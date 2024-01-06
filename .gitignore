@@ -1,0 +1,11 @@
+/.idea
+
+/extensions/**/dist
+
+/node_modules
+/web/dist
+/web/.github
+/web/node_modules
+/web/.env
+
+/.env
