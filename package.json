@@ -8,11 +8,15 @@
     "dev": "shopify app dev",
     "info": "shopify app info",
     "generate": "shopify app generate",
-    "deploy": "shopify app deploy"
+    "deploy": "shopify app deploy",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@shopify/app": "^3",
-    "@shopify/cli": "^3"
+    "@shopify/cli": "^3",
+    "@xpify/buildpack": "file:./@xpify/buildpack",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0"
   },
   "workspaces": [
     "extensions/*"

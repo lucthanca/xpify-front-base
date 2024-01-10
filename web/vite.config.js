@@ -38,13 +38,13 @@ if (host === "localhost") {
   };
 }
 
-async function promptName() {
-  // const separator = defaultName.includes(' ') ? ' ' : '-';
-  return renderTextPrompt({
-    message: `Điền khoá bảo mật để fetch config của app ${'aaa'}:`,
-    defaultValue: '',
-  });
-}
+// async function promptName() {
+//   // const separator = defaultName.includes(' ') ? ' ' : '-';
+//   return renderTextPrompt({
+//     message: `Điền khoá bảo mật để fetch config của app ${'aaa'}:`,
+//     defaultValue: '',
+//   });
+// }
 
 // const prompTest = async () => {
 //   const id = await renderTextPrompt({
@@ -60,8 +60,8 @@ export default defineConfig(async ({ mode }) => {
     process.env.SHOPIFY_API_KEY = process.env.VITE_SHOPIFY_API_KEY
   }
   // console.log({ sdsd: process.env });
-  const test = await promptName();
-  console.log({ test });
+  // const test = await promptName();
+  console.log({ env: process.env });
   return {
     root: dirname(fileURLToPath(import.meta.url)),
     plugins: [react(), splitVendorChunkPlugin()],

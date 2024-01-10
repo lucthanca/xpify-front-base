@@ -2,7 +2,7 @@
 
 name = "vadu-simpify-app"
 client_id = "b782e866f44fe9ffb2c6dfd37b787d76"
-application_url = "https://questionnaire-newfoundland-methods-gather.trycloudflare.com"
+application_url = "https://quarter-sets-expenditures-stroke.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,9 +11,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://questionnaire-newfoundland-methods-gather.trycloudflare.com/auth/callback",
-  "https://questionnaire-newfoundland-methods-gather.trycloudflare.com/auth/shopify/callback",
-  "https://questionnaire-newfoundland-methods-gather.trycloudflare.com/api/auth/callback"
+  "https://quarter-sets-expenditures-stroke.trycloudflare.com/auth/callback",
+  "https://quarter-sets-expenditures-stroke.trycloudflare.com/auth/shopify/callback",
+  "https://quarter-sets-expenditures-stroke.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
