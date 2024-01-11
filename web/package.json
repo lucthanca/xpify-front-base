@@ -4,8 +4,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "BACKEND_HOST=xpifyi.vadu.com vite build",
-    "dev": "BACKEND_HOST=api-simpify.xhyva.tk BACKEND_SSL=true vite",
+    "build": "vite build",
+    "dev": "vite",
     "coverage": "vitest run --coverage"
   },
   "type": "module",

@@ -1,6 +1,9 @@
 import { renderTextPrompt } from '@shopify/cli-kit/node/ui';
 import { outputInfo } from '@shopify/cli-kit/node/output';
-import { updateEnvFile } from "@xpify/buildpack/src/env";
+import { updateEnvFile } from "@xpify/buildpack/src/env.js";
+import { renderError } from '@shopify/cli-kit/node/ui';
+import { AbortSilentError } from '@shopify/cli-kit/node/error';
+import { verifyToken } from './verifier.js';
 
 /**
  * @typedef {Object} ShopifyRemoteApp
@@ -26,7 +29,7 @@ import { updateEnvFile } from "@xpify/buildpack/src/env";
  * @property {String} idEnvironmentVariableName
  * @property {String} directory
  * @property {String} packageManager
- * @property {ShopifyLocalAppDotEnv} dotenv
+ * @property {ShopifyLocalAppDotEnv|undefined} dotenv
  */
 /**
  * @typedef {Object} ShopifyAppConfig
@@ -44,10 +47,51 @@ import { updateEnvFile } from "@xpify/buildpack/src/env";
  * @returns {Promise<void>}
  */
 export const ensureXpifyDev = async (config) => {
-	console.log(config);
+	if (!config.localApp.dotenv) {
+		renderError({
+			headline: "Không tìm thấy file .env. Tạo file .env trong thư mục gốc của app trước.",
+			body: [
+				"Ví dụ:",
+				"cp .env.example .env",
+			],
+		});
+		throw new AbortSilentError();
+	}
 	await ensureBackendUrl(config);
 	await ensureSecretKey(config);
 };
+
+class SecretKey {
+	constructor(config) {
+		this.config = config;
+	}
+
+	async input(forcePrompt = false) {
+		const { remoteApp, localApp } = this.config;
+		const { title } = remoteApp;
+		let i = process.env.XPIFY_SECRET_KEY || localApp.dotenv.variables.XPIFY_SECRET_KEY;
+		if (forcePrompt || !i) {
+			i = await renderTextPrompt({
+				message: `Điền khoá bảo mật để fetch config của app ${title}:`,
+				defaultValue: '',
+			});
+		}
+		try {
+			await verifyToken(i, title);
+		} catch (e) {
+			if (e.message === 'x-graphql-authorization') {
+				renderError({
+					headline: "Khoá bảo mật không hợp lệ.",
+					body: [
+						"Vui lòng kiểm tra lại khoá bảo mật.",
+					],
+				});
+				return await this.input(true);
+			}
+		}
+		return i;
+	}
+}
 
 /**
  * Ensures the secret key for the Xpify application.
@@ -61,17 +105,22 @@ export const ensureXpifyDev = async (config) => {
 const ensureSecretKey = async (config) => {
 	const { localApp, remoteApp } = config;
 	const { dotenv } = localApp;
-	if (!process.env.XPIFY_SECRET_KEY) {
-		process.env.XPIFY_SECRET_KEY = dotenv.variables.XPIFY_SECRET_KEY || await renderTextPrompt({
-			message: `Điền khoá bảo mật để fetch config của app ${remoteApp.title}:`,
-			defaultValue: '',
-		});
+	const secretKey = new SecretKey(config);
+	process.env.XPIFY_SECRET_KEY = await secretKey.input();
 
-		if (!dotenv.variables.XPIFY_SECRET_KEY) {
-			const output = await updateEnvFile(dotenv.path, { XPIFY_SECRET_KEY: process.env.XPIFY_SECRET_KEY });
-			outputInfo(output);
-		}
+	if (!dotenv.variables.XPIFY_SECRET_KEY) {
+		const output = await updateEnvFile(dotenv.path, { XPIFY_SECRET_KEY: process.env.XPIFY_SECRET_KEY });
+		outputInfo(output);
 	}
+}
+
+export const ensureXpifyRedirectUrlWhitelist = (urls) => {
+	return urls.map(url => {
+		// replace url host with process.env.XPIFY_BACKEND_URL
+		const urlObject = new URL(url);
+		urlObject.host = new URL(process.env.XPIFY_BACKEND_URL).host;
+		return urlObject.toString();
+	});
 }
 
 /**

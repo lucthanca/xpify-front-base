@@ -1,0 +1,42 @@
+diff --git a/node_modules/@shopify/app/dist/cli/services/dev.js b/node_modules/@shopify/app/dist/cli/services/dev.js
+index d6509db..0dc021b 100644
+--- a/node_modules/@shopify/app/dist/cli/services/dev.js
++++ b/node_modules/@shopify/app/dist/cli/services/dev.js
+@@ -24,6 +24,8 @@ import { formatPackageManagerCommand, outputDebug } from '@shopify/cli-kit/node/
+ import { hashString } from '@shopify/cli-kit/node/crypto';
+ import { AbortError } from '@shopify/cli-kit/node/error';
+ import { ensureAuthenticatedPartners } from '@shopify/cli-kit/node/session';
++import { ensureXpifyDev } from "@xpify/buildpack";
++
+ export async function dev(commandOptions) {
+     const config = await prepareForDev(commandOptions);
+     await actionsBeforeSettingUpDevProcesses(config);
+@@ -57,6 +59,7 @@ async function prepareForDev(commandOptions) {
+         tunnelUrl: commandOptions.tunnelUrl,
+     }, tunnelClient);
+     localApp.webs = webs;
++    await ensureXpifyDev({ localApp, remoteApp });
+     const partnerUrlsUpdated = await handleUpdatingOfPartnerUrls(webs, commandOptions.update, network, localApp, cachedUpdateURLs, remoteApp, apiKey, token);
+     // If we have a real UUID for an extension, use that instead of a random one
+     const allExtensionsWithDevUUIDs = getDevUUIDsForAllExtensions(localApp, apiKey);
+diff --git a/node_modules/@shopify/app/dist/cli/services/dev/urls.js b/node_modules/@shopify/app/dist/cli/services/dev/urls.js
+index 070dded..fb3c046 100644
+--- a/node_modules/@shopify/app/dist/cli/services/dev/urls.js
++++ b/node_modules/@shopify/app/dist/cli/services/dev/urls.js
+@@ -13,6 +13,7 @@ import { codespaceURL, codespacePortForwardingDomain, gitpodURL } from '@shopify
+ import { fanoutHooks } from '@shopify/cli-kit/node/plugins';
+ import { terminalSupportsRawMode } from '@shopify/cli-kit/node/system';
+ import { outputDebug } from '@shopify/cli-kit/node/output';
++import { ensureXpifyRedirectUrlWhitelist } from '@xpify/buildpack';
+ /**
+  * The tunnel creation logic depends on 7 variables:
+  * - If a Codespaces environment is deteced, then the URL is built using the codespaces hostname. No need for tunnel
+@@ -122,6 +123,8 @@ export function generatePartnersURLs(baseURL, authCallbackPath, proxyFields) {
+             },
+         }
+         : {};
++
++    redirectUrlWhitelist = ensureXpifyRedirectUrlWhitelist(redirectUrlWhitelist);
+     return {
+         applicationUrl: baseURL,
+         redirectUrlWhitelist,
