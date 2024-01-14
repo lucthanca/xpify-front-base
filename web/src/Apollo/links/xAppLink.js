@@ -1,11 +1,9 @@
+// X-Xpify-App
 import { setContext } from '@apollo/client/link/context';
-import storage from '~/utils/storage';
 
-export const authLink = () => {
+export const xAppLink = () => {
   return setContext((_, { headers }) => {
-    // get the authentication token from local storage if it exists.
-    const token = storage.getItem('x-xpify-token');
-    if (!token) {
+    if (!process.env.XPIFY_APP_ID) {
       return { headers };
     }
 
@@ -13,7 +11,7 @@ export const authLink = () => {
     return {
       headers: {
         ...headers,
-        'x-xpify-token': token ? `Bearer ${token}` : '',
+        'x-xpify-app': process.env.XPIFY_APP_ID,
       },
     };
   });

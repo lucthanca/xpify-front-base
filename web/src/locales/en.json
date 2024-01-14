@@ -1,4 +1,10 @@
 {
+  "Error": {
+    "UnknownError": {
+      "description": "Our mistake! We're working hard to fix this. In the meantime, try refreshing the page or if that doesn't work, contact us for support. Thanks for your patience!",
+      "heading": "Something went wrong!"
+    }
+  },
   "HomePage": {
     "heading": "Nice work on building a Shopify app 🎉",
     "learnMore": "Learn more about building out your app in <ShopifyTutorialLink>this Shopify tutorial</ShopifyTutorialLink> 📚",

@@ -8,16 +8,20 @@ import { Loading } from '@shopify/app-bridge-react';
 import { BrowserRouter } from 'react-router-dom';
 import { Spinner } from '@shopify/polaris';
 
+export const ShopifyLoadingFull = () => {
+  return (
+    <div className='grid grid-rows-1 justify-center h-fill-available items-center'>
+      <Loading />
+      <Spinner accessibilityLabel={'Loading'} />
+    </div>
+  );
+};
+
 const Adapter = props => {
   const talonProps = useAdapter(props);
   const { client, initialized } = talonProps;
   if (!initialized || !props.domain)
-    return (
-      <div className='grid grid-rows-1 justify-center h-fill-available items-center'>
-        <Loading />
-        <Spinner accessibilityLabel={'Loading'} />
-      </div>
-    );
+    return <ShopifyLoadingFull />
   return (
     <ApolloProvider client={client}>
       <App />

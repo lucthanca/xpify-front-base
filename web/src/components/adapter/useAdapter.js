@@ -2,7 +2,7 @@ import { useMemo, useCallback, useState, useEffect } from 'react';
 import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
 import typePolicies from "~/Apollo/policies";
 import { CachePersistor } from 'apollo-cache-persist';
-import { getLinks } from '~/Apollo/links';
+import { useLinks } from '~/Apollo/links';
 
 const CACHE_PERSIST_PREFIX = 'apollo-cache-persist';
 
@@ -12,9 +12,9 @@ const CACHE_PERSIST_PREFIX = 'apollo-cache-persist';
  * The tradeoff is that we may be creating an instance we don't end up needing.
  */
 const preInstantiatedCache = new InMemoryCache({
-  // XPIFY_POSSIBLE_TYPES is injected into the bundle at vite config at build time.
+  // XPIFY_POSSIBLE_TYPES is injected into the bundle at vite config at build time. @see vite.config.js
   // eslint-disable-next-line no-undef
-  possibleTypes: XPIFY_POSSIBLE_TYPES,
+  possibleTypes: process.env.XPIFY_POSSIBLE_TYPES || XPIFY_POSSIBLE_TYPES,
   typePolicies,
 });
 
@@ -22,6 +22,7 @@ export const useAdapter = props => {
   const { origin, domain } = props;
   const [initialized, setInitialized] = useState(false);
   const [apiBase] = useState(() => new URL('/graphql', origin).toString());
+  const { getLinks } = useLinks(apiBase);
   const createApolloClient = useCallback((cache, link) => new ApolloClient({ cache, link, ssrMode: false }), []);
   const createCachePersistor = useCallback((cache) => {
     return new CachePersistor({
@@ -40,7 +41,7 @@ export const useAdapter = props => {
       await client.persistor.persist();
     }
   }, []);
-  const apolloLink = useMemo(() => getLinks(origin), [origin]);
+  const apolloLink = getLinks(); // useMemo(() => getLinks(apiBase), [apiBase]);
   const apolloClient = useMemo(() => {
     const client = createApolloClient(preInstantiatedCache, apolloLink);
 

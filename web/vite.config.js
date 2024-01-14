@@ -3,9 +3,9 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import react from "@vitejs/plugin-react";
 import buildpack from './src/utils/buildpack';
-import { renderAutocompletePrompt, renderConfirmationPrompt, renderTextPrompt } from '@shopify/cli-kit/node/ui';
-import { joinPath } from '@shopify/cli-kit/node/path';
-import { slugify } from '@shopify/cli-kit/common/string';
+// import { renderAutocompletePrompt, renderConfirmationPrompt, renderTextPrompt } from '@shopify/cli-kit/node/ui';
+// import { joinPath } from '@shopify/cli-kit/node/path';
+// import { slugify } from '@shopify/cli-kit/common/string';
 
 if (
   process.env.npm_lifecycle_event === "build" &&
@@ -38,36 +38,27 @@ if (host === "localhost") {
   };
 }
 
-// async function promptName() {
-//   // const separator = defaultName.includes(' ') ? ' ' : '-';
-//   return renderTextPrompt({
-//     message: `Điền khoá bảo mật để fetch config của app ${'aaa'}:`,
-//     defaultValue: '',
-//   });
-// }
-
-// const prompTest = async () => {
-//   const id = await renderTextPrompt({
-//     message: 'Place build secret?',
-//     choices: orgList,
-//   });
-// }
-
 export default defineConfig(async ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   const possibleTypes = await buildpack.getPossibleTypes();
   if (!process.env.SHOPIFY_API_KEY) {
     process.env.SHOPIFY_API_KEY = process.env.VITE_SHOPIFY_API_KEY
   }
-  // console.log({ sdsd: process.env });
-  // const test = await promptName();
-  console.log({ env: process.env });
+  if (!process.env.XPIFY_BACKEND_URL) {
+    process.env.XPIFY_BACKEND_URL = process.env.VITE_XPIFY_BACKEND_URL
+  }
+  if (!process.env.XPIFY_APP_ID) {
+    process.env.XPIFY_APP_ID = process.env.VITE_XPIFY_APP_ID
+  }
+
   return {
     root: dirname(fileURLToPath(import.meta.url)),
     plugins: [react(), splitVendorChunkPlugin()],
     define: {
       "process.env.SHOPIFY_API_KEY": JSON.stringify(process.env.SHOPIFY_API_KEY),
-      XPIFY_POSSIBLE_TYPES: JSON.stringify(possibleTypes),
+      "process.env.XPIFY_BACKEND_URL": JSON.stringify(process.env.XPIFY_BACKEND_URL),
+      "process.env.XPIFY_APP_ID": JSON.stringify(process.env.XPIFY_APP_ID),
+      "process.env.XPIFY_POSSIBLE_TYPES": JSON.stringify(possibleTypes),
     },
     resolve: {
       preserveSymlinks: true,

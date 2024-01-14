@@ -10,11 +10,27 @@ import {
 } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { useTranslation, Trans } from "react-i18next";
+import {gql, useQuery} from "@apollo/client";
 
 import { trophyImage } from "~/assets";
 
+const TEstQuery = gql`
+    query TstPricingPlan($id: ID!) {
+      appPricingPlans(id: $id) {
+        id status name price
+      }
+    }
+`;
+
 export default function HomePage() {
   const { t } = useTranslation();
+  const { data, loading, error } = useQuery(TEstQuery, {
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      id: 'gid://shopify/AppPricingPlan/1',
+    },
+  });
+  console.log({ data, loading, error });
   return (
     <Page narrowWidth>
       <TitleBar title={t("HomePage.title")} primaryAction={null} />

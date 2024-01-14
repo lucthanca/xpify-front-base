@@ -12,24 +12,25 @@ import { Routes as ReactRouterRoutes, Route } from "react-router-dom";
  *
  * @param {object} pages value of import.meta.globEager(). See https://vitejs.dev/guide/features.html#glob-import
  *
- * @return {Routes} `<Routes/>` from React Router, with a `<Route/>` for each file in `pages`
+ * @return {JSX.Element} `<Routes/>` from React Router, with a `<Route/>` for each file in `pages`
  */
 export default function Routes({ pages }) {
   const routes = useRoutes(pages);
-  const routeComponents = routes.map(({ path, component: Component }) => (
-    (path !== '/exitIframe') && <Route key={path} path={path} element={<Component />} />
-  )).filter(c => c !== false);
+  // const routeComponents = routes.map(({ path, component: Component }) => (
+  //   (path !== '/exitIframe' && path !== "/notFound") && <Route key={path} path={path} element={<Component />} />
+  // )).filter(c => c !== false);
 
-  console.log({ routeComponents })
+  const routeComponents = routes.map(({ path, component: Component }) => (
+    <Route key={path} path={path} element={<Component />} />
+  ));
 
   const NotFound = routes.find(({ path }) => path === "/notFound").component;
-
-  const ExitIframe = routes.find(({ path }) => path === "/exitIframe").component;
+  // const ExitIframe = routes.find(({ path }) => path === "/exitIframe").component;
 
   return (
     <ReactRouterRoutes>
       {routeComponents}
-      <Route path="/exitIframe" element={<ExitIframe />} />
+      {/*<Route path="/exitIframe" element={<ExitIframe />} />*/}
       <Route path="*" element={<NotFound />} />
     </ReactRouterRoutes>
   );

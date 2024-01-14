@@ -13,20 +13,24 @@ export default function ExitIframe() {
     if (!!app && !!search) {
       const params = new URLSearchParams(search);
       const redirectUri = params.get("redirectUri");
-      const url = new URL(decodeURIComponent(redirectUri));
-
-      if (
-        [location.hostname, "admin.shopify.com"].includes(url.hostname) ||
-        url.hostname.endsWith(".myshopify.com")
-      ) {
-        const redirect = Redirect.create(app);
-        redirect.dispatch(
-          Redirect.Action.REMOTE,
-          decodeURIComponent(redirectUri)
-        );
-      } else {
-        setShowWarning(true);
-      }
+      // const url = new URL(decodeURIComponent(redirectUri));
+      const redirect = Redirect.create(app);
+      redirect.dispatch(
+        Redirect.Action.REMOTE,
+        decodeURIComponent(redirectUri)
+      );
+      // if (
+      //   [location.hostname, "admin.shopify.com"].includes(url.hostname) ||
+      //   url.hostname.endsWith(".myshopify.com")
+      // ) {
+      //   const redirect = Redirect.create(app);
+      //   redirect.dispatch(
+      //     Redirect.Action.REMOTE,
+      //     decodeURIComponent(redirectUri)
+      //   );
+      // } else {
+      //   setShowWarning(true);
+      // }
     }
   }, [app, search, setShowWarning]);
 

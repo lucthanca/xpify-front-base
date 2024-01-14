@@ -44,7 +44,7 @@ const getSchemaTypes = () => {
 };
 
 const fetchQuery = query => {
-    const backendUrl = process.env.VITE_BACKEND_URL;
+    const backendUrl = process.env.XPIFY_BACKEND_URL || process.env.VITE_XPIFY_BACKEND_URL;
     if (!backendUrl) {
         return Promise.reject(new Error('API endpoint missing!'));
     }
