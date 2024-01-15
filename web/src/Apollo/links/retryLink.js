@@ -9,7 +9,7 @@ export const retryLink = () => {
     },
     attempts: {
       max: 5,
-      retryIf: (error, _operation) => !!error && navigator.onLine,
+      retryIf: (error, _operation) => !!error && error?.statusCode >= 500 && navigator.onLine,
     }
   });
 };

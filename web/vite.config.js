@@ -3,9 +3,6 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import react from "@vitejs/plugin-react";
 import buildpack from './src/utils/buildpack';
-// import { renderAutocompletePrompt, renderConfirmationPrompt, renderTextPrompt } from '@shopify/cli-kit/node/ui';
-// import { joinPath } from '@shopify/cli-kit/node/path';
-// import { slugify } from '@shopify/cli-kit/common/string';
 
 if (
   process.env.npm_lifecycle_event === "build" &&

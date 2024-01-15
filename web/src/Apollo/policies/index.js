@@ -11,8 +11,11 @@ const typePolicies = {
   StoreConfig: {
     keyFields: ['store_code'],
   },
-  simpifyShop: {
-    keyFields: 'uid',
+  App: {
+    keyFields: 'id',
+  },
+  PricingPlan: {
+    keyFields: 'id',
   },
 };
 

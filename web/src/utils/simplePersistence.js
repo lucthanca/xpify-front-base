@@ -29,6 +29,13 @@ class NamespacedLocalStorage {
   }
 }
 
+
+/**
+ * Một lớp thao tác với localStorage có hỗ trợ thời gian hết hạn.
+ *
+ * @deprecated dùng ~/utils/storage.js thay thế
+ * @class BrowserPersistence
+ */
 export default class BrowserPersistence {
   static KEY = 'V1_XPIFY_BROWSER_PERSISTENCE';
 

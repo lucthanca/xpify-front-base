@@ -1,8 +1,9 @@
 import { Redirect } from "@shopify/app-bridge/actions";
-import { useAppBridge, Loading } from "@shopify/app-bridge-react";
+import { useAppBridge } from "@shopify/app-bridge-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Banner, Layout, Page } from "@shopify/polaris";
+import { ShopifyLoadingFull } from "~/components/adapter/index.jsx";
 
 export default function ExitIframe() {
   const app = useAppBridge();
@@ -34,6 +35,6 @@ export default function ExitIframe() {
       </Layout>
     </Page>
   ) : (
-    <Loading />
+    <ShopifyLoadingFull />
   );
 }

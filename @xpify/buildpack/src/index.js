@@ -53,8 +53,10 @@ export const ensureXpifyDev = async (config) => {
 		renderError({
 			headline: "Không tìm thấy file .env. Tạo file .env trong thư mục gốc của app trước.",
 			body: [
-				"Ví dụ:",
-				"cp .env.example .env",
+				"Chú ý:",
+				"Nếu đang sử dụng file config dạng shopify.app.toml, thì file env sẽ là .env",
+				"nhưng nếu mà file config lại là dạng shopify.app.[app_name].toml thì file env sẽ là .env.[app_name]",
+				"Ví dụ: file config là: shopify.app.section-builder.toml thì file env sẽ là .env.section-builder",
 			],
 		});
 		throw new AbortSilentError();

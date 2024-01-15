@@ -1,7 +1,6 @@
 import { createHttpLink } from '@apollo/client';
 import { stripIgnoredCharacters } from 'graphql/utilities/stripIgnoredCharacters';
 import { authenticatedFetch } from "@shopify/app-bridge/utilities";
-import { Redirect } from '@shopify/app-bridge/actions';
 
 const shrinkQuery = (fullURL) => {
   const url = new URL(fullURL);
@@ -35,12 +34,19 @@ const customFetchToShrinkQuery = (uri, options) => {
 export const httpLink = (uri, app) => {
   const fetchFunction = authenticatedFetch(app);
 
+  /**
+   * A function that returns an auth-aware fetch function.
+   * @desc The returned fetch function that matches the browser's fetch API
+   * See: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+   * It will provide the following functionality:
+   *
+   * Add a `X-Shopify-Access-Token` header to the request.
+   *
+   * @returns {Function} fetch function
+   */
   const authenticatedFetchToShrinkQuery = async (uri, options) => {
-    console.log({ options });
     const resource = options.method === 'GET' ? shrinkQuery(uri) : uri;
-    const response = await fetchFunction(resource, options);
-    checkHeadersForReauthorization(response.headers, app);
-    return response;
+    return await fetchFunction(resource, options);
   };
 
   return createHttpLink({
@@ -49,20 +55,6 @@ export const httpLink = (uri, app) => {
     uri,
   });
 };
-
-function checkHeadersForReauthorization(headers, app) {
-  if (headers.get("X-Shopify-API-Request-Failure-Reauthorize") === "1") {
-    const authUrlHeader = headers.get("X-Shopify-API-Request-Failure-Reauthorize-Url");
-
-    const redirect = Redirect.create(app);
-    redirect.dispatch(
-      Redirect.Action.REMOTE,
-      authUrlHeader.startsWith("/")
-        ? `https://${window.location.host}${authUrlHeader}`
-        : authUrlHeader
-    );
-  }
-}
 
 export const httpLinkWithoutAuthFetch = (uri) => {
   return createHttpLink({

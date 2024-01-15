@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useState, useEffect } from 'react';
-import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client';
+import { InMemoryCache, ApolloClient } from '@apollo/client';
 import typePolicies from "~/Apollo/policies";
 import { CachePersistor } from 'apollo-cache-persist';
 import { useLinks } from '~/Apollo/links';

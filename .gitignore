@@ -10,3 +10,5 @@
 
 /.env
 /shopify.app.toml
+/shopify.app.*.toml
+/*.env*
