@@ -748,16 +748,16 @@
   resolved "https://registry.yarnpkg.com/@remote-ui/types/-/types-1.1.3.tgz#b2a790d5be50fb82d89d4abea9883f87f83a5a25"
   integrity sha512-P1kN1F3p0oMgnLN8Of1Ie9am3sLvJ7nhqHH1pvzkrxqjVwhhyPVZNcwOHyUNZPKp62izhDavdrcnqrdXzVJqGA==
 
-"@shopify/app@^3":
-  version "3.52.0"
-  resolved "https://registry.yarnpkg.com/@shopify/app/-/app-3.52.0.tgz#3e4cb09699c3b015ed55ccae3a4b95c8c1425278"
-  integrity sha512-h1KHy2Rkih2nl7sbC9s2eZTpTag67dOPMsJKAgYfwMhk4KF60qd8hZNSDqs70SD2QdEbg43NALxKw+3nGrut9A==
+"@shopify/app@3.53.0":
+  version "3.53.0"
+  resolved "https://registry.yarnpkg.com/@shopify/app/-/app-3.53.0.tgz#bb787c265795cdf091d353dc2aa2ae5784b08374"
+  integrity sha512-gCw3s5Ugg6qrLiDLucqDalb1BrfXOwsb3wk9dyYsPqJoZ4vRYJBO0KSG0dQj45K4qMu0QZP97bdO2vo8yowWxA==
   dependencies:
     "@luckycatfactory/esbuild-graphql-loader" "3.8.1"
     "@oclif/core" "2.11.7"
-    "@shopify/cli-kit" "3.52.0"
+    "@shopify/cli-kit" "3.53.0"
     "@shopify/function-runner" "4.1.1"
-    "@shopify/plugin-cloudflare" "3.52.0"
+    "@shopify/plugin-cloudflare" "3.53.0"
     "@shopify/polaris" "12.1.1"
     "@shopify/polaris-icons" "7.9.0"
     abort-controller "3.0.0"
@@ -777,10 +777,10 @@
     serve-static "1.15.0"
     ws "8.13.0"
 
-"@shopify/cli-kit@3.52.0":
-  version "3.52.0"
-  resolved "https://registry.yarnpkg.com/@shopify/cli-kit/-/cli-kit-3.52.0.tgz#f235dde5bf417494d5f39c4fc5d8951c5d138e7b"
-  integrity sha512-PBGg9xx+XTMEDTuJtKKmrggcUeUTAGTVdQAii/T/HoWLDBSXaPfFcMnahslmXnAvyhLbS/yu0z84xQfSKxKnrA==
+"@shopify/cli-kit@3.53.0":
+  version "3.53.0"
+  resolved "https://registry.yarnpkg.com/@shopify/cli-kit/-/cli-kit-3.53.0.tgz#7165b8a1591e66a9ce38ac05dd6b75216cc9350a"
+  integrity sha512-Rw5koF98VoiD5bbZ2Sd0UsmZY1aP6U6I+IUJKcu1V59BQgvHoVkIAnok7wkzUWbwjDQNH5kf/edwC8HgLpEXjA==
   dependencies:
     "@bugsnag/js" "7.21.0"
     "@iarna/toml" "2.2.5"
@@ -847,17 +847,17 @@
     unique-string "3.0.0"
     zod "3.22.3"
 
-"@shopify/cli@^3":
-  version "3.52.0"
-  resolved "https://registry.yarnpkg.com/@shopify/cli/-/cli-3.52.0.tgz#a8b402dea69cf8446f65627cb6c2d21d2022bf8f"
-  integrity sha512-Ci7u1fStf6sxlLywA+kMNvgjwpUiLkcVfTf/6zZbYR7mOv0GbN8zfVDY3Q3wER+YY1NazQGNowAkbmO5skqqFw==
+"@shopify/cli@3.53.0":
+  version "3.53.0"
+  resolved "https://registry.yarnpkg.com/@shopify/cli/-/cli-3.53.0.tgz#fe7d13f6aa870aaa9a6be638868631cdfd39678b"
+  integrity sha512-kWWg7yilH3SOzRdSFlJ7y4uSKqMuFGzM2/mUtF5NP5/WrVZ20EXZNAZmnHU5zW3t3yDJpi5gDn1SUSGAU0rGlg==
   dependencies:
     "@oclif/core" "2.11.7"
     "@oclif/plugin-commands" "2.2.24"
     "@oclif/plugin-help" "5.2.18"
     "@oclif/plugin-plugins" "3.1.8"
-    "@shopify/cli-kit" "3.52.0"
-    "@shopify/plugin-did-you-mean" "3.52.0"
+    "@shopify/cli-kit" "3.53.0"
+    "@shopify/plugin-did-you-mean" "3.53.0"
     zod-to-json-schema "3.21.4"
 
 "@shopify/function-runner@4.1.1":
@@ -868,23 +868,23 @@
     cachedir "^2.3.0"
     node-fetch "^3.2.10"
 
-"@shopify/plugin-cloudflare@3.52.0":
-  version "3.52.0"
-  resolved "https://registry.yarnpkg.com/@shopify/plugin-cloudflare/-/plugin-cloudflare-3.52.0.tgz#d83f5b38242a95c49ddff1ce56fcef1e5f671f9a"
-  integrity sha512-+MPxCPNf7X19LYbLL1jwTG/Bbf0EtZe0GGXWCHCDP+zUeMpKvnW8mwpoRXKjUkADIJI//0qUn+eC8Npi4Kk5iA==
+"@shopify/plugin-cloudflare@3.53.0":
+  version "3.53.0"
+  resolved "https://registry.yarnpkg.com/@shopify/plugin-cloudflare/-/plugin-cloudflare-3.53.0.tgz#b75b6869824d35a17a670513c39d44a213db6d45"
+  integrity sha512-Qq0Z4xfBQcxN1ckn0CiYDKqfW1Bi5DCKLi9B3xFzIWSqU5cuFk7ziTxoDYoXH4GNYCwCw4l7kVAQOcmwcU/bsA==
   dependencies:
     "@oclif/core" "2.11.7"
-    "@shopify/cli-kit" "3.52.0"
+    "@shopify/cli-kit" "3.53.0"
     node-fetch "3.3.2"
     semver "7.5.4"
 
-"@shopify/plugin-did-you-mean@3.52.0":
-  version "3.52.0"
-  resolved "https://registry.yarnpkg.com/@shopify/plugin-did-you-mean/-/plugin-did-you-mean-3.52.0.tgz#1c8d77659502a25d71fe38d630c8b53c84d22345"
-  integrity sha512-FS9sq8bgy1PBuDNFUwH9+HdU7M13rjx7aFgqxGCoFpdnzzlov5hcHuoPXs3o6Gwx8kbIGajslYIP6oO8bHQclw==
+"@shopify/plugin-did-you-mean@3.53.0":
+  version "3.53.0"
+  resolved "https://registry.yarnpkg.com/@shopify/plugin-did-you-mean/-/plugin-did-you-mean-3.53.0.tgz#21caebe044b2a5dfb95fe4d635dcab601b0db9ce"
+  integrity sha512-DM48Z+oFKiU/01xgTPBjXwL6HYWSATEHKplHXb2rjPVF2IOtnf3hcgOCfaz+hmQk3W28BYLlocF2RcPNkDIASw==
   dependencies:
     "@oclif/core" "2.11.7"
-    "@shopify/cli-kit" "3.52.0"
+    "@shopify/cli-kit" "3.53.0"
     n-gram "2.0.2"
 
 "@shopify/polaris-icons@7.9.0":

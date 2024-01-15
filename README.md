@@ -29,12 +29,12 @@ Template chạy trên Shopify CLI 3.0, một package bạn có thể thêm vào 
 Dùng yarn:
 
 ```shell
-yarn create @shopify/app --template <url_của_repo_này>
+yarn create @shopify/app@3.53.0 --template <url_của_repo_này>
 ```
 Dùng npx:
 
 ```shell
-npm init @shopify/app@latest -- --template <url_của_repo_này>
+npm init @shopify/app@3.53.0 -- --template <url_của_repo_này>
 ```
 
 Điều này sẽ clone template và cài cli vào project.

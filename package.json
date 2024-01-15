@@ -12,8 +12,8 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@shopify/app": "^3",
-    "@shopify/cli": "^3",
+    "@shopify/app": "3.53.0",
+    "@shopify/cli": "3.53.0",
     "@xpify/buildpack": "file:./@xpify/buildpack",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0"
