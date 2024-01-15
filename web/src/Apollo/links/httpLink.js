@@ -1,6 +1,7 @@
 import { createHttpLink } from '@apollo/client';
 import { stripIgnoredCharacters } from 'graphql/utilities/stripIgnoredCharacters';
 import { authenticatedFetch } from "@shopify/app-bridge/utilities";
+import { Redirect } from '@shopify/app-bridge/actions';
 
 const shrinkQuery = (fullURL) => {
   const url = new URL(fullURL);
@@ -20,26 +21,6 @@ const shrinkQuery = (fullURL) => {
 }
 
 const customFetchToShrinkQuery = (uri, options) => {
-  // const authenticatedFetch = useAuthenticatedFetch();
-  // const fetch = async () => {
-  //   const resource = options.method === 'GET' ? shrinkQuery(uri) : uri
-  //   const response = await authenticatedFetch(resource, options);
-  //   return response.json();
-  // };
-  //
-  // return fetch();
-  // TODO: add `ismorphic-fetch` or equivalent to avoid this error
-  if (typeof globalThis.fetch !== 'function') {
-    console.error('This environment does not define `fetch`.');
-    return () => {};
-  }
-
-  const resource = options.method === 'GET' ? shrinkQuery(uri) : uri;
-
-  return globalThis.fetch(resource, options);
-};
-
-const customFetchToShrinkQueryNoAuth = (uri, options) => {
   // TODO: add `ismorphic-fetch` or equivalent to avoid this error
   if (typeof globalThis.fetch !== 'function') {
     console.error('This environment does not define `fetch`.');
@@ -54,23 +35,38 @@ const customFetchToShrinkQueryNoAuth = (uri, options) => {
 export const httpLink = (uri, app) => {
   const fetchFunction = authenticatedFetch(app);
 
-  const fetchWithShopifySessionAuth = async (uri, options) => {
+  const authenticatedFetchToShrinkQuery = async (uri, options) => {
+    console.log({ options });
     const resource = options.method === 'GET' ? shrinkQuery(uri) : uri;
-    return await fetchFunction(resource, options);
-    // checkHeadersForReauthorization(response.headers, app);
-    // return response;
+    const response = await fetchFunction(resource, options);
+    checkHeadersForReauthorization(response.headers, app);
+    return response;
   };
 
   return createHttpLink({
-    fetch: fetchWithShopifySessionAuth,
+    fetch: authenticatedFetchToShrinkQuery,
     useGETForQueries: true,
     uri,
   });
 };
 
+function checkHeadersForReauthorization(headers, app) {
+  if (headers.get("X-Shopify-API-Request-Failure-Reauthorize") === "1") {
+    const authUrlHeader = headers.get("X-Shopify-API-Request-Failure-Reauthorize-Url");
+
+    const redirect = Redirect.create(app);
+    redirect.dispatch(
+      Redirect.Action.REMOTE,
+      authUrlHeader.startsWith("/")
+        ? `https://${window.location.host}${authUrlHeader}`
+        : authUrlHeader
+    );
+  }
+}
+
 export const httpLinkWithoutAuthFetch = (uri) => {
   return createHttpLink({
-    fetch: customFetchToShrinkQueryNoAuth,
+    fetch: customFetchToShrinkQuery,
     useGETForQueries: true,
     uri,
   });

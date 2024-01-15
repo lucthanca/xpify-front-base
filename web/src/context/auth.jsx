@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
   const [query] = useState(() => location.search);
   const { data, loading, error } = useQuery(ENSURE_INSTALLED_QUERY, {
     fetchPolicy: 'no-cache',
-    context: { withoutAuth: true } ,
+    context: { noAuth: true } ,
     variables: {
       query,
     },

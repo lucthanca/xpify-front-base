@@ -1,11 +1,13 @@
 import { gql } from 'graphql-request';
 import { graphqlRequest } from '@shopify/cli-kit/node/api/graphql';
 import { renderTasks } from '@shopify/cli-kit/node/ui';
+import { XPIFY_BACKEND_URL } from './backendEndpoint/backendUrlInput.js';
+import { XPIFY_SECRET_KEY } from './backendAuth/secretKeyInput.js';
 
 const APP_QUERY = gql `
     query GetApp($remoteId: String!) {
         app (field: remote_id, value: $remoteId) {
-            id name api_key secret_key scopes
+            id name api_key secret_key scopes api_version
         }
     }
 `;
@@ -36,6 +38,7 @@ export async function ensureXpifyApp (config) {
 							secret_key: app.secret_key !== config.remoteApp.apiSecret ? config.remoteApp.apiSecret : undefined,
 							scopes: app.scopes !== config.localApp.configuration?.['access_scopes']?.scopes ? config.localApp.configuration?.['access_scopes']?.scopes : undefined,
 							name: app.name !== config.remoteApp.title ? config.remoteApp.title : undefined,
+							api_version: app.api_version !== config.localApp.configuration?.['webhooks']?.['api_version'] ? config.localApp.configuration?.['webhooks']?.['api_version'] : undefined,
 						};
 
 						const filteredChanges = Object.fromEntries(Object.entries(changes).filter(([_, v]) => v !== undefined));
@@ -72,6 +75,7 @@ const createApp = async (config) => {
 		secret_key: remoteApp.apiSecret,
 		remote_id: remoteApp.id,
 		scopes: localApp.configuration?.['access_scopes']?.scopes || null,
+		api_version: config.localApp.configuration?.['webhooks']?.['api_version'] || '2024-01',
 	}, 'XpifyCreateApp');
 	if (!result.saveApp?.id) {
 		throw new Error('Không tạo được app vào backend, check lại!')
@@ -84,7 +88,7 @@ const saveApp = async (input, apiName) => {
 		query: CREATE_APP_MUTATION,
 		api: apiName,
 		url: getBackendEndpoint(),
-		token: process.env.XPIFY_SECRET_KEY,
+		token: process.env[XPIFY_SECRET_KEY],
 		variables: {
 			input,
 		},
@@ -97,7 +101,7 @@ const getApp = async (config) => {
 			query: APP_QUERY,
 			api: 'XpifyApp',
 			url: getBackendEndpoint(),
-			token: process.env.XPIFY_SECRET_KEY,
+			token: process.env[XPIFY_SECRET_KEY],
 			variables: {
 				remoteId: config.remoteApp.id,
 			},
@@ -120,5 +124,5 @@ const getApp = async (config) => {
 };
 
 function getBackendEndpoint() {
-	return new URL('/graphql', process.env.XPIFY_BACKEND_URL).href;
+	return new URL('/graphql', process.env[XPIFY_BACKEND_URL]).href;
 }
