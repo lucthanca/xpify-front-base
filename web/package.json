@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
+    "dev": "vite --force",
     "coverage": "vitest run --coverage"
   },
   "type": "module",
@@ -24,7 +24,7 @@
     "@shopify/app-bridge": "^3.7.7",
     "@shopify/app-bridge-react": "^3.7.7",
     "@shopify/i18next-shopify": "^0.2.9",
-    "@shopify/polaris": "^10.49.1",
+    "@shopify/polaris": "^12.10.0",
     "@vitejs/plugin-react": "1.2.0",
     "apollo-cache-persist": "^0.1.1",
     "framer-motion": "^10.17.4",

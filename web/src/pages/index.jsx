@@ -4,7 +4,7 @@ import {
   Layout,
   TextContainer,
   Image,
-  Stack,
+  LegacyStack as Stack,
   Link,
   Text,
 } from "@shopify/polaris";
