@@ -8,7 +8,7 @@ export const retryLink = () => {
       jitter: true
     },
     attempts: {
-      max: 5,
+      max: 1,
       retryIf: (error, _operation) => !!error && error?.statusCode >= 500 && navigator.onLine,
     }
   });

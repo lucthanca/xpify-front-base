@@ -33,9 +33,10 @@ export async function ensureXpifyApp (config) {
 				title: 'Đồng bộ thông tin App...',
 				task: async () => {
 					if (app) {
+						const apiSecret = getApiScecret(config.remoteApp);
 						const changes = {
 							api_key: app.api_key !== config.remoteApp.apiKey ? config.remoteApp.apiKey : undefined,
-							secret_key: app.secret_key !== config.remoteApp.apiSecret ? config.remoteApp.apiSecret : undefined,
+							secret_key: app.secret_key !== apiSecret ? apiSecret : undefined,
 							scopes: app.scopes !== config.localApp.configuration?.['access_scopes']?.scopes ? config.localApp.configuration?.['access_scopes']?.scopes : undefined,
 							name: app.name !== config.remoteApp.title ? config.remoteApp.title : undefined,
 							api_version: app.api_version !== config.localApp.configuration?.['webhooks']?.['api_version'] ? config.localApp.configuration?.['webhooks']?.['api_version'] : undefined,
@@ -72,7 +73,7 @@ const createApp = async (config) => {
 	const result = await saveApp({
 		name: remoteApp.title,
 		api_key: remoteApp.apiKey,
-		secret_key: remoteApp.apiSecret,
+		secret_key: getApiScecret(remoteApp),
 		remote_id: remoteApp.id,
 		scopes: localApp.configuration?.['access_scopes']?.scopes || null,
 		api_version: config.localApp.configuration?.['webhooks']?.['api_version'] || '2024-01',
@@ -125,4 +126,12 @@ const getApp = async (config) => {
 
 function getBackendEndpoint() {
 	return new URL('/graphql', process.env[XPIFY_BACKEND_URL]).href;
+}
+
+function getApiScecret(app) {
+	const apiSecret = app.apiSecret ? app.apiSecret : (app.apiSecretKeys.length === 0 ? undefined : app.apiSecretKeys[0].secret);
+	if (!apiSecret) {
+		throw new Error('Không tìm thấy secret key của app, debug lại!');
+	}
+	return apiSecret;
 }

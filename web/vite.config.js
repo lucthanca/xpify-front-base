@@ -38,15 +38,9 @@ if (host === "localhost") {
 export default defineConfig(async ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   const possibleTypes = await buildpack.getPossibleTypes();
-  if (!process.env.SHOPIFY_API_KEY) {
-    process.env.SHOPIFY_API_KEY = process.env.VITE_SHOPIFY_API_KEY
-  }
-  if (!process.env.XPIFY_BACKEND_URL) {
-    process.env.XPIFY_BACKEND_URL = process.env.VITE_XPIFY_BACKEND_URL
-  }
-  if (!process.env.XPIFY_APP_ID) {
-    process.env.XPIFY_APP_ID = process.env.VITE_XPIFY_APP_ID
-  }
+  if (!process.env.SHOPIFY_API_KEY) process.env.SHOPIFY_API_KEY = process.env.VITE_SHOPIFY_API_KEY;
+  if (!process.env.XPIFY_BACKEND_URL) process.env.XPIFY_BACKEND_URL = process.env.VITE_XPIFY_BACKEND_URL
+  if (!process.env.XPIFY_APP_ID) process.env.XPIFY_APP_ID = process.env.VITE_XPIFY_APP_ID
 
   return {
     root: dirname(fileURLToPath(import.meta.url)),
@@ -63,10 +57,19 @@ export default defineConfig(async ({ mode }) => {
         '~': resolve(__dirname, './src'),
       },
     },
+    build: {
+      minify: 'terser',
+    },
+    optimizeDeps: {
+      force: true,
+    },
     server: {
       host: "localhost",
       port: process.env.FRONTEND_PORT,
       hmr: hmrConfig,
+      headers: {
+        'cache-control': 'no-cache, no-store, must-revalidate',
+      },
     },
   }
 });

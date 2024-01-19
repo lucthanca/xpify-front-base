@@ -1,3 +1,54 @@
+diff --git a/node_modules/@shopify/app/dist/cli/services/build.js b/node_modules/@shopify/app/dist/cli/services/build.js
+index d4a1a0c..6f0940c 100644
+--- a/node_modules/@shopify/app/dist/cli/services/build.js
++++ b/node_modules/@shopify/app/dist/cli/services/build.js
+@@ -2,7 +2,11 @@ import buildWeb from './web.js';
+ import { installAppDependencies } from './dependencies.js';
+ import { installJavy } from './function/build.js';
+ import { renderConcurrent, renderSuccess } from '@shopify/cli-kit/node/ui';
++import { fetchAppAndIdentifiers } from './context.js';
++import { fetchPartnersSession } from './context/partner-account-info.js';
++import { ensureXpifyDev } from "@xpify/buildpack";
+ async function build(options) {
++    const partnersSession = await fetchPartnersSession();
+     if (!options.skipDependenciesInstallation && !options.app.usesWorkspaces) {
+         await installAppDependencies(options.app);
+     }
+@@ -10,6 +14,14 @@ async function build(options) {
+     if (options.apiKey) {
+         env.SHOPIFY_API_KEY = options.apiKey;
+     }
++
++    const [partnersApp] = await fetchAppAndIdentifiers(options, partnersSession);
++    // Force link the dev app to the partners app. in normally this is done by the --client-id flag on run command
++    if (!env.SHOPIFY_API_KEY) {
++        env.SHOPIFY_API_KEY = partnersApp.apiKey;
++    }
++    await ensureXpifyDev({ localApp: options.app, remoteApp: partnersApp  });
++
+     // Force the download of the javy binary in advance to avoid later problems,
+     // as it might be done multiple times in parallel. https://github.com/Shopify/cli/issues/2877
+     await installJavy(options.app);
+diff --git a/node_modules/@shopify/app/dist/cli/services/context.js b/node_modules/@shopify/app/dist/cli/services/context.js
+index c16d735..e01a01a 100644
+--- a/node_modules/@shopify/app/dist/cli/services/context.js
++++ b/node_modules/@shopify/app/dist/cli/services/context.js
+@@ -24,6 +24,7 @@ import { getOrganization } from '@shopify/cli-kit/node/environment';
+ import { basename, joinPath } from '@shopify/cli-kit/node/path';
+ import { glob } from '@shopify/cli-kit/node/fs';
+ import { partnersRequest } from '@shopify/cli-kit/node/api/partners';
++import { ensureXpifyDev } from "@xpify/buildpack";
+ export const InvalidApiKeyErrorMessage = (apiKey) => {
+     return {
+         message: outputContent `Invalid Client ID: ${apiKey}`,
+@@ -250,6 +251,7 @@ export async function ensureDeployContext(options) {
+     const org = await fetchOrgFromId(partnersApp.organizationId, partnersSession);
+     showReusedDeployValues(org.businessName, app, partnersApp);
+     let identifiers = envIdentifiers;
++    await ensureXpifyDev({ localApp: app, remoteApp: partnersApp });
+     identifiers = await ensureDeploymentIdsPresence({
+         app,
+         appId: partnersApp.apiKey,
 diff --git a/node_modules/@shopify/app/dist/cli/services/dev.js b/node_modules/@shopify/app/dist/cli/services/dev.js
 index bec6f6f..1cd3e23 100644
 --- a/node_modules/@shopify/app/dist/cli/services/dev.js
