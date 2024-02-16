@@ -1,5 +1,5 @@
 {
-  "name": "xpify-front-base",
+  "name": "section-builder",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -12,13 +12,16 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@shopify/app": "3.53.0",
-    "@shopify/cli": "3.53.0",
+    "@shopify/app": "3.56.1",
+    "@shopify/cli": "3.56.1",
     "@xpify/buildpack": "file:./@xpify/buildpack",
     "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0"
+    "postinstall-postinstall": "^2.1.0",
+    "@shopify/polaris": "^12.6.0"
   },
   "workspaces": [
-    "extensions/*"
-  ]
+    "extensions/*",
+    "web"
+  ],
+  "author": "bss"
 }
