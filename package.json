@@ -16,8 +16,7 @@
     "@shopify/cli": "3.56.1",
     "@xpify/buildpack": "file:./@xpify/buildpack",
     "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0",
-    "@shopify/polaris": "^12.6.0"
+    "postinstall-postinstall": "^2.1.0"
   },
   "workspaces": [
     "extensions/*",
