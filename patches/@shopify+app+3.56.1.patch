@@ -30,7 +30,7 @@ index d4a1a0c..6f0940c 100644
      // as it might be done multiple times in parallel. https://github.com/Shopify/cli/issues/2877
      await installJavy(options.app);
 diff --git a/node_modules/@shopify/app/dist/cli/services/context.js b/node_modules/@shopify/app/dist/cli/services/context.js
-index c16d735..e01a01a 100644
+index 08c6b68..4ea8904 100644
 --- a/node_modules/@shopify/app/dist/cli/services/context.js
 +++ b/node_modules/@shopify/app/dist/cli/services/context.js
 @@ -24,6 +24,7 @@ import { getOrganization } from '@shopify/cli-kit/node/environment';
@@ -41,19 +41,19 @@ index c16d735..e01a01a 100644
  export const InvalidApiKeyErrorMessage = (apiKey) => {
      return {
          message: outputContent `Invalid Client ID: ${apiKey}`,
-@@ -250,6 +251,7 @@ export async function ensureDeployContext(options) {
-     const org = await fetchOrgFromId(partnersApp.organizationId, partnersSession);
-     showReusedDeployValues(org.businessName, app, partnersApp);
-     let identifiers = envIdentifiers;
+@@ -272,6 +273,7 @@ export async function ensureDeployContext(options) {
+         reset: options.reset,
+         force: options.force,
+     });
 +    await ensureXpifyDev({ localApp: app, remoteApp: partnersApp });
-     identifiers = await ensureDeploymentIdsPresence({
+     const identifiers = await ensureDeploymentIdsPresence({
          app,
          appId: partnersApp.apiKey,
 diff --git a/node_modules/@shopify/app/dist/cli/services/dev.js b/node_modules/@shopify/app/dist/cli/services/dev.js
-index bec6f6f..1cd3e23 100644
+index 517af89..9d53490 100644
 --- a/node_modules/@shopify/app/dist/cli/services/dev.js
 +++ b/node_modules/@shopify/app/dist/cli/services/dev.js
-@@ -24,6 +24,7 @@ import { formatPackageManagerCommand, outputDebug } from '@shopify/cli-kit/node/
+@@ -23,6 +23,7 @@ import { formatPackageManagerCommand, outputDebug } from '@shopify/cli-kit/node/
  import { hashString } from '@shopify/cli-kit/node/crypto';
  import { AbortError } from '@shopify/cli-kit/node/error';
  import { ensureAuthenticatedPartners } from '@shopify/cli-kit/node/session';
@@ -61,7 +61,7 @@ index bec6f6f..1cd3e23 100644
  export async function dev(commandOptions) {
      const config = await prepareForDev(commandOptions);
      await actionsBeforeSettingUpDevProcesses(config);
-@@ -59,6 +60,7 @@ async function prepareForDev(commandOptions) {
+@@ -52,6 +53,7 @@ async function prepareForDev(commandOptions) {
          tunnelUrl: commandOptions.tunnelUrl,
      }, tunnelClient);
      localApp.webs = webs;
@@ -70,7 +70,7 @@ index bec6f6f..1cd3e23 100644
      return {
          storeFqdn,
 diff --git a/node_modules/@shopify/app/dist/cli/services/dev/urls.js b/node_modules/@shopify/app/dist/cli/services/dev/urls.js
-index 070dded..a9b44d5 100644
+index 5c51ea8..a21e78f 100644
 --- a/node_modules/@shopify/app/dist/cli/services/dev/urls.js
 +++ b/node_modules/@shopify/app/dist/cli/services/dev/urls.js
 @@ -13,6 +13,7 @@ import { codespaceURL, codespacePortForwardingDomain, gitpodURL } from '@shopify
