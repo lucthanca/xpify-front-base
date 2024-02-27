@@ -1,0 +1,22 @@
+/*
+ * Copyright (c) 2024 BSS
+*/
+.bss-section{ /* Enable section */
+    display: block !important;
+}
+
+
+/* Style by dev BSS */
+.d-flex {
+    display: flex;
+}
+
+.d-block {
+    display: block;
+}
+/* ...... */
+
+.overflow-hidden {
+    overflow: hidden;
+}
+/* ...... */

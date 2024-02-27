@@ -1,0 +1,64 @@
+.pointer {
+  cursor: pointer;
+}
+
+
+.Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge {
+  max-width: 90% !important;
+}
+
+.Polaris-IndexFilters__ButtonWrap > .Polaris-InlineStack > div:first-child {
+  /* Remove Cancel btn in component Index Filter Polaris */
+  display: none;
+}
+
+.section-builder-paginate {
+  display: flex;
+  justify-content: center;
+}
+
+.section-builder-paginate ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.section-builder-paginate ul li {
+  cursor: pointer;
+  list-style-type: none;
+  background-color: #fff;
+  margin: 5px;
+  border-radius: 5px;
+  box-shadow: var(--p-shadow-card);
+}
+
+.section-builder-paginate ul li.selected {
+  background-color: var(--p-action-primary);
+  color: #fff;
+}
+
+.section-builder-paginate ul a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  text-decoration: none;
+  padding: 10px;
+  min-width: 33px;
+  height: 33px;
+}
+
+.section-builder-paginate ul a[aria-disabled=true] {
+  pointer-events: none;
+  opacity: .2;
+}
+
+.section-builder-paginate ul a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  text-decoration: none;
+  padding: 10px;
+  min-width: 33px;
+  height: 33px;
+}

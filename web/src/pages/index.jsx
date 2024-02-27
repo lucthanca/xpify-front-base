@@ -1,91 +1,95 @@
 import {
-  Card,
   Page,
   Layout,
-  TextContainer,
-  Image,
-  LegacyStack as Stack,
-  Link,
-  Text,
+  Text
 } from "@shopify/polaris";
-import { TitleBar } from "@shopify/app-bridge-react";
-import { useTranslation, Trans } from "react-i18next";
+import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {gql, useQuery, useMutation} from "@apollo/client";
 
-import { trophyImage } from "~/assets";
+import '~/assets/style.css';
+import Search from '~/components/input/search';
+import MediaTutorial from '~/components/media/tutorial';
+import ProductList from '~/components/product/list';
+import ModalProduct from '~/components/modal/product';
+import Card from "~/components/product/card";
 
-export default function HomePage() {
+const graphQlGetSections = gql`
+  query GET(
+    $search: String,
+    $filter: SectionFilterInput,
+    $pageSize: Int = 20,
+    $currentPage: Int = 1
+  ) {
+    getSections(
+      search: $search,
+      filter: $filter,
+      pageSize: $pageSize,
+      currentPage: $currentPage
+    ) {
+      items {
+        entity_id
+        is_enable
+        plan_id
+        name
+        images {
+          src
+        }
+        url_key
+        price
+        src
+        version
+      }
+      total_count
+      page_info {
+        current_page
+        page_size
+        total_pages
+      }
+    }
+  }
+`;
+
+function HomePage() {
   const { t } = useTranslation();
+  const [filterSearch, setFilterSearch] = useState('');
+  const { data, loading, error } = useQuery(graphQlGetSections, {
+    fetchPolicy: "cache-and-network",
+    variables: {
+      search: filterSearch,
+      pageSize: 8,
+      currentPage: 1
+    }
+  });
+
+  const [isShowPopup, setIsShowPopup] = useState(false);
+  const handleShowModal = useCallback(() => {
+    setIsShowPopup(!isShowPopup);
+  }, []);
+
+  console.log('re-render-homePage');
   return (
-    <Page narrowWidth>
-      <TitleBar title={t("HomePage.title")} primaryAction={null} />
+    <Page fullWidth>
       <Layout>
+        {/* <Layout.Section>
+          <Text variant="headingLg" as="h2">{t("HomePage.tutorialTitle")}</Text>
+          <MediaTutorial />
+        </Layout.Section> */}
+
         <Layout.Section>
-          <Card sectioned>
-            <Stack
-              wrap={false}
-              spacing="extraTight"
-              distribution="trailing"
-              alignment="center"
-            >
-              <Stack.Item fill>
-                <TextContainer spacing="loose">
-                  <Text as="h2" variant="headingMd">
-                    {t("HomePage.heading")}
-                  </Text>
-                  <p>
-                    <Trans
-                      i18nKey="HomePage.yourAppIsReadyToExplore"
-                      components={{
-                        PolarisLink: (
-                          <Link url="https://polaris.shopify.com/" external />
-                        ),
-                        AdminApiLink: (
-                          <Link
-                            url="https://shopify.dev/api/admin-graphql"
-                            external
-                          />
-                        ),
-                        AppBridgeLink: (
-                          <Link
-                            url="https://shopify.dev/apps/tools/app-bridge"
-                            external
-                          />
-                        ),
-                      }}
-                    />
-                  </p>
-                  <p>{t("HomePage.startPopulatingYourApp")}</p>
-                  <p>
-                    <Trans
-                      i18nKey="HomePage.learnMore"
-                      components={{
-                        ShopifyTutorialLink: (
-                          <Link
-                            url="https://shopify.dev/apps/getting-started/add-functionality"
-                            external
-                          />
-                        ),
-                      }}
-                    />
-                  </p>
-                </TextContainer>
-              </Stack.Item>
-              <Stack.Item>
-                <div style={{ padding: "0 20px" }}>
-                  <Image
-                    source={trophyImage}
-                    alt={t("HomePage.trophyAltText")}
-                    width={120}
-                  />
-                </div>
-              </Stack.Item>
-            </Stack>
+          <Text variant="headingLg" as="h2">{t("HomePage.sectionTitle")}</Text>
+
+          <Card>
+            <Search filterSearch={filterSearch} setFilterSearch={setFilterSearch} />
+            <br></br>
+            {(!loading || data?.getSections) && <ProductList items={data.getSections?.items ?? []} handleShowModal={handleShowModal} />}
           </Card>
         </Layout.Section>
-        <Layout.Section>
 
-        </Layout.Section>
+        <ModalProduct isShowPopup={isShowPopup} setIsShowPopup={setIsShowPopup} />
       </Layout>
     </Page>
   );
 }
+
+export default HomePage;

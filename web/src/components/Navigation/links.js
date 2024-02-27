@@ -4,8 +4,20 @@ export const useNavigationLinks = () => {
   const { t } = useTranslation();
   return [
     {
-      label: t('NavigationMenu.pageName'),
-      destination: '/pagename',
+      label: t('NavigationMenu.sections'),
+      destination: '/sections',
+    },
+    {
+      label: t('NavigationMenu.section'),
+      destination: '/section',
+    },
+    {
+      label: t('NavigationMenu.faq'),
+      destination: '/faq',
+    },
+    {
+      label: "Test",
+      destination: '/test',
     }
   ];
 };
