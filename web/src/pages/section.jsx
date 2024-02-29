@@ -1,6 +1,6 @@
-import { Page, Badge, Card, Layout, Button, Icon, Text, ProgressBar, BlockStack, Box, Banner, InlineGrid, SkeletonPage, SkeletonBodyText, SkeletonDisplayText } from '@shopify/polaris';
-import { ViewIcon } from '@shopify/polaris-icons';
-import { useCallback, useState } from 'react';
+import { Page, Badge, Card, Layout, Button, Icon, Text, ProgressBar, BlockStack, Box, Banner, InlineGrid, SkeletonPage, SkeletonBodyText, SkeletonDisplayText, List } from '@shopify/polaris';
+import { ViewIcon, PaymentIcon } from '@shopify/polaris-icons';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { memo } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
@@ -9,9 +9,43 @@ import SkeletonProduct from '~/components/product/skeleton';
 import {gql, useQuery, useMutation} from "@apollo/client";
 import CollapsibleButton from "~/components/collapsible/button";
 import GallerySlider from '~/components/splide/gallery';
-import ModalInstallSection from '~/components/modal/installSection';
+import ModalInstallSection from '~/components/product/manage';
 import ProductCarousel from '~/components/splide/product';
-import ModalProduct from '~/components/modal/product';
+import ModalProduct from '~/components/product/modal';
+import BannerDefault from '~/components/banner/default';
+
+const skeleton = (
+  <SkeletonPage primaryAction backAction>
+    <Layout>
+      <Layout.Section>
+        <BlockStack gap={400}>
+          <Card sectioned>
+            <SkeletonBodyText lines={7} />
+          </Card>
+          <Card sectioned>
+            <Text>
+              <BlockStack gap={400}>
+                <SkeletonDisplayText size="small" />
+                <SkeletonBodyText lines={5} />
+              </BlockStack>
+            </Text>
+          </Card>
+          <Card sectioned>
+            <Text>
+              <BlockStack gap={400}>
+                <SkeletonDisplayText size="small" />
+                <SkeletonBodyText lines={3} />
+              </BlockStack>
+            </Text>
+          </Card>
+          <Card sectioned>
+            <SkeletonProduct total={3} columns={{ sm: 1, md: 2, lg: 3 }} />
+          </Card>
+        </BlockStack>
+      </Layout.Section>
+    </Layout>
+  </SkeletonPage>
+);
 
 const graphQlGetSection = gql`
   query GET($key: String!) {
@@ -33,9 +67,23 @@ const graphQlGetSection = gql`
       pricing_plan {
         name
         code
+        prices {
+          interval
+          amount
+        }
+        description
       }
       categories
       tags
+      installed {
+        theme_id
+        product_version
+      }
+      actions {
+        install
+        purchase
+        plan
+      }
     }
   }
 `;
@@ -78,9 +126,19 @@ const graphQlGetSectionMore = gql`
       pricing_plan {
         name
         code
+        prices {
+          interval
+          amount
+        }
+        description
       }
       categories
       tags
+      actions {
+        install
+        purchase
+        plan
+      }
     }
   }
 `;
@@ -94,49 +152,28 @@ const graphQlGetThemes = gql`
     }
   }
 `;
-const skeleton = (
-  <SkeletonPage primaryAction backAction>
-    <Layout>
-      <Layout.Section>
-        <BlockStack gap={400}>
-          <Card sectioned>
-            <SkeletonBodyText lines={7} />
-          </Card>
-          <Card sectioned>
-            <Text>
-              <BlockStack gap={400}>
-                <SkeletonDisplayText size="small" />
-                <SkeletonBodyText lines={5} />
-              </BlockStack>
-            </Text>
-          </Card>
-          <Card sectioned>
-            <Text>
-              <BlockStack gap={400}>
-                <SkeletonDisplayText size="small" />
-                <SkeletonBodyText lines={3} />
-              </BlockStack>
-            </Text>
-          </Card>
-        </BlockStack>
-      </Layout.Section>
-    </Layout>
-  </SkeletonPage>
-);
+const graphQlRedirectPurchase = gql`
+  mutation Purchase($name: String!, $interval: PricingPlanInterval!, $is_plan: Boolean!) {
+    redirectBillingUrl(name: $name, interval: $interval, is_plan: $is_plan) {
+      message
+      tone
+    }
+  }
+`;
+
 
 function SectionDetail() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [isShowPopupManage, setIsShowPopupManage] = useState(false);
   const [bannerAlert, setBannerAlert] = useState(undefined); 
-
   const [isShowPopup, setIsShowPopup] = useState(false);
   const [currentProduct, setCurrentProduct] = useState({});
 
-  const { data:section, loading:sectionL, error:sectionE } = useQuery(graphQlGetSection, {
+  const { data:section, loading:sectionL, error:sectionE, refetch:sectionR } = useQuery(graphQlGetSection, {
     fetchPolicy: "cache-and-network",
     variables: {
-      key: 'about-01'
+      key: 'about-04'
     }
   });
   const { data:themes, loading:themesL, error:themesE } = useQuery(graphQlGetThemes, {
@@ -156,30 +193,65 @@ function SectionDetail() {
   const { data:productMore, loading:loadingProduct, error:errorProduct } = useQuery(graphQlGetSectionMore, {
     fetchPolicy: "cache-and-network",
     variables: {
-      key: currentProduct?.url_key ? currentProduct?.url_key : ''
+      key: currentProduct?.url_key ?? ''
     }
   });
+  const [redirectPurchase, { data:purchase, loading:purchaseL, error:purchaseE }] = useMutation(graphQlRedirectPurchase);
 
   const handleShowModal = useCallback(() => {
     setIsShowPopup(!isShowPopup);
   }, []);
+  const handlePurchase = useCallback(async () => {
+    await redirectPurchase({ 
+        variables: {
+            name: section.getSection?.url_key,
+            interval: 'ONE_TIME',
+            is_plan: false
+        }
+     });
+  }, [section]);
+
+  useEffect(() => {
+    if (purchase?.redirectBillingUrl?.message) {
+      setBannerAlert({
+        'title': purchase.redirectBillingUrl.message,
+        'tone': purchase?.redirectBillingUrl?.tone ?? "critical"
+      });
+    }
+    if (purchaseE?.graphQLErrors?.length) {
+      setBannerAlert({
+        'title': purchaseE.message,
+        'tone': 'critical',
+        'content': purchaseE.graphQLErrors
+      });
+    }
+  }, [purchase, purchaseE]);
 
   console.log("re-render-pageSection");
   return (
-    (!sectionL || section)
+    (section)
     ? <Page
       backAction={{content: 'Products', onAction: () => navigate(-1)}}
       title={section.getSection.name}
       titleMetadata={<Badge tone="success">v{section.getSection.version}</Badge>}
-      subtitle="$9 or update to Pro"
+      subtitle={section.getSection?.price ? `$${section.getSection?.price} or update to ${section.getSection?.pricing_plan?.name}` : 'Free'}
       compactTitle
       primaryAction={{content: 'Manage Section', onAction: () => {setIsShowPopupManage(!isShowPopupManage)}}}
       secondaryActions={[
         {
           content: 'View in demo site',
           icon: ViewIcon,
-          url: section.getSection.demo_link,
+          url: section?.getSection?.demo_link,
+          disabled: !section?.getSection?.demo_link,
+          helpText: !section?.getSection?.demo_link ? 'This product has no demo yet.' : '',
           onAction: () => {}
+        },
+        {
+          content: !section?.getSection?.actions?.purchase ? 'Purchased' : 'Purchase',
+          disabled: !section?.getSection?.actions?.purchase,
+          helpText: 'Own forever this section.',
+          loading: purchaseL,
+          onAction: () => handlePurchase()
         }
       ]}
     >
@@ -187,19 +259,42 @@ function SectionDetail() {
         <Layout.Section>
           <BlockStack gap={400}>
             {
-              bannerAlert &&
+              (!section.getSection.actions?.install) &&
               <Banner
-                {...bannerAlert}
-                onDismiss={() => {setBannerAlert(undefined)}}
+                title="You cann't use this section now!"
+                action={{
+                  content: 'Purchase $' + section.getSection.price,
+                  icon: PaymentIcon,
+                  loading: purchaseL,
+                  onAction: () => handlePurchase()
+                }}
+                secondaryAction={{content: 'View Plan', icon: ViewIcon}}
+                tone='warning'
               >
                 <BlockStack gap={200}>
-                  <Text variant="bodySm">{bannerAlert.content}</Text>
+                  <Text variant="headingSm">How to use this section?</Text>
+                  <List>
+                    {
+                      section.getSection.actions?.purchase &&
+                      <List.Item>
+                        <Text variant="bodySm">Own forever: Purchase once.</Text>
+                      </List.Item>
+                    }
+                    {
+                      section.getSection.actions?.plan &&
+                      <List.Item>
+                        <Text variant="bodySm">Periodic payments: Own all sections included in the plan ({section.getSection.pricing_plan.name})</Text>
+                      </List.Item>
+                    }
+                  </List>
                 </BlockStack>
               </Banner>
             }
 
+            <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
+
             <Card title="Gallery" padding={0}>
-              <GallerySlider gallery={section.getSection.images} height={'30rem'} />
+              <GallerySlider gallery={section.getSection?.images} height={'30rem'} />
             </Card>
             {
               section.getSection.description && 
@@ -227,7 +322,7 @@ function SectionDetail() {
                   ? <ProductCarousel
                     configSplide={{
                       options: {
-                        perPage: 5,
+                        perPage: 3,
                         gap: '1rem',
                         pagination: false,
                         breakpoints:{
@@ -243,7 +338,8 @@ function SectionDetail() {
                           }
                         },
                         autoplay: true,
-                        interval: 3000
+                        interval: 3000,
+                        rewind: true
                       }
                     }}
                     items={productRelated.getSections?.items ?? []}
@@ -273,9 +369,19 @@ function SectionDetail() {
 
         {
           section &&
-          <ModalInstallSection currentProduct={section?.getSection} themes={themes?.getThemes} isShowPopup={isShowPopupManage} setIsShowPopup={setIsShowPopupManage} setBannerAlert={setBannerAlert} />
+          <ModalInstallSection
+            currentProduct={section?.getSection}
+            themes={themes?.getThemes}
+            isShowPopup={isShowPopupManage}
+            setIsShowPopup={setIsShowPopupManage}
+            setBannerAlert={setBannerAlert}
+            reloadProduct={() => sectionR()}
+          />
         }
-        <ModalProduct currentProduct={currentProduct} productMore={productMore} isShowPopup={isShowPopup} setIsShowPopup={setIsShowPopup} />
+        {
+          isShowPopup &&
+          <ModalProduct currentProduct={currentProduct} productMore={productMore} isShowPopup={isShowPopup} setIsShowPopup={setIsShowPopup} />
+        }
       </Layout>
     </Page>
     : skeleton

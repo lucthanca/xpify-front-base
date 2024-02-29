@@ -24,7 +24,7 @@ function ProductCard({item, handleShowModal, setCurrentProduct, lazyLoadImg = tr
       <Box background="bg-surface-secondary" padding="400">
         <BlockStack gap={200}>
           <Text variant="headingMd" as="h2">{item.name}</Text>
-          <Text as="p" variant="bodyMd">
+          <Text as="div" variant="bodyMd">
             Version: {item.version}
             <br></br>
             {item.price ? 'Price: $' + item.price : 'Free'}

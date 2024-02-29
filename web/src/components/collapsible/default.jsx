@@ -14,7 +14,7 @@ import {
 } from '@shopify/polaris-icons';
 import {useState, useCallback, memo} from 'react';
 
-function CollapsibleDefault() {
+function CollapsibleDefault({title, content}) {
     const [open, setOpen] = useState(false);
 
     const handleToggle = useCallback(() => setOpen((open) => !open), []);
@@ -24,7 +24,7 @@ function CollapsibleDefault() {
             <InlineStack>
                 <div className='title-collapsible pointer' onClick={handleToggle}>
                     <Text as="p" variant="bodyLg">
-                        Can I use Section Store with any Shopify theme?
+                        {title}
                     </Text>
                     
                     <BlockStack as='div'>
@@ -44,16 +44,9 @@ function CollapsibleDefault() {
                         expandOnPrint
                     >
                         <BlockStack gap={200}>
-                            <Text as="p" variant="bodyMd" tone='subdued'>
-                                Your mailing list lets you contact customers or visitors who
-                                have shown an interest in your store. Reach out to them with
-                                exclusive offers or updates about your products.
-
-                                Your mailing list lets you contact customers or visitors who
-                                have shown an interest in your store. Reach out to them with
-                                exclusive offers or updates about your products.
+                            <Text as="div" variant="bodyMd" tone='subdued'>
+                                <div dangerouslySetInnerHTML={{__html: content}}></div>
                             </Text>
-                            <Link url="#">Test link</Link>
                         </BlockStack>
                     </Collapsible>
                 </Box>

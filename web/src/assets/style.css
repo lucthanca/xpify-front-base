@@ -1,8 +1,4 @@
-.pointer {
-  cursor: pointer;
-}
-
-
+/* Custom Style Polaris */
 .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge {
   max-width: 90% !important;
 }
@@ -11,6 +7,16 @@
   /* Remove Cancel btn in component Index Filter Polaris */
   display: none;
 }
+
+
+
+
+
+/* BSS Style */
+.pointer {
+  cursor: pointer;
+}
+
 
 .section-builder-paginate {
   display: flex;

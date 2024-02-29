@@ -15,7 +15,7 @@ export default function GallerySlider({gallery, height}) {
       {
         gallery.map(slide => (
           <SplideSlide key={ slide.src } style={{'backgroundColor': '#eeeeee'}}>
-            <img src={ slide.src } alt={ slide.alt } style={{'height': '100%', 'margin': 'auto'}}/>
+            <img src={ slide.src } alt={ slide.alt ?? '' } style={{'height': '100%', 'margin': 'auto'}}/>
           </SplideSlide>
         ))
       }

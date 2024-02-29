@@ -16,7 +16,7 @@ import Search from '~/components/input/search';
 import ProductCarousel from '~/components/splide/product';
 import ProductList from '~/components/product/list';
 import SkeletonProduct from '~/components/product/skeleton';
-import ModalProduct from '~/components/modal/product';
+import ModalProduct from '~/components/product/modal';
 import Paginate from '~/components/paginate/default';
 import { AutoScroll } from "@splidejs/splide-extension-auto-scroll";
 
@@ -62,12 +62,22 @@ const graphQlGetSections = gql`
 const graphQlGetSection = gql`
   query GET($key: String!) {
     getSection(key: $key) {
+      categories
+      tags
       pricing_plan {
         name
         code
+        prices {
+          interval
+          amount
+        }
+        description
       }
-      categories
-      tags
+      actions {
+        install
+        purchase
+        plan
+      }
     }
   }
 `;
@@ -115,7 +125,6 @@ function Sections() {
   const [tagFilter, setTagFilter] = useState(undefined);
   const [priceFilter, setPriceFilter] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
-
   const [isShowPopup, setIsShowPopup] = useState(false);
   const [currentProduct, setCurrentProduct] = useState({});
 
@@ -123,7 +132,7 @@ function Sections() {
     setIsShowPopup(!isShowPopup);
   }, []);
 
-  const { data, loading, error } = useQuery(graphQlGetSections, {
+  const { data:sections, loading:sectionsL, error:sectionsE } = useQuery(graphQlGetSections, {
     fetchPolicy: "network-only",
     variables: {
       search: searchFilter,
@@ -152,10 +161,10 @@ function Sections() {
       currentPage: 1
     }
   });
-  const { data:productMore, loading:loadingProduct, error:errorProduct } = useQuery(graphQlGetSection, {
-    fetchPolicy: "network-only",
+  const { data:productMore, loading:productMoreL, error:productMoreE } = useQuery(graphQlGetSection, {
+    fetchPolicy: "cache-and-network",
     variables: {
-      key: currentProduct?.url_key ? currentProduct?.url_key : ''
+      key: currentProduct?.url_key ?? ''
     }
   });
 
@@ -259,8 +268,8 @@ function Sections() {
             <Box padding={600}>
               <BlockStack gap={200}>
                 {
-                  (!loading || data?.getSections)
-                  ? <ProductList items={data.getSections?.items ?? []} handleShowModal={handleShowModal} setCurrentProduct={setCurrentProduct} />
+                  sections?.getSections !== undefined
+                  ? <ProductList items={sections.getSections?.items ?? []} handleShowModal={handleShowModal} setCurrentProduct={setCurrentProduct} />
                   : <SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />
                 }
               </BlockStack>
@@ -270,9 +279,9 @@ function Sections() {
 
         <Layout.Section>
           {
-            (!loading || data?.getSections)
+            sections?.getSections !== undefined
             ? <Paginate
-              pageInfo={data?.getSections.page_info ?? []}
+              pageInfo={sections?.getSections.page_info ?? []}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
             />

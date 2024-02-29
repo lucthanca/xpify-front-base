@@ -11,7 +11,7 @@ import '~/assets/style.css';
 import Search from '~/components/input/search';
 import MediaTutorial from '~/components/media/tutorial';
 import ProductList from '~/components/product/list';
-import ModalProduct from '~/components/modal/product';
+import ModalProduct from '~/components/product/modal';
 import Card from "~/components/product/card";
 
 const graphQlGetSections = gql`
