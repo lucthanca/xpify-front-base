@@ -42,6 +42,12 @@ export default defineConfig(async ({ mode }) => {
   if (!process.env.XPIFY_BACKEND_URL) process.env.XPIFY_BACKEND_URL = process.env.VITE_XPIFY_BACKEND_URL
   if (!process.env.XPIFY_APP_ID) process.env.XPIFY_APP_ID = process.env.VITE_XPIFY_APP_ID
 
+  const proxyOptions = {
+      target: process.env.XPIFY_BACKEND_URL,
+      changeOrigin: true,
+      secure: true,
+      ws: false,
+    };
   return {
     root: dirname(fileURLToPath(import.meta.url)),
     plugins: [react(), splitVendorChunkPlugin()],
@@ -69,6 +75,10 @@ export default defineConfig(async ({ mode }) => {
       hmr: hmrConfig,
       headers: {
         'cache-control': 'no-cache, no-store, must-revalidate',
+      },
+      proxy: {
+        '^/api(/|(\\?.*)?$)': proxyOptions,
+        '^/graphql': proxyOptions,
       },
     },
   }
