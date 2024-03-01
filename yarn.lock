@@ -637,13 +637,6 @@
   dependencies:
     tslib "^2.4.0"
 
-"@formatjs/intl-localematcher@^0.4.0":
-  version "0.4.2"
-  resolved "https://registry.npmjs.org/@formatjs/intl-localematcher/-/intl-localematcher-0.4.2.tgz"
-  integrity sha512-BGdtJFmaNJy5An/Zan4OId/yR9Ih1OojFjcduX/xOvq798OgWSyDtd6Qd5jqJXwJs1ipe4Fxu9+cshic5Ox2tA==
-  dependencies:
-    tslib "^2.4.0"
-
 "@formatjs/intl-pluralrules@^5.2.4":
   version "5.2.11"
   resolved "https://registry.npmjs.org/@formatjs/intl-pluralrules/-/intl-pluralrules-5.2.11.tgz"
@@ -1205,6 +1198,42 @@
   resolved "https://registry.npmjs.org/@remix-run/router/-/router-1.14.2.tgz"
   integrity sha512-ACXpdMM9hmKZww21yEqWwiLws/UPLhNKvimN8RrYSqPSvB3ov7sLvAcfvaxePeLvccTQKGdkDIhLYApZVDFuKg==
 
+"@remote-ui/async-subscription@^2.1.12", "@remote-ui/async-subscription@^2.1.15":
+  version "2.1.15"
+  resolved "https://registry.yarnpkg.com/@remote-ui/async-subscription/-/async-subscription-2.1.15.tgz#ab8753770630baa2bc2224e0b5c0ee15c09f5026"
+  integrity sha512-SdPfO4ExDOVyOPAoCqT9+Tk0UeU97EMplkxlr5qiv3W7c1yRsxgtbETicoBh9l/P49bLzVjiJG6CQIu1au3Vhw==
+  dependencies:
+    "@remote-ui/rpc" "^1.4.5"
+
+"@remote-ui/core@^2.2.3", "@remote-ui/core@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@remote-ui/core/-/core-2.2.4.tgz#56b174b6f041c57d5950811e6f93cfcffb0fbc1a"
+  integrity sha512-7ahrsI5GqYvAGcWTcysbKFKbzbhB/mDgIJr9VurF34gor2IqRCrmrPYemLQuOCQhWqPb3AOEUxWFYNLiB5i6kA==
+  dependencies:
+    "@remote-ui/rpc" "^1.4.5"
+    "@remote-ui/types" "^1.1.3"
+
+"@remote-ui/react@^5.0.2":
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@remote-ui/react/-/react-5.0.4.tgz#9330821455dbd98a214204d034a2abcdb1b6d53a"
+  integrity sha512-zrewan3KqKHW8HOCgnpHduG4Ldqyh9ysouGIv8VeE0PlC03eCqi2MFzA+nKIJ1p58LIAbPQ1asp+RwT6ImVImg==
+  dependencies:
+    "@remote-ui/async-subscription" "^2.1.15"
+    "@remote-ui/core" "^2.2.4"
+    "@remote-ui/rpc" "^1.4.5"
+    "@types/react" ">=17.0.0 <19.0.0"
+    "@types/react-reconciler" ">=0.26.0 <0.30.0"
+
+"@remote-ui/rpc@^1.4.5":
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/@remote-ui/rpc/-/rpc-1.4.5.tgz#20328970c314374d96fdaae1cf93aca4b47fefee"
+  integrity sha512-Cr+06niG/vmE4A9YsmaKngRuuVSWKMY42NMwtZfy+gctRWGu6Wj9BWuMJg5CEp+JTkRBPToqT5rqnrg1G/Wvow==
+
+"@remote-ui/types@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@remote-ui/types/-/types-1.1.3.tgz#b2a790d5be50fb82d89d4abea9883f87f83a5a25"
+  integrity sha512-P1kN1F3p0oMgnLN8Of1Ie9am3sLvJ7nhqHH1pvzkrxqjVwhhyPVZNcwOHyUNZPKp62izhDavdrcnqrdXzVJqGA==
+
 "@rollup/pluginutils@^4.1.2":
   version "4.2.1"
   resolved "https://registry.npmjs.org/@rollup/pluginutils/-/pluginutils-4.2.1.tgz"
@@ -1234,16 +1263,16 @@
     base64url "^3.0.1"
     web-vitals "^3.0.1"
 
-"@shopify/app@3.56.1":
-  version "3.56.1"
-  resolved "https://registry.npmjs.org/@shopify/app/-/app-3.56.1.tgz"
-  integrity sha512-/cyXPD/xDexvat18LzdMGIy/fMbq2pUuW8jQryj/2PSvl4z7wN/DkbzLfgXH2XDXH/Epcg//zsCOTjb9X4J7ew==
+"@shopify/app@3.56.3":
+  version "3.56.3"
+  resolved "https://registry.yarnpkg.com/@shopify/app/-/app-3.56.3.tgz#80b1dc49421824c8d9920abdf5f6d3627dc73c9b"
+  integrity sha512-pz6Lmn7fJdzUNvRnuC9e3QTIiolzQlyDFrw58VIVm5326Adn2pD0X8OI0eYn6lyadvwLR3dHNU0FQUgKH5QNEA==
   dependencies:
     "@luckycatfactory/esbuild-graphql-loader" "3.8.1"
     "@oclif/core" "3.15.1"
-    "@shopify/cli-kit" "3.56.1"
+    "@shopify/cli-kit" "3.56.3"
     "@shopify/function-runner" "4.1.1"
-    "@shopify/plugin-cloudflare" "3.56.1"
+    "@shopify/plugin-cloudflare" "3.56.3"
     "@shopify/polaris" "12.10.0"
     "@shopify/polaris-icons" "8.0.0"
     "@shopify/theme-check-node" "2.0.1"
@@ -1264,10 +1293,10 @@
     serve-static "1.15.0"
     ws "8.13.0"
 
-"@shopify/cli-kit@3.56.1":
-  version "3.56.1"
-  resolved "https://registry.npmjs.org/@shopify/cli-kit/-/cli-kit-3.56.1.tgz"
-  integrity sha512-QDHcUODGA33ch0f3uMqALv+qKUK4kXqH1nl1XlRXqrFEx+l5xpU+BXWRn4cW5SsHWU7xiVwlf3hnrHQDrGMLdw==
+"@shopify/cli-kit@3.56.3":
+  version "3.56.3"
+  resolved "https://registry.yarnpkg.com/@shopify/cli-kit/-/cli-kit-3.56.3.tgz#00770e74cabb20363811ccfceaa4b827ed467033"
+  integrity sha512-PQdV2a8t9uhum6IBDjF76Df/J5PPV72shwzwO/H8QB4lHfDIS/zxYB5IAKIsqFfiK4F3UqMmPYOs3dJgE0C4NQ==
   dependencies:
     "@bugsnag/js" "7.21.0"
     "@iarna/toml" "2.2.5"
@@ -1334,17 +1363,17 @@
     unique-string "3.0.0"
     zod "3.22.3"
 
-"@shopify/cli@3.56.1":
-  version "3.56.1"
-  resolved "https://registry.npmjs.org/@shopify/cli/-/cli-3.56.1.tgz"
-  integrity sha512-sS9BmvCcF+3XmGwwaNfXqZ9ymJLaJ3eabA+CK5YIIKMIsQYtsG3BJJK0KNJbHkBJnT0fpkAX8moI4i7Zdw6/Gg==
+"@shopify/cli@3.56.3":
+  version "3.56.3"
+  resolved "https://registry.yarnpkg.com/@shopify/cli/-/cli-3.56.3.tgz#fcfc880e40ab283c214e4700a240c9200c6be20b"
+  integrity sha512-sex2GFdJ3FT3ENWh07dCuIHBja7WPY3XOFvHDii/pNL5i5ZC6c+7KnjfqazPAHwz10zh83uVhZQQRBAdk52Brg==
   dependencies:
     "@oclif/core" "3.15.1"
     "@oclif/plugin-commands" "2.2.24"
     "@oclif/plugin-help" "5.2.18"
     "@oclif/plugin-plugins" "3.1.8"
-    "@shopify/cli-kit" "3.56.1"
-    "@shopify/plugin-did-you-mean" "3.56.1"
+    "@shopify/cli-kit" "3.56.3"
+    "@shopify/plugin-did-you-mean" "3.56.3"
     zod-to-json-schema "3.21.4"
 
 "@shopify/function-runner@4.1.1":
@@ -1368,29 +1397,34 @@
     line-column "^1.0.2"
     ohm-js "^16.3.0"
 
-"@shopify/plugin-cloudflare@3.56.1":
-  version "3.56.1"
-  resolved "https://registry.npmjs.org/@shopify/plugin-cloudflare/-/plugin-cloudflare-3.56.1.tgz"
-  integrity sha512-hPRUBY0OB/EsP8a13aLamSZzNzJ8tNx9KIqgbPXvOLARuq0MT0IGLnwK/mkZhg+3d0Ua62Y7bX3v2lb2Rj+T4w==
+"@shopify/plugin-cloudflare@3.56.3":
+  version "3.56.3"
+  resolved "https://registry.yarnpkg.com/@shopify/plugin-cloudflare/-/plugin-cloudflare-3.56.3.tgz#3bda7ee8f7fd4a87f662704eefb14bf67451a69a"
+  integrity sha512-MQCvXnz5m/+1dJWwNTUUXkVQWMeQhqW2Cg3CS6POd/JBgO/WSUEfaFWE1d9NwPHM7IcW64kimLoOBJ5SJr9/Lg==
   dependencies:
     "@oclif/core" "3.15.1"
-    "@shopify/cli-kit" "3.56.1"
+    "@shopify/cli-kit" "3.56.3"
     node-fetch "3.3.2"
     semver "7.5.4"
 
-"@shopify/plugin-did-you-mean@3.56.1":
-  version "3.56.1"
-  resolved "https://registry.npmjs.org/@shopify/plugin-did-you-mean/-/plugin-did-you-mean-3.56.1.tgz"
-  integrity sha512-Pn7MtQzMFucFWUedXu1wapaki73KMYjzG4xRLtru37WYaWlXazLmhL1G1ywjMBytukrgNIdQ3yCHPvQp1GIuoQ==
+"@shopify/plugin-did-you-mean@3.56.3":
+  version "3.56.3"
+  resolved "https://registry.yarnpkg.com/@shopify/plugin-did-you-mean/-/plugin-did-you-mean-3.56.3.tgz#c2db485462e65260eb3a36064355c82381c8a814"
+  integrity sha512-dwrhQ6IlALU67ZGQIRoqjnQ2cpPjPJwhjBrvQMFx5SqOjmSI60lUZzthQBDMOGJLUMwbUZPIkGuUwJVZrUeNtQ==
   dependencies:
     "@oclif/core" "3.15.1"
-    "@shopify/cli-kit" "3.56.1"
+    "@shopify/cli-kit" "3.56.3"
     n-gram "2.0.2"
 
 "@shopify/polaris-icons@8.0.0", "@shopify/polaris-icons@^8.0.0":
   version "8.0.0"
   resolved "https://registry.npmjs.org/@shopify/polaris-icons/-/polaris-icons-8.0.0.tgz"
   integrity sha512-NyO/gkBvJfLiIDHywTFRQpwrA+wHHb9xk3uiApArBBB3zluWK1Gos+6zldfXPRZzHSzk2gB6IP2dQDJ2zJmIcg==
+
+"@shopify/polaris-icons@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-8.6.0.tgz#68a192c28086927ede109d45c00b5d5e8d88e911"
+  integrity sha512-IKvVwvRxguAObrPFVMs79e8+sg813jPBt/+8IyOxNcvUbzC2L3qXcvm7d4bKeQgP6I3IeuwF1FSdwI4lNAPYjQ==
 
 "@shopify/polaris-tokens@^6.14.0":
   version "6.14.0"
@@ -1404,13 +1438,33 @@
   dependencies:
     deepmerge "^4.3.1"
 
-"@shopify/polaris@12.10.0", "@shopify/polaris@^12.10.0":
+"@shopify/polaris-tokens@^8.8.0":
+  version "8.8.0"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris-tokens/-/polaris-tokens-8.8.0.tgz#348841e58d25c17759a162501a2ab08e9724705c"
+  integrity sha512-Ml0sR+hu/uZJVDZjF2+2qgogCrXSvQ8TOwkrRNUuzhDG58f99FHnyuQ1kprUFyDt0DSEZJ0Jf4pzrBnkI0UgVg==
+  dependencies:
+    deepmerge "^4.3.1"
+
+"@shopify/polaris@12.10.0":
   version "12.10.0"
   resolved "https://registry.npmjs.org/@shopify/polaris/-/polaris-12.10.0.tgz"
   integrity sha512-i1BY/WazTcExnUdba8XUWGScAGBjfEW4R95ndk10NX2SKEzD6krFtFMTTSAECzcdSqlcblsKvDe1jd1/FlzA6w==
   dependencies:
     "@shopify/polaris-icons" "^8.0.0"
     "@shopify/polaris-tokens" "^8.5.0"
+    "@types/react" "^18.2.0"
+    "@types/react-dom" "^18.2.0"
+    "@types/react-transition-group" "^4.4.2"
+    react-fast-compare "^3.2.0"
+    react-transition-group "^4.4.2"
+
+"@shopify/polaris@^12.19.2":
+  version "12.19.2"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-12.19.2.tgz#7094fe4f6725165dac36bbe3f80c1ffa5cfc7cb6"
+  integrity sha512-mh94tXIjOD1T+KtAWVqepTN2qnh6YKTtF/HAVXySanlPjtlY5rraChdxAqNbnigsdlCZ6tOpssdEctA2GJkvLw==
+  dependencies:
+    "@shopify/polaris-icons" "^8.6.0"
+    "@shopify/polaris-tokens" "^8.8.0"
     "@types/react" "^18.2.0"
     "@types/react-dom" "^18.2.0"
     "@types/react-transition-group" "^4.4.2"
@@ -1457,6 +1511,23 @@
     "@shopify/theme-check-docs-updater" "2.0.1"
     glob "^8.0.3"
     yaml "^2.3.0"
+
+"@shopify/ui-extensions-react@2023.10.x":
+  version "2023.10.1"
+  resolved "https://registry.yarnpkg.com/@shopify/ui-extensions-react/-/ui-extensions-react-2023.10.1.tgz#d4e5c4801c3c8541a90344639bbc15541e1c2386"
+  integrity sha512-N5WQUEP9bkr4kjHssV3EwH49efhzHF3GqB5Sp6Jxscsd90bpuJv5AcVHANR3792SMNa1ybeAgFVaHIZRPs2Weg==
+  dependencies:
+    "@remote-ui/async-subscription" "^2.1.12"
+    "@remote-ui/react" "^5.0.2"
+    "@types/react" ">=18.0.0"
+
+"@shopify/ui-extensions@2023.10.x":
+  version "2023.10.1"
+  resolved "https://registry.yarnpkg.com/@shopify/ui-extensions/-/ui-extensions-2023.10.1.tgz#3bb1c072b4dad0bb21a45e4d33d4b956cfba4156"
+  integrity sha512-1dSaPYKahGpgBEeo2AE7Agx8b9VpPBtFPI8LQOA1BGx3qvt9un2XE0MnuQqp0Z8YxiU9o6Wy2995IlEnQmoWdg==
+  dependencies:
+    "@remote-ui/async-subscription" "^2.1.12"
+    "@remote-ui/core" "^2.2.3"
 
 "@sigstore/bundle@^1.1.0":
   version "1.1.0"
@@ -1585,6 +1656,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-reconciler@>=0.26.0 <0.30.0":
+  version "0.28.8"
+  resolved "https://registry.yarnpkg.com/@types/react-reconciler/-/react-reconciler-0.28.8.tgz#e51710572bcccf214306833c2438575d310b3e98"
+  integrity sha512-SN9c4kxXZonFhbX4hJrZy37yw9e7EIxcpHCxQv5JUS18wDE5ovkQKlqQEkufdJCCMfuI9BnjUJvhYeJ9x5Ra7g==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-transition-group@^4.4.2":
   version "4.4.10"
   resolved "https://registry.npmjs.org/@types/react-transition-group/-/react-transition-group-4.4.10.tgz"
@@ -1596,6 +1674,15 @@
   version "18.2.48"
   resolved "https://registry.npmjs.org/@types/react/-/react-18.2.48.tgz"
   integrity sha512-qboRCl6Ie70DQQG9hhNREz81jqC1cs9EVNcjQ1AU+jH6NFfSAhVVbrrY/+nSF+Bsk4AOwm9Qa61InvMCyV+H3w==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@>=17.0.0 <19.0.0", "@types/react@>=18.0.0", "@types/react@^18.0.0":
+  version "18.2.61"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.61.tgz#5607308495037436779939ec0348a5816c08799d"
+  integrity sha512-NURTN0qNnJa7O/k4XUkEW2yfygA+NxS0V5h1+kp9jPwhzZy95q3ADoGMP0+JypMhrZBTTgjKAUlTctde1zzeQA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -6061,7 +6148,7 @@ react-is@^16.13.1, react-is@^16.7.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-reconciler@^0.29.0:
+react-reconciler@0.29.0, react-reconciler@^0.29.0:
   version "0.29.0"
   resolved "https://registry.npmjs.org/react-reconciler/-/react-reconciler-0.29.0.tgz"
   integrity sha512-wa0fGj7Zht1EYMRhKWwoo1H9GApxYLBuhoAuXN0TlltESAjDssB+Apf0T/DngVqaMyPypDmabL37vw/2aRM98Q==
@@ -6099,7 +6186,7 @@ react-transition-group@^4.4.2:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@18.2.0, react@^18.2.0:
+react@18.2.0, react@^18.0.0, react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==

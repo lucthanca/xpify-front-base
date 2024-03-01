@@ -63,18 +63,25 @@ export const ensureXpifyDev = async (config) => {
 	}
 	await ensureBackendUrl(config);
 	await ensureSecretKey(config);
-
 	await ensureXpifyApp(config);
 };
 
+/**
+ * This function is used to ensure the whitelist of redirect URLs for the Xpify application.
+ * It takes an array of URLs, maps through each URL, and modifies the host and pathname of the URL if certain conditions are met.
+ *
+ * @param {Array<string>} urls - An array of URLs that need to be checked and possibly modified.
+ * @returns {Array<string>} An array of modified URLs, with the host replaced with the value of `process.env.XPIFY_BACKEND_URL` and the pathname appended with `/_rid/${process.env.XPIFY_APP_REMOTE_ID}` if the original pathname was `/api/auth/callback`. URLs that did not meet the condition are removed from the array.
+ */
 export const ensureXpifyRedirectUrlWhitelist = (urls) => {
 	return urls.map(url => {
 		// replace url host with process.env.XPIFY_BACKEND_URL
 		const urlObject = new URL(url);
 		if (urlObject.pathname === '/api/auth/callback') {
-			urlObject.pathname = `/api/auth/callback/_rid/${process.env.XPIFY_APP_REMOTE_ID}`
+			urlObject.pathname = `/api/auth/callback/_rid/${process.env.XPIFY_APP_REMOTE_ID}`;
+			urlObject.host = new URL(process.env[XPIFY_BACKEND_URL]).host;
+			return urlObject.toString();
 		}
-		urlObject.host = new URL(process.env[XPIFY_BACKEND_URL]).host;
-		return urlObject.toString();
-	});
+		return null;
+	}).filter(url => url !== null);
 }
