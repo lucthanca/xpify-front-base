@@ -4,9 +4,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { memo } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
-import SkeletonProduct from '~/components/product/skeleton';
-
 import {gql, useQuery, useMutation} from "@apollo/client";
+
+import SkeletonProduct from '~/components/product/skeleton';
 import CollapsibleButton from "~/components/collapsible/button";
 import GallerySlider from '~/components/splide/gallery';
 import ModalInstallSection from '~/components/product/manage';

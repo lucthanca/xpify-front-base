@@ -10,8 +10,11 @@
     "sectionTitle": "Sections"
   },
   "NavigationMenu": {
-    "sections": "Sections",
     "pageName": "Page name",
+    "mySections": "My sections",
+    "sections": "Sections",
+    "group": "Group",
+    "plan": "Pricing Plan",
     "faq": "FAQ",
     "section": "Section detail"
   },

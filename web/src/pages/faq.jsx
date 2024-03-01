@@ -1,9 +1,9 @@
-import { Page, Layout, Text, Box, BlockStack } from "@shopify/polaris";
+import { Page, Layout, Text, Box, BlockStack, Card, InlineStack, SkeletonBodyText } from "@shopify/polaris";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import {gql, useQuery} from "@apollo/client";
 
-import CollapsibleDefault from "~/components/collapsible/default";
+import CollapsibleDefault from "~/components/collapsible/faq";
 
 const graphQlGetFaqs = gql`
   query Get {
@@ -20,6 +20,17 @@ function Faq() {
     fetchPolicy: "cache-and-network",
   });
 
+  const skeleton = [];
+  for (let i = 1; i <= 5; i++) {
+    skeleton.push(
+      <Card key={i}>
+        <InlineStack>
+          <SkeletonBodyText lines={1}></SkeletonBodyText>
+        </InlineStack>
+      </Card>
+    );
+  }
+
   console.log('re-render-pageFaq');
   return (
     <Page>
@@ -35,10 +46,11 @@ function Faq() {
         <Layout.Section>
           <BlockStack gap={200}>
             {
-              faqs !== undefined &&
-              faqs.getFaqs.map((item, key) => {
+              faqs?.getFaqs !== undefined
+              ? faqs.getFaqs.map((item, key) => {
                 return <CollapsibleDefault key={key} {...item} />;
               })
+              : skeleton
             }
           </BlockStack>
         </Layout.Section>
