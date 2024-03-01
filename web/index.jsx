@@ -1,7 +1,7 @@
+import './index.css';
 import { createRoot } from 'react-dom/client';
 import Adapter from './src/components/adapter';
 import { initI18n } from '~/utils/i18nUtils';
-import './index.css';
 
 const shopDomain = new URLSearchParams(window.location.search).get('shop');
 
