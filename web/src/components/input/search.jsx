@@ -28,7 +28,6 @@ export default function Search({
 
   const [selected, setSelected] = useState(0);
   const {mode, setMode} = useSetIndexFiltersMode(IndexFiltersMode.Filtering);
-  const onHandleCancel = () => {};
 
   const handleSearchFilterChange = useCallback(
     (value) => setSearchFilter(value),

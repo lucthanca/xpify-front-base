@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { memo } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 import {gql, useQuery, useMutation} from "@apollo/client";
 
 import SkeletonProduct from '~/components/product/skeleton';
@@ -13,6 +14,9 @@ import ModalInstallSection from '~/components/product/manage';
 import ProductCarousel from '~/components/splide/product';
 import ModalProduct from '~/components/product/modal';
 import BannerDefault from '~/components/banner/default';
+import { SECTION_QUERY, SECTIONS_QUERY } from "~/queries/section-builder/product.gql";
+import { THEMES_QUERY } from "~/queries/section-builder/theme.gql";
+import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
 
 const skeleton = (
   <SkeletonPage primaryAction backAction>
@@ -23,7 +27,7 @@ const skeleton = (
             <SkeletonBodyText lines={7} />
           </Card>
           <Card sectioned>
-            <Text>
+            <Text as='div'>
               <BlockStack gap={400}>
                 <SkeletonDisplayText size="small" />
                 <SkeletonBodyText lines={5} />
@@ -31,7 +35,7 @@ const skeleton = (
             </Text>
           </Card>
           <Card sectioned>
-            <Text>
+            <Text as='div'>
               <BlockStack gap={400}>
                 <SkeletonDisplayText size="small" />
                 <SkeletonBodyText lines={3} />
@@ -47,139 +51,24 @@ const skeleton = (
   </SkeletonPage>
 );
 
-const graphQlGetSection = gql`
-  query GET($key: String!) {
-    getSection(key: $key) {
-      entity_id
-      is_enable
-      plan_id
-      name
-      images {
-        src
-      }
-      url_key
-      price
-      src
-      version
-      description
-      release_note
-      demo_link
-      pricing_plan {
-        name
-        code
-        prices {
-          interval
-          amount
-        }
-        description
-      }
-      categories
-      tags
-      installed {
-        theme_id
-        product_version
-      }
-      actions {
-        install
-        purchase
-        plan
-      }
-    }
-  }
-`;
-const graphQlGetSections = gql`
-  query GET(
-    $search: String,
-    $filter: SectionFilterInput,
-    $sort: SectionSortInput,
-    $pageSize: Int = 20,
-    $currentPage: Int = 1
-  ) {
-    getSections(
-      search: $search,
-      filter: $filter,
-      sort: $sort,
-      pageSize: $pageSize,
-      currentPage: $currentPage
-    ) {
-      items {
-        entity_id
-        is_enable
-        plan_id
-        name
-        images {
-          src
-        }
-        url_key
-        price
-        src
-        version
-        description
-        release_note
-      }
-    }
-  }
-`;
-const graphQlGetSectionMore = gql`
-  query GET($key: String!) {
-    getSection(key: $key) {
-      pricing_plan {
-        name
-        code
-        prices {
-          interval
-          amount
-        }
-        description
-      }
-      categories
-      tags
-      actions {
-        install
-        purchase
-        plan
-      }
-    }
-  }
-`;
-const graphQlGetThemes = gql`
-  query Get {
-    getThemes {
-      id
-      name
-      role
-      errors
-    }
-  }
-`;
-const graphQlRedirectPurchase = gql`
-  mutation Purchase($name: String!, $interval: PricingPlanInterval!, $is_plan: Boolean!) {
-    redirectBillingUrl(name: $name, interval: $interval, is_plan: $is_plan) {
-      message
-      tone
-    }
-  }
-`;
-
-
 function SectionDetail() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { key } = useParams();
+
   const [isShowPopupManage, setIsShowPopupManage] = useState(false);
   const [bannerAlert, setBannerAlert] = useState(undefined); 
-  const [isShowPopup, setIsShowPopup] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState({});
 
-  const { data:section, loading:sectionL, error:sectionE, refetch:sectionR } = useQuery(graphQlGetSection, {
+  const { data:section, loading:sectionL, error:sectionE, refetch:sectionR } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
-      key: 'about-04'
+      key: key
     }
   });
-  const { data:themes, loading:themesL, error:themesE } = useQuery(graphQlGetThemes, {
+  const { data:themes, loading:themesL, error:themesE } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
   });
-  const { data:productRelated, loading:productRelatedL, error:productRelatedE } = useQuery(graphQlGetSections, {
+  const { data:productRelated, loading:productRelatedL, error:productRelatedE } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-first",
     variables: {
       sort: {
@@ -190,17 +79,8 @@ function SectionDetail() {
       currentPage: 1
     }
   });
-  const { data:productMore, loading:loadingProduct, error:errorProduct } = useQuery(graphQlGetSectionMore, {
-    fetchPolicy: "cache-and-network",
-    variables: {
-      key: currentProduct?.url_key ?? ''
-    }
-  });
-  const [redirectPurchase, { data:purchase, loading:purchaseL, error:purchaseE }] = useMutation(graphQlRedirectPurchase);
+  const [redirectPurchase, { data:purchase, loading:purchaseL, error:purchaseE }] = useMutation(REDIRECT_BILLING_PAGE_MUTATION);
 
-  const handleShowModal = useCallback(() => {
-    setIsShowPopup(!isShowPopup);
-  }, []);
   const handlePurchase = useCallback(async () => {
     await redirectPurchase({ 
         variables: {
@@ -300,7 +180,7 @@ function SectionDetail() {
               section.getSection.description && 
               <Card title="Description">
                 <Text variant="headingMd">Description</Text>
-                <Box padding="400">
+                <Box padding="200">
                   <div dangerouslySetInnerHTML={{__html: section.getSection.description}}></div>
                 </Box>
               </Card>
@@ -309,7 +189,7 @@ function SectionDetail() {
               section.getSection.release_note && 
               <Card title="Release Note">
                 <Text variant="headingMd">Release Note</Text>
-                <Box padding="400">
+                <Box padding="200">
                   <div dangerouslySetInnerHTML={{__html: section.getSection.release_note}}></div>
                 </Box>
               </Card>
@@ -319,34 +199,36 @@ function SectionDetail() {
                 <Text variant="headingMd" as="h2">Related sections</Text>
                 {
                   productRelated?.getSections
-                  ? <ProductCarousel
-                    configSplide={{
-                      options: {
-                        perPage: 3,
-                        gap: '1rem',
-                        pagination: false,
-                        breakpoints:{
-                          425: {
-                            perPage: 1
+                  ? <Box paddingBlockStart="200">
+                    <ProductCarousel
+                      configSplide={{
+                        options: {
+                          perPage: 3,
+                          gap: '1rem',
+                          pagination: false,
+                          breakpoints:{
+                            425: {
+                              perPage: 1
+                            },
+                            768: {
+                              perPage: 2,
+                              gap: '0.5rem'
+                            },
+                            2560: {
+                              perPage: 3
+                            }
                           },
-                          768: {
-                            perPage: 2,
-                            gap: '0.5rem'
-                          },
-                          2560: {
-                            perPage: 3
-                          }
-                        },
-                        autoplay: true,
-                        interval: 3000,
-                        rewind: true
-                      }
-                    }}
-                    items={productRelated.getSections?.items ?? []}
-                    handleShowModal={handleShowModal}
-                    setCurrentProduct={setCurrentProduct}
-                  />
-                  : <SkeletonProduct total={3} columns={{ sm: 1, md: 2, lg: 3 }} />
+                          autoplay: true,
+                          interval: 3000,
+                          rewind: true
+                        }
+                      }}
+                      items={productRelated.getSections?.items ?? []}
+                    />
+                  </Box>
+                  : <Box paddingBlockStart="200">
+                    <SkeletonProduct total={3} columns={{ sm: 1, md: 2, lg: 3 }} />
+                  </Box>
                 }
               </BlockStack>
             </Card>
@@ -377,10 +259,6 @@ function SectionDetail() {
             setBannerAlert={setBannerAlert}
             reloadProduct={() => sectionR()}
           />
-        }
-        {
-          isShowPopup &&
-          <ModalProduct currentProduct={currentProduct} productMore={productMore} isShowPopup={isShowPopup} setIsShowPopup={setIsShowPopup} />
         }
       </Layout>
     </Page>

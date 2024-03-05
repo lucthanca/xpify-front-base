@@ -1,5 +1,5 @@
-import {useState, useCallback} from 'react';
-import { BlockStack, Box, Card, Icon, InlineGrid, InlineStack, Layout, List, Page, Text, Tabs, ResourceList, ResourceItem, Avatar, Thumbnail, Tooltip, Badge } from "@shopify/polaris";
+import {useState, useCallback, useMemo} from 'react';
+import { BlockStack, Box, Card, Icon, InlineGrid, InlineStack, Layout, List, Page, Text, Tabs, ResourceList, ResourceItem, Avatar, Thumbnail, Tooltip, Badge, EmptyState } from "@shopify/polaris";
 import {
   ProductIcon,
   HeartIcon,
@@ -9,25 +9,7 @@ import {
 import {gql, useQuery} from "@apollo/client";
 
 import Tutorial from '~/components/media/tutorial';
-
-const graphQlGetSectionsInstall = gql`
-  query GET {
-    getSectionsInstall {
-      product_id
-      name
-      price
-      version
-      url_key
-      images {
-        src
-      }
-      installed {
-        theme_id
-        product_version
-      }
-    }
-  }
-`;
+import { SECTIONS_INSTALL_QUERY } from "~/queries/section-builder/product.gql";
 
 function HomePage() {
   const [selected, setSelected] = useState(0);
@@ -35,9 +17,27 @@ function HomePage() {
     (selectedTabIndex) => setSelected(selectedTabIndex),
     [],
   );
-  const { data:sectionsInstalled, loading:sectionsInstalledL, error:sectionsInstalledE } = useQuery(graphQlGetSectionsInstall, {
+  const { data:sectionsInstalled, loading:sectionsInstalledL, error:sectionsInstalledE } = useQuery(SECTIONS_INSTALL_QUERY, {
     fetchPolicy: "cache-and-network",
   });
+
+  const emptyStateMarkup = useMemo(() => {
+    if (sectionsInstalled?.getSectionsInstall 
+      && sectionsInstalled?.getSectionsInstall.length == 0
+    ) {
+      return (
+        <EmptyState
+          heading="No sections"
+          action={{content: 'Explore Library'}}
+          image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
+        >
+          <Text variant="bodyMd" as='p'>Discover all sections on library</Text>
+        </EmptyState>
+      );
+    }
+
+    return undefined;
+  }, [sectionsInstalled]);
 
   return (
     <Page
@@ -141,12 +141,12 @@ function HomePage() {
                     <Tabs
                       tabs={[
                         {
-                          id: 'paid',
-                          content: 'Sections Paid'
-                        },
-                        {
                           id: 'sections',
                           content: 'Sections Installed'
+                        },
+                        {
+                          id: 'paid',
+                          content: 'Sections Paid'
                         }
                       ]}
                       selected={selected}
@@ -155,8 +155,9 @@ function HomePage() {
                     >
                       <Box paddingInline={400} paddingBlockEnd={400}>
                         <ResourceList
-                          resourceName={{singular: 'customer', plural: 'customers'}}
-                          items={sectionsInstalled?.getSectionsInstall ??[]}
+                          resourceName={{singular: 'section', plural: 'sections'}}
+                          items={sectionsInstalled?.getSectionsInstall ?? []}
+                          emptyState={emptyStateMarkup}
                           renderItem={(item) => {
                             return (
                               <ResourceItem
@@ -178,14 +179,11 @@ function HomePage() {
                                     </BlockStack>
                                     {
                                       item.installed &&
-                                      <>
-                                        <Tooltip
-                                        active={false} content={item.installed.filter(install => install.product_version !== item.version).length + ' themes are using old version!'} >
-                                          <Text variant="bodySm" tone='subdued' as="p">
-                                            Installed in {item.installed.length} themes
-                                          </Text>
-                                        </Tooltip>
-                                      </>
+                                      <Tooltip content={item.installed.filter(install => install.product_version !== item.version).length + ' themes are using old version!'}>
+                                        <Text variant="bodySm" tone='subdued' as="p">
+                                          Installed in {item.installed.length} themes
+                                        </Text>
+                                      </Tooltip>
                                     }
                                   </BlockStack>
                                   <Badge tone="success">v{item.version}</Badge>

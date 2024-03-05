@@ -8,16 +8,16 @@ export const useNavigationLinks = () => {
       destination: '/sections',
     },
     {
-      label: t('NavigationMenu.group'),
-      destination: '/group',
+      label: t('NavigationMenu.groups'),
+      destination: '/groups',
     },
     {
-      label: t('NavigationMenu.plan'),
-      destination: '/plan',
+      label: t('NavigationMenu.plans'),
+      destination: '/plans',
     },
     {
-      label: t('NavigationMenu.faq'),
-      destination: '/faq',
+      label: t('NavigationMenu.faqs'),
+      destination: '/faqs',
     }
   ];
 };

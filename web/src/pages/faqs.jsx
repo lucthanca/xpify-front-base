@@ -4,32 +4,24 @@ import { useTranslation } from "react-i18next";
 import {gql, useQuery} from "@apollo/client";
 
 import CollapsibleDefault from "~/components/collapsible/faq";
+import { FAQS_QUERY } from "~/queries/section-builder/faq.gql";
 
-const graphQlGetFaqs = gql`
-  query Get {
-    getFaqs {
-      title
-      content
-    }
-  }
-`;
+const skeleton = [];
+for (let i = 1; i <= 5; i++) {
+  skeleton.push(
+    <Card key={i}>
+      <InlineStack>
+        <SkeletonBodyText lines={1}></SkeletonBodyText>
+      </InlineStack>
+    </Card>
+  );
+}
 
 function Faq() {
   const { t } = useTranslation();
-  const { data:faqs, loading:faqsL, error:faqsE } = useQuery(graphQlGetFaqs, {
+  const { data:faqs, loading:faqsL, error:faqsE } = useQuery(FAQS_QUERY, {
     fetchPolicy: "cache-and-network",
   });
-
-  const skeleton = [];
-  for (let i = 1; i <= 5; i++) {
-    skeleton.push(
-      <Card key={i}>
-        <InlineStack>
-          <SkeletonBodyText lines={1}></SkeletonBodyText>
-        </InlineStack>
-      </Card>
-    );
-  }
 
   console.log('re-render-pageFaq');
   return (

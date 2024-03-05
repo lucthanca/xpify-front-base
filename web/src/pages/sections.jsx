@@ -16,123 +16,24 @@ import Search from '~/components/input/search';
 import ProductCarousel from '~/components/splide/product';
 import ProductList from '~/components/product/list';
 import SkeletonProduct from '~/components/product/skeleton';
-import ModalProduct from '~/components/product/modal';
 import Paginate from '~/components/paginate/default';
 import { AutoScroll } from "@splidejs/splide-extension-auto-scroll";
-
-const graphQlGetSections = gql`
-  query GET(
-    $search: String,
-    $filter: SectionFilterInput,
-    $sort: SectionSortInput,
-    $pageSize: Int = 20,
-    $currentPage: Int = 1
-  ) {
-    getSections(
-      search: $search,
-      filter: $filter,
-      sort: $sort,
-      pageSize: $pageSize,
-      currentPage: $currentPage
-    ) {
-      items {
-        entity_id
-        is_enable
-        plan_id
-        name
-        images {
-          src
-        }
-        url_key
-        price
-        src
-        version
-        description
-        release_note
-      }
-      total_count
-      page_info {
-        current_page
-        page_size
-        total_pages
-      }
-    }
-  }
-`;
-const graphQlGetSection = gql`
-  query GET($key: String!) {
-    getSection(key: $key) {
-      categories
-      tags
-      pricing_plan {
-        name
-        code
-        prices {
-          interval
-          amount
-        }
-        description
-      }
-      actions {
-        install
-        purchase
-        plan
-      }
-    }
-  }
-`;
-
-const graphQlGetPricingPlans = gql`
-    query Get {
-      getPricingPlans {
-        entity_id
-        name
-      }
-    }
-`;
-const graphQlGetCategories = gql`
-    query Get {
-      getCategories {
-        entity_id
-        name
-      }
-    }
-`;
-const graphQlGetTags = gql`
-    query Get {
-      getTags {
-        entity_id
-        name
-      }
-    }
-`;
-const graphQlGetSortOptions = gql`
-    query Get {
-      getSortOptions {
-        label
-        value
-        directionLabel
-      }
-    }
-`;
+import { SECTIONS_QUERY } from "~/queries/section-builder/product.gql";
+import { CATEGORIES_QUERY } from "~/queries/section-builder/category.gql";
+import { TAGS_QUERY } from "~/queries/section-builder/tag.gql";
+import { PRICING_PLANS_QUERY, SORT_OPTIONS_QUERY } from "~/queries/section-builder/other.gql";
 
 function Sections() {
   const { t } = useTranslation();
   const [searchFilter, setSearchFilter] = useState('');
-  const [sortSelected, setSortSelected] = useState(['main_table.qty_sold desc']);
+  const [sortSelected, setSortSelected] = useState(['main_table.name asc']);
   const [planFilter, setPlanFilter] = useState(undefined);
   const [categoryFilter, setCategoryFilter] = useState(undefined);
   const [tagFilter, setTagFilter] = useState(undefined);
   const [priceFilter, setPriceFilter] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isShowPopup, setIsShowPopup] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState({});
 
-  const handleShowModal = useCallback(() => {
-    setIsShowPopup(!isShowPopup);
-  }, []);
-
-  const { data:sections, loading:sectionsL, error:sectionsE } = useQuery(graphQlGetSections, {
+  const { data:sections, loading:sectionsL, error:sectionsE } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "network-only",
     variables: {
       search: searchFilter,
@@ -150,7 +51,7 @@ function Sections() {
       currentPage: currentPage
     }
   });
-  const { data:productTopSells, loading:productTopSellsL, error:productTopSellsE } = useQuery(graphQlGetSections, {
+  const { data:productTopSells, loading:productTopSellsL, error:productTopSellsE } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-first",
     variables: {
       sort: {
@@ -161,23 +62,17 @@ function Sections() {
       currentPage: 1
     }
   });
-  const { data:productMore, loading:productMoreL, error:productMoreE } = useQuery(graphQlGetSection, {
-    fetchPolicy: "cache-and-network",
-    variables: {
-      key: currentProduct?.url_key ?? ''
-    }
-  });
 
-  const { data: pricingPlans, loading: loadingPricingPlans, error: errorPricingPlans } = useQuery(graphQlGetPricingPlans, {
+  const { data: pricingPlans, loading: loadingPricingPlans, error: errorPricingPlans } = useQuery(PRICING_PLANS_QUERY, {
     fetchPolicy: "cache-and-network"
   });
-  const { data: categories, loading: loadingCategories, error: errorCategories } = useQuery(graphQlGetCategories, {
+  const { data: categories, loading: loadingCategories, error: errorCategories } = useQuery(CATEGORIES_QUERY, {
     fetchPolicy: "cache-and-network"
   });
-  const { data: tags, loading: loadingTags, error: errorTags } = useQuery(graphQlGetTags, {
+  const { data: tags, loading: loadingTags, error: errorTags } = useQuery(TAGS_QUERY, {
     fetchPolicy: "cache-and-network"
   });
-  const { data: sortOptions, loading: loadingSortOptions, error: errorSortOptions } = useQuery(graphQlGetSortOptions, {
+  const { data: sortOptions, loading: loadingSortOptions, error: errorSortOptions } = useQuery(SORT_OPTIONS_QUERY, {
     fetchPolicy: "cache-and-network"
   });
 
@@ -194,8 +89,8 @@ function Sections() {
               tagFilter={tagFilter} setTagFilter={setTagFilter}
               priceFilter={priceFilter} setPriceFilter={setPriceFilter}
               sortSelected={sortSelected} setSortSelected={setSortSelected}
-              pricingPlans={pricingPlans?.getPricingPlans ? pricingPlans.getPricingPlans.map(item => ({
-                value: item.entity_id,
+              pricingPlans={pricingPlans?.getPricingPlans?.plan ? pricingPlans.getPricingPlans.plan.map(item => ({
+                value: item.id,
                 label: item.name
               })) : []}
               categories={categories?.getCategories ? categories.getCategories.map(item => ({
@@ -257,8 +152,6 @@ function Sections() {
                       }
                     }}
                     items={productTopSells.getSections?.items ?? []}
-                    handleShowModal={handleShowModal}
-                    setCurrentProduct={setCurrentProduct}
                   />
                   : <SkeletonProduct total={5} columns={{ sm: 1, md: 3, lg: 5 }} />
                 }
@@ -269,7 +162,7 @@ function Sections() {
               <BlockStack gap={200}>
                 {
                   sections?.getSections !== undefined
-                  ? <ProductList items={sections.getSections?.items ?? []} handleShowModal={handleShowModal} setCurrentProduct={setCurrentProduct} />
+                  ? <ProductList items={sections.getSections?.items ?? []} columns={{sm: 1, md: 2, lg: 4}} />
                   : <SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />
                 }
               </BlockStack>
@@ -288,8 +181,6 @@ function Sections() {
             : <SkeletonDisplayText maxWidth="true"></SkeletonDisplayText>
           }
         </Layout.Section>
-
-        <ModalProduct currentProduct={currentProduct} productMore={productMore} isShowPopup={isShowPopup} setIsShowPopup={setIsShowPopup} />
       </Layout>
     </Page>
   );

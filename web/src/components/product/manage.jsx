@@ -3,29 +3,14 @@ import {useCallback, memo, useState, useMemo, useEffect} from 'react';
 import {NoteIcon} from '@shopify/polaris-icons';
 import {gql, useQuery, useMutation} from "@apollo/client";
 import { WrenchIcon, StatusActiveIcon } from '@shopify/polaris-icons';
-import BannerDefault from '~/components/banner/default';
 
-const graphQlUpdate = gql`
-  mutation Update($theme_id: String!, $asset: String!, $value: String!) {
-    updateAsset(theme_id: $theme_id, asset: $asset, value: $value) {
-      key
-      value
-      errors
-    }
-  }
-`;
-const graphQlDelete = gql`
-  mutation Delete($theme_id: String!, $asset: String!) {
-    deleteAsset(theme_id: $theme_id, asset: $asset) {
-      message
-    }
-  }
-`;
+import BannerDefault from '~/components/banner/default';
+import { UPDATE_ASSET_MUTATION, DELETE_ASSET_MUTATION } from "~/queries/section-builder/asset.gql";
 
 function ModalInstallSection({currentProduct, themes, isShowPopup, setIsShowPopup, setBannerAlert, reloadProduct}) {
   const [selected, setSelected] = useState([]);
-  const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(graphQlUpdate);
-  const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(graphQlDelete);
+  const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION);
+  const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION);
   const [bannerAlertPopup, setBannerAlertPopup] = useState(undefined); 
   const handleChange = useCallback(() => {
     setIsShowPopup(!isShowPopup);

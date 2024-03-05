@@ -13,9 +13,9 @@
     "pageName": "Page name",
     "mySections": "My sections",
     "sections": "Sections",
-    "group": "Group",
-    "plan": "Pricing Plan",
-    "faq": "FAQ",
+    "groups": "Groups",
+    "plans": "Pricing Plans",
+    "faqs": "FAQ",
     "section": "Section detail"
   },
   "NotFound": {

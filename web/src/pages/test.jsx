@@ -86,7 +86,7 @@ const graphQlCancelPlan = gql`
     mutation Cancel($name: String!) {
         cancelPlan(name: $name) {
             message
-            status
+            tone
         }
     }
 `;
