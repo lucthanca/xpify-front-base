@@ -25,6 +25,8 @@
     "@shopify/app-bridge-react": "^3.7.7",
     "@shopify/i18next-shopify": "^0.2.9",
     "@shopify/polaris": "^12.19.2",
+    "@splidejs/react-splide": "^0.7.12",
+    "@splidejs/splide-extension-auto-scroll": "^0.5.3",
     "@vitejs/plugin-react": "1.2.0",
     "apollo-cache-persist": "^0.1.1",
     "framer-motion": "^10.17.4",
