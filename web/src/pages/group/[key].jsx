@@ -57,14 +57,15 @@ function SectionDetail() {
   });
   const bundleSection = useMemo(() => groupSection?.getGroupSection, [groupSection]);
   const { data:groupSections, loading:groupSectionsL, error:groupSectionsE } = useQuery(SECTIONS_QUERY, {
-    fetchPolicy: "cache-first",
+    fetchPolicy: "cache-and-network",
     variables: {
       filter: {
         product_id: groupSection?.getGroupSection?.child_ids ?? []
       },
       pageSize: 99,
       currentPage: 1
-    }
+    },
+    skip: groupSection?.getGroupSection?.child_ids?.length === 0,
   });
 
   // const [redirectPurchase, { data:purchase, loading:purchaseL, error:purchaseE }] = useMutation(REDIRECT_BILLING_PAGE_MUTATION);
