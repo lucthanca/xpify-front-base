@@ -1,8 +1,46 @@
 import { gql } from '@apollo/client';
 
+const CommonSectionField = `
+  fragment CommonSectionField on SectionInterface {
+    entity_id
+    is_enable
+    name
+    url_key
+    price
+    description
+    demo_link
+    images { src }
+    type_id
+  }
+`;
+const SectionActionsFragment = gql`
+  fragment SectionActionsFragment on Section {
+    actions {
+      install
+      purchase
+      plan
+    }
+  }
+`;
+const PricingPlanFragment = gql`
+  fragment PricingPlanFragment on Section {
+    pricing_plan {
+      name code prices { interval amount } description
+    }
+  }
+`;
+const SectionInstalledFragment = gql`
+  fragment SectionInstalledFragment on Section {
+    installed {
+      theme_id
+      product_version
+    }
+  }
+`;
+
 /* Simple Product */
 export const SECTIONS_QUERY = gql`
-  query GET(
+  query GetSectionCollection(
     $search: String,
     $filter: SectionFilterInput,
     $sort: SectionSortInput,
@@ -17,40 +55,20 @@ export const SECTIONS_QUERY = gql`
       currentPage: $currentPage
     ) {
       items {
+        __typename
+        ...CommonSectionField
+        ... on GroupSection {
+          child_ids
+        }
+        ... on Section {
+          version release_note src plan_id
+          ...PricingPlanFragment
+          ...SectionActionsFragment
+          ...SectionInstalledFragment
+        }
         entity_id
-        is_enable
-        plan_id
-        name
-        images {
-          src
-        }
-        url_key
-        price
-        src
-        version
-        description
-        release_note
-        demo_link
-        pricing_plan {
-          name
-          code
-          prices {
-            interval
-            amount
-          }
-          description
-        }
         categories
         tags
-        actions {
-          install
-          purchase
-          plan
-        }
-        installed {
-          theme_id
-          product_version
-        }
       }
       total_count
       page_info {
@@ -60,92 +78,54 @@ export const SECTIONS_QUERY = gql`
       }
     }
   }
+  ${CommonSectionField}
+  ${PricingPlanFragment}
+  ${SectionActionsFragment}
+  ${SectionInstalledFragment}
 `;
 export const SECTION_QUERY = gql`
-  query GET($key: String!) {
+  query GetSectionByKey($key: String!) {
     getSection(key: $key) {
+      __typename
       entity_id
-      is_enable
-      plan_id
-      name
-      images {
-        src
-      }
-      url_key
-      price
-      src
-      version
-      description
-      release_note
-      demo_link
-      pricing_plan {
-        name
-        code
-        prices {
-          interval
-          amount
-        }
-        description
-      }
+      ...CommonSectionField
+      ... on Section { plan_id src version release_note ...PricingPlanFragment ...SectionActionsFragment ...SectionInstalledFragment }
       categories
       tags
-      actions {
-        install
-        purchase
-        plan
-      }
-      installed {
-        theme_id
-        product_version
-      }
     }
   }
+  ${CommonSectionField}
+  ${PricingPlanFragment}
+  ${SectionActionsFragment}
+  ${SectionInstalledFragment}
 `;
 
 /* Group Product */
 export const GROUP_SECTIONS_QUERY = gql`
-  query GET {
+  query GetGroupSections {
     getGroupSections {
+      __typename
       entity_id
-      is_enable
-      name
-      child_ids
-      url_key
-      price
-      description
-      demo_link
-      images {
-        src
-      }
-      actions {
-        install
-        purchase
-        plan
+      ...CommonSectionField
+      ... on GroupSection {
+        child_ids
       }
     }
   }
+  ${CommonSectionField}
 `;
 export const GROUP_SECTION_QUERY = gql`
   query GET($key: String!) {
     getGroupSection(key: $key) {
+      __typename
       entity_id
-      is_enable
-      name
-      child_ids
-      url_key
-      price
-      description
-      demo_link
-      images {
-        src
-      }
-      actions {
-        install
-        purchase
-        plan
+      ...CommonSectionField
+      ...on GroupSection {
+        child_ids
       }
     }
   }
+  ${CommonSectionField}
 `;
 
 /* Product Install */

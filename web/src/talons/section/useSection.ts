@@ -7,13 +7,54 @@ import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
 import type { ApolloQueryResult } from '@apollo/client/core/types';
 import { useRelatedProducts } from '~/talons/relatedProducts/useRelatedProducts';
 
-export type SectionData = {
+type SectionImage = {
+  src: string;
+  alt: string;
+}
+type SectionActions = {
+  install: boolean;
+  purchase: boolean;
+  play: boolean;
+};
+export type Install = {
+  theme_id: string;
+  product_version: string
+}
+export type Interval = {
+  interval: string;
+  amount: number;
+}
+export type PricingPlan = {
+  id: string;
+  status: boolean;
+  code: string;
+  name: string;
+  prices: Interval[];
+  currency: string;
+  description: string;
+  sort_order: number;
+}
+export interface SectionDataInterface {
   entity_id: string;
   name: string;
   description: string;
   price: number;
   version: string;
-  is_enable: string;
+  is_enable: boolean;
+  plan_id: string;
+  demo_link: string;
+  images: SectionImage[];
+  url_key: string;
+  categories: string[];
+  tags: string[];
+}
+export type SectionData = SectionDataInterface & {
+  actions: SectionActions;
+  installed: Install[];
+  pricing_plan: PricingPlan;
+  version: String;
+  release_note: String;
+  src: String
 };
 export type ThemeData = {
   id: string;
