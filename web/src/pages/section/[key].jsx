@@ -1,4 +1,4 @@
-import { Page, Badge, Card, Layout, Button, Icon, Text, ProgressBar, BlockStack, Box, Banner, InlineGrid, SkeletonPage, SkeletonBodyText, SkeletonDisplayText, List } from '@shopify/polaris';
+import { Page, Badge, Card, Layout, Button, Icon, Text, ProgressBar, BlockStack, Box, Banner, InlineGrid, SkeletonPage, SkeletonBodyText, SkeletonDisplayText, List, Image } from '@shopify/polaris';
 import { ViewIcon, PaymentIcon } from '@shopify/polaris-icons';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { memo } from "react";
@@ -8,13 +8,13 @@ import { useParams } from "react-router-dom";
 import {gql, useQuery, useMutation} from "@apollo/client";
 
 import SkeletonProduct from '~/components/product/skeleton';
-import CollapsibleButton from "~/components/collapsible/button";
+import CollapsibleButton from "~/components/collapsible/guide";
 import GallerySlider from '~/components/splide/gallery';
 import ModalInstallSection from '~/components/product/manage';
 import ProductCarousel from '~/components/splide/product';
 import ModalProduct from '~/components/product/modal';
 import BannerDefault from '~/components/banner/default';
-import { SECTION_QUERY, SECTIONS_QUERY } from "~/queries/section-builder/product.gql";
+import { SECTION_QUERY, RELATED_SECTIONS_QUERY } from "~/queries/section-builder/product.gql";
 import { THEMES_QUERY } from "~/queries/section-builder/theme.gql";
 import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
 
@@ -57,7 +57,8 @@ function SectionDetail() {
   const { key } = useParams();
 
   const [isShowPopupManage, setIsShowPopupManage] = useState(false);
-  const [bannerAlert, setBannerAlert] = useState(undefined); 
+  const [bannerAlert, setBannerAlert] = useState(undefined);
+  const [progress, setProgress] = useState(0);
 
   const { data:section, loading:sectionL, error:sectionE, refetch:sectionR } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
@@ -68,15 +69,10 @@ function SectionDetail() {
   const { data:themes, loading:themesL, error:themesE } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
   });
-  const { data:productRelated, loading:productRelatedL, error:productRelatedE } = useQuery(SECTIONS_QUERY, {
-    fetchPolicy: "cache-first",
+  const { data:productRelated, loading:productRelatedL, error:productRelatedE } = useQuery(RELATED_SECTIONS_QUERY, {
+    fetchPolicy: "cache-and-network",
     variables: {
-      sort: {
-        'column': 'qty_sold',
-        'order': 'desc'
-      },
-      pageSize: 12,
-      currentPage: 1
+      key: key
     }
   });
   const [redirectPurchase, { data:purchase, loading:purchaseL, error:purchaseE }] = useMutation(REDIRECT_BILLING_PAGE_MUTATION);
@@ -90,6 +86,11 @@ function SectionDetail() {
         }
      });
   }, [section]);
+  const handleRedirectPlansPage = useCallback(() => {
+    navigate(`/plans`);
+    window.scrollTo(0,0);
+  }, []);
+
 
   useEffect(() => {
     if (purchase?.redirectBillingUrl?.message) {
@@ -109,7 +110,7 @@ function SectionDetail() {
 
   console.log("re-render-pageSection");
   return (
-    (section)
+    section?.getSection !== undefined
     ? <Page
       backAction={{content: 'Products', onAction: () => navigate(-1)}}
       title={section.getSection.name}
@@ -148,7 +149,10 @@ function SectionDetail() {
                   loading: purchaseL,
                   onAction: () => handlePurchase()
                 }}
-                secondaryAction={{content: 'View Plan', icon: ViewIcon}}
+                secondaryAction={{
+                  content: 'View Plan', icon: ViewIcon,
+                  onAction: () => handleRedirectPlansPage()
+                }}
                 tone='warning'
               >
                 <BlockStack gap={200}>
@@ -174,7 +178,7 @@ function SectionDetail() {
             <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
 
             <Card title="Gallery" padding={0}>
-              <GallerySlider gallery={section.getSection?.images} height={'30rem'} />
+              <GallerySlider gallery={section.getSection?.images ?? []} height={'30rem'} />
             </Card>
             {
               section.getSection.description && 
@@ -194,12 +198,14 @@ function SectionDetail() {
                 </Box>
               </Card>
             }
-            <Card title="Related">
-              <BlockStack gap={200}>
-                <Text variant="headingMd" as="h2">Related sections</Text>
-                {
-                  productRelated?.getSections
-                  ? <Box paddingBlockStart="200">
+
+            {
+              productRelated?.getRelatedSections !== undefined
+              ? productRelated.getRelatedSections.length > 0 &&
+              <Card title="Related">
+                <BlockStack gap={200}>
+                  <Text variant="headingMd" as="h2">Related sections</Text>
+                  <Box paddingBlockStart="200">
                     <ProductCarousel
                       configSplide={{
                         options: {
@@ -223,26 +229,48 @@ function SectionDetail() {
                           rewind: true
                         }
                       }}
-                      items={productRelated.getSections?.items ?? []}
+                      items={productRelated.getRelatedSections ?? []}
                     />
                   </Box>
-                  : <Box paddingBlockStart="200">
+                </BlockStack>
+              </Card>
+            : <Card>
+                <BlockStack gap={200}>
+                <SkeletonDisplayText></SkeletonDisplayText>
+                  <Box paddingBlockStart="200">
                     <SkeletonProduct total={3} columns={{ sm: 1, md: 2, lg: 3 }} />
                   </Box>
-                }
-              </BlockStack>
-            </Card>
+                </BlockStack>
+              </Card>
+            }
+
             <Card title="Guide">
               <BlockStack gap={200}>
                 <Text variant="headingMd">Setup guide</Text>
                 <Text variant="bodySm">Only 3 simple steps to add any sections & blocks to your theme</Text>
-                <ProgressBar progress={33} size="small" />
+                <ProgressBar progress={progress} size="small" />
               </BlockStack>
               <Box paddingBlockStart={400}>
                 <BlockStack gap={200}>
-                  <CollapsibleButton />
-                  <CollapsibleButton />
-                  <CollapsibleButton />
+                  <CollapsibleButton options={{
+                    'id': 'setup_guide_1',
+                    'progress': 100/3,
+                    'title': 'Step 1',
+                    'content': 'By giving values to a key, this technique is used to store objects in localStorage. This value can be of any datatype, including text, integer, object, array, and so on.'
+                  }} setProgress={setProgress} />
+                  <CollapsibleButton options={{
+                    'id': 'setup_guide_2',
+                    'progress': 100/3,
+                    'title': 'Step 2',
+                    'content': 'By giving values to a key',
+                    'image': <Image source="https://sections.puco.io/images/general/enable-app.gif" />
+                  }} setProgress={setProgress} />
+                  <CollapsibleButton options={{
+                    'id': 'setup_guide_3',
+                    'progress': 100/3,
+                    'title': 'Step 3',
+                    'content': 'This value can be of any datatype'
+                  }} setProgress={setProgress} />
                 </BlockStack>
               </Box>
             </Card>

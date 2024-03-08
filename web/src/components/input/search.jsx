@@ -10,6 +10,7 @@ import {
   RangeSlider,
   Badge,
 } from '@shopify/polaris';
+import { debounce } from 'lodash'
 import {useState, useCallback, useMemo} from 'react';
 
 export default function Search({
@@ -18,6 +19,7 @@ export default function Search({
   categoryFilter, setCategoryFilter,
   tagFilter, setTagFilter,
   priceFilter, setPriceFilter,
+  debounceLoading, setDebounceLoading,
   sortSelected, setSortSelected,
   pricingPlans,
   categories,
@@ -26,13 +28,29 @@ export default function Search({
 }) {
   console.log('re-render-searchComponent');
 
+  const [search, setSearch] = useState(searchFilter);
+  const [price, setPrice] = useState(priceFilter);
   const [selected, setSelected] = useState(0);
   const {mode, setMode} = useSetIndexFiltersMode(IndexFiltersMode.Filtering);
-
-  const handleSearchFilterChange = useCallback(
-    (value) => setSearchFilter(value),
-    [],
-  );
+  
+  const debounceSearch = useCallback(debounce((nextValue) => {
+    setSearchFilter(nextValue);
+    setDebounceLoading(false);
+  }, 500), []);
+  const handleSearchFilterChange = useCallback((value) => {
+    setSearch(value);
+    debounceSearch(value);
+    setDebounceLoading(true);
+  }, []);
+  const debouncePrice = useCallback(debounce((nextValue) => {
+    setPriceFilter(nextValue);
+    setDebounceLoading(false);
+  }, 300), []);
+  const handlePriceFilterChange = useCallback((value) => {
+    setPrice(value);
+    debouncePrice(value);
+    setDebounceLoading(true);
+  }, []);
   const handlePlanFilterChange = useCallback(
     (value) => setPlanFilter(value),
     [],
@@ -43,10 +61,6 @@ export default function Search({
   );
   const handleTagFilterChange = useCallback(
     (value) => setTagFilter(value),
-    [],
-  );
-  const handlePriceFilterChange = useCallback(
-    (value) => setPriceFilter(value),
     [],
   );
 
@@ -134,7 +148,7 @@ export default function Search({
         <RangeSlider
           label="Price is between"
           labelHidden
-          value={priceFilter || [0, 19]}
+          value={price || [0, 19]}
           prefix="$"
           output
           min={0}
@@ -169,10 +183,10 @@ export default function Search({
       onRemove: handleTagFilterRemove,
     });
   }
-  if (priceFilter) {
+  if (price) {
     appliedFilters.push({
       key: 'priceFilter',
-      label: `Price is between $${priceFilter[0]} and $${priceFilter[1]}`,
+      label: `Price is between $${price[0]} and $${price[1]}`,
       onRemove: handlePriceFilterRemove,
     });
   }
@@ -181,7 +195,7 @@ export default function Search({
     <IndexFilters
       sortOptions={sortOptions}
       sortSelected={sortSelected}
-      queryValue={searchFilter}
+      queryValue={search}
       queryPlaceholder="Searching in all sections"
       onQueryChange={handleSearchFilterChange}
       onQueryClear={handleSearchFilterRemove}

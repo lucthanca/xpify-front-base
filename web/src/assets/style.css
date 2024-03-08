@@ -23,6 +23,31 @@
 }
 
 
+.grid-guide {
+  display: grid;
+  align-items: flex-start;
+  grid-template-columns: auto 1fr auto;
+  column-gap: var(--p-space-300);
+}
+
+.bss-setup-guide:hover {
+  background-color: var(--p-color-bg-surface-hover);
+}
+
+.dotted-icon > circle {
+  display: none;
+}
+
+.dotted-icon:hover > circle {
+  display: block;
+}
+
+.step-complete{
+  border: var(--p-border-width-025) solid var(--p-color-border);
+  border-radius: var(--p-border-radius-200);
+  padding: 0 var(--p-space-200);
+}
+
 .section-builder-paginate {
   display: flex;
   justify-content: center;

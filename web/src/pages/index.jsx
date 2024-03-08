@@ -6,43 +6,71 @@ import {
   NotificationIcon,
   QuestionCircleIcon
 } from '@shopify/polaris-icons';
+import { useNavigate } from '@shopify/app-bridge-react';
 import {gql, useQuery} from "@apollo/client";
 
+import GuideCard from "~/components/card/guide";
 import Tutorial from '~/components/media/tutorial';
-import { SECTIONS_INSTALL_QUERY } from "~/queries/section-builder/product.gql";
+import { SECTIONS_BOUGHT_QUERY, SECTIONS_INSTALLED_QUERY } from "~/queries/section-builder/product.gql";
+
+const tabs = [
+  {
+    id: 'installed',
+    content: 'Sections Installed',
+    query: SECTIONS_INSTALLED_QUERY
+  },
+  {
+    id: 'bought',
+    content: 'Sections Paid',
+    query: SECTIONS_BOUGHT_QUERY
+  }
+];
 
 function HomePage() {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState(0);
-  const handleTabChange = useCallback(
-    (selectedTabIndex) => setSelected(selectedTabIndex),
-    [],
-  );
-  const { data:sectionsInstalled, loading:sectionsInstalledL, error:sectionsInstalledE } = useQuery(SECTIONS_INSTALL_QUERY, {
+  const [tabQuery, setTabQuery] = useState(SECTIONS_INSTALLED_QUERY);
+
+  const handleTabChange = useCallback((selectedTabIndex) => {
+    setSelected(selectedTabIndex);
+    setTabQuery(tabs[selectedTabIndex].query);
+  }, []);
+
+  const handleRedirectProductPage = useCallback((url) => {
+    navigate(`/section/${url}`);
+    window.scrollTo(0,0);
+  }, []);
+  const handleRedirectSectionsPage = useCallback(() => {
+    navigate(`/sections`);
+    window.scrollTo(0,0);
+  }, []);
+
+  const { data:sections, loading:sectionsL, error:sectionsE } = useQuery(tabQuery, {
     fetchPolicy: "cache-and-network",
   });
 
   const emptyStateMarkup = useMemo(() => {
-    if (sectionsInstalled?.getSectionsInstall 
-      && sectionsInstalled?.getSectionsInstall.length == 0
-    ) {
-      return (
-        <EmptyState
-          heading="No sections"
-          action={{content: 'Explore Library'}}
-          image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
-        >
-          <Text variant="bodyMd" as='p'>Discover all sections on library</Text>
-        </EmptyState>
-      );
-    }
-
-    return undefined;
-  }, [sectionsInstalled]);
+    return (
+      <EmptyState
+        heading="No sections"
+        action={{
+          content: 'Explore Library',
+          onAction: () => handleRedirectSectionsPage()
+        }}
+        image="https://cdn.shopify.com/s/files/1/2376/3301/products/emptystate-files.png"
+      >
+        <Text variant="bodyMd" as='p'>Discover all sections on library</Text>
+      </EmptyState>
+    );
+  }, [sections]);
 
   return (
     <Page
       title="Home page"
-      primaryAction={{content: 'Start App'}}
+      primaryAction={{
+        content: 'Start App',
+        onAction: () => {handleRedirectSectionsPage()}
+      }}
       secondaryActions={[
         {content: 'Latest release', icon: NotificationIcon},
         {content: 'Wishlist', icon: HeartIcon},
@@ -53,59 +81,7 @@ function HomePage() {
         <Layout.Section>
           <BlockStack gap={600}>
             <Box>
-              <InlineGrid gap="400" columns={3}>
-                <Card>
-                  <BlockStack gap="200">
-                    <BlockStack inlineAlign="start">
-                      <InlineStack gap="400">
-                        <Icon source={QuestionCircleIcon} />
-                        <Text as="h3" variant="headingSm">
-                          Contact support
-                        </Text>
-                      </InlineStack>
-                    </BlockStack>
-                    <List>
-                      <List.Item>Socks</List.Item>
-                      <List.Item>Super Shoes</List.Item>
-                      <List.Item>Super</List.Item>
-                    </List>
-                  </BlockStack>
-                </Card>
-                <Card>
-                  <BlockStack gap="200">
-                    <BlockStack inlineAlign="start">
-                      <InlineStack gap="400">
-                        <Icon source={QuestionCircleIcon} />
-                        <Text as="h3" variant="headingSm">
-                          Contact support
-                        </Text>
-                      </InlineStack>
-                    </BlockStack>
-                    <List>
-                      <List.Item>Socks</List.Item>
-                      <List.Item>Super Shoes</List.Item>
-                      <List.Item>Super</List.Item>
-                    </List>
-                  </BlockStack>
-                </Card>
-                <Card>
-                  <BlockStack gap="200">
-                    <BlockStack inlineAlign="start">
-                      <InlineStack gap="400">
-                        <Icon source={QuestionCircleIcon} />
-                        <Text as="h3" variant="headingSm">
-                          Contact support
-                        </Text>
-                      </InlineStack>
-                    </BlockStack>
-                    <List>
-                      <List.Item>Socks</List.Item>
-                      <List.Item>Super Shoes</List.Item>
-                      <List.Item>Super</List.Item>
-                    </List>
-                  </BlockStack>
-                </Card>
-              </InlineGrid>
+              <GuideCard />
             </Box>
             
             <Box>
@@ -117,38 +93,43 @@ function HomePage() {
                 <InlineGrid gap="400" columns={2}>
                   <Card>
                     <BlockStack gap="200">
-                      <Text as="h3" variant="headingSm">
-                        Sections provided by your theme
-                      </Text>
-                      <Text as="p" variant="bodyLg">
-                        18
-                      </Text>
+                      <BlockStack inlineAlign="start">
+                        <InlineStack gap="400">
+                          <Icon source={QuestionCircleIcon} />
+                          <Text as="h3" variant="headingSm">
+                            Contact support
+                          </Text>
+                        </InlineStack>
+                      </BlockStack>
+                      <List>
+                        <List.Item>Socks</List.Item>
+                        <List.Item>Super Shoes</List.Item>
+                        <List.Item>Super</List.Item>
+                      </List>
                     </BlockStack>
                   </Card>
                   <Card>
                     <BlockStack gap="200">
-                      <Text as="h3" variant="headingSm">
-                        Sections & Blocks extended from Puco
-                      </Text>
-                      <Text as="p" variant="bodyLg">
-                        4
-                      </Text>
+                      <BlockStack inlineAlign="start">
+                        <InlineStack gap="400">
+                          <Icon source={QuestionCircleIcon} />
+                          <Text as="h3" variant="headingSm">
+                            Contact support
+                          </Text>
+                        </InlineStack>
+                      </BlockStack>
+                      <List>
+                        <List.Item>Socks</List.Item>
+                        <List.Item>Super Shoes</List.Item>
+                        <List.Item>Super</List.Item>
+                      </List>
                     </BlockStack>
                   </Card>
                 </InlineGrid>
                 <InlineGrid>
                   <Card padding={0}>
                     <Tabs
-                      tabs={[
-                        {
-                          id: 'sections',
-                          content: 'Sections Installed'
-                        },
-                        {
-                          id: 'paid',
-                          content: 'Sections Paid'
-                        }
-                      ]}
+                      tabs={tabs}
                       selected={selected}
                       onSelect={handleTabChange}
                       fitted
@@ -156,7 +137,11 @@ function HomePage() {
                       <Box paddingInline={400} paddingBlockEnd={400}>
                         <ResourceList
                           resourceName={{singular: 'section', plural: 'sections'}}
-                          items={sectionsInstalled?.getSectionsInstall ?? []}
+                          items={
+                            sections?.getSectionsInstall
+                            ? sections?.getSectionsInstall ?? []
+                            : sections?.getSectionsBuy ?? []
+                          }
                           emptyState={emptyStateMarkup}
                           renderItem={(item) => {
                             return (
@@ -166,6 +151,7 @@ function HomePage() {
                                 media={
                                   <Thumbnail size='medium' source={item.images[0]?.src} alt='' />
                                 }
+                                onClick={() => {handleRedirectProductPage(item.url_key)}}
                               >
                                 <InlineStack align='space-between'>
                                   <BlockStack gap={200}>
@@ -181,7 +167,7 @@ function HomePage() {
                                       item.installed &&
                                       <Tooltip content={item.installed.filter(install => install.product_version !== item.version).length + ' themes are using old version!'}>
                                         <Text variant="bodySm" tone='subdued' as="p">
-                                          Installed in {item.installed.length} themes
+                                           in {item.installed.length} themes
                                         </Text>
                                       </Tooltip>
                                     }
@@ -207,33 +193,39 @@ function HomePage() {
                 </BlockStack>
 
                 <InlineGrid gap="400" columns={3}>
-                  <Tutorial mediaCard={{
-                    portrait: true,
-                    title: "Quickstart 1",
-                    primaryAction: {
-                      content: 'Watch 1',
-                      onAction: () => {},
-                    }
+                  <div>
+                    <Tutorial mediaCard={{
+                      portrait: true,
+                      title: "Quickstart 1",
+                      primaryAction: {
+                        content: 'Watch 1',
+                        onAction: () => {},
+                      }
+                    }}
+                    />
+                  </div>
+                  <div>
+                    <Tutorial mediaCard={{
+                      portrait: true,
+                      title: "Quickstart 2",
+                      primaryAction: {
+                        content: 'Watch 2',
+                        onAction: () => {},
+                      }
                     }}
                   />
-                  <Tutorial mediaCard={{
-                    portrait: true,
-                    title: "Quickstart 2",
-                    primaryAction: {
-                      content: 'Watch 2',
-                      onAction: () => {},
-                    }
+                  </div>
+                  <div>
+                    <Tutorial mediaCard={{
+                      portrait: true,
+                      title: "Quickstart 3",
+                      primaryAction: {
+                        content: 'Watch 3',
+                        onAction: () => {},
+                      }
                     }}
                   />
-                  <Tutorial mediaCard={{
-                    portrait: true,
-                    title: "Quickstart 3",
-                    primaryAction: {
-                      content: 'Watch 3',
-                      onAction: () => {},
-                    }
-                    }}
-                  />
+                  </div>
                 </InlineGrid>
               </BlockStack>
             </Box>

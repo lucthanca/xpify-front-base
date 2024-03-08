@@ -101,6 +101,46 @@ export const SECTION_QUERY = gql`
     }
   }
 `;
+export const RELATED_SECTIONS_QUERY = gql`
+  query GET($key: String!) {
+    getRelatedSections(key: $key) {
+      entity_id
+      is_enable
+      plan_id
+      name
+      images {
+        src
+      }
+      url_key
+      price
+      src
+      version
+      description
+      release_note
+      demo_link
+      pricing_plan {
+        name
+        code
+        prices {
+          interval
+          amount
+        }
+        description
+      }
+      categories
+      tags
+      actions {
+        install
+        purchase
+        plan
+      }
+      installed {
+        theme_id
+        product_version
+      }
+    }
+  }
+`;
 
 /* Group Product */
 export const GROUP_SECTIONS_QUERY = gql`
@@ -148,8 +188,24 @@ export const GROUP_SECTION_QUERY = gql`
   }
 `;
 
-/* Product Install */
-export const SECTIONS_INSTALL_QUERY = gql`
+/* Product Bought */
+export const SECTIONS_BOUGHT_QUERY = gql`
+  query GET {
+    getSectionsBuy {
+      product_id
+      name
+      price
+      version
+      url_key
+      images {
+        src
+      }
+    }
+  }
+`;
+
+/* Product Installed */
+export const SECTIONS_INSTALLED_QUERY = gql`
   query GET {
     getSectionsInstall {
       product_id

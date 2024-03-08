@@ -7,7 +7,7 @@ import { Icon } from '@shopify/polaris';
 
 function Default({pageInfo, currentPage, setCurrentPage}) {
   if (!pageInfo.current_page || pageInfo.total_pages <= 1) {
-    return <div></div>;
+    return <></>;
   }
 
   const listItems = [];
@@ -19,14 +19,13 @@ function Default({pageInfo, currentPage, setCurrentPage}) {
     );
   }
 
-  const handleChangePage = useCallback(
-    (page) => setCurrentPage(page),
-    [],
-  );
+  const handleChangePage = useCallback((page) => {
+    setCurrentPage(page);
+    window.scrollTo(0,0);
+  }, []);
   const handlePrevPage = useCallback(() => setCurrentPage(
     (prevState) => prevState - 1
   ),[]);
-
   const handleNextPage = useCallback(() => setCurrentPage(
     (prevState) => prevState + 1
   ),[]);
@@ -35,7 +34,7 @@ function Default({pageInfo, currentPage, setCurrentPage}) {
     <div className="section-builder-paginate">
       <ul role="navigation" aria-label="Pagination">
         <li className={currentPage == 1 ? "disabled" : ""}>
-          <a role="button" aria-disabled={currentPage == 1} aria-label="Previous" onClick={handlePrevPage}>
+          <a role="button" aria-disabled={currentPage == 1} aria-label="Previous" onClick={() => handlePrevPage()}>
             <Icon
               source={ChevronLeftIcon}
               tone="base"
@@ -44,7 +43,7 @@ function Default({pageInfo, currentPage, setCurrentPage}) {
         </li>
         {listItems}
         <li className={currentPage == pageInfo.total_pages ? "disabled" : ""}>
-          <a role="button" aria-disabled={currentPage == pageInfo.total_pages} aria-label="Next" onClick={handleNextPage}>
+          <a role="button" aria-disabled={currentPage == pageInfo.total_pages} aria-label="Next" onClick={() => handleNextPage()}>
             <Icon
               source={ChevronRightIcon}
               tone="base"

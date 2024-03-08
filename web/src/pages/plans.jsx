@@ -47,7 +47,7 @@ function Plans() {
                     <BlockStack gap="200">
                       <InlineStack align="space-between">
                         <Text as="h3" variant="headingSm">
-                          Free
+                          Basic
                         </Text>
                         <Badge tone="success">
                         <Tooltip content={"Forever"}>

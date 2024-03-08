@@ -23,14 +23,17 @@ import { CATEGORIES_QUERY } from "~/queries/section-builder/category.gql";
 import { TAGS_QUERY } from "~/queries/section-builder/tag.gql";
 import { PRICING_PLANS_QUERY, SORT_OPTIONS_QUERY } from "~/queries/section-builder/other.gql";
 
+const defaultSort = ['main_table.name asc'];
+
 function Sections() {
   const { t } = useTranslation();
   const [searchFilter, setSearchFilter] = useState('');
-  const [sortSelected, setSortSelected] = useState(['main_table.name asc']);
+  const [sortSelected, setSortSelected] = useState(defaultSort);
   const [planFilter, setPlanFilter] = useState(undefined);
   const [categoryFilter, setCategoryFilter] = useState(undefined);
   const [tagFilter, setTagFilter] = useState(undefined);
   const [priceFilter, setPriceFilter] = useState(undefined);
+  const [debounceLoading, setDebounceLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data:sections, loading:sectionsL, error:sectionsE } = useQuery(SECTIONS_QUERY, {
@@ -89,9 +92,10 @@ function Sections() {
               tagFilter={tagFilter} setTagFilter={setTagFilter}
               priceFilter={priceFilter} setPriceFilter={setPriceFilter}
               sortSelected={sortSelected} setSortSelected={setSortSelected}
-              pricingPlans={pricingPlans?.getPricingPlans?.plan ? pricingPlans.getPricingPlans.plan.map(item => ({
-                value: item.id,
-                label: item.name
+              debounceLoading={debounceLoading} setDebounceLoading={setDebounceLoading}
+              pricingPlans={pricingPlans?.getPricingPlans ? pricingPlans.getPricingPlans.map(item => ({
+                value: item.plan.id,
+                label: item.plan.name
               })) : []}
               categories={categories?.getCategories ? categories.getCategories.map(item => ({
                 value: item.entity_id,
@@ -161,7 +165,7 @@ function Sections() {
             <Box padding={600}>
               <BlockStack gap={200}>
                 {
-                  sections?.getSections !== undefined
+                  !debounceLoading && sections?.getSections !== undefined
                   ? <ProductList items={sections.getSections?.items ?? []} columns={{sm: 1, md: 2, lg: 4}} />
                   : <SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />
                 }

@@ -45,6 +45,16 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
      });
   }, [currentProduct]);
 
+  const handleRedirectProductPage = useCallback((url) => {
+    handleChange();
+    navigate(`/section/${url}`);
+    window.scrollTo(0,0);
+  }, []);
+  const handleRedirectPlansPage = useCallback(() => {
+    navigate(`/plans`);
+    window.scrollTo(0,0);
+  }, []);
+
   useEffect(() => {
     if (purchase?.redirectBillingUrl?.message) {
       setBannerAlert({
@@ -91,11 +101,11 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
               <BlockStack gap="200">
                 <Text variant="headingMd" as="h2">{product.name}</Text>
                 {
-                  (product.categories !== undefined || product.tags !== undefined)
-                  ? (product.categories || product.tags) &&
+                  (product?.categories !== undefined || product?.tags !== undefined)
+                  ? (product?.categories || product?.tags) &&
                   <InlineStack gap="200" blockAlign="start">
                     {
-                      product.categories &&
+                      product?.categories &&
                       product.categories.map(item => (
                         <Tooltip key={item} content="Category">
                           <Badge tone="success">{item}</Badge>
@@ -103,7 +113,7 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
                       ))
                     }
                     {
-                      product.tags &&
+                      product?.tags &&
                       product.tags.map(item => (
                         <Tooltip key={item} content="Tag">
                           <Badge tone="info">#{item}</Badge>
@@ -134,9 +144,7 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
                     <Button
                       size="large"
                       fullWidth 
-                      onClick={() => {
-                        navigate(`/section/${product.url_key}`, {replace: false});
-                      }}
+                      onClick={() => {handleRedirectProductPage(product.url_key)}}
                     >
                       {product.actions?.install ? 'Install Now' : 'Go to product page'}
                     </Button>
@@ -176,9 +184,10 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
                   <Button
                     size="large"
                     fullWidth 
-                    onClick={() => {}}
+                    disabled={!product.actions?.plan}
+                    onClick={() => {handleRedirectPlansPage()}}
                   >
-                    Upgrade Now
+                    {product.actions?.plan ? "Upgrade Now" : "Actived"}
                   </Button>
                 </BlockStack>
               </Card>
