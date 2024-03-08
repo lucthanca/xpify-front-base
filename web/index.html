@@ -12,12 +12,13 @@
         // code, so that the vite server is properly enabled to run HMR
         const script = document.createElement('script');
         script.setAttribute('type', "module");
-        script.setAttribute('src', "./dev_embed.js");
+        const origin = window.location.origin;
+        script.setAttribute('src', `${origin}/dev_embed.js`);
         document.getElementsByTagName('head')[0].append(script);
       }
     </script>
-    
-    <link 
+
+    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/splidejs/4.1.4/css/splide.min.css"
     >
