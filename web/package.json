@@ -46,6 +46,7 @@
     "jsdom": "^19.0.0",
     "postcss": "^8.4.33",
     "prettier": "^2.6.0",
+    "sass": "^1.71.1",
     "stylelint": "^15.6.1",
     "tailwindcss": "^3.4.0",
     "terser": "^5.26.0",

@@ -11,7 +11,8 @@ import SkeletonProduct from '~/components/product/skeleton';
 import GallerySlider from '~/components/splide/gallery';
 import ProductList from '~/components/product/list';
 import { GROUP_SECTION_QUERY, SECTIONS_QUERY } from "~/queries/section-builder/product.gql";
-import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
+// import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
+import { useSectionPurchase } from '~/hooks/useSectionPurchase';
 
 const skeleton = (
   <SkeletonPage primaryAction backAction>
@@ -46,6 +47,7 @@ function SectionDetail() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { key } = useParams();
+  const { purchaseSection, loading: purchaseL, error: purchaseError } = useSectionPurchase();
 
   const { data:groupSection, loading:groupSectionL, error:groupSectionE } = useQuery(GROUP_SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
@@ -53,6 +55,7 @@ function SectionDetail() {
       key: key
     }
   });
+  const bundleSection = useMemo(() => groupSection?.getGroupSection, [groupSection]);
   const { data:groupSections, loading:groupSectionsL, error:groupSectionsE } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-first",
     variables: {
@@ -64,17 +67,12 @@ function SectionDetail() {
     }
   });
 
-  const [redirectPurchase, { data:purchase, loading:purchaseL, error:purchaseE }] = useMutation(REDIRECT_BILLING_PAGE_MUTATION);
+  // const [redirectPurchase, { data:purchase, loading:purchaseL, error:purchaseE }] = useMutation(REDIRECT_BILLING_PAGE_MUTATION);
 
   const handlePurchase = useCallback(async () => {
-    await redirectPurchase({ 
-      variables: {
-        name: groupSection.getGroupSection?.url_key,
-        interval: 'ONE_TIME',
-        is_plan: false
-      }
-     });
-  }, [groupSection]);
+    if (!bundleSection.entity_id) return;
+    await purchaseSection(bundleSection);
+  }, [bundleSection]);
 
   console.log("re-render-pageSection");
   return (
@@ -85,11 +83,11 @@ function SectionDetail() {
       subtitle={groupSection.getGroupSection?.price ? `$${groupSection.getGroupSection?.price}` : 'Free'}
       compactTitle
       primaryAction={{
-        content: !groupSection?.getGroupSection?.actions?.purchase ? 'Purchased' : 'Purchase',
+        content: !groupSection?.getGroupSection?.actions?.purchase ? 'Owned' : 'Purchase',
         disabled: !groupSection?.getGroupSection?.actions?.purchase,
         helpText: 'Own forever this groupSection.',
         loading: purchaseL,
-        onAction: () => handlePurchase()
+        onAction: handlePurchase,
       }}
       secondaryActions={[
         {
