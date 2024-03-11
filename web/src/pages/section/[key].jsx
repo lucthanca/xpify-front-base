@@ -5,7 +5,9 @@ const SectionDetails = lazy(() => import('~/components/SectionDetails'));
 
 const SectionFullPageDetails = props => {
   const talonProps = useSection();
-  if (!talonProps.section || Object.keys(talonProps.section).length === 0) return <Skeleton />;
+  const { loadingWithoutData } = talonProps;
+  if (loadingWithoutData) return <Skeleton />;
+
   return (
     <Suspense fallback={<Skeleton />}>
       <SectionDetails {...talonProps} {...props} />

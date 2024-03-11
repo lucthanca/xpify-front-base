@@ -17,6 +17,7 @@ import ModalInstallSection from '~/components/product/manage';
 import SectionGallery from '~/components/SectionDetails/gallery';
 import RelatedProducts from '~/components/SectionDetails/RelatedProducts';
 import { Loading } from '@shopify/app-bridge-react';
+import NotFound from '~/pages/NotFound';
 
 const SectionFullpageDetails = props => {
   const {
@@ -27,11 +28,22 @@ const SectionFullpageDetails = props => {
     themes,
     reloadSection,
     relatedProducts,
+    sectionError,
   } = props;
   const handleBackPage = useBackPage();
   const [isShowPopupManage, setIsShowPopupManage] = useState(false);
   const [bannerAlert, setBannerAlert] = useState(undefined);
   const handleShowPopup = useCallback(() => setIsShowPopupManage(prev => !prev), []);
+
+  const handleBack = useCallback(() => navigate('/sections'), [navigate]);
+  const backAction = useMemo(() => ({
+    content: 'Not Found',
+    onAction: handleBack
+  }), [handleBack]);
+
+  if (sectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity') {
+    return <NotFound backAction={backAction} />;
+  }
 
   return (
     <>

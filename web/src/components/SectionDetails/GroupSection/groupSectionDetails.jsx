@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { ViewIcon } from '@shopify/polaris-icons';
 import { BlockStack, Box, Card, Layout, Page, Text } from '@shopify/polaris';
 import { useBackPage } from '~/hooks/section-builder/redirect';
@@ -6,7 +6,12 @@ import GallerySlider from '~/components/splide/gallery';
 import ProductList from '~/components/product/list';
 import SkeletonProduct from '~/components/product/skeleton';
 import { Loading } from '@shopify/app-bridge-react';
+<<<<<<< HEAD
 
+=======
+import { useNavigate } from 'react-router-dom';
+import NotFound from '~/pages/NotFound.jsx';
+>>>>>>> a39afbe4c046c9bb97ae40d45a22c3ab8a4e2fb2
 const GroupSectionDetails = props => {
   const handleBackPage = useBackPage();
   const {
@@ -15,8 +20,18 @@ const GroupSectionDetails = props => {
     childSections,
     purchaseLoading,
     handlePurchase,
+    groupSectionError,
   } = props;
-  console.log({ disable: sectionLoading || purchaseLoading || !groupSection?.actions?.purchase });
+
+  const handleBack = useCallback(() => navigate('/groups'), [navigate]);
+  const backAction = useMemo(() => ({
+    content: 'Not Found',
+    onAction: handleBack
+  }), [handleBack]);
+
+  if (groupSectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity') {
+    return <NotFound backAction={backAction} />;
+  }
 
   return (
     <>
