@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useSectionPurchase } from '~/hooks/useSectionPurchase';
 import { useCallback, useMemo } from 'react';
-import { useQuery } from '@apollo/client';
+import { ApolloError, useQuery } from '@apollo/client';
 import { SECTION_QUERY } from '~/queries/section-builder/product.gql';
 import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
 import type { ApolloQueryResult } from '@apollo/client/core/types';
@@ -73,6 +73,8 @@ export type SectionTalon = {
   themes: ThemeData[] | [];
   section: SectionData | {};
   relatedProducts: SectionData[];
+  sectionError: ApolloError | undefined;
+  loadingWithoutData: boolean;
 };
 
 export const useSection = (): SectionTalon => {
@@ -80,7 +82,7 @@ export const useSection = (): SectionTalon => {
   const { purchaseSection, loading: purchaseLoading, error: purchaseError } = useSectionPurchase();
   const { products: relatedProducts } = useRelatedProducts();
 
-  const { data: loadedSection, loading: sectionLoading, error: sectionE, refetch: reloadSection } = useQuery(SECTION_QUERY, {
+  const { data: loadedSection, loading: sectionLoading, error: sectionError, refetch: reloadSection } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: { key }
   });
@@ -89,6 +91,7 @@ export const useSection = (): SectionTalon => {
   }, [loadedSection]);
   const { data:themesData, loading:themesL, error:themesE } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
+    skip: Boolean(!section.entity_id),
   });
   const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
   const handlePurchase = useCallback(async () => {
@@ -104,5 +107,7 @@ export const useSection = (): SectionTalon => {
     themes,
     section,
     relatedProducts,
+    sectionError,
+    loadingWithoutData: sectionLoading && !loadedSection,
   };
 };

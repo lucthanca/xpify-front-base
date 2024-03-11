@@ -21,7 +21,7 @@ export const useGroupSection = () => {
       pageSize: 99,
       currentPage: 1
     },
-    skip: groupSection?.child_ids?.length === 0,
+    skip: !Array.isArray(groupSection?.child_ids) || groupSection?.child_ids?.length === 0,
   });
   const childSections = useMemo(() => groupChildSections?.getSections?.items || [], [groupChildSections]);
   const handlePurchase = useCallback(async () => {
