@@ -2,7 +2,7 @@
   "name": "@xpify/front-base",
   "private": true,
   "license": "UNLICENSED",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "shopify": "shopify",
     "build": "shopify app build",
