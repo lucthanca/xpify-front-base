@@ -1,5 +1,20 @@
-import {Badge, BlockStack, Box, Button, CalloutCard, Card, Frame, Grid, Icon, InlineGrid, InlineStack, Modal, SkeletonBodyText, SkeletonDisplayText, SkeletonTabs, Text, Tooltip} from '@shopify/polaris';
 import {useState, useCallback, memo, useEffect, useMemo} from 'react';
+import {
+  Badge,
+  BlockStack,
+  Box,
+  Button,
+  CalloutCard,
+  Card,
+  Icon,
+  InlineGrid,
+  InlineStack,
+  Modal,
+  SkeletonBodyText,
+  SkeletonDisplayText,
+  Text,
+  Tooltip
+} from '@shopify/polaris';
 import {
   PaymentIcon,
   BillIcon,
@@ -9,16 +24,14 @@ import {
   ViewIcon,
   CheckIcon
 } from '@shopify/polaris-icons';
+import { useQuery, useMutation } from "@apollo/client";
 import GallerySlider from '~/components/splide/gallery';
-import {useNavigate} from '@shopify/app-bridge-react';
-import {gql, useQuery, useMutation} from "@apollo/client";
-
-import BannerDefault from '~/components/banner/default';
+import BannerDefault from '~/components/block/banner';
 import { SECTION_QUERY } from "~/queries/section-builder/product.gql";
 import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
+import { useRedirectPlansPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 
 function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
-  const navigate = useNavigate();
   const { data:productMore, loading:productMoreL, error:productMoreE } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
@@ -45,15 +58,8 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
      });
   }, [currentProduct]);
 
-  const handleRedirectProductPage = useCallback((url) => {
-    handleChange();
-    navigate(`/section/${url}`);
-    window.scrollTo(0,0);
-  }, []);
-  const handleRedirectPlansPage = useCallback(() => {
-    navigate(`/plans`);
-    window.scrollTo(0,0);
-  }, []);
+  const handleRedirectProductPage = useRedirectSectionPage();
+  const handleRedirectPlansPage = useRedirectPlansPage();
 
   useEffect(() => {
     if (purchase?.redirectBillingUrl?.message) {
@@ -72,7 +78,6 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
   }, [purchase, purchaseE]);
 
   return (
-    product?.entity_id &&
     <Modal
       size='large'
       open={isShowPopup}
@@ -144,7 +149,7 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
                     <Button
                       size="large"
                       fullWidth 
-                      onClick={() => {handleRedirectProductPage(product.url_key)}}
+                      onClick={() => handleRedirectProductPage(product.url_key)}
                     >
                       {product.actions?.install ? 'Install Now' : 'Go to product page'}
                     </Button>
@@ -185,7 +190,7 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
                     size="large"
                     fullWidth 
                     disabled={!product.actions?.plan}
-                    onClick={() => {handleRedirectPlansPage()}}
+                    onClick={handleRedirectPlansPage}
                   >
                     {product.actions?.plan ? "Upgrade Now" : "Actived"}
                   </Button>

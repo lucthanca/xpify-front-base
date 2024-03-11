@@ -1,3 +1,5 @@
+import '~/assets/style.css';
+import { memo, useState } from "react";
 import {
   Page,
   Layout,
@@ -7,17 +9,13 @@ import {
   Text,
   BlockStack
 } from "@shopify/polaris";
-import { useCallback, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import {gql, useQuery, useMutation} from "@apollo/client";
-
-import '~/assets/style.css';
+import { useQuery } from "@apollo/client";
+import { AutoScroll } from "@splidejs/splide-extension-auto-scroll";
 import Search from '~/components/input/search';
 import ProductCarousel from '~/components/splide/product';
 import ProductList from '~/components/product/list';
 import SkeletonProduct from '~/components/product/skeleton';
-import Paginate from '~/components/paginate/default';
-import { AutoScroll } from "@splidejs/splide-extension-auto-scroll";
+import Paginate from '~/components/block/paginate/default';
 import { SECTIONS_QUERY } from "~/queries/section-builder/product.gql";
 import { CATEGORIES_QUERY } from "~/queries/section-builder/category.gql";
 import { TAGS_QUERY } from "~/queries/section-builder/tag.gql";
@@ -26,7 +24,6 @@ import { PRICING_PLANS_QUERY, SORT_OPTIONS_QUERY } from "~/queries/section-build
 const defaultSort = ['main_table.name asc'];
 
 function Sections() {
-  const { t } = useTranslation();
   const [searchFilter, setSearchFilter] = useState('');
   const [sortSelected, setSortSelected] = useState(defaultSort);
   const [planFilter, setPlanFilter] = useState(undefined);
@@ -36,8 +33,8 @@ function Sections() {
   const [debounceLoading, setDebounceLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data:sections, loading:sectionsL, error:sectionsE } = useQuery(SECTIONS_QUERY, {
-    fetchPolicy: "network-only",
+  const { data:sections } = useQuery(SECTIONS_QUERY, {
+    fetchPolicy: "cache-and-network",
     variables: {
       search: searchFilter,
       filter: {
@@ -54,7 +51,7 @@ function Sections() {
       currentPage: currentPage
     }
   });
-  const { data:productTopSells, loading:productTopSellsL, error:productTopSellsE } = useQuery(SECTIONS_QUERY, {
+  const { data:productTopSells } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-first",
     variables: {
       sort: {
@@ -66,16 +63,16 @@ function Sections() {
     }
   });
 
-  const { data: pricingPlans, loading: loadingPricingPlans, error: errorPricingPlans } = useQuery(PRICING_PLANS_QUERY, {
+  const { data: pricingPlans } = useQuery(PRICING_PLANS_QUERY, {
     fetchPolicy: "cache-and-network"
   });
-  const { data: categories, loading: loadingCategories, error: errorCategories } = useQuery(CATEGORIES_QUERY, {
+  const { data: categories } = useQuery(CATEGORIES_QUERY, {
     fetchPolicy: "cache-and-network"
   });
-  const { data: tags, loading: loadingTags, error: errorTags } = useQuery(TAGS_QUERY, {
+  const { data: tags } = useQuery(TAGS_QUERY, {
     fetchPolicy: "cache-and-network"
   });
-  const { data: sortOptions, loading: loadingSortOptions, error: errorSortOptions } = useQuery(SORT_OPTIONS_QUERY, {
+  const { data: sortOptions } = useQuery(SORT_OPTIONS_QUERY, {
     fetchPolicy: "cache-and-network"
   });
 
@@ -110,7 +107,9 @@ function Sections() {
 
             <Box padding={600}>
               <BlockStack gap={200}>
-                <Text variant="headingLg" as="h2">Top Sells</Text>
+                <BlockStack>
+                  <Text variant="headingMd" as="h2">Top Sells</Text>
+                </BlockStack>
                 {
                   productTopSells?.getSections
                   ? <ProductCarousel
@@ -190,4 +189,4 @@ function Sections() {
   );
 }
 
-export default Sections;
+export default memo(Sections);

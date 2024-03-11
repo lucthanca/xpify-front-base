@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const CommonSectionField = `
+const CommonSectionField = gql`
   fragment CommonSectionField on SectionInterface {
     entity_id
     is_enable

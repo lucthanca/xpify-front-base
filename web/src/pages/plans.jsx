@@ -1,13 +1,28 @@
-import {gql, useQuery} from "@apollo/client";
-import { Badge, BlockStack, Box, Button, Card, Icon, InlineGrid, InlineStack, Layout, Page, SkeletonBodyText, SkeletonDisplayText, SkeletonTabs, Tabs, Text, Tooltip } from "@shopify/polaris";
-import { useCallback, useState } from "react";
+import { memo } from "react";
+import {
+  Badge,
+  BlockStack,
+  Box,
+  Card,
+  Icon,
+  InlineGrid,
+  InlineStack,
+  Layout,
+  Page,
+  SkeletonBodyText,
+  SkeletonDisplayText,
+  SkeletonTabs,
+  Text,
+  Tooltip
+} from "@shopify/polaris";
 import { CheckIcon } from '@shopify/polaris-icons';
-
-import PricingPlanCard from '~/components/card/plan';
+import { useQuery } from "@apollo/client";
+import TitleBlock from '~/components/block/title';
+import PricingPlanCard from '~/components/block/card/plan';
 import { PRICING_PLANS_QUERY } from "~/queries/section-builder/other.gql";
 
 function Plans() {
-  const { data:pricingPlans, loading:pricingPlansL, error:pricingPlansE } = useQuery(PRICING_PLANS_QUERY, {
+  const { data:pricingPlans } = useQuery(PRICING_PLANS_QUERY, {
     fetchPolicy: "cache-and-network",
   });
 
@@ -38,10 +53,8 @@ function Plans() {
 
             <Box paddingBlockEnd={600}>
               <BlockStack gap={400}>
-                <BlockStack>
-                  <Text variant="headingMd" as="h2">List Plan</Text>
-                  <Text variant="bodyXs" as="p" tone="subdued">We support both Usage-based and Subscription-based.</Text>
-                </BlockStack>
+                <TitleBlock title='List Plan' subTitle='We support both Usage-based and Subscription-based.' />
+
                 <InlineGrid gap="400" columns={{sm: 1, md: 2}}>
                   <Card>
                     <BlockStack gap="200">
@@ -117,4 +130,4 @@ function Plans() {
   )
 }
 
-export default Plans;
+export default memo(Plans);

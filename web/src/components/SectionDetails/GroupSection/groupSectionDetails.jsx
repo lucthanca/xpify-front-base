@@ -1,13 +1,14 @@
 import { memo } from 'react';
 import { ViewIcon } from '@shopify/polaris-icons';
 import { BlockStack, Box, Card, Layout, Page, Text } from '@shopify/polaris';
+import { useBackPage } from '~/hooks/section-builder/redirect';
 import GallerySlider from '~/components/splide/gallery';
 import ProductList from '~/components/product/list';
 import SkeletonProduct from '~/components/product/skeleton';
 import { Loading } from '@shopify/app-bridge-react';
-import { useNavigate } from 'react-router-dom';
+
 const GroupSectionDetails = props => {
-  const navigate = useNavigate();
+  const handleBackPage = useBackPage();
   const {
     groupSectionLoading: sectionLoading,
     groupSection,
@@ -21,7 +22,7 @@ const GroupSectionDetails = props => {
     <>
       {sectionLoading && <Loading />}
       <Page
-        backAction={{content: 'Products', onAction: () => navigate(-1)}}
+        backAction={{content: 'Products', onAction: () => handleBackPage()}}
         title={groupSection.name}
         subtitle={groupSection.price ? `$${groupSection.price}` : 'Free'}
         compactTitle

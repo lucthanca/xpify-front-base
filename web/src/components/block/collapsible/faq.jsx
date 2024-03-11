@@ -1,8 +1,8 @@
+import { useState, useCallback, memo } from 'react';
 import {
   Card,
   Text,
   Collapsible,
-  Link,
   BlockStack,
   InlineStack,
   Icon,
@@ -12,7 +12,6 @@ import {
   CircleChevronUpIcon,
   CircleChevronDownIcon
 } from '@shopify/polaris-icons';
-import {useState, useCallback, memo} from 'react';
 
 function CollapsibleDefault({title, content}) {
   const [open, setOpen] = useState(false);
@@ -28,11 +27,7 @@ function CollapsibleDefault({title, content}) {
           </Text>
 
           <BlockStack as='div'>
-            {
-              open
-              ? <Icon source={CircleChevronUpIcon} tone="base" />
-              : <Icon source={CircleChevronDownIcon} tone="base" />
-            }
+            <Icon source={open ? CircleChevronUpIcon : CircleChevronDownIcon} tone="base" />
           </BlockStack>
         </div>
 

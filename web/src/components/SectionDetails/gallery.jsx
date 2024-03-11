@@ -1,7 +1,9 @@
 import { memo } from 'react';
-import GallerySlider from '~/components/splide/gallery.jsx';
-import { Card } from '@shopify/polaris';
+import {
+  Card
+} from '@shopify/polaris';
 import PropTypes from 'prop-types';
+import GallerySlider from '~/components/splide/gallery.jsx';
 
 const SectionGallery = (props) => {
   const { images } = props;

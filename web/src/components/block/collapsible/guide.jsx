@@ -1,25 +1,16 @@
+import {useState, useCallback, memo, useEffect} from 'react';
 import {
-  Card,
   Text,
   Collapsible,
-  Link,
   BlockStack,
   InlineStack,
-  Icon,
   Box,
   Button,
-  Grid,
   InlineGrid,
-  Image,
-  Tooltip,
+  Tooltip
 } from '@shopify/polaris';
-import {
-  CheckCircleIcon,
-  XCircleIcon
-} from '@shopify/polaris-icons';
 import { DottedCircleIcon } from '~/assets/dottedCircle';
 import { DoneCircleIcon } from '~/assets/doneCircle';
-import {useState, useCallback, memo, useEffect} from 'react';
 
 function CollapsibleButton({options, setProgress, openChild, setOpenChild}) {
   const [isDone, setIsDone] = useState(undefined);
@@ -87,7 +78,6 @@ function CollapsibleButton({options, setProgress, openChild, setOpenChild}) {
                       <Text as="p" variant="bodyMd" tone='subdued'>
                         {options.content}
                       </Text>
-                      {/* <Button onClick={() => setItem([options.id])} disabled={isDone}>Done</Button> */}
                     </BlockStack>
                     {options.image}
                   </InlineGrid>

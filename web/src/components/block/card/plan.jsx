@@ -1,7 +1,19 @@
-import { Badge, BlockStack, Box, Button, Card, Icon, InlineGrid, InlineStack, Tabs, Text, Tooltip } from "@shopify/polaris";
-import { CheckIcon } from '@shopify/polaris-icons';
 import { memo, useCallback, useState } from "react";
-import {gql, useQuery, useMutation} from "@apollo/client";
+import {
+  Badge,
+  BlockStack,
+  Box,
+  Button,
+  Card,
+  Icon,
+  InlineGrid,
+  InlineStack,
+  Tabs,
+  Text,
+  Tooltip
+} from "@shopify/polaris";
+import { CheckIcon } from '@shopify/polaris-icons';
+import { useMutation } from "@apollo/client";
 import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
 
 const titleIntervalType = {
@@ -16,7 +28,7 @@ function PricingPlanCard({item}) {
     (selectedTabIndex) => setSelected(selectedTabIndex),
     [],
   );
-  const [redirectPlan, { data:purchasePlan, loading:purchasePlanL, error:purchasePlanE }] = useMutation(REDIRECT_BILLING_PAGE_MUTATION);
+  const [redirectPlan, { data:purchasePlan, loading:purchasePlanLoading }] = useMutation(REDIRECT_BILLING_PAGE_MUTATION);
 
   const handlePlan = useCallback(async (code, interval) => {
     await redirectPlan({ 
@@ -89,7 +101,7 @@ function PricingPlanCard({item}) {
             variant="primary"
             onClick={() => handlePlan(item.plan.code, item.plan.prices[selected]?.interval)}
             accessibilityLabel="Purchase"
-            loading={purchasePlanL}
+            loading={purchasePlanLoading}
             disabled={item.information.currentPeriodEnd}
           >
             {item.information.currentPeriodEnd ? "Purchased" : "Purchase"}

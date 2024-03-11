@@ -1,11 +1,21 @@
-import { BlockStack, Box, Button, Card, Collapsible, Icon, Image, InlineGrid, InlineStack, ProgressBar, Text } from "@shopify/polaris";
 import { memo, useCallback, useState } from "react";
+import {
+  BlockStack,
+  Box,
+  Button,
+  Card,
+  Collapsible,
+  Icon,
+  Image,
+  InlineGrid,
+  InlineStack,
+  Text
+} from "@shopify/polaris";
 import {
   ChevronUpIcon,
   ChevronDownIcon
 } from '@shopify/polaris-icons';
-
-import CollapsibleGuide from "~/components/collapsible/guide";
+import CollapsibleGuide from "~/components/block/collapsible/guide";
 
 const totalStep = 3;
 

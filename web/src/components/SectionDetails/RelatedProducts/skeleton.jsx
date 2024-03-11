@@ -1,6 +1,8 @@
-import SkeletonProduct from '~/components/product/skeleton';
-import { Card } from '@shopify/polaris';
 import { memo } from 'react';
+import {
+  Card
+} from '@shopify/polaris';
+import SkeletonProduct from '~/components/product/skeleton';
 
 const Skeleton = () => {
   return (

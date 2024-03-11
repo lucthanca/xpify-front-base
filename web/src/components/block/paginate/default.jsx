@@ -1,9 +1,11 @@
 import { memo, useCallback } from 'react';
 import {
+  Icon
+} from '@shopify/polaris';
+import {
   ChevronRightIcon,
   ChevronLeftIcon
 } from '@shopify/polaris-icons';
-import { Icon } from '@shopify/polaris';
 
 function Default({pageInfo, currentPage, setCurrentPage}) {
   if (!pageInfo.current_page || pageInfo.total_pages <= 1) {
@@ -35,19 +37,13 @@ function Default({pageInfo, currentPage, setCurrentPage}) {
       <ul role="navigation" aria-label="Pagination">
         <li className={currentPage == 1 ? "disabled" : ""}>
           <a role="button" aria-disabled={currentPage == 1} aria-label="Previous" onClick={() => handlePrevPage()}>
-            <Icon
-              source={ChevronLeftIcon}
-              tone="base"
-            />
+            <Icon source={ChevronLeftIcon} tone="base" />
           </a>
         </li>
         {listItems}
         <li className={currentPage == pageInfo.total_pages ? "disabled" : ""}>
           <a role="button" aria-disabled={currentPage == pageInfo.total_pages} aria-label="Next" onClick={() => handleNextPage()}>
-            <Icon
-              source={ChevronRightIcon}
-              tone="base"
-            />
+            <Icon source={ChevronRightIcon} tone="base" />
           </a>
         </li>
       </ul>

@@ -1,6 +1,12 @@
-import { BlockStack, Box, Button, Card, Icon, Image, InlineGrid, SkeletonBodyText, SkeletonDisplayText, SkeletonThumbnail, Spinner, Text } from '@shopify/polaris';
-import { ViewIcon } from '@shopify/polaris-icons';
-import { memo, useState } from 'react';
+import { memo } from 'react';
+import {
+  BlockStack,
+  Box,
+  Card,
+  InlineGrid,
+  SkeletonBodyText,
+  SkeletonDisplayText,
+} from '@shopify/polaris';
 
 function Skeleton({total, columns}) {
   const listSkeleton = [];

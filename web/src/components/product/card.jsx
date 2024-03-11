@@ -1,31 +1,30 @@
-import { BlockStack, Box, Button, Card, Icon, Image, SkeletonBodyText, SkeletonDisplayText, Spinner, Text } from '@shopify/polaris';
+import {
+  BlockStack,
+  Box,
+  Button,
+  Card,
+  Icon,
+  Text
+} from '@shopify/polaris';
 import { ViewIcon } from '@shopify/polaris-icons';
-import { memo, useCallback, useState } from 'react';
-import {useNavigate} from '@shopify/app-bridge-react';
+import { memo, useCallback } from 'react';
+import { useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 
-import ModalProduct from '~/components/product/modal';
-
-function ProductCard({item, lazyLoadImg = true}) {
+function ProductCard({item, setCurrentProduct, setIsShowPopup, lazyLoadImg = true}) {
   console.log('re-render-productCard');
-  const navigate = useNavigate();
-  const [isShowPopup, setIsShowPopup] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState(undefined);
 
   const handleQuickView = useCallback((item) => {
-    setIsShowPopup(!isShowPopup);
+    setIsShowPopup(prev => !prev);
     setCurrentProduct(item);
-  }, [currentProduct]);
-
-  const handleRedirectProductPage = useCallback((url) => {
-    navigate(`/section/${url}`);
-    window.scrollTo(0,0);
   }, []);
+
+  const handleRedirectProductPage = useRedirectSectionPage();
 
   return (
     item && 
     <>
       <Card padding={0}>
-        <div className='pointer' onClick={() => {handleRedirectProductPage(item.url_key)}}>
+        <div className='pointer' onClick={() => handleRedirectProductPage(item.url_key)}>
           <img
             src={item.images[0]?.src}
             alt={item.name}
@@ -53,11 +52,6 @@ function ProductCard({item, lazyLoadImg = true}) {
           </BlockStack>
         </Box>
       </Card>
-
-      {
-        currentProduct && isShowPopup &&
-        <ModalProduct currentProduct={currentProduct} isShowPopup={isShowPopup} setIsShowPopup={setIsShowPopup} />
-      } 
     </>
   );
 }

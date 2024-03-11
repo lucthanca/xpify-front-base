@@ -1,5 +1,7 @@
-import React from 'react';
-import { Splide, SplideSlide } from '@splidejs/react-splide';
+import {
+  Splide,
+  SplideSlide
+} from '@splidejs/react-splide';
 
 export default function GallerySlider({gallery, height}) {
   return (

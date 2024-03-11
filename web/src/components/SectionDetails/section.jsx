@@ -1,9 +1,18 @@
-import { memo, useCallback, useState, useMemo } from 'react';
-import { Badge, Banner, BlockStack, Box, Card, Layout, List, Page, ProgressBar, Text } from '@shopify/polaris';
+import { memo, useCallback, useState } from 'react';
+import {
+  Badge,
+  Banner,
+  BlockStack,
+  Box,
+  Card,
+  Layout,
+  List,
+  Page,
+  Text
+} from '@shopify/polaris';
 import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
-import { useNavigate } from 'react-router-dom';
-import BannerDefault from '~/components/banner/default';
-import CollapsibleButton from '~/components/collapsible/button';
+import { useBackPage } from '~/hooks/section-builder/redirect';
+import BannerDefault from '~/components/block/banner';
 import ModalInstallSection from '~/components/product/manage';
 import SectionGallery from '~/components/SectionDetails/gallery';
 import RelatedProducts from '~/components/SectionDetails/RelatedProducts';
@@ -19,7 +28,7 @@ const SectionFullpageDetails = props => {
     reloadSection,
     relatedProducts,
   } = props;
-  const navigate = useNavigate();
+  const handleBackPage = useBackPage();
   const [isShowPopupManage, setIsShowPopupManage] = useState(false);
   const [bannerAlert, setBannerAlert] = useState(undefined);
   const handleShowPopup = useCallback(() => setIsShowPopupManage(prev => !prev), []);
@@ -28,7 +37,7 @@ const SectionFullpageDetails = props => {
     <>
       {sectionLoading && <Loading />}
       <Page
-        backAction={{content: 'Products', onAction: () => navigate(-1)}}
+        backAction={{content: 'Products', onAction: () => handleBackPage()}}
         title={section.name}
         titleMetadata={<Badge tone="success">v{section.version}</Badge>}
         subtitle={section.price ? `$${section.price} or update to ${section.pricing_plan?.name}` : 'Free'}
@@ -66,7 +75,11 @@ const SectionFullpageDetails = props => {
                     onAction: handlePurchase,
                     disabled: sectionLoading || purchaseLoading
                   }}
-                  secondaryAction={{ content: 'View Plan', icon: ViewIcon, disabled: sectionLoading || purchaseLoading }}
+                  secondaryAction={section.actions?.plan ?? {
+                    content: 'View Plan',
+                    icon: ViewIcon,
+                    disabled: sectionLoading || purchaseLoading
+                  }}
                   tone='warning'
                 >
                   <BlockStack gap='200'>
@@ -91,8 +104,9 @@ const SectionFullpageDetails = props => {
 
               <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
               <SectionGallery images={section?.images || []} />
+
               {section.description && (
-                <Card title="Description">
+                <Card title="Description"> 
                   <Text variant="headingMd">Description</Text>
                   <Box padding="200">
                     <div dangerouslySetInnerHTML={{__html: section.description}}></div>
@@ -108,20 +122,6 @@ const SectionFullpageDetails = props => {
                 </Card>
               )}
               <RelatedProducts products={relatedProducts} />
-              <Card title="Guide">
-                <BlockStack gap='200'>
-                  <Text variant="headingMd">Setup guide</Text>
-                  <Text variant="bodySm">Only 3 simple steps to add any sections & blocks to your theme</Text>
-                  <ProgressBar progress={33} size="small" />
-                </BlockStack>
-                <Box paddingBlockStart='400'>
-                  <BlockStack gap='200'>
-                    <CollapsibleButton />
-                    <CollapsibleButton />
-                    <CollapsibleButton />
-                  </BlockStack>
-                </Box>
-              </Card>
             </BlockStack>
           </Layout.Section>
 

@@ -1,17 +1,24 @@
-import {InlineGrid, ExceptionList, Modal, OptionList, SkeletonBodyText, SkeletonDisplayText, SkeletonTabs, Text, Tooltip, Icon, Badge, BlockStack} from '@shopify/polaris';
 import {useCallback, memo, useState, useMemo, useEffect} from 'react';
-import {NoteIcon} from '@shopify/polaris-icons';
-import {gql, useQuery, useMutation} from "@apollo/client";
-import { WrenchIcon, StatusActiveIcon } from '@shopify/polaris-icons';
-
-import BannerDefault from '~/components/banner/default';
+import {
+  InlineGrid,
+  ExceptionList,
+  Modal,
+  OptionList,
+  Badge,
+  BlockStack
+} from '@shopify/polaris';
+import { NoteIcon, WrenchIcon } from '@shopify/polaris-icons';
+import { useMutation } from "@apollo/client";
+import BannerDefault from '~/components/block/banner';
 import { UPDATE_ASSET_MUTATION, DELETE_ASSET_MUTATION } from "~/queries/section-builder/asset.gql";
 
 function ModalInstallSection({currentProduct, themes, isShowPopup, setIsShowPopup, setBannerAlert, reloadProduct}) {
   const [selected, setSelected] = useState([]);
+  const [bannerAlertPopup, setBannerAlertPopup] = useState(undefined);
+
   const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION);
   const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION);
-  const [bannerAlertPopup, setBannerAlertPopup] = useState(undefined); 
+
   const handleChange = useCallback(() => {
     setIsShowPopup(!isShowPopup);
     setBannerAlertPopup(undefined);
@@ -19,14 +26,14 @@ function ModalInstallSection({currentProduct, themes, isShowPopup, setIsShowPopu
 
   const sections = useMemo(() => {
     return themes ? themes.reduce((acc, theme) => {
-      var existingTitle = acc.find(item => item.title === `• ${theme.role}`);
+      var existingTitle = acc.find(item => item.title === `Role: ${theme.role}`);
       if (currentProduct?.installed) {
         var installVersion = currentProduct.installed.find(item => item.theme_id === theme.id)?.product_version;
         var media = installVersion ? {'media': <Badge tone={installVersion === currentProduct.version ? "success" : "warning"}>v{installVersion}</Badge>} : {};
       }
       if (!existingTitle) {
         acc.push({
-          title: `• ${theme.role}`,
+          title: `Role: ${theme.role}`,
           options: [{
             value: theme.id,
             label: theme.name,

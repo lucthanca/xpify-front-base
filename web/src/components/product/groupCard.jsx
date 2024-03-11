@@ -1,15 +1,16 @@
 import { BlockStack, Box, Card, InlineGrid, InlineStack, Layout, Page, Text } from "@shopify/polaris";
 import { memo, useState } from 'react';
 import {useNavigate} from '@shopify/app-bridge-react';
+import { useRedirectGroupPage } from "~/hooks/section-builder/redirect";
 
 function GroupCard({item, columns}) {
   console.log('re-render-groupCard');
-  const navigate = useNavigate();
+  const handleRedirectProductPage = useRedirectGroupPage();
 
   return (
     <Box>
       <InlineGrid columns={columns} gap={400}>
-        <div className='pointer' onClick={() => {navigate(`/group/${item.url_key}`)}}>
+        <div className='pointer' onClick={() => handleRedirectProductPage(`/group/${item.url_key}`)}>
           <Card padding={0}>
             <img
               src={item.images[0]?.src}

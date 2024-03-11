@@ -1,5 +1,10 @@
 import { memo } from 'react';
-import { BlockStack, Box, Card, Text } from '@shopify/polaris';
+import {
+  BlockStack,
+  Box,
+  Card,
+  Text
+} from '@shopify/polaris';
 import ProductCarousel from '~/components/splide/product';
 import SkeletonProduct from '~/components/product/skeleton';
 import PropTypes from 'prop-types';

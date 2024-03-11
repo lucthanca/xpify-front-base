@@ -1,6 +1,14 @@
-import { BlockStack, Card, Layout, SkeletonBodyText, SkeletonDisplayText, SkeletonPage, Text } from '@shopify/polaris';
-import SkeletonProduct from '~/components/product/skeleton';
 import React from 'react';
+import {
+  BlockStack,
+  Card,
+  Layout,
+  SkeletonBodyText,
+  SkeletonDisplayText,
+  SkeletonPage,
+  Text
+} from '@shopify/polaris';
+import SkeletonProduct from '~/components/product/skeleton';
 
 const Skeleton = () => {
   return (

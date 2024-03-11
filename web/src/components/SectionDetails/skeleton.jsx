@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import {
   Card,
   Layout,
@@ -8,7 +9,6 @@ import {
   SkeletonDisplayText,
 } from '@shopify/polaris';
 import RelatedProductSkeleton from '~/components/SectionDetails/RelatedProducts/skeleton';
-import { memo } from 'react';
 
 const Skeleton = () => {
   return (

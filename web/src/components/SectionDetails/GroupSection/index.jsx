@@ -1,6 +1,6 @@
+import React from 'react';
 import { useGroupSection } from '~/talons/groups/useGroupSection';
 import Skeleton from '~/components/SectionDetails/GroupSection/skeleton';
-import React from 'react';
 const LazyGroupSection = React.lazy(() => import('./groupSectionDetails'));
 
 const GroupSection = props => {

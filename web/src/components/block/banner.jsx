@@ -1,5 +1,10 @@
-import { Banner, BlockStack, List, Text } from "@shopify/polaris";
 import { memo } from "react";
+import {
+  Banner,
+  BlockStack,
+  List,
+  Text
+} from "@shopify/polaris";
 
 function BannerDefault({bannerAlert, setBannerAlert}) {
   console.log('re-render banner');
