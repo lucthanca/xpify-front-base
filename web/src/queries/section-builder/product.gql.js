@@ -155,13 +155,14 @@ export const GROUP_SECTIONS_QUERY = gql`
   ${CommonSectionField}
 `;
 export const GROUP_SECTION_QUERY = gql`
-  query GET($key: String!) {
+  query GetGroupSection($key: String!) {
     getGroupSection(key: $key) {
       __typename
       entity_id
       ...CommonSectionField
       ...on GroupSection {
         child_ids
+        actions { purchase }
       }
     }
   }
