@@ -1,6 +1,7 @@
+import { EmptyState, Text } from "@shopify/polaris";
 import { memo } from "react";
 
-function EmptyState({heading, action, content}) {
+function EmptySections({heading, action, content}) {
 	return (
 		<EmptyState
 			heading={heading}
@@ -15,4 +16,4 @@ function EmptyState({heading, action, content}) {
 	);
 }
 
-export default memo(EmptyState);
+export default memo(EmptySections);
