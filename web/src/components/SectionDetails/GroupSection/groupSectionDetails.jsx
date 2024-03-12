@@ -6,12 +6,8 @@ import GallerySlider from '~/components/splide/gallery';
 import ProductList from '~/components/product/list';
 import SkeletonProduct from '~/components/product/skeleton';
 import { Loading } from '@shopify/app-bridge-react';
-<<<<<<< HEAD
-
-=======
-import { useNavigate } from 'react-router-dom';
 import NotFound from '~/pages/NotFound.jsx';
->>>>>>> a39afbe4c046c9bb97ae40d45a22c3ab8a4e2fb2
+
 const GroupSectionDetails = props => {
   const handleBackPage = useBackPage();
   const {
