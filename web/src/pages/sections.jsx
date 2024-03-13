@@ -20,6 +20,7 @@ import { SECTIONS_QUERY } from "~/queries/section-builder/product.gql";
 import { CATEGORIES_QUERY } from "~/queries/section-builder/category.gql";
 import { TAGS_QUERY } from "~/queries/section-builder/tag.gql";
 import { PRICING_PLANS_QUERY, SORT_OPTIONS_QUERY } from "~/queries/section-builder/other.gql";
+import SectionCollection from '~/components/SectionCollection';
 
 const defaultSort = ['main_table.name asc'];
 
@@ -189,4 +190,10 @@ function Sections() {
   );
 }
 
-export default memo(Sections);
+const SectionListPage = props => {
+  return (
+    <SectionCollection {...props} />
+  );
+}
+
+export default memo(SectionListPage);

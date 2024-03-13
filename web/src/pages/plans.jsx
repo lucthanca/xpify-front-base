@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from 'react';
 import {
   Badge,
   BlockStack,
@@ -19,12 +19,14 @@ import { CheckIcon } from '@shopify/polaris-icons';
 import { useQuery } from "@apollo/client";
 import TitleBlock from '~/components/block/title';
 import PricingPlanCard from '~/components/block/card/plan';
-import { PRICING_PLANS_QUERY } from "~/queries/section-builder/other.gql";
+import { PRICING_PLAN_QUERY_KEY, PRICING_PLANS_QUERY } from '~/queries/section-builder/other.gql';
 
 function Plans() {
-  const { data:pricingPlans } = useQuery(PRICING_PLANS_QUERY, {
+  const { data, loading } = useQuery(PRICING_PLANS_QUERY, {
     fetchPolicy: "cache-and-network",
   });
+  const pricingPlans = useMemo(() => data?.[PRICING_PLAN_QUERY_KEY], [data]);
+  const loadingWithoutData = useMemo(() => loading && !pricingPlans, [loading, pricingPlans]);
 
   return (
     <Page
@@ -33,11 +35,11 @@ function Plans() {
     >
       <Layout>
         <Layout.Section>
-          <BlockStack gap={600}>
+          <BlockStack gap='600'>
             <Box>
               <Card>
                 <BlockStack gap="200">
-                  <BlockStack inlineAlign="start" gap={200}>
+                  <BlockStack inlineAlign="start" gap='200'>
                     <InlineStack gap="400">
                       <Text as="h3" variant="headingSm">
                         Guarantee
@@ -51,8 +53,8 @@ function Plans() {
               </Card>
             </Box>
 
-            <Box paddingBlockEnd={600}>
-              <BlockStack gap={400}>
+            <Box paddingBlockEnd='600'>
+              <BlockStack gap='400'>
                 <TitleBlock title='List Plan' subTitle='We support both Usage-based and Subscription-based.' />
 
                 <InlineGrid gap="400" columns={{sm: 1, md: 2}}>
@@ -68,7 +70,7 @@ function Plans() {
                         </Tooltip>
                         </Badge>
                       </InlineStack>
-                      
+
                       <Text as="p" variant="bodyMd" tone="subdued">
                         Usage-based. Pay as you go. Pay once and own forever. No monthly fee.
                       </Text>
@@ -99,16 +101,12 @@ function Plans() {
                       </InlineGrid>
                     </BlockStack>
                   </Card>
-                  {
-                    pricingPlans?.getPricingPlans !== undefined
-                    ? pricingPlans.getPricingPlans.map(item => {
-                      return <PricingPlanCard key={item.plan.code} item={item} />
-                    })
-                    : <Card>
+                  {loadingWithoutData && (
+                    <Card>
                       <BlockStack gap="400">
                         <SkeletonDisplayText size="small"></SkeletonDisplayText>
                         <SkeletonBodyText lines="1"></SkeletonBodyText>
-                
+
                         <InlineGrid>
                           <SkeletonTabs count={2} fitted></SkeletonTabs>
                           <SkeletonBodyText lines={5}></SkeletonBodyText>
@@ -119,6 +117,9 @@ function Plans() {
                         </InlineStack>
                       </BlockStack>
                     </Card>
+                  )}
+                  {
+                    (!loadingWithoutData && pricingPlans.length > 0) && pricingPlans.map(item => (<PricingPlanCard key={item.code} item={item} />))
                   }
                 </InlineGrid>
               </BlockStack>
