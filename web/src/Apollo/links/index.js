@@ -6,6 +6,7 @@ import { httpLink, httpLinkWithoutAuthFetch } from '~/Apollo/links/httpLink';
 import { xAppLink } from '~/Apollo/links/xAppLink';
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { checkForReauthorizationLink } from '~/Apollo/links/checkForReauthorizationLink';
+import { authNotRequiredLink } from '~/Apollo/links/noAuthLink';
 
 export const useLinks = (uri) => {
   const app = useAppBridge();
@@ -16,6 +17,7 @@ export const useLinks = (uri) => {
       retryLink(),
       xAppLink(),
       gqlCacheLink(),
+      authNotRequiredLink(),
       split(
         (operation) => operation.getContext().noAuth === undefined || operation.getContext().noAuth === false,
         httpLink(uri, app),
