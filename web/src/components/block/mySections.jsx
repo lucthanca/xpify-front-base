@@ -96,7 +96,7 @@ function SectionList() {
                         item.installed &&
                         <Tooltip content={item.installed.filter(install => install.product_version !== item.version).length + ' themes are using old version!'}>
                           <Text variant="bodySm" tone='subdued' as="p">
-                              in {item.installed.length} themes
+                              Installed in {item.installed.length} themes
                           </Text>
                         </Tooltip>
                       }

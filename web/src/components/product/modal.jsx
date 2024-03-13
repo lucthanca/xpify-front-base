@@ -85,11 +85,11 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
       title={product.name}
     >
       <Modal.Section>
-        <InlineGrid columns={['twoThirds', 'oneThird']} gap={400}>
+        <InlineGrid columns={{sm: 1, md: ['twoThirds', 'oneThird']}} gap={400}>
           <BlockStack>
             <Card title="Gallery" padding={0}>
               <div>
-                <GallerySlider gallery={product.images} height={'30rem'} />
+                <GallerySlider gallery={product.images} />
               </div>
               {
                 product.description && 
@@ -213,7 +213,7 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
                       tone="base"
                     />
                   </div>
-                  <p>One-time charge (never recurring)</p>
+                  <p>One-time charge</p>
                 </InlineStack>
                 <InlineStack align="start" gap={200}>
                   <div>

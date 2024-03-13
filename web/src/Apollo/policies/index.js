@@ -11,6 +11,16 @@ const typePolicies = {
   StoreConfig: {
     keyFields: ['store_code'],
   },
+  Section: {
+    keyFields: 'entity_id',
+    keyArgs: ['entity_id'],
+    merge: true,
+  },
+  GroupSection: {
+    keyFields: 'entity_id',
+    keyArgs: ['entity_id'],
+    merge: true,
+  },
   App: {
     keyFields: 'id',
   },

@@ -11,7 +11,7 @@ import {
   Text
 } from '@shopify/polaris';
 import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
-import { useBackPage } from '~/hooks/section-builder/redirect';
+import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
 import BannerDefault from '~/components/block/banner';
 import ModalInstallSection from '~/components/product/manage';
 import SectionGallery from '~/components/SectionDetails/gallery';
@@ -31,18 +31,13 @@ const SectionFullpageDetails = props => {
     sectionError,
   } = props;
   const handleBackPage = useBackPage();
+  const handleRedirectPlansPage = useRedirectPlansPage();
   const [isShowPopupManage, setIsShowPopupManage] = useState(false);
   const [bannerAlert, setBannerAlert] = useState(undefined);
   const handleShowPopup = useCallback(() => setIsShowPopupManage(prev => !prev), []);
 
-  const handleBack = useCallback(() => navigate('/sections'), [navigate]);
-  const backAction = useMemo(() => ({
-    content: 'Not Found',
-    onAction: handleBack
-  }), [handleBack]);
-
   if (sectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity') {
-    return <NotFound backAction={backAction} />;
+    return <NotFound />;
   }
 
   return (
@@ -87,10 +82,10 @@ const SectionFullpageDetails = props => {
                     onAction: handlePurchase,
                     disabled: sectionLoading || purchaseLoading
                   }}
-                  secondaryAction={section.actions?.plan ?? {
-                    content: 'View Plan',
+                  secondaryAction={{
+                    content: 'View Plans',
                     icon: ViewIcon,
-                    disabled: sectionLoading || purchaseLoading
+                    onAction: handleRedirectPlansPage
                   }}
                   tone='warning'
                 >

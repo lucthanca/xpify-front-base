@@ -48,6 +48,16 @@
   padding: 0 var(--p-space-200);
 }
 
+.splide-gallery-li {
+  background-color: #eeeeee;
+  display: flex;
+  justify-items: center;
+}
+
+.splide-gallery-li > img {
+  margin: auto;
+}
+
 .section-builder-paginate {
   display: flex;
   justify-content: center;

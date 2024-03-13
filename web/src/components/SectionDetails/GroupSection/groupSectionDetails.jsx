@@ -19,14 +19,8 @@ const GroupSectionDetails = props => {
     groupSectionError,
   } = props;
 
-  const handleBack = useCallback(() => navigate('/groups'), [navigate]);
-  const backAction = useMemo(() => ({
-    content: 'Not Found',
-    onAction: handleBack
-  }), [handleBack]);
-
   if (groupSectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity') {
-    return <NotFound backAction={backAction} />;
+    return <NotFound />;
   }
 
   return (
@@ -60,7 +54,7 @@ const GroupSectionDetails = props => {
               <BlockStack gap='600'>
                 <Box>
                   <Card title="Gallery" padding={0}>
-                    <GallerySlider gallery={groupSection?.images || []} height={'30rem'} />
+                    <GallerySlider gallery={groupSection?.images || []} />
                   </Card>
                 </Box>
 

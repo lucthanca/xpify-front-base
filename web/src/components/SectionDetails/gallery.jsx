@@ -9,7 +9,7 @@ const SectionGallery = (props) => {
   const { images } = props;
   return (
     <Card title="Gallery" padding='0'>
-      <GallerySlider gallery={images} height={'30rem'} />
+      <GallerySlider gallery={images} />
     </Card>
   );
 };

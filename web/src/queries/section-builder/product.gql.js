@@ -67,8 +67,6 @@ export const SECTIONS_QUERY = gql`
           ...SectionInstalledFragment
         }
         entity_id
-        categories
-        tags
       }
       total_count
       page_info {
@@ -173,34 +171,21 @@ export const GROUP_SECTION_QUERY = gql`
 export const SECTIONS_BOUGHT_QUERY = gql`
   query GET {
     getSectionsBuy {
-      product_id
-      name
-      price
-      version
-      url_key
-      images {
-        src
-      }
+      ...CommonSectionField
+      ...on Section { version }
     }
   }
+  ${CommonSectionField}
 `;
 
 /* Product Installed */
 export const SECTIONS_INSTALLED_QUERY = gql`
   query GET {
     getSectionsInstall {
-      product_id
-      name
-      price
-      version
-      url_key
-      images {
-        src
-      }
-      installed {
-        theme_id
-        product_version
-      }
+      ...CommonSectionField
+      ...on Section { version ...SectionInstalledFragment }
     }
   }
+  ${CommonSectionField}
+  ${SectionInstalledFragment}
 `;

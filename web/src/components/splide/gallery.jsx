@@ -3,12 +3,12 @@ import {
   SplideSlide
 } from '@splidejs/react-splide';
 
-export default function GallerySlider({gallery, height}) {
+export default function GallerySlider({gallery}) {
   return (
     <Splide
       options={{
         perPage: 1,
-        height: height,
+        gap: 50,
         rewind: true,
         autoplay: true,
         interval: 3000
@@ -16,8 +16,8 @@ export default function GallerySlider({gallery, height}) {
     >
       {
         gallery.map(slide => (
-          <SplideSlide key={ slide.src } style={{'backgroundColor': '#eeeeee'}}>
-            <img src={ slide.src } alt={ slide.alt ?? '' } style={{'height': '100%', 'margin': 'auto'}}/>
+          <SplideSlide className='splide-gallery-li' key={ slide.src }>
+            <img src={ slide.src } alt={ slide.alt ?? '' }/>
           </SplideSlide>
         ))
       }

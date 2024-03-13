@@ -9,7 +9,10 @@ const GroupCollection = () => {
   const {
     loadingWithoutData,
     groups,
+    loading,
   } = useGroupCollection();
+  if (loading) return <div>Loading</div>
+  console.log({ groups });
   return (
     <Page
       title="All groups"
