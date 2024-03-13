@@ -93,6 +93,9 @@ const saveApp = async (input, apiName) => {
 		variables: {
 			input,
 		},
+		addedHeaders: {
+			'x-auth-required': '0',
+		},
 	});
 }
 
@@ -105,6 +108,9 @@ const getApp = async (config) => {
 			token: process.env[XPIFY_SECRET_KEY],
 			variables: {
 				remoteId: config.remoteApp.id,
+			},
+			addedHeaders: {
+				'x-auth-required': '0',
 			},
 		});
 		if (result?.app?.id) {
