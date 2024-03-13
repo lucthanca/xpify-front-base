@@ -1,22 +1,15 @@
 import { gql } from '@apollo/client';
 
 /* Pricing plan App */
+export const PRICING_PLAN_QUERY_KEY = 'pricingPlans';
 export const PRICING_PLANS_QUERY = gql`
-  query Get {
-    getPricingPlans {
-      plan {
-        id
-        status
-        code
-        name
-        prices {
-          interval
-          amount
-        }
-        currency
-        description
-        sort_order
-      }
+  query GetPricingPlans {
+    ${PRICING_PLAN_QUERY_KEY} {
+      id status code name
+      prices { interval amount }
+      currency
+      description
+      sort_order
       information {
         name
         currentPeriodEnd
@@ -43,6 +36,14 @@ export const PURCHASE_SECTION_MUTATION = gql`
   mutation Purchase($id: ID!) {
     ${PURCHASE_SECTION_MUTATION_KEY}(id: $id) {
       entity_id
+    }
+  }
+`;
+export const SUBSCRIBE_PLAN_MUTATION_KEY = 'subscribePricingPlan';
+export const SUBSCRIBE_PLAN_MUTATION = gql`
+  mutation Subscribe($input: SubscribePricingPlanInput!) {
+    ${SUBSCRIBE_PLAN_MUTATION_KEY}(input: $input) {
+      id code name price interval created_at
     }
   }
 `;

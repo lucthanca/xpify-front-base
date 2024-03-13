@@ -24,7 +24,7 @@ export type Interval = {
   interval: string;
   amount: number;
 }
-export type PricingPlan = {
+export interface PricingPlan {
   id: string;
   status: boolean;
   code: string;

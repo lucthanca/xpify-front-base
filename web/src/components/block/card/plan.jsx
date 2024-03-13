@@ -13,8 +13,7 @@ import {
   Tooltip
 } from "@shopify/polaris";
 import { CheckIcon } from '@shopify/polaris-icons';
-import { useMutation } from "@apollo/client";
-import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
+import { usePlan } from '~/talons/plan/usePlan';
 
 const titleIntervalType = {
   'EVERY_30_DAYS': 'Montly',
@@ -23,29 +22,15 @@ const titleIntervalType = {
 };
 
 function PricingPlanCard({item}) {
-  const [selected, setSelected] = useState(0);
-  const handleTabChange = useCallback(
-    (selectedTabIndex) => setSelected(selectedTabIndex),
-    [],
-  );
-  const [redirectPlan, { data:purchasePlan, loading:purchasePlanLoading }] = useMutation(REDIRECT_BILLING_PAGE_MUTATION);
+  const { subscribe, loading: purchasePlanLoading, handleTabChange, selected } = usePlan({ plan: item });
 
-  const handlePlan = useCallback(async (code, interval) => {
-    await redirectPlan({ 
-      variables: {
-        name: code,
-        interval: interval,
-        is_plan: true
-      }
-    });
-  }, [purchasePlan]);
-
+  console.log({ item });
   return (
     <Card>
       <BlockStack gap="200">
         <InlineStack align="space-between">
           <Text as="h3" variant="headingSm">
-            {item.plan.name}
+            {item.name}
           </Text>
           {
             item.information.currentPeriodEnd &&
@@ -63,8 +48,8 @@ function PricingPlanCard({item}) {
         <InlineGrid>
           <Tabs
             tabs={
-              item.plan?.prices &&
-              item.plan.prices.map(price => {
+              item?.prices &&
+              item.prices.map(price => {
                 return {
                   id: price.interval,
                   content: titleIntervalType[price.interval],
@@ -76,13 +61,13 @@ function PricingPlanCard({item}) {
             onSelect={handleTabChange}
             fitted
           >
-            <Box padding={400}>
-              <BlockStack gap={400}>
+            <Box padding='400'>
+              <BlockStack gap='400'>
               {
-                item.plan?.description &&
-                item.plan.description.split('\n').map((content, key) => {
+                item?.description &&
+                item.description.split('\n').map((content, key) => {
                   return (
-                    <InlineStack key={key} gap={200} blockAlign="start">
+                    <InlineStack key={key} gap='200' blockAlign="start">
                       <div>
                         <Icon source={CheckIcon} tone="info"/>
                       </div>
@@ -99,7 +84,7 @@ function PricingPlanCard({item}) {
         <InlineStack align="end">
           <Button
             variant="primary"
-            onClick={() => handlePlan(item.plan.code, item.plan.prices[selected]?.interval)}
+            onClick={subscribe}
             accessibilityLabel="Purchase"
             loading={purchasePlanLoading}
             disabled={item.information.currentPeriodEnd}
