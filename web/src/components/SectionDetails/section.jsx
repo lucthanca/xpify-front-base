@@ -4,10 +4,14 @@ import {
   Banner,
   BlockStack,
   Box,
+  Button,
   Card,
+  InlineGrid,
+  InlineStack,
   Layout,
   List,
   Page,
+  Select,
   Text
 } from '@shopify/polaris';
 import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
@@ -47,9 +51,12 @@ const SectionFullpageDetails = props => {
         backAction={{content: 'Products', onAction: () => handleBackPage()}}
         title={section.name}
         titleMetadata={<Badge tone="success">v{section.version}</Badge>}
-        subtitle={section.price ? `$${section.price} or update to ${section.pricing_plan?.name}` : 'Free'}
+        subtitle='This is product page'
         compactTitle
-        primaryAction={{ content: 'Manage Section', onAction: handleShowPopup, disabled: sectionLoading }}
+        primaryAction={{
+          content: 'Purchase',
+          disabled: true
+        }}
         secondaryActions={[
           {
             content: 'View in demo site',
@@ -71,6 +78,16 @@ const SectionFullpageDetails = props => {
         <Layout>
           <Layout.Section>
             <BlockStack gap='400'>
+              <InlineStack gap={200}>
+                {
+                  section?.tags
+                  ? section.tags.map(tag => {
+                    return <Badge key={tag} tone="info" size='small'>#{tag}</Badge>
+                  })
+                  : <></>
+                }
+              </InlineStack>
+
               {
                 (!section.actions?.install) &&
                 <Banner
@@ -109,40 +126,43 @@ const SectionFullpageDetails = props => {
                 </Banner>
               }
 
-              <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
-              <SectionGallery images={section?.images || []} />
+              {/* <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} /> */}
+              <Card>
+                <BlockStack gap='200'>
+                  <Text variant='bodySm' fontWeight='bold'>Choose theme for installation:</Text>
+                  <ModalInstallSection section={section} themes={themes} reloadSection={reloadSection} />
+                </BlockStack>
+              </Card>
 
-              {section.description && (
-                <Card title="Description"> 
-                  <Text variant="headingMd">Description</Text>
-                  <Box padding="200">
-                    <div dangerouslySetInnerHTML={{__html: section.description}}></div>
-                  </Box>
-                </Card>
-              )}
-              {section.release_note && (
-                <Card title="Release Note">
-                  <Text variant="headingMd">Release Note</Text>
-                  <Box padding="200">
-                    <div dangerouslySetInnerHTML={{__html: section.release_note}}></div>
-                  </Box>
-                </Card>
-              )}
+              <Box>
+                <SectionGallery images={section?.images || []} />
+              </Box>
+
+              <Box>
+                {section.description && (
+                  <Card title="Description"> 
+                    <Text variant="headingMd">Description</Text>
+                    <Box padding="200">
+                      <div dangerouslySetInnerHTML={{__html: section.description}}></div>
+                    </Box>
+                  </Card>
+                )}
+              </Box>
+              
+              <Box>
+                {section.release_note && (
+                  <Card title="Release Note">
+                    <Text variant="headingMd">Release Note</Text>
+                    <Box padding="200">
+                      <div dangerouslySetInnerHTML={{__html: section.release_note}}></div>
+                    </Box>
+                  </Card>
+                )}
+              </Box>
+
               <RelatedProducts products={relatedProducts} />
             </BlockStack>
           </Layout.Section>
-
-          {
-            section &&
-            <ModalInstallSection
-              currentProduct={section}
-              themes={themes}
-              isShowPopup={isShowPopupManage}
-              setIsShowPopup={setIsShowPopupManage}
-              setBannerAlert={setBannerAlert}
-              reloadProduct={reloadSection}
-            />
-          }
         </Layout>
       </Page>
     </>

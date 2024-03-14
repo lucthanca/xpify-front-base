@@ -5,51 +5,86 @@ import {
   Modal,
   OptionList,
   Badge,
-  BlockStack
+  BlockStack,
+  Select,
+  InlineStack,
+  Button,
+  Icon,
+  Box
 } from '@shopify/polaris';
 import { NoteIcon, WrenchIcon } from '@shopify/polaris-icons';
 import { useMutation } from "@apollo/client";
 import BannerDefault from '~/components/block/banner';
 import { UPDATE_ASSET_MUTATION, DELETE_ASSET_MUTATION } from "~/queries/section-builder/asset.gql";
 
-function ModalInstallSection({currentProduct, themes, isShowPopup, setIsShowPopup, setBannerAlert, reloadProduct}) {
-  const [selected, setSelected] = useState([]);
-  const [bannerAlertPopup, setBannerAlertPopup] = useState(undefined);
+const titleRoleTheme = {
+  'main': 'Live',
+  'unpublished': 'Trial',
+  'development': 'Dev',
+};
+
+function ModalInstallSection({section, themes, reloadSection}) {
+  const [selected, setSelected] = useState("");
+  const [bannerAlert, setBannerAlert] = useState(undefined);
+  const handleSelectChange = useCallback(
+    (value) => setSelected(value),
+    [],
+  );
+
+  useMemo(() => {
+    setSelected(themes[0]['id'] ?? "");
+  }, [themes]);
+  const options = useMemo(() => {
+    return themes
+    ? themes.map(theme => {
+      var prefix = {};
+      var status = 'Not install';
+      if (section?.installed) {
+        var installVersion = section.installed.find(item => item.theme_id === theme.id)?.product_version;
+        if (installVersion) {
+          if (installVersion === section.version) {
+            prefix = {
+              'prefix': <Badge tone="success">v{installVersion}</Badge>
+            };
+            status = 'Installed';
+          } else {
+            prefix = {
+              'prefix': <Badge tone="warning">v{installVersion}</Badge>
+            };
+            status = 'Should update';
+          }
+        }
+      }
+      return ({
+        value: theme.id,
+        label: `(${titleRoleTheme[theme.role]}) ${theme.name} - ${status} `,
+        ...prefix
+      })
+    })
+    : [];
+  }, [section, themes]);
+  const installed = useMemo(() => section.installed.find(item => item.theme_id == selected), [section, selected]);
 
   const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION);
   const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION);
 
-  const handleChange = useCallback(() => {
-    setIsShowPopup(!isShowPopup);
-    setBannerAlertPopup(undefined);
-  }, [isShowPopup]);
-
-  const sections = useMemo(() => {
-    return themes ? themes.reduce((acc, theme) => {
-      var existingTitle = acc.find(item => item.title === `Role: ${theme.role}`);
-      if (currentProduct?.installed) {
-        var installVersion = currentProduct.installed.find(item => item.theme_id === theme.id)?.product_version;
-        var media = installVersion ? {'media': <Badge tone={installVersion === currentProduct.version ? "success" : "warning"}>v{installVersion}</Badge>} : {};
+  const handleUpdate = useCallback(async () => {
+    await updateAction({ 
+      variables: {
+        theme_id: selected,
+        asset: section?.src,
+        value: ''
       }
-      if (!existingTitle) {
-        acc.push({
-          title: `Role: ${theme.role}`,
-          options: [{
-            value: theme.id,
-            label: theme.name,
-            ...media
-          }]
-        });
-      } else {
-        existingTitle.options.push({
-          value: theme.id,
-          label: theme.name,
-          ...media
-        });
+    });
+  }, [selected]);
+  const handleDelete = useCallback(async () => {
+    await deleteAction({ 
+      variables: {
+        theme_id: selected[0],
+        asset: section?.src
       }
-      return acc;
-    }, []) : {};
-  }, [currentProduct, themes]);
+    });
+  }, [selected]);
 
   useEffect(() => {
     if (dataUpdate) {
@@ -58,7 +93,7 @@ function ModalInstallSection({currentProduct, themes, isShowPopup, setIsShowPopu
           'title': 'This section has been successfully installed! 🎉',
           'tone': 'success',
           'action': {content: 'Customize', icon: WrenchIcon},
-          'content': [{'message': 'Access theme ' + themes.find(item => item.id == selected[0]).name + ' and add section ' + currentProduct?.name}]
+          'content': [{'message': 'Access theme ' + themes.find(item => item.id == selected).name + ' and add section ' + section?.name}]
         });
       } else {
         setBannerAlert({
@@ -66,94 +101,63 @@ function ModalInstallSection({currentProduct, themes, isShowPopup, setIsShowPopu
           'tone': 'critical'
         });
       }
-      reloadProduct();
+      reloadSection();
     }
   }, [dataUpdate]);
   useEffect(() => {
     if (dataDelete) {
       if (dataDelete.deleteAsset?.message) {
-        setBannerAlertPopup({
-          'title': dataDelete.deleteAsset.message.replace(currentProduct?.src, currentProduct?.name)
+        setBannerAlert({
+          'title': dataDelete.deleteAsset.message.replace(section?.src, section?.name)
         });
       }
-      reloadProduct();
+      reloadSection();
     }
   }, [dataDelete]);
   useEffect(() => {
     if (dataUpdateE) {
-      setBannerAlertPopup({
+      setBannerAlert({
         'title': dataUpdateE.message,
         'tone': 'critical',
         'content': dataUpdateE.graphQLErrors ?? []
       });
-    } else if (!currentProduct.actions?.install) {
-      setBannerAlertPopup({
+    } else if (!section.actions?.install) {
+      setBannerAlert({
         'title': 'Chua mua section nay',
         'tone': 'warning'
       });
     }
-  }, [currentProduct, dataUpdateE]);
-
-  const handleUpdate = useCallback(async () => {
-    await updateAction({ 
-      variables: {
-        theme_id: selected[0],
-        asset: currentProduct?.src,
-        value: ''
-      }
-    });
-    handleChange();
-  }, [selected]);
-  const handleDelete = useCallback(async () => {
-    await deleteAction({ 
-      variables: {
-        theme_id: selected[0],
-        asset: currentProduct?.src
-      }
-    });
-  }, [selected]);
+  }, [section, dataUpdateE]);
 
   return (
     themes &&
-    <Modal
-      open={isShowPopup}
-      onClose={handleChange}
-      title={"Themes in your Store"}
-      primaryAction={{
-        content: 'Reinstall section',
-        onAction: () => handleUpdate(),
-        disabled: !currentProduct.actions?.install || !selected.length,
-        loading: dataUpdateL
-      }}
-      secondaryActions={[
-        {
-          content: 'Uninstall section',
-          destructive: true,
-          onAction: () => handleDelete(),
-          disabled: currentProduct.installed ? !currentProduct.installed.find(item => item.theme_id === selected[0]) : true,
-          loading: dataDeleteL
-        },
-      ]}
-    >
-    <Modal.Section>
-      <InlineGrid>
-        <BlockStack gap={400}>
-          <ExceptionList items={[
-            {
-              icon: NoteIcon,
-              description: "Theme marked (version) mean this section has been installed.",
-            },
-          ]} />
-          <BannerDefault bannerAlert={bannerAlertPopup} setBannerAlert={setBannerAlertPopup} />
-        </BlockStack>
-        <OptionList
-          onChange={setSelected}
-          sections={sections}
-          selected={selected}
-        />
-      </InlineGrid>
-    </Modal.Section>
-    </Modal>
+    <>
+      <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
+      <Select
+        label="Theme "
+        labelInline
+        options={options}
+        onChange={handleSelectChange}
+        value={selected}
+      />
+      <InlineStack gap={200}>
+        <Button
+          onClick={handleUpdate}
+          disabled={!section.actions?.install || !selected}
+          loading={dataUpdateL}
+        >
+          {installed ? 'Re-install section' : 'Install section'}
+        </Button>
+        <Button
+          onClick={handleDelete}
+          tone="critical"
+          disabled={section.installed ? !installed : true}
+          loading={dataDeleteL}
+        >
+          Delete section
+          </Button>
+      </InlineStack>
+    </>
   );
 }
 
