@@ -87,7 +87,7 @@ function PricingPlanCard({item}) {
             onClick={subscribe}
             accessibilityLabel="Purchase"
             loading={purchasePlanLoading}
-            disabled={item.information.currentPeriodEnd}
+            // disabled={item.information.currentPeriodEnd}
           >
             {item.information.currentPeriodEnd ? "Purchased" : "Purchase"}
           </Button>

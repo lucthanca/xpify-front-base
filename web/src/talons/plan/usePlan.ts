@@ -51,6 +51,10 @@ export const usePlan = ({ plan }: { plan: PricingPlan }) => {
     if (shouldLogInfo) {
       toast.show('Redirecting to payment...', { isError: false });
     }
+    // show toast error other
+    if (!shouldLogInfo) {
+      toast.show(error.message, { isError: true });
+    }
   }, [error]);
 
   return {
