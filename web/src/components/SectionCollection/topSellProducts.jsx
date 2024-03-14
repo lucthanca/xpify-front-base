@@ -36,7 +36,7 @@ const topSellProducts = props => {
   return (
     <Box padding='600'>
       <BlockStack gap='200'>
-        <Text variant="headingLg" as="h2">Top Sells</Text>
+        <Text variant="headingMd" as="h2">Top Sells</Text>
         {loadingWithoutData && <SkeletonProduct total={5} columns={{ sm: 1, md: 3, lg: 5 }} />}
         {!loadingWithoutData && (
           <ProductCarousel

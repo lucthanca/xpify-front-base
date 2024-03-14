@@ -31,6 +31,8 @@ const SectionCollection = props => {
     currentPage,
     setCurrentPage,
     sectionCollectionPageInfo,
+    debounceLoading,
+    setDebounceLoading
   } = useSectionCollection();
 
   return (
@@ -49,6 +51,8 @@ const SectionCollection = props => {
               categories={categoriesOptions}
               tags={tagOptions}
               sortOptions={sortOptions}
+              debounceLoading={debounceLoading}
+              setDebounceLoading={setDebounceLoading}
             />
 
             <TopSellProducts />
@@ -56,7 +60,7 @@ const SectionCollection = props => {
             <Box padding='600'>
               <BlockStack gap='200'>
                 {
-                  sections !== undefined ? (
+                  !debounceLoading && sections !== undefined ? (
                     <ProductList items={sections ?? []} columns={{sm: 1, md: 2, lg: 4}} />
                   ) : (<SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />)
                 }

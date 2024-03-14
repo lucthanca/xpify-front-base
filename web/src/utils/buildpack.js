@@ -55,6 +55,7 @@ const fetchQuery = query => {
         Accept: 'application/json',
         'User-Agent': 'xpify-buildpack',
         Host: targetURL.host,
+        'x-auth-required': '0',
     };
 
     // debug('Fetching query: %s', query);

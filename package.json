@@ -2,7 +2,7 @@
   "name": "@xpify/front-base",
   "private": true,
   "license": "UNLICENSED",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "shopify": "shopify",
     "build": "shopify app build",
@@ -13,8 +13,8 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@shopify/app": "3.56.3",
-    "@shopify/cli": "3.56.3",
+    "@shopify/app": "^3.57.0",
+    "@shopify/cli": "^3.57.0",
     "@shopify/polaris": "^12.19.2",
     "@xpify/buildpack": "file:./@xpify/buildpack",
     "patch-package": "^8.0.0",

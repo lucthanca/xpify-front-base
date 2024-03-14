@@ -32,15 +32,15 @@ import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.
 import { useRedirectPlansPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 
 function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
-  const { data:productMore, loading:productMoreL, error:productMoreE } = useQuery(SECTION_QUERY, {
+  const { data:productDetail } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       key: currentProduct?.url_key ?? ''
     }
   });
   const product = useMemo(() => {
-    return {...currentProduct, ...productMore?.getSection};
-  }, [productMore]);
+    return {...currentProduct, ...productDetail?.getSection};
+  }, [currentProduct, productDetail]);
   const [bannerAlert, setBannerAlert] = useState(undefined); 
   const handleChange = useCallback(() => {
     setIsShowPopup(!isShowPopup);

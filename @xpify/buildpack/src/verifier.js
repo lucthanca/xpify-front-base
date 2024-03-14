@@ -29,7 +29,8 @@ export async function verifyToken(token, appName) {
                 appName,
             },
             addedHeaders: {
-                timeout: 5000
+                timeout: 5000,
+                'x-auth-required': '0',
             },
         });
     } catch (error) {
@@ -57,7 +58,8 @@ export async function healthCheck(url)
             token: undefined,
             variables: {},
             addedHeaders: {
-                timeout: 5000
+                timeout: 5000,
+                'x-auth-required': '0',
             },
         });
     } catch (error) {

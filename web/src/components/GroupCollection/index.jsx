@@ -8,10 +8,9 @@ import { memo } from 'react';
 const GroupCollection = () => {
   const {
     loadingWithoutData,
-    groups,
-    loading,
+    groups
   } = useGroupCollection();
-  if (loading) return <div>Loading</div>
+
   console.log({ groups });
   return (
     <Page

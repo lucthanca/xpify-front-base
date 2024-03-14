@@ -29,9 +29,10 @@ export const useSectionCollection = () => {
   const [tagFilter, setTagFilter] = useState(undefined);
   const [priceFilter, setPriceFilter] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
+  const [debounceLoading, setDebounceLoading] = useState(false);
 
-  const { data: sectionsData, loading:sectionsL, error:sectionsE } = useQuery(SECTIONS_QUERY, {
-    fetchPolicy: "network-only",
+  const { data: sectionsData } = useQuery(SECTIONS_QUERY, {
+    fetchPolicy: "cache-and-network",
     variables: {
       search: searchFilter,
       filter: {
@@ -62,7 +63,7 @@ export const useSectionCollection = () => {
   });
 
   const pricingPlanOptions: SelectOption[] = useMemo(() => {
-    return pricingPlans?.getPricingPlans?.plan ? pricingPlans.getPricingPlans.plan.map((item: PricingPlan) => ({
+    return pricingPlans?.pricingPlans ? pricingPlans.pricingPlans.map((item: PricingPlan) => ({
       value: item.id,
       label: item.name
     })) : [];
@@ -109,5 +110,7 @@ export const useSectionCollection = () => {
     currentPage,
     setCurrentPage,
     sectionCollectionPageInfo,
+    debounceLoading,
+    setDebounceLoading
   };
 };
