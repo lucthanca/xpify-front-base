@@ -33,6 +33,7 @@ const topSellProducts = props => {
     extensions: {AutoScroll}
   }))
   if (!loadingWithoutData && !productTopSells || productTopSells?.length === 0) return null;
+  return <></>;
   return (
     <Box padding='600'>
       <BlockStack gap='200'>

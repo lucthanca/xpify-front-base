@@ -1,21 +1,29 @@
 import {
+  Badge,
   BlockStack,
   Box,
   Button,
   Card,
   Icon,
+  InlineGrid,
+  InlineStack,
   Text
 } from '@shopify/polaris';
-import { ViewIcon } from '@shopify/polaris-icons';
+import { ViewIcon, ArrowRightIcon, PlusCircleIcon, CartSaleIcon } from '@shopify/polaris-icons';
 import { memo, useCallback } from 'react';
+import BadgeTag from '~/components/block/badge/tag';
 import { useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 
-function ProductCard({item, setCurrentProduct, setIsShowPopup, lazyLoadImg = true}) {
+function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, lazyLoadImg = true}) {
   console.log('re-render-productCard');
 
   const handleQuickView = useCallback((item) => {
     setIsShowPopup(prev => !prev);
-    setCurrentProduct(item);
+    setSection(item);
+  }, []);
+  const handleInstall = useCallback((item) => {
+    setIsShowPopupInstall(prev => !prev);
+    setSection(item);
   }, []);
 
   const handleRedirectProductPage = useRedirectSectionPage();
@@ -23,7 +31,7 @@ function ProductCard({item, setCurrentProduct, setIsShowPopup, lazyLoadImg = tru
   return (
     item && 
     <>
-      <Card padding={0}>
+      <Card padding={0} background="bg-surface-secondary">
         <div className='pointer' onClick={() => handleRedirectProductPage(item.url_key)}>
           <img
             src={item.images[0]?.src}
@@ -32,23 +40,61 @@ function ProductCard({item, setCurrentProduct, setIsShowPopup, lazyLoadImg = tru
           />
         </div>
 
-        <Box background="bg-surface-secondary" padding="400">
+        <Box padding="400">
           <BlockStack gap={200}>
-            <Text variant="headingMd" as="h2">{item.name}</Text>
-            <Text as="div" variant="bodyMd">
-              Version: {item.version}
-              <br></br>
-              {item.price ? 'Price: $' + item.price : 'Free'}
-            </Text>
-            <Button 
-              loading={false} 
-              icon={<Icon source={ViewIcon} tone="base" />} 
-              size="large" 
-              fullWidth 
-              onClick={() => handleQuickView(item)}
-            >
-              Quick view
-            </Button>
+            <BlockStack>
+              <InlineStack align='space-between'>
+                <InlineStack gap={200}>
+                  <div className='pointer' onClick={() => handleRedirectProductPage(item.url_key)}>
+                    <Text variant="headingMd" as="h2">{item.name}</Text>
+                  </div>
+                  {
+                    item.actions?.install &&
+                    <Badge tone='success'>Ready</Badge>
+                  }
+                </InlineStack>
+                <Text variant="headingMd" as="h2">${item.price}</Text>
+              </InlineStack>
+              <Text as="div" variant="bodyMd">
+                Version: {item.version}
+              </Text>
+            </BlockStack>
+            <InlineStack gap={200}>
+              <Button 
+                icon={<Icon source={ViewIcon} tone="base" />} 
+                size="large"
+                onClick={() => handleQuickView(item)}
+              />
+              <Button
+                icon={<Icon source={ArrowRightIcon} tone="base" />} 
+                size="large"
+                onClick={() => handleRedirectProductPage(item.url_key)}
+              />
+              {
+                item.actions?.install &&
+                <Button 
+                  loading={false} 
+                  icon={<Icon source={PlusCircleIcon} tone="base" />} 
+                  size="large"
+                  onClick={() => handleInstall(item)}
+                />
+              }
+              {
+                item.actions?.purchase &&
+                <Button 
+                  loading={false} 
+                  icon={<Icon source={CartSaleIcon} tone="base" />} 
+                  size="large"
+                  onClick={() => handleQuickView(item)}
+                />
+              }
+            </InlineStack>
+            <Box paddingBlockStart={200}>
+              {
+                item?.tags &&
+                <BadgeTag tags={item.tags} />
+              }
+            </Box>
           </BlockStack>
         </Box>
       </Card>

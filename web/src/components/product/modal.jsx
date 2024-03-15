@@ -25,22 +25,25 @@ import {
   CheckIcon
 } from '@shopify/polaris-icons';
 import { useQuery, useMutation } from "@apollo/client";
+import ModalInstallSection from '~/components/product/manage'
 import GallerySlider from '~/components/splide/gallery';
 import BannerDefault from '~/components/block/banner';
+import BadgeTag from '~/components/block/badge/tag';
 import { SECTION_QUERY } from "~/queries/section-builder/product.gql";
 import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
 import { useRedirectPlansPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 
-function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
-  const { data:productDetail } = useQuery(SECTION_QUERY, {
+function ModalProduct({section, isShowPopup, setIsShowPopup}) {
+  const { data:sectionDetail, refetch:reloadSectionDetail } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
-      key: currentProduct?.url_key ?? ''
+      key: section?.url_key ?? '',
+      skip: Boolean(!section?.url_key),
     }
   });
   const product = useMemo(() => {
-    return {...currentProduct, ...productDetail?.getSection};
-  }, [currentProduct, productDetail]);
+    return {...section, ...sectionDetail?.getSection};
+  }, [section, sectionDetail]);
   const [bannerAlert, setBannerAlert] = useState(undefined); 
   const handleChange = useCallback(() => {
     setIsShowPopup(!isShowPopup);
@@ -51,12 +54,12 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
   const handlePurchase = useCallback(async () => {
     await redirectPurchase({ 
         variables: {
-            name: currentProduct?.url_key,
+            name: section?.url_key,
             interval: 'ONE_TIME',
             is_plan: false
         }
      });
-  }, [currentProduct]);
+  }, [section]);
 
   const handleRedirectProductPage = useRedirectSectionPage();
   const handleRedirectPlansPage = useRedirectPlansPage();
@@ -86,51 +89,55 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
     >
       <Modal.Section>
         <InlineGrid columns={{sm: 1, md: ['twoThirds', 'oneThird']}} gap={400}>
-          <BlockStack>
+          <BlockStack gap={400}>
             <Card title="Gallery" padding={0}>
-              <div>
-                <GallerySlider gallery={product.images} />
-              </div>
-              {
-                product.description && 
-                <Box background="bg-surface-secondary" padding="400">
-                  <BlockStack gap={200}>
-                    <div dangerouslySetInnerHTML={{__html: product.description}}></div>
-                  </BlockStack>
-                </Box>
-              }
+              <GallerySlider gallery={product.images} />
             </Card>
+            <InlineGrid columns={2} gap={400}>
+              <Card>
+                <Box>
+                  <iframe width="100%" height="240" src="https://www.youtube.com/embed/EN6xKGnrGYw?si=KvHdD2IijxWuZ0sD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </Box>
+              </Card>
+
+              <Card>
+                <Box>
+                  <iframe width="100%" height="240" src="https://www.youtube.com/embed/EN6xKGnrGYw?si=KvHdD2IijxWuZ0sD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </Box>
+              </Card>
+            </InlineGrid>
           </BlockStack>
           <BlockStack gap={400}>
             <Card title="Infomation">
               <BlockStack gap="200">
-                <Text variant="headingMd" as="h2">{product.name}</Text>
+                <InlineStack gap={200}>
+                  <div className='pointer' onClick={() => handleRedirectProductPage(product.url_key)}>
+                    <Text variant="headingMd" as="h2">{product.name}</Text>
+                  </div>
+                  {
+                    product.actions?.install &&
+                    <div>
+                      <Badge tone='success'>Ready</Badge>
+                    </div>
+                  }
+                </InlineStack>
+
                 {
-                  (product?.categories !== undefined || product?.tags !== undefined)
-                  ? (product?.categories || product?.tags) &&
-                  <InlineStack gap="200" blockAlign="start">
-                    {
-                      product?.categories &&
-                      product.categories.map(item => (
-                        <Tooltip key={item} content="Category">
-                          <Badge tone="success">{item}</Badge>
-                        </Tooltip>
-                      ))
-                    }
-                    {
-                      product?.tags &&
-                      product.tags.map(item => (
-                        <Tooltip key={item} content="Tag">
-                          <Badge tone="info">#{item}</Badge>
-                        </Tooltip>
-                      ))
-                    }
-                  </InlineStack>
-                  : <SkeletonBodyText lines={1}/>
+                  product?.tags &&
+                  <BadgeTag tags={product.tags} />
                 }
                 
                 <Text variant="bodyMd" as="p">Version: {product.version}</Text>
+
+                <Text variant="bodyLg" as="p" fontWeight='bold'>${product.price}</Text>
+
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
+                
+                {
+                  product.actions?.install &&
+                  <ModalInstallSection section={section} reloadSection={reloadSectionDetail} />
+                }
+
                 {
                   product.actions
                   ? <>
@@ -143,22 +150,34 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
                         fullWidth 
                         onClick={() => handlePurchase()}
                       >
-                        Purchase ${product.price}
+                        Purchase
                       </Button>
                     }
                     <Button
                       size="large"
-                      fullWidth 
-                      onClick={() => handleRedirectProductPage(product.url_key)}
+                      fullWidth
+                      url={product.demo_link}
+                      disabled={!Boolean(product.demo_link)}
                     >
-                      {product.actions?.install ? 'Install Now' : 'Go to product page'}
+                      <Tooltip>View demo store</Tooltip>
                     </Button>
                   </>
                   : <SkeletonDisplayText maxWidth='true'></SkeletonDisplayText>
                 }
-
               </BlockStack>
             </Card>
+
+            {
+              product.description && 
+              <Card title="USP">
+                <Box>
+                  <BlockStack gap={200}>
+                    <div dangerouslySetInnerHTML={{__html: product.description}}></div>
+                  </BlockStack>
+                </Box>
+              </Card>
+            }
+          
             {
               product.pricing_plan
               ? <Card title="Plan">
@@ -204,35 +223,8 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
                 </BlockStack>
               </Card>
             }
-            <Card title="Feature">
-              <BlockStack gap="200">
-                <InlineStack align="start" gap={200}>
-                  <div>
-                    <Icon
-                      source={CashDollarIcon}
-                      tone="base"
-                    />
-                  </div>
-                  <p>One-time charge</p>
-                </InlineStack>
-                <InlineStack align="start" gap={200}>
-                  <div>
-                    <Icon
-                      source={BillIcon}
-                      tone="base"
-                    />
-                  </div>
-                  <p>Buy once, own forever</p>
-                </InlineStack>
-                <InlineStack align="start" gap={200}>
-                  <div>
-                    <Icon source={UploadIcon} tone="base" />
-                  </div>
-                  <p>Add section to any theme</p>
-                </InlineStack>
-              </BlockStack>
-            </Card>
-            <CalloutCard
+
+            {/* <CalloutCard
               title="Learn more"
               illustration="https://cdn.shopify.com/s/assets/admin/checkout/settings-customizecart-705f57c725ac05be5a34ec20c05b94298cb8afd10aac7bd9c7ad02030f48cfa0.svg"
               primaryAction={{
@@ -247,7 +239,7 @@ function ModalProduct({currentProduct, isShowPopup, setIsShowPopup}) {
               }}
             >
               <div dangerouslySetInnerHTML={{__html: product.release_note}}></div>
-            </CalloutCard>
+            </CalloutCard> */}
           </BlockStack>
         </InlineGrid>
       </Modal.Section>

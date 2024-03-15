@@ -13,9 +13,10 @@ import {
   Box
 } from '@shopify/polaris';
 import { NoteIcon, WrenchIcon } from '@shopify/polaris-icons';
-import { useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import BannerDefault from '~/components/block/banner';
 import { UPDATE_ASSET_MUTATION, DELETE_ASSET_MUTATION } from "~/queries/section-builder/asset.gql";
+import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
 
 const titleRoleTheme = {
   'main': 'Live',
@@ -23,16 +24,24 @@ const titleRoleTheme = {
   'development': 'Dev',
 };
 
-function ModalInstallSection({section, themes, reloadSection}) {
+function ModalInstallSection({section, reloadSection}) {
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState(undefined);
+
+  const { data:themesData } = useQuery(THEMES_QUERY, {
+    fetchPolicy: "cache-and-network",
+    skip: Boolean(!section.entity_id),
+  });
+  const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
   const handleSelectChange = useCallback(
     (value) => setSelected(value),
     [],
   );
 
   useMemo(() => {
-    setSelected(themes[0]['id'] ?? "");
+    if (themes && themes.length) {
+      setSelected(themes[0]['id'] ?? "");
+    }
   }, [themes]);
   const options = useMemo(() => {
     return themes
@@ -57,13 +66,15 @@ function ModalInstallSection({section, themes, reloadSection}) {
       }
       return ({
         value: theme.id,
-        label: `(${titleRoleTheme[theme.role]}) ${theme.name} - ${status} `,
+        label: `${theme.name}(${titleRoleTheme[theme.role]}) - ${status} `,
         ...prefix
       })
     })
     : [];
   }, [section, themes]);
-  const installed = useMemo(() => section.installed.find(item => item.theme_id == selected), [section, selected]);
+  const installed = useMemo(() => {
+    return section?.installed && section.installed.find(item => item.theme_id == selected)
+  }, [section, selected]);
 
   const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION);
   const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION);
@@ -134,15 +145,15 @@ function ModalInstallSection({section, themes, reloadSection}) {
     <>
       <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
       <Select
-        label="Theme "
         labelInline
         options={options}
         onChange={handleSelectChange}
         value={selected}
       />
-      <InlineStack gap={200}>
+      <InlineGrid columns={2} gap={200}>
         <Button
           onClick={handleUpdate}
+          variant='primary'
           disabled={!section.actions?.install || !selected}
           loading={dataUpdateL}
         >
@@ -155,8 +166,8 @@ function ModalInstallSection({section, themes, reloadSection}) {
           loading={dataDeleteL}
         >
           Delete section
-          </Button>
-      </InlineStack>
+        </Button>
+      </InlineGrid>
     </>
   );
 }

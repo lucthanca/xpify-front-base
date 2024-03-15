@@ -11,6 +11,7 @@ const CommonSectionField = gql`
     demo_link
     images { src }
     type_id
+    tags
   }
 `;
 const SectionActionsFragment = gql`
@@ -89,7 +90,6 @@ export const SECTION_QUERY = gql`
       ...CommonSectionField
       ... on Section { plan_id src version release_note ...PricingPlanFragment ...SectionActionsFragment ...SectionInstalledFragment }
       categories
-      tags
     }
   }
   ${CommonSectionField}

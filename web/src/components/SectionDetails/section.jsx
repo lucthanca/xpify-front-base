@@ -51,7 +51,17 @@ const SectionFullpageDetails = props => {
         backAction={{content: 'Products', onAction: () => handleBackPage()}}
         title={section.name}
         titleMetadata={<Badge tone="success">v{section.version}</Badge>}
-        subtitle='This is product page'
+        subtitle={
+          <InlineStack gap={200}>
+                {
+                  section?.tags
+                  ? section.tags.map(tag => {
+                    return <Badge key={tag} tone="info" size='small'>#{tag}</Badge>
+                  })
+                  : <></>
+                }
+              </InlineStack>
+        }
         compactTitle
         primaryAction={{
           content: 'Purchase',
@@ -78,16 +88,6 @@ const SectionFullpageDetails = props => {
         <Layout>
           <Layout.Section>
             <BlockStack gap='400'>
-              <InlineStack gap={200}>
-                {
-                  section?.tags
-                  ? section.tags.map(tag => {
-                    return <Badge key={tag} tone="info" size='small'>#{tag}</Badge>
-                  })
-                  : <></>
-                }
-              </InlineStack>
-
               {
                 (!section.actions?.install) &&
                 <Banner
@@ -127,16 +127,11 @@ const SectionFullpageDetails = props => {
               }
 
               {/* <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} /> */}
-              <Card>
-                <BlockStack gap='200'>
-                  <Text variant='bodySm' fontWeight='bold'>Choose theme for installation:</Text>
-                  <ModalInstallSection section={section} themes={themes} reloadSection={reloadSection} />
-                </BlockStack>
-              </Card>
 
-              <Box>
-                <SectionGallery images={section?.images || []} />
-              </Box>
+              <BlockStack gap='200'>
+                <Text variant='bodySm' fontWeight='bold'>Choose theme for installation:</Text>
+                <ModalInstallSection section={section} themes={themes} reloadSection={reloadSection} />
+              </BlockStack>
 
               <Box>
                 {section.description && (
@@ -147,6 +142,10 @@ const SectionFullpageDetails = props => {
                     </Box>
                   </Card>
                 )}
+              </Box>
+
+              <Box>
+                <SectionGallery images={section?.images || []} />
               </Box>
               
               <Box>
