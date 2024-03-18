@@ -34,12 +34,14 @@ export async function ensureXpifyApp (config) {
 				task: async () => {
 					if (app) {
 						const apiSecret = getApiScecret(config.remoteApp);
+						const remoteAppHandle = config.remoteApp?.configuration?.handle ?? resolveAppHandleFromName(config.remoteApp.title);
 						const changes = {
 							api_key: app.api_key !== config.remoteApp.apiKey ? config.remoteApp.apiKey : undefined,
 							secret_key: app.secret_key !== apiSecret ? apiSecret : undefined,
 							scopes: app.scopes !== config.localApp.configuration?.['access_scopes']?.scopes ? config.localApp.configuration?.['access_scopes']?.scopes : undefined,
 							name: app.name !== config.remoteApp.title ? config.remoteApp.title : undefined,
 							api_version: app.api_version !== config.localApp.configuration?.['webhooks']?.['api_version'] ? config.localApp.configuration?.['webhooks']?.['api_version'] : undefined,
+							handle: app.handle !== remoteAppHandle ? remoteAppHandle : undefined,
 						};
 
 						const filteredChanges = Object.fromEntries(Object.entries(changes).filter(([_, v]) => v !== undefined));
@@ -77,6 +79,7 @@ const createApp = async (config) => {
 		remote_id: remoteApp.id,
 		scopes: localApp.configuration?.['access_scopes']?.scopes || null,
 		api_version: config.localApp.configuration?.['webhooks']?.['api_version'] || '2024-01',
+		handle: remoteApp.configuration?.handle ?? resolveAppHandleFromName(remoteApp.title),
 	}, 'XpifyCreateApp');
 	if (!result.saveApp?.id) {
 		throw new Error('Không tạo được app vào backend, check lại!')
@@ -84,19 +87,35 @@ const createApp = async (config) => {
 	return result.saveApp;
 };
 
+const resolveAppHandleFromName = (name) => {
+	return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
 const saveApp = async (input, apiName) => {
-	return await graphqlRequest({
-		query: CREATE_APP_MUTATION,
-		api: apiName,
-		url: getBackendEndpoint(),
-		token: process.env[XPIFY_SECRET_KEY],
-		variables: {
-			input,
-		},
-		addedHeaders: {
-			'x-auth-required': '0',
-		},
-	});
+	try {
+		return await graphqlRequest({
+			query: CREATE_APP_MUTATION,
+			api: apiName,
+			url: getBackendEndpoint(),
+			token: process.env[XPIFY_SECRET_KEY],
+			variables: {
+				input,
+			},
+			addedHeaders: {
+				'x-auth-required': '0',
+			},
+		});
+	} catch (e) {
+		if (e.constructor.name === 'GraphQLClientError') {
+			if (e.errors?.[0]?.extensions?.category === 'graphql-authorization') {
+				throw new Error('Token không hợp lệ, thử lại.');
+			}
+			if (e.errors?.[0]?.extensions?.category === 'x-duplicate-handle') {
+				throw new Error(`Trùng app handle - đã tồn tại 1 app có handle ${input.handle ?? 'N/A'}. Đổi tên app hoặc thêm handle vào file toml.`);
+			}
+			if (e.errors?.[0]?.extensions?.category === 'x-duplicate-remoteId') throw new Error(`Trùng remote id. lỗi này thì debug đi.`);
+		}
+	}
 }
 
 const getApp = async (config) => {
