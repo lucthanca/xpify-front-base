@@ -12,7 +12,13 @@ import {
 import { ViewIcon, ArrowRightIcon, PlusCircleIcon, CartSaleIcon } from '@shopify/polaris-icons';
 import { memo, useCallback } from 'react';
 import BadgeTag from '~/components/block/badge/tag';
-import { useRedirectSectionPage } from '~/hooks/section-builder/redirect';
+import { usePurchase } from '~/hooks/section-builder/purchase';
+import { useRedirectGroupPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
+
+const productType = {
+  'simple': 1,
+  'group': 2
+};
 
 function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, lazyLoadImg = true}) {
   console.log('re-render-productCard');
@@ -27,12 +33,22 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, l
   }, []);
 
   const handleRedirectProductPage = useRedirectSectionPage();
+  const handleRedirectGroupPage = useRedirectGroupPage();
+  const handleRedirect = useCallback((product) => {
+    if (product.type_id == productType.group) {
+      return handleRedirectGroupPage(product.url_key);
+    } else {
+      return handleRedirectProductPage(product.url_key);
+    }
+  }, []);
+
+  const { handlePurchase, purchaseLoading} = usePurchase();
 
   return (
     item && 
     <>
       <Card padding={0} background="bg-surface-secondary">
-        <div className='pointer' onClick={() => handleRedirectProductPage(item.url_key)}>
+        <div className='pointer' onClick={() => handleRedirect(item)}>
           <img
             src={item.images[0]?.src}
             alt={item.name}
@@ -45,7 +61,7 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, l
             <BlockStack>
               <InlineStack align='space-between'>
                 <InlineStack gap={200}>
-                  <div className='pointer' onClick={() => handleRedirectProductPage(item.url_key)}>
+                  <div className='pointer' onClick={() => handleRedirect(item)}>
                     <Text variant="headingMd" as="h2">{item.name}</Text>
                   </div>
                   {
@@ -55,20 +71,27 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, l
                 </InlineStack>
                 <Text variant="headingMd" as="h2">${item.price}</Text>
               </InlineStack>
-              <Text as="div" variant="bodyMd">
-                Version: {item.version}
-              </Text>
+              {
+                item.version &&
+                <Text as="div" variant="bodyMd">
+                  Version: {item.version}
+                </Text>
+              }
             </BlockStack>
             <InlineStack gap={200}>
-              <Button 
-                icon={<Icon source={ViewIcon} tone="base" />} 
-                size="large"
-                onClick={() => handleQuickView(item)}
-              />
+              {
+                item.type_id == productType.simple &&
+                <Button 
+                  icon={<Icon source={ViewIcon} tone="base" />} 
+                  size="large"
+                  onClick={() => handleQuickView(item)}
+                />
+              }
+
               <Button
                 icon={<Icon source={ArrowRightIcon} tone="base" />} 
                 size="large"
-                onClick={() => handleRedirectProductPage(item.url_key)}
+                onClick={() => handleRedirect(item)}
               />
               {
                 item.actions?.install &&
@@ -82,10 +105,10 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, l
               {
                 item.actions?.purchase &&
                 <Button 
-                  loading={false} 
+                  loading={purchaseLoading} 
                   icon={<Icon source={CartSaleIcon} tone="base" />} 
                   size="large"
-                  onClick={() => handleQuickView(item)}
+                  onClick={() => handlePurchase(item)}
                 />
               }
             </InlineStack>

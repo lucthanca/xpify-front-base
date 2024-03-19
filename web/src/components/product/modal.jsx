@@ -32,6 +32,7 @@ import BadgeTag from '~/components/block/badge/tag';
 import { SECTION_QUERY } from "~/queries/section-builder/product.gql";
 import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
 import { useRedirectPlansPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
+import { usePurchase } from '~/hooks/section-builder/purchase';
 
 function ModalProduct({section, isShowPopup, setIsShowPopup}) {
   const { data:sectionDetail, refetch:reloadSectionDetail } = useQuery(SECTION_QUERY, {
@@ -49,36 +50,11 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
     setIsShowPopup(!isShowPopup);
     setBannerAlert(undefined);
   }, [isShowPopup]);
-  const [redirectPurchase, { data:purchase, loading:purchaseL, error:purchaseE }] = useMutation(REDIRECT_BILLING_PAGE_MUTATION);
 
-  const handlePurchase = useCallback(async () => {
-    await redirectPurchase({ 
-        variables: {
-            name: section?.url_key,
-            interval: 'ONE_TIME',
-            is_plan: false
-        }
-     });
-  }, [section]);
+  const { handlePurchase, purchaseLoading} = usePurchase();
 
   const handleRedirectProductPage = useRedirectSectionPage();
   const handleRedirectPlansPage = useRedirectPlansPage();
-
-  useEffect(() => {
-    if (purchase?.redirectBillingUrl?.message) {
-      setBannerAlert({
-        'title': purchase.redirectBillingUrl.message,
-        'tone': purchase?.redirectBillingUrl?.tone ?? "critical"
-      });
-    }
-    if (purchaseE?.graphQLErrors?.length) {
-      setBannerAlert({
-        'title': purchaseE.message,
-        'tone': 'critical',
-        'content': purchaseE.graphQLErrors
-      });
-    }
-  }, [purchase, purchaseE]);
 
   return (
     <Modal
@@ -94,17 +70,6 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
               <GallerySlider gallery={product.images} />
             </Card>
             <InlineGrid columns={2} gap={400}>
-              <Card>
-                <Box>
-                  <iframe width="100%" height="240" src="https://www.youtube.com/embed/EN6xKGnrGYw?si=KvHdD2IijxWuZ0sD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                </Box>
-              </Card>
-
-              <Card>
-                <Box>
-                  <iframe width="100%" height="240" src="https://www.youtube.com/embed/EN6xKGnrGYw?si=KvHdD2IijxWuZ0sD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                </Box>
-              </Card>
             </InlineGrid>
           </BlockStack>
           <BlockStack gap={400}>
@@ -144,11 +109,11 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
                     {
                       product.actions?.purchase &&
                       <Button 
-                        loading={purchaseL} 
+                        loading={purchaseLoading} 
                         icon={<Icon source={PaymentIcon} tone="base" />} 
                         size="large"
                         fullWidth 
-                        onClick={() => handlePurchase()}
+                        onClick={() => handlePurchase(product)}
                       >
                         Purchase
                       </Button>

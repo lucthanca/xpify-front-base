@@ -15,7 +15,7 @@ export const useRedirectSectionPage = (key) => {
   const result = useCallback((key) => {
     navigate(`/section/${key}`);
     useScrollToTop();
-  }, [key])
+  }, [])
   return result;
 }
 
@@ -30,10 +30,10 @@ export const useRedirectGroupsPage = () => {
 
 export const useRedirectGroupPage = (key) => {
   const navigate = useNavigate();
-  const result = useCallback(() => {
+  const result = useCallback((key) => {
     navigate(`/group/${key}`);
     useScrollToTop();
-  })
+  }, [])
   return result;
 }
 

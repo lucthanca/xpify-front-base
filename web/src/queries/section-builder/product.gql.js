@@ -12,14 +12,14 @@ const CommonSectionField = gql`
     images { src }
     type_id
     tags
-  }
-`;
-const SectionActionsFragment = gql`
-  fragment SectionActionsFragment on Section {
     actions {
       install
       purchase
       plan
+    }
+    installed {
+      theme_id
+      product_version
     }
   }
 `;
@@ -27,14 +27,6 @@ const PricingPlanFragment = gql`
   fragment PricingPlanFragment on Section {
     pricing_plan {
       name code prices { interval amount } description
-    }
-  }
-`;
-const SectionInstalledFragment = gql`
-  fragment SectionInstalledFragment on Section {
-    installed {
-      theme_id
-      product_version
     }
   }
 `;
@@ -64,8 +56,6 @@ export const SECTIONS_QUERY = gql`
         ... on Section {
           version release_note src plan_id
           ...PricingPlanFragment
-          ...SectionActionsFragment
-          ...SectionInstalledFragment
         }
         entity_id
       }
@@ -79,8 +69,6 @@ export const SECTIONS_QUERY = gql`
   }
   ${CommonSectionField}
   ${PricingPlanFragment}
-  ${SectionActionsFragment}
-  ${SectionInstalledFragment}
 `;
 export const SECTION_QUERY = gql`
   query GetSectionByKey($key: String!) {
@@ -88,14 +76,12 @@ export const SECTION_QUERY = gql`
       __typename
       entity_id
       ...CommonSectionField
-      ... on Section { plan_id src version release_note ...PricingPlanFragment ...SectionActionsFragment ...SectionInstalledFragment }
+      ... on Section { plan_id src version release_note ...PricingPlanFragment }
       categories
     }
   }
   ${CommonSectionField}
   ${PricingPlanFragment}
-  ${SectionActionsFragment}
-  ${SectionInstalledFragment}
 `;
 export const RELATED_SECTIONS_QUERY = gql`
   query GET($key: String!) {
@@ -183,9 +169,8 @@ export const SECTIONS_INSTALLED_QUERY = gql`
   query GET {
     getSectionsInstall {
       ...CommonSectionField
-      ...on Section { version ...SectionInstalledFragment }
+      ...on Section { version }
     }
   }
   ${CommonSectionField}
-  ${SectionInstalledFragment}
 `;

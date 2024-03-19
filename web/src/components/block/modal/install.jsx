@@ -49,7 +49,7 @@ function ModalInstall({section, isShowPopup, setIsShowPopup}) {
     <Modal
         open={isShowPopup}
         onClose={() => {setIsShowPopup(prev => !prev)}}
-        title={`Install section ${product?.name ?? ''} to theme`}
+        title={`Install "${product?.name ?? ''}" to theme`}
       >
         <Modal.Section>
           <BlockStack gap={400}>

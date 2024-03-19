@@ -36,7 +36,7 @@ export default function Search({
   const debounceSearch = useCallback(debounce((nextValue) => {
     setSearchFilter(nextValue);
     setDebounceLoading(false);
-  }, 500), []);
+  }, 300), []);
   const handleSearchFilterChange = useCallback((value) => {
     setSearch(value);
     debounceSearch(value);
@@ -45,7 +45,7 @@ export default function Search({
   const debouncePrice = useCallback(debounce((nextValue) => {
     setPriceFilter(nextValue);
     setDebounceLoading(false);
-  }, 300), []);
+  }, 200), []);
   const handlePriceFilterChange = useCallback((value) => {
     setPrice(value);
     debouncePrice(value);
@@ -86,7 +86,9 @@ export default function Search({
   );
 
   const handleFiltersClearAll = useCallback(() => {
-    handlePlanFilterRemove();
+    if (pricingPlans) {
+      handlePlanFilterRemove();
+    }
     handleCategoryFilterRemove();
     handleTagFilterRemove();
     handlePriceFilterRemove();
@@ -97,69 +99,84 @@ export default function Search({
     handlePriceFilterRemove
   ]);
 
-  const filters = [
-    {
-      key: 'planFilter',
-      label: 'Plan',
-      filter: (
-        <ChoiceList
-          title="Plan"
-          titleHidden
-          choices={pricingPlans}
-          selected={planFilter || []}
-          onChange={handlePlanFilterChange}
-        />
-      ),
-      shortcut: false,
-    },
-    {
-      key: 'categoryFilter',
-      label: 'Category',
-      filter: (
-        <ChoiceList
-          title="Category"
-          titleHidden
-          choices={categories}
-          selected={categoryFilter || []}
-          onChange={handleCategoryFilterChange}
-        />
-      ),
-      shortcut: true,
-    },
-    {
-      key: 'tagFilter',
-      label: 'Tag',
-      filter: (
-        <ChoiceList
-          title="Tag"
-          titleHidden
-          choices={tags}
-          selected={tagFilter || []}
-          onChange={handleTagFilterChange}
-          allowMultiple
-        />
-      ),
-      shortcut: true,
-    },
-    {
-      key: 'priceFilter',
-      label: 'Price',
-      filter: (
-        <RangeSlider
-          label="Price is between"
-          labelHidden
-          value={price || [0, 19]}
-          prefix="$"
-          output
-          min={0}
-          max={50}
-          step={1}
-          onChange={handlePriceFilterChange}
-        />
-      ),
-      shortcut: false
+  const filters = useMemo(() => {
+    var result = [];
+    if (pricingPlans) {
+      result.push({
+        key: 'planFilter',
+        label: 'Plan',
+        filter: (
+          <ChoiceList
+            title="Plan"
+            titleHidden
+            choices={pricingPlans}
+            selected={planFilter || []}
+            onChange={handlePlanFilterChange}
+          />
+        ),
+        shortcut: false,
+      });
     }
-  ];
+    if (categories) {
+      result.push(
+        {
+          key: 'categoryFilter',
+          label: 'Category',
+          filter: (
+            <ChoiceList
+              title="Category"
+              titleHidden
+              choices={categories}
+              selected={categoryFilter || []}
+              onChange={handleCategoryFilterChange}
+            />
+          ),
+          shortcut: true,
+        }
+      );
+    }
+    if (tags) {
+      result.push(
+        {
+          key: 'tagFilter',
+          label: 'Tag',
+          filter: (
+            <ChoiceList
+              title="Tag"
+              titleHidden
+              choices={tags}
+              selected={tagFilter || []}
+              onChange={handleTagFilterChange}
+              allowMultiple
+            />
+          ),
+          shortcut: true,
+        }
+      );
+    }
+    result.push(
+      {
+        key: 'priceFilter',
+        label: 'Price',
+        filter: (
+          <RangeSlider
+            label="Price is between"
+            labelHidden
+            value={price || [0, 19]}
+            prefix="$"
+            output
+            min={0}
+            max={100}
+            step={1}
+            onChange={handlePriceFilterChange}
+          />
+        ),
+        shortcut: false
+      }
+    );
+
+    return result;
+  }, []);
 
   const appliedFilters = [];
   if (planFilter && planFilter.length > 0) {

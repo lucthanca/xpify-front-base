@@ -14,9 +14,9 @@
     "mySections": "My sections",
     "sections": "Sections",
     "groups": "Groups",
+    "myLibrary": "My Library",
     "plans": "Pricing Plans",
-    "faqs": "FAQ",
-    "section": "Section detail"
+    "helpCenter": "Help Center"
   },
   "NotFound": {
     "description": "Check the URL and try again, or use the search bar to find what you need.",

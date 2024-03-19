@@ -6,6 +6,12 @@ import { PRICING_PLANS_QUERY, SORT_OPTIONS_QUERY } from '~/queries/section-build
 import { CATEGORIES_QUERY } from '~/queries/section-builder/category.gql';
 import { TAGS_QUERY } from '~/queries/section-builder/tag.gql';
 import { PricingPlan, SectionData } from '~/talons/section/useSection';
+import { useLocation } from 'react-router-dom';
+
+const productType = {
+  'simple': 1,
+  'group': 2
+};
 
 type SelectOption = {
   value: string;
@@ -22,6 +28,7 @@ type Tag = {
 
 export const useSectionCollection = () => {
   const { t } = useTranslation();
+  const location = useLocation();
   const [searchFilter, setSearchFilter] = useState('');
   const [sortSelected, setSortSelected] = useState(['main_table.name asc']);
   const [planFilter, setPlanFilter] = useState(undefined);
@@ -31,18 +38,49 @@ export const useSectionCollection = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [debounceLoading, setDebounceLoading] = useState(false);
 
+  const information = useMemo(() => {
+    const currentPath = location.pathname;
+    if (currentPath === '/my-library') {
+      if (location.search === '?type=simple') {
+        return {
+          sectionType: productType.group,
+          isOwned: true
+        };
+      } else {
+        return {
+          sectionType: productType.simple,
+          isOwned: true
+        };
+      }
+    } else {
+      if (currentPath === '/groups') {
+        return {
+          sectionType: productType.group,
+          isOwned: false
+        };
+      } else {
+        return {
+          sectionType: productType.simple,
+          isOwned: false
+        };
+      }
+    }
+  }, []);
+
   const { data: sectionsData } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       search: searchFilter,
       filter: {
+        type_id: information?.sectionType ?? 1,
         category_id: categoryFilter ?? [],
         tag_id: tagFilter ?? [],
         plan_id: planFilter ?? [],
         price: priceFilter ? {
           min: priceFilter[0],
           max: priceFilter[1]
-        } : {}
+        } : {},
+        owned: information?.isOwned ?? false
       },
       sort: sortSelected ? (([column, order]) => ({ column, order }))(sortSelected[0].split(' ')) : {},
       pageSize: 12,
