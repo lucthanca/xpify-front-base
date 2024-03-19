@@ -34,7 +34,7 @@ export async function ensureXpifyApp (config) {
 				task: async () => {
 					if (app) {
 						const apiSecret = getApiScecret(config.remoteApp);
-						const remoteAppHandle = config.remoteApp?.configuration?.handle ?? resolveAppHandleFromName(config.remoteApp.title);
+						const remoteAppHandle = config.localApp?.configuration?.handle ?? resolveAppHandleFromName(config.remoteApp.title);
 						const changes = {
 							api_key: app.api_key !== config.remoteApp.apiKey ? config.remoteApp.apiKey : undefined,
 							secret_key: app.secret_key !== apiSecret ? apiSecret : undefined,
@@ -79,7 +79,7 @@ const createApp = async (config) => {
 		remote_id: remoteApp.id,
 		scopes: localApp.configuration?.['access_scopes']?.scopes || null,
 		api_version: config.localApp.configuration?.['webhooks']?.['api_version'] || '2024-01',
-		handle: remoteApp.configuration?.handle ?? resolveAppHandleFromName(remoteApp.title),
+		handle: localApp.configuration?.handle ?? resolveAppHandleFromName(remoteApp.title),
 	}, 'XpifyCreateApp');
 	if (!result.saveApp?.id) {
 		throw new Error('Không tạo được app vào backend, check lại!')
