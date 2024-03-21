@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
 import { PRICING_PLANS_QUERY, SORT_OPTIONS_QUERY } from '~/queries/section-builder/other.gql';
 import { CATEGORIES_QUERY } from '~/queries/section-builder/category.gql';
 import { TAGS_QUERY } from '~/queries/section-builder/tag.gql';
 import { PricingPlan, SectionData } from '~/talons/section/useSection';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 const productType = {
   'simple': 1,
@@ -29,14 +29,40 @@ type Tag = {
 export const useSectionCollection = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchFilter, setSearchFilter] = useState('');
   const [sortSelected, setSortSelected] = useState(['main_table.name asc']);
   const [planFilter, setPlanFilter] = useState(undefined);
   const [categoryFilter, setCategoryFilter] = useState(undefined);
-  const [tagFilter, setTagFilter] = useState(undefined);
+  const [tagFilter, setStateTagFilter] = useState([] as string[]);
   const [priceFilter, setPriceFilter] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
   const [debounceLoading, setDebounceLoading] = useState(false);
+
+  /**
+   * To determine if has search tags in URL -> pin the tag filter
+   */
+  const [shouldPinTagFilter, setShouldPinTagFilter] = useState(() => {
+    return searchParams.has('tags');
+  });
+  const searchTags = useMemo(() => {
+      return searchParams.get('tags')?.toLowerCase()?.split(',');
+  }, [searchParams]);
+
+  const setTagFilter = useCallback((value: any) => {
+    // use window.location.search because searchParams is not updated yet
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    if (!value?.length && Boolean(currentUrlParams.has('tags'))) {
+      currentUrlParams.delete('tags');
+      setSearchParams(currentUrlParams);
+      setShouldPinTagFilter(false);
+    }
+
+    setStateTagFilter((_) => {
+      if (value === undefined || value === null) return [];
+      return value;
+    });
+  }, [searchParams])
 
   const information = useMemo(() => {
     const currentPath = location.pathname;
@@ -74,7 +100,7 @@ export const useSectionCollection = () => {
       filter: {
         type_id: information?.sectionType ?? 1,
         category_id: categoryFilter ?? [],
-        tag_id: tagFilter ?? [],
+        tag_id: tagFilter,
         plan_id: planFilter ?? [],
         price: priceFilter ? {
           min: priceFilter[0],
@@ -127,6 +153,16 @@ export const useSectionCollection = () => {
   const sectionCollectionPageInfo = useMemo(() => {
     return sectionsData?.getSections?.page_info;
   }, [sectionsData]);
+
+  useEffect(() => {
+    if (!tagOptions?.length || !searchTags?.length) return;
+    const tagIdsMapping = tagOptions.map((item) => {
+      if (searchTags.includes(item.label?.toLowerCase())) return item.value;
+      return undefined;
+    }).filter((item) => item !== undefined) as string[];
+    setTagFilter(tagIdsMapping);
+    setShouldPinTagFilter(true);
+  }, [searchTags, tagOptions]);
   return {
     searchFilter,
     setSearchFilter,
@@ -149,6 +185,7 @@ export const useSectionCollection = () => {
     setCurrentPage,
     sectionCollectionPageInfo,
     debounceLoading,
-    setDebounceLoading
+    setDebounceLoading,
+    shouldPinTagFilter,
   };
 };
