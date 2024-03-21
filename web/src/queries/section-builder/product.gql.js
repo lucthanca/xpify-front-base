@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 
 const CommonSectionField = gql`
   fragment CommonSectionField on SectionInterface {
+    id
     entity_id
     is_enable
     name
@@ -29,6 +30,8 @@ const PricingPlanFragment = gql`
   }
 `;
 
+const QUERY_SECTION_COLLECTION_KEY = `getSections`;
+
 /* Simple Product */
 export const SECTIONS_QUERY = gql`
   query GetSectionCollection(
@@ -38,7 +41,7 @@ export const SECTIONS_QUERY = gql`
     $pageSize: Int = 20,
     $currentPage: Int = 1
   ) {
-    getSections(
+    ${QUERY_SECTION_COLLECTION_KEY}(
       search: $search,
       filter: $filter,
       sort: $sort,

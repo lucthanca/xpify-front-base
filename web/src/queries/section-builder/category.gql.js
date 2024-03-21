@@ -8,3 +8,12 @@ export const CATEGORIES_QUERY = gql`
     }
   }
 `;
+
+export const CATEGORIES_QUERY_V2 = gql`
+  query GetCategoryCollection($filter: CategoryFilterInput, $pageSize: Int = 20, $currentPage: Int = 1) {
+    categories(filter: $filter, pageSize: $pageSize, currentPage: $currentPage) {
+      id
+      name
+    }
+  }
+`;
