@@ -7,6 +7,7 @@ import SkeletonProduct from '~/components/product/skeleton';
 import ProductList from '~/components/product/list';
 import Paginate from '~/components/block/paginate/default';
 import { useSectionCollection } from '~/talons/section/useSectionCollection';
+import { useSearchParams } from "react-router-dom";
 
 const SectionCollection = props => {
   const {
@@ -31,7 +32,8 @@ const SectionCollection = props => {
     setCurrentPage,
     sectionCollectionPageInfo,
     debounceLoading,
-    setDebounceLoading
+    setDebounceLoading,
+    shouldPinTagFilter,
   } = useSectionCollection();
 
   return (
@@ -51,6 +53,7 @@ const SectionCollection = props => {
             sortOptions={sortOptions}
             debounceLoading={debounceLoading}
             setDebounceLoading={setDebounceLoading}
+            shouldPinTagFilter={shouldPinTagFilter}
           />
 
           <Box padding='600'>

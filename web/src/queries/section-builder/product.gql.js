@@ -11,15 +11,13 @@ const CommonSectionField = gql`
     demo_link
     images { src }
     type_id
-    tags
-    actions {
-      install
-      purchase
-      plan
+    tags {
+      name id
     }
-    installed {
-      theme_id
-      product_version
+    actions {
+      purchase
+      install
+      plan
     }
   }
 `;
@@ -55,6 +53,10 @@ export const SECTIONS_QUERY = gql`
         }
         ... on Section {
           version release_note src plan_id
+          installed {
+            theme_id
+            product_version
+          }
           ...PricingPlanFragment
         }
         entity_id
@@ -110,7 +112,7 @@ export const RELATED_SECTIONS_QUERY = gql`
         description
       }
       categories
-      tags
+      tags { id name }
       actions {
         install
         purchase

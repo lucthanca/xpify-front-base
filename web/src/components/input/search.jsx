@@ -1,17 +1,14 @@
 import {
-  TextField,
-  IndexTable,
   IndexFilters,
   useSetIndexFiltersMode,
   IndexFiltersMode,
-  useIndexResourceState,
-  Text,
   ChoiceList,
   RangeSlider,
-  Badge,
 } from '@shopify/polaris';
-import { debounce } from 'lodash'
-import {useState, useCallback, useMemo} from 'react';
+import { debounce } from 'lodash';
+import { useState, useCallback, useMemo } from 'react';
+
+const TAG_FILTER_KEY = 'filter_tag'
 
 export default function Search({
   searchFilter, setSearchFilter,
@@ -24,15 +21,16 @@ export default function Search({
   pricingPlans,
   categories,
   tags,
-  sortOptions
+  sortOptions,
+  shouldPinTagFilter,
 }) {
-  console.log('re-render-searchComponent');
+  // console.log('re-render-searchComponent');
 
   const [search, setSearch] = useState(searchFilter);
   const [price, setPrice] = useState(priceFilter);
   const [selected, setSelected] = useState(0);
   const {mode, setMode} = useSetIndexFiltersMode(IndexFiltersMode.Filtering);
-  
+
   const debounceSearch = useCallback(debounce((nextValue) => {
     setSearchFilter(nextValue);
     setDebounceLoading(false);
@@ -59,10 +57,7 @@ export default function Search({
     (value) => setCategoryFilter(value),
     [],
   );
-  const handleTagFilterChange = useCallback(
-    (value) => setTagFilter(value),
-    [],
-  );
+  const handleTagFilterChange = useCallback((value) => setTagFilter(value), []);
 
   const handleSearchFilterRemove = useCallback(
     () => setSearchFilter(undefined),
@@ -76,10 +71,7 @@ export default function Search({
     () => setCategoryFilter(undefined),
     [],
   );
-  const handleTagFilterRemove = useCallback(
-    () => setTagFilter(undefined),
-    [],
-  );
+  const handleTagFilterRemove = useCallback(() => setTagFilter([]), [],);
   const handlePriceFilterRemove = useCallback(
     () => setPriceFilter(undefined),
     [],
@@ -138,14 +130,14 @@ export default function Search({
     if (tags) {
       result.push(
         {
-          key: 'tagFilter',
+          key: TAG_FILTER_KEY,
           label: 'Tag',
           filter: (
             <ChoiceList
               title="Tag"
               titleHidden
               choices={tags}
-              selected={tagFilter || []}
+              selected={tagFilter}
               onChange={handleTagFilterChange}
               allowMultiple
             />
@@ -153,6 +145,10 @@ export default function Search({
           shortcut: true,
         }
       );
+      // put a dummy filter to pin the tag filter to tell the FiltersBar render the tag filter
+      // @see node_modules/@shopify/polaris/build/esm/components/Filters/components/FiltersBar
+      // 62: useOnValueChange(filters.length, ...)
+      shouldPinTagFilter && result.push({key: 'dummy'});
     }
     result.push(
       {
@@ -176,7 +172,7 @@ export default function Search({
     );
 
     return result;
-  }, []);
+  }, [tagFilter, tags, shouldPinTagFilter]);
 
   const appliedFilters = [];
   if (planFilter && planFilter.length > 0) {
@@ -193,9 +189,9 @@ export default function Search({
       onRemove: handleCategoryFilterRemove,
     });
   }
-  if (tagFilter && tagFilter.length > 0) {
+  if (tagFilter?.length > 0) {
     appliedFilters.push({
-      key: 'tagFilter',
+      key: TAG_FILTER_KEY,
       label: `Tag in: ` + tagFilter.map((val) => `${tags.find(item => item.value === val)?.label}`).join(','),
       onRemove: handleTagFilterRemove,
     });
