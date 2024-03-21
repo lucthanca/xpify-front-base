@@ -6,7 +6,7 @@ import { PRICING_PLANS_QUERY, SORT_OPTIONS_QUERY } from '~/queries/section-build
 import { CATEGORIES_QUERY } from '~/queries/section-builder/category.gql';
 import { TAGS_QUERY } from '~/queries/section-builder/tag.gql';
 import { PricingPlan, SectionData } from '~/talons/section/useSection';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 const productType = {
   'simple': 1,
@@ -41,7 +41,7 @@ export const useSectionCollection = () => {
   const information = useMemo(() => {
     const currentPath = location.pathname;
     if (currentPath === '/my-library') {
-      if (location.search === '?type=simple') {
+      if (location.search === '?type=group') {
         return {
           sectionType: productType.group,
           isOwned: true

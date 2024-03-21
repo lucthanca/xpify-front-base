@@ -27,8 +27,9 @@ import {
 import { useQuery, useMutation } from "@apollo/client";
 import ModalInstallSection from '~/components/product/manage'
 import GallerySlider from '~/components/splide/gallery';
-import BannerDefault from '~/components/block/banner';
+import BannerDefault from '~/components/block/banner/alert';
 import BadgeTag from '~/components/block/badge/tag';
+import BadgeStatusSection from '~/components/block/badge/statusSection';
 import { SECTION_QUERY } from "~/queries/section-builder/product.gql";
 import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
 import { useRedirectPlansPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
@@ -79,12 +80,7 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
                   <div className='pointer' onClick={() => handleRedirectProductPage(product.url_key)}>
                     <Text variant="headingMd" as="h2">{product.name}</Text>
                   </div>
-                  {
-                    product.actions?.install &&
-                    <div>
-                      <Badge tone='success'>Ready</Badge>
-                    </div>
-                  }
+                  <BadgeStatusSection item={product} key={reloadSectionDetail} />
                 </InlineStack>
 
                 {
@@ -100,7 +96,7 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
                 
                 {
                   product.actions?.install &&
-                  <ModalInstallSection section={section} reloadSection={reloadSectionDetail} />
+                  <ModalInstallSection section={product} reloadSection={reloadSectionDetail} />
                 }
 
                 {

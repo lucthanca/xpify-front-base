@@ -14,10 +14,12 @@ import {
   Select,
   Text
 } from '@shopify/polaris';
-import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
+import { PaymentIcon, ViewIcon, LockIcon } from '@shopify/polaris-icons';
 import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
-import BannerDefault from '~/components/block/banner';
+import BadgeTag from '~/components/block/badge/tag';
+import BadgeStatusSection from '~/components/block/badge/statusSection';
 import ModalInstallSection from '~/components/product/manage';
+import BannerWarningNotPurchase from '~/components/block/banner/warningPurchase';
 import SectionGallery from '~/components/SectionDetails/gallery';
 import RelatedProducts from '~/components/SectionDetails/RelatedProducts';
 import { Loading } from '@shopify/app-bridge-react';
@@ -50,18 +52,16 @@ const SectionFullpageDetails = props => {
       <Page
         backAction={{content: 'Products', onAction: () => handleBackPage()}}
         title={section.name}
-        titleMetadata={<Badge tone="success">v{section.version}</Badge>}
-        subtitle={
+        titleMetadata={
           <InlineStack gap={200}>
-                {
-                  section?.tags
-                  ? section.tags.map(tag => {
-                    return <Badge key={tag} tone="info" size='small'>#{tag}</Badge>
-                  })
-                  : <></>
-                }
-              </InlineStack>
+            <BadgeStatusSection item={section} key={sectionLoading} />
+            {
+              section?.tags &&
+              <BadgeTag tags={section.tags} />
+            }
+          </InlineStack>
         }
+        subtitle={"version " + section.version}
         compactTitle
         primaryAction={{
           content: 'Purchase',
@@ -90,48 +90,32 @@ const SectionFullpageDetails = props => {
             <BlockStack gap='400'>
               {
                 (!section.actions?.install) &&
-                <Banner
-                  title="You cann't use this section now!"
-                  action={{
-                    content: 'Purchase $' + section.price,
-                    icon: PaymentIcon,
-                    loading: purchaseLoading,
-                    onAction: handlePurchase,
-                    disabled: sectionLoading || purchaseLoading
-                  }}
-                  secondaryAction={{
-                    content: 'View Plans',
-                    icon: ViewIcon,
-                    onAction: handleRedirectPlansPage
-                  }}
-                  tone='warning'
-                >
-                  <BlockStack gap='200'>
-                    <Text variant="headingSm">How to use this section?</Text>
-                    <List>
-                      {
-                        section.actions?.purchase &&
-                        <List.Item>
-                          <Text variant="bodySm">Own forever: Purchase once.</Text>
-                        </List.Item>
+                <BannerWarningNotPurchase
+                  section={section}
+                  config={
+                    {
+                      title: "You cann't use this section now!",
+                      tone: 'warning',
+                      action: {
+                        content: 'Purchase $' + section.price,
+                        icon: PaymentIcon,
+                        loading: purchaseLoading,
+                        onAction: handlePurchase,
+                        disabled: sectionLoading || purchaseLoading
+                      },
+                      secondaryAction: {
+                        content: 'View Plans',
+                        icon: ViewIcon,
+                        onAction: handleRedirectPlansPage
                       }
-                      {
-                        section.actions?.plan &&
-                        <List.Item>
-                          <Text variant="bodySm">Periodic payments: Own all sections included in the plan ({section.pricing_plan.name})</Text>
-                        </List.Item>
-                      }
-                    </List>
-                  </BlockStack>
-                </Banner>
+                    }
+                  }
+                />
               }
 
               {/* <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} /> */}
 
-              <BlockStack gap='200'>
-                <Text variant='bodySm' fontWeight='bold'>Choose theme for installation:</Text>
-                <ModalInstallSection section={section} themes={themes} reloadSection={reloadSection} />
-              </BlockStack>
+              <ModalInstallSection section={section} themes={themes} reloadSection={reloadSection} fullWith={false} />
 
               <Box>
                 {section.description && (

@@ -27,14 +27,14 @@ import {
 import { useQuery, useMutation } from "@apollo/client";
 import ModalInstallSection from '~/components/product/manage'
 import GallerySlider from '~/components/splide/gallery';
-import BannerDefault from '~/components/block/banner';
+import BannerDefault from '~/components/block/banner/alert';
 import BadgeTag from '~/components/block/badge/tag';
 import { SECTION_QUERY } from "~/queries/section-builder/product.gql";
 import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
 import { useRedirectPlansPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 
 function ModalInstall({section, isShowPopup, setIsShowPopup}) {
-  const { data:sectionDetail } = useQuery(SECTION_QUERY, {
+  const { data:sectionDetail, refetch:sectionDetailReload } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       key: section?.url_key ?? '',
@@ -53,7 +53,7 @@ function ModalInstall({section, isShowPopup, setIsShowPopup}) {
       >
         <Modal.Section>
           <BlockStack gap={400}>
-            <ModalInstallSection section={product} reloadSection={() => {}} />
+            <ModalInstallSection section={product} reloadSection={sectionDetailReload} />
           </BlockStack>
         </Modal.Section>
       </Modal>

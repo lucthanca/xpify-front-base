@@ -7,6 +7,7 @@ import SkeletonProduct from '~/components/product/skeleton';
 import ProductList from '~/components/product/list';
 import Paginate from '~/components/block/paginate/default';
 import { useSectionCollection } from '~/talons/section/useSectionCollection';
+import { useSearchParams } from 'react-router-dom';
 
 const GroupCollection = props => {
   const {
@@ -30,6 +31,9 @@ const GroupCollection = props => {
     debounceLoading,
     setDebounceLoading
   } = useSectionCollection();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log(searchParams);
 
   return (
     <>
@@ -61,15 +65,11 @@ const GroupCollection = props => {
       </Layout.Section>
 
       <Layout.Section>
-        {
-          sectionCollectionPageInfo !== undefined ? (
-            <Paginate
-              pageInfo={sectionCollectionPageInfo ?? []}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
-          ) : (<SkeletonDisplayText maxWidth="true"></SkeletonDisplayText>)
-        }
+        <Paginate
+          pageInfo={sectionCollectionPageInfo ?? []}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </Layout.Section>
     </>
   );

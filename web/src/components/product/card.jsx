@@ -9,9 +9,10 @@ import {
   InlineStack,
   Text
 } from '@shopify/polaris';
-import { ViewIcon, ArrowRightIcon, PlusCircleIcon, CartSaleIcon } from '@shopify/polaris-icons';
-import { memo, useCallback } from 'react';
+import { ViewIcon, PlusCircleIcon, CartSaleIcon } from '@shopify/polaris-icons';
+import { memo, useCallback, useMemo } from 'react';
 import BadgeTag from '~/components/block/badge/tag';
+import BadgeStatusSection from '~/components/block/badge/statusSection';
 import { usePurchase } from '~/hooks/section-builder/purchase';
 import { useRedirectGroupPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 
@@ -56,7 +57,7 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, l
           />
         </div>
 
-        <Box padding="400">
+        <Box padding={400}>
           <BlockStack gap={200}>
             <BlockStack>
               <InlineStack align='space-between'>
@@ -64,12 +65,11 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, l
                   <div className='pointer' onClick={() => handleRedirect(item)}>
                     <Text variant="headingMd" as="h2">{item.name}</Text>
                   </div>
-                  {
-                    item.actions?.install &&
-                    <Badge tone='success'>Ready</Badge>
-                  }
+                  <InlineStack gap={200}>
+                    <BadgeStatusSection item={item} />
+                  </InlineStack>
                 </InlineStack>
-                <Text variant="headingMd" as="h2">${item.price}</Text>
+                <Text variant="bodyMd">${item.price}</Text>
               </InlineStack>
               {
                 item.version &&
@@ -87,12 +87,6 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, l
                   onClick={() => handleQuickView(item)}
                 />
               }
-
-              <Button
-                icon={<Icon source={ArrowRightIcon} tone="base" />} 
-                size="large"
-                onClick={() => handleRedirect(item)}
-              />
               {
                 item.actions?.install &&
                 <Button 

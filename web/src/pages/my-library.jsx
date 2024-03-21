@@ -2,7 +2,7 @@ import { Box, Button, InlineGrid, InlineStack, Layout, OptionList, Page, Popover
 import { useCallback, useEffect, useState } from 'react';
 import SectionCollection from '~/components/SectionCollection';
 import GroupCollection from '~/components/GroupCollection';
-import { useNavigate, createSearchParams } from 'react-router-dom';
+import { useNavigate, createSearchParams, useSearchParams } from 'react-router-dom';
 
 const defaultSelected = 'simple';
 const options = [
@@ -13,6 +13,7 @@ const options = [
 function MyLibrary() {
   const [selected, setSelected] = useState([defaultSelected]);
   const [popoverActive, setPopoverActive] = useState(false);
+  const [pageActive, setPageActive] = useState(undefined);
   const navigate = useNavigate();
 
   const togglePopoverActive = useCallback(() => {
@@ -25,6 +26,14 @@ function MyLibrary() {
       search: `?${createSearchParams({type: selected})}`,
     };
     navigate(nav, { replace: true });
+
+    if (selected == defaultSelected) {
+      setPageActive(<SectionCollection />);
+    } else {
+      setPageActive(<GroupCollection />);
+    }
+
+    setPopoverActive(false);
   }, [selected]);
 
   const activator = (
@@ -52,11 +61,7 @@ function MyLibrary() {
           </Box>
         </Layout.Section>
 
-        {
-          selected == defaultSelected
-          ? <SectionCollection />
-          : <GroupCollection />
-        }
+        {pageActive}
       </Layout>
     </Page>
   );

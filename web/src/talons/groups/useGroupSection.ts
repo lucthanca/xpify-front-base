@@ -7,7 +7,7 @@ import { useCallback, useMemo } from 'react';
 export const useGroupSection = () => {
   const { key } = useParams();
   const { purchaseSection, loading: purchaseLoading, error: purchaseError } = useSectionPurchase();
-  const { data, loading: groupSectionLoading, error: groupSectionError } = useQuery(GROUP_SECTION_QUERY, {
+  const { data, loading: groupSectionLoading, error: groupSectionError, refetch: groupSectionReload } = useQuery(GROUP_SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: { key }
   });
@@ -36,6 +36,7 @@ export const useGroupSection = () => {
     groupSection,
     groupSectionLoading,
     groupSectionError,
+    groupSectionReload,
     childSections,
     handlePurchase,
     purchaseLoading,

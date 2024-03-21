@@ -17,7 +17,7 @@ function BannerDefault({bannerAlert, setBannerAlert}) {
           <List>
             {
               bannerAlert.content.map((item, key) => {
-                return (
+                return item && (
                   <List.Item key={key}>
                     <Text variant="bodySm">{item.debugMessage ?? item.message}</Text>
                   </List.Item>

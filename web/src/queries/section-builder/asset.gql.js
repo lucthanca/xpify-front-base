@@ -2,8 +2,8 @@ import { gql } from '@apollo/client';
 
 /* Asset in Store */
 export const UPDATE_ASSET_MUTATION = gql`
-  mutation Update($theme_id: String!, $asset: String!, $value: String!) {
-    updateAsset(theme_id: $theme_id, asset: $asset, value: $value) {
+  mutation Update($theme_id: String!, $key: String!) {
+    updateAsset(theme_id: $theme_id, key: $key) {
       key
       value
       public_url
@@ -14,12 +14,13 @@ export const UPDATE_ASSET_MUTATION = gql`
       checksum
       theme_id
       errors
+      name
     }
   }
 `;
 export const DELETE_ASSET_MUTATION = gql`
-  mutation Delete($theme_id: String!, $asset: String!) {
-    deleteAsset(theme_id: $theme_id, asset: $asset) {
+  mutation Delete($theme_id: String!, $key: String!) {
+    deleteAsset(theme_id: $theme_id, key: $key) {
       message
     }
   }

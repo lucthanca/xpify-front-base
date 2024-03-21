@@ -10,13 +10,16 @@ import {
   InlineStack,
   Button,
   Icon,
-  Box
+  Box,
+  Text
 } from '@shopify/polaris';
 import { NoteIcon, WrenchIcon } from '@shopify/polaris-icons';
+import { useToast } from '@shopify/app-bridge-react';
 import { useQuery, useMutation } from "@apollo/client";
-import BannerDefault from '~/components/block/banner';
+import BannerDefault from '~/components/block/banner/alert';
 import { UPDATE_ASSET_MUTATION, DELETE_ASSET_MUTATION } from "~/queries/section-builder/asset.gql";
 import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
+import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
 
 const titleRoleTheme = {
   'main': 'Live',
@@ -24,19 +27,49 @@ const titleRoleTheme = {
   'development': 'Dev',
 };
 
-function ModalInstallSection({section, reloadSection}) {
+function ModalInstallSection({section, reloadSection, fullWith = true}) {
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState(undefined);
+  const [bannerSuccess, setBannerSuccess] = useState(undefined);
+  const [bannerError, setBannerError] = useState(undefined);
+  const toast = useToast();
 
   const { data:themesData } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
     skip: Boolean(!section.entity_id),
   });
   const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
+  const { data: groupChildSections, refetch: childSectionReload } = useQuery(SECTIONS_QUERY, {
+    fetchPolicy: "cache-and-network",
+    variables: {
+      filter: {
+        product_id: section?.child_ids ?? []
+      },
+      pageSize: 99,
+      currentPage: 1
+    },
+    skip: !Array.isArray(section?.child_ids) || section?.child_ids?.length === 0,
+  });
+  const childSections = useMemo(() => groupChildSections?.getSections?.items || [], [groupChildSections]);
+  
   const handleSelectChange = useCallback(
     (value) => setSelected(value),
     [],
   );
+  const getUpdateMessage = useCallback((item, currentTheme, parent = null) => {
+    const installVersion = item?.installed && item.installed.find(item => item.theme_id == currentTheme)?.product_version;
+    if (installVersion) {
+      if (installVersion != item.version) {
+        return {message: `Update ${item.name} v${installVersion} to v${item.version}`};
+      } else {
+        return '';
+      }
+    } else {
+      if (parent?.child_ids) {
+        return {message: `Add ${item.name} v${item.version}`};
+      }
+    }
+  }, []);
 
   useMemo(() => {
     if (themes && themes.length) {
@@ -46,35 +79,58 @@ function ModalInstallSection({section, reloadSection}) {
   const options = useMemo(() => {
     return themes
     ? themes.map(theme => {
-      var prefix = {};
       var status = 'Not install';
+
       if (section?.installed) {
-        var installVersion = section.installed.find(item => item.theme_id === theme.id)?.product_version;
-        if (installVersion) {
-          if (installVersion === section.version) {
-            prefix = {
-              'prefix': <Badge tone="success">v{installVersion}</Badge>
-            };
-            status = 'Installed';
-          } else {
-            prefix = {
-              'prefix': <Badge tone="warning">v{installVersion}</Badge>
-            };
-            status = 'Should update';
-          }
+        var content;
+        if (childSections.length) {
+          content = childSections.map(item => getUpdateMessage(item, theme.id, section))
+        } else {
+          content = [getUpdateMessage(section, theme.id)];
+        }
+  
+        content = content.filter(item => item !== undefined);
+        if (content.length) {
+          status = 'Installed';
+        }
+        content = content.filter(item => item !== "");
+        if (content.length) {
+          status = 'Should update';
         }
       }
+
       return ({
         value: theme.id,
-        label: `${theme.name}(${titleRoleTheme[theme.role]}) - ${status} `,
-        ...prefix
+        label: `${theme.name}(${titleRoleTheme[theme.role]}) - ${status} `
       })
     })
     : [];
-  }, [section, themes]);
+  }, [section, themes, childSections]);
+
   const installed = useMemo(() => {
-    return section?.installed && section.installed.find(item => item.theme_id == selected)
-  }, [section, selected]);
+    setBannerAlert(undefined);
+    if (!section?.installed) {
+      return false;
+    }
+
+    var content;
+    if (childSections.length) {
+      content = childSections.map(item => getUpdateMessage(item, selected, section));
+    } else {
+      content = [getUpdateMessage(section, selected)];
+    }
+    content = content.filter(item => item !== undefined);
+    const contentUpdate = content.filter(item => item !== "");
+    if (contentUpdate.length) {
+      setBannerAlert({
+        'title': 'You should update section to laster version!',
+        'tone': 'info',
+        'content': contentUpdate
+      });
+    }
+
+    return content.length ? true : false;
+  }, [section, selected, childSections]);
 
   const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION);
   const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION);
@@ -83,92 +139,113 @@ function ModalInstallSection({section, reloadSection}) {
     await updateAction({ 
       variables: {
         theme_id: selected,
-        asset: section?.src,
-        value: ''
+        key: section?.url_key
       }
     });
   }, [selected]);
   const handleDelete = useCallback(async () => {
     await deleteAction({ 
       variables: {
-        theme_id: selected[0],
-        asset: section?.src
+        theme_id: selected,
+        key: section?.url_key
       }
     });
   }, [selected]);
 
   useEffect(() => {
-    if (dataUpdate) {
-      if (!dataUpdate.updateAsset?.errors && dataUpdate.updateAsset?.key) {
-        setBannerAlert({
-          'title': 'This section has been successfully installed! 🎉',
+    if (dataUpdate && dataUpdate.updateAsset.length) {
+      const updateSuccess = dataUpdate.updateAsset.filter(item => (!item?.errors && item?.key));
+      const updateFail = dataUpdate.updateAsset.filter(item => (item?.errors || !item?.key));
+
+      if (updateSuccess.length) {
+        setBannerSuccess({
+          'title': `This product has been successfully installed in theme ` + themes.find(item => item.id == selected).name,
           'tone': 'success',
           'action': {content: 'Customize', icon: WrenchIcon},
-          'content': [{'message': 'Access theme ' + themes.find(item => item.id == selected).name + ' and add section ' + section?.name}]
-        });
-      } else {
-        setBannerAlert({
-          'title': dataUpdate.updateAsset?.errors ?? 'You can not install sections to a demo theme',
-          'tone': 'critical'
+          'content': updateSuccess.map(item => {
+            return {message: 'Add successfully the section ' + item.name};
+          })
         });
       }
+
+      if (updateFail.length) {
+        setBannerError({
+          'title': `Error`,
+          'tone': 'critical',
+          'content': updateFail.map(item => {
+            return {message: `Fail ${item.name}. ${item.errors ?? ""}`};
+          })
+        });
+      }
+
       reloadSection();
+      childSectionReload();
     }
   }, [dataUpdate]);
   useEffect(() => {
     if (dataDelete) {
-      if (dataDelete.deleteAsset?.message) {
-        setBannerAlert({
-          'title': dataDelete.deleteAsset.message.replace(section?.src, section?.name)
-        });
-      }
+      toast.show('Deleted...');
       reloadSection();
+      childSectionReload();
     }
   }, [dataDelete]);
   useEffect(() => {
     if (dataUpdateE) {
-      setBannerAlert({
+      setBannerError({
         'title': dataUpdateE.message,
         'tone': 'critical',
         'content': dataUpdateE.graphQLErrors ?? []
       });
-    } else if (!section.actions?.install) {
-      setBannerAlert({
-        'title': 'Chua mua section nay',
-        'tone': 'warning'
-      });
     }
-  }, [section, dataUpdateE]);
+  }, [dataUpdateE]);
 
   return (
     themes &&
-    <>
-      <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
-      <Select
-        labelInline
-        options={options}
-        onChange={handleSelectChange}
-        value={selected}
-      />
-      <InlineGrid columns={2} gap={200}>
-        <Button
-          onClick={handleUpdate}
-          variant='primary'
-          disabled={!section.actions?.install || !selected}
-          loading={dataUpdateL}
-        >
-          {installed ? 'Re-install section' : 'Install section'}
-        </Button>
-        <Button
-          onClick={handleDelete}
-          tone="critical"
-          disabled={section.installed ? !installed : true}
-          loading={dataDeleteL}
-        >
-          Delete section
-        </Button>
+    <BlockStack gap='200'>
+      {
+        (bannerAlert || bannerSuccess || bannerError) &&
+        <Box>
+          <BannerDefault bannerAlert={bannerSuccess} setBannerAlert={setBannerSuccess} />
+          <BannerDefault bannerAlert={bannerError} setBannerAlert={setBannerError} />
+          <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
+        </Box>
+      }
+
+      <Text variant='bodySm' fontWeight='bold'>Choose theme for installation:</Text>
+
+      <InlineGrid columns={fullWith ? 1 : {sm: 1, md: ['twoThirds', 'oneThird']}} gap={200} alignItems='center'>
+        <div>
+          <Select
+            labelInline
+            options={options}
+            onChange={handleSelectChange}
+            value={selected}
+          />
+        </div>
+        <div>
+          <InlineGrid columns={2} gap={200}>
+            <Button
+              onClick={handleUpdate}
+              variant='primary'
+              disabled={!section.actions?.install || !selected}
+              loading={dataUpdateL}
+              fullWidth
+            >
+              {installed ? 'Reinstall to theme' : 'Install to theme'}
+            </Button>
+            <Button
+              onClick={handleDelete}
+              tone="critical"
+              disabled={section.installed ? !installed : true}
+              loading={dataDeleteL}
+              fullWidth
+            >
+              Delete from theme
+            </Button>
+          </InlineGrid>
+        </div>
       </InlineGrid>
-    </>
+    </BlockStack>
   );
 }
 

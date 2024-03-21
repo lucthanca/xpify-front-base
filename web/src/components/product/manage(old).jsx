@@ -9,7 +9,7 @@ import {
 } from '@shopify/polaris';
 import { NoteIcon, WrenchIcon } from '@shopify/polaris-icons';
 import { useMutation } from "@apollo/client";
-import BannerDefault from '~/components/block/banner';
+import BannerDefault from '~/components/block/banner/alert';
 import { UPDATE_ASSET_MUTATION, DELETE_ASSET_MUTATION } from "~/queries/section-builder/asset.gql";
 
 function ModalInstallSection({currentProduct, themes, isShowPopup, setIsShowPopup, setBannerAlert, reloadProduct}) {
