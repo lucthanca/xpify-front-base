@@ -39,7 +39,7 @@ function ModalInstallSection({section, reloadSection, fullWith = true}) {
     skip: Boolean(!section.entity_id),
   });
   const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
-  const { data: groupChildSections, refetch: childSectionReload } = useQuery(SECTIONS_QUERY, {
+  const { data: groupChildSections, loading: groupChildSectionsLoad, refetch: childSectionReload } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       filter: {
@@ -80,11 +80,14 @@ function ModalInstallSection({section, reloadSection, fullWith = true}) {
     return themes
     ? themes.map(theme => {
       var status = 'Not install';
+      const installedInTheme = section?.installed && section.installed.find(item => item.theme_id == theme.id);
 
-      if (section?.installed) {
-        var content;
+      if (installedInTheme) {
+        var content = [];
         if (childSections.length) {
-          content = childSections.map(item => getUpdateMessage(item, theme.id, section))
+          if (!groupChildSectionsLoad) {
+            content = childSections.map(item => getUpdateMessage(item, theme.id, section))
+          }
         } else {
           content = [getUpdateMessage(section, theme.id)];
         }
@@ -101,11 +104,14 @@ function ModalInstallSection({section, reloadSection, fullWith = true}) {
 
       return ({
         value: theme.id,
-        label: `${theme.name}(${titleRoleTheme[theme.role]}) - ${status} `
+        label: `${theme.name}(${titleRoleTheme[theme.role]}) - ${status}`
       })
     })
-    : [];
-  }, [section, themes, childSections]);
+    : {
+      value: 0,
+      label: `Loading...`
+    };
+  }, [section, themes, groupChildSectionsLoad]);
 
   const installed = useMemo(() => {
     setBannerAlert(undefined);
@@ -113,24 +119,31 @@ function ModalInstallSection({section, reloadSection, fullWith = true}) {
       return false;
     }
 
-    var content;
-    if (childSections.length) {
-      content = childSections.map(item => getUpdateMessage(item, selected, section));
-    } else {
-      content = [getUpdateMessage(section, selected)];
-    }
-    content = content.filter(item => item !== undefined);
-    const contentUpdate = content.filter(item => item !== "");
-    if (contentUpdate.length) {
-      setBannerAlert({
-        'title': 'You should update section to laster version!',
-        'tone': 'info',
-        'content': contentUpdate
-      });
-    }
+    const installedInTheme = section?.installed && section.installed.find(item => item.theme_id == selected);
 
-    return content.length ? true : false;
-  }, [section, selected, childSections]);
+    if (installedInTheme) {
+      var content = [];
+      if (childSections.length) {
+        if (!groupChildSectionsLoad) {
+          content = childSections.map(item => getUpdateMessage(item, selected, section));
+        }
+      } else {
+        content = [getUpdateMessage(section, selected)];
+      }
+      content = content.filter(item => item !== undefined);
+      const contentUpdate = content.filter(item => item !== "");
+      if (contentUpdate.length) {
+        setBannerAlert({
+          'title': 'You should update section to laster version!',
+          'tone': 'info',
+          'content': contentUpdate
+        });
+      }
+
+      return content.length ? true : false;
+    }
+    return false;
+  }, [selected, options]);
 
   const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION);
   const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION);

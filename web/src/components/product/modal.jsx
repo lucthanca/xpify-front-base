@@ -184,23 +184,6 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
                 </BlockStack>
               </Card>
             }
-
-            {/* <CalloutCard
-              title="Learn more"
-              illustration="https://cdn.shopify.com/s/assets/admin/checkout/settings-customizecart-705f57c725ac05be5a34ec20c05b94298cb8afd10aac7bd9c7ad02030f48cfa0.svg"
-              primaryAction={{
-                content: 'Try section',
-                icon: <Icon source={WrenchIcon} tone="base" />
-              }}
-              secondaryAction={{
-                content: 'View demo store',
-                icon: <Icon source={ViewIcon} tone="base" />,
-                url: product.demo_link,
-                target: '_blank'
-              }}
-            >
-              <div dangerouslySetInnerHTML={{__html: product.release_note}}></div>
-            </CalloutCard> */}
           </BlockStack>
         </InlineGrid>
       </Modal.Section>

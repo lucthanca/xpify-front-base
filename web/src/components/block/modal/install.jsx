@@ -33,7 +33,7 @@ import { SECTION_QUERY } from "~/queries/section-builder/product.gql";
 import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
 import { useRedirectPlansPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 
-function ModalInstall({section, isShowPopup, setIsShowPopup}) {
+function ModalInstall({section, setSectionDetail, isShowPopup, setIsShowPopup}) {
   const { data:sectionDetail, refetch:sectionDetailReload } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
@@ -44,6 +44,9 @@ function ModalInstall({section, isShowPopup, setIsShowPopup}) {
   const product = useMemo(() => {
     return {...section, ...sectionDetail?.getSection};
   }, [section, sectionDetail]);
+  useEffect(() => {
+    setSectionDetail(product);
+  }, [product]);
 
   return (
     <Modal

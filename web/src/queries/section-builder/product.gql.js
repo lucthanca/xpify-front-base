@@ -7,6 +7,7 @@ const CommonSectionField = gql`
     name
     url_key
     price
+    short_description
     description
     demo_link
     images { src }
@@ -18,6 +19,10 @@ const CommonSectionField = gql`
       purchase
       install
       plan
+    }
+    installed {
+      theme_id
+      product_version
     }
   }
 `;
@@ -53,10 +58,6 @@ export const SECTIONS_QUERY = gql`
         }
         ... on Section {
           version release_note src plan_id
-          installed {
-            theme_id
-            product_version
-          }
           ...PricingPlanFragment
         }
         entity_id
