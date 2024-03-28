@@ -21,15 +21,18 @@ const productType = {
   'group': 2
 };
 
-function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, lazyLoadImg = true}) {
+function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, onQuickViewClick, lazyLoadImg = true}) {
   console.log('re-render-productCard');
 
-  const handleQuickView = useCallback((item) => {
-    setIsShowPopup(prev => !prev);
-    setSection(item);
-  }, []);
+  const handleQuickView = useCallback(() => {
+    setIsShowPopup && setIsShowPopup(prev => !prev);
+    setSection && setSection(item);
+    if (onQuickViewClick) {
+      onQuickViewClick(item);
+    }
+  }, [item]);
   const handleInstall = useCallback((item) => {
-    setIsShowPopupInstall(prev => !prev);
+    setIsShowPopupInstall && setIsShowPopupInstall(prev => !prev);
     setSection(item);
   }, []);
 
@@ -46,14 +49,15 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, l
   const { handlePurchase, purchaseLoading} = usePurchase();
 
   return (
-    item && 
+    item &&
     <>
-      <Card padding={0} background="bg-surface-secondary">
-        <div className='pointer' onClick={() => handleRedirect(item)}>
+      <Card padding='0' background="bg-surface-secondary" className='h-full'>
+        <div className='pointer aspect-square' onClick={() => handleRedirect(item)}>
           <img
             src={item.images[0]?.src}
             alt={item.name}
             loading={lazyLoadImg ? "lazy" : "eager"}
+            className='object-cover w-full h-full'
           />
         </div>
 
@@ -81,26 +85,26 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, l
             <InlineStack gap={200}>
               {
                 item.type_id == productType.simple &&
-                <Button 
-                  icon={<Icon source={ViewIcon} tone="base" />} 
+                <Button
+                  icon={<Icon source={ViewIcon} tone="base" />}
                   size="large"
-                  onClick={() => handleQuickView(item)}
+                  onClick={handleQuickView}
                 />
               }
               {
                 item.actions?.install &&
-                <Button 
-                  loading={false} 
-                  icon={<Icon source={PlusCircleIcon} tone="base" />} 
+                <Button
+                  loading={false}
+                  icon={<Icon source={PlusCircleIcon} tone="base" />}
                   size="large"
                   onClick={() => handleInstall(item)}
                 />
               }
               {
                 item.actions?.purchase &&
-                <Button 
-                  loading={purchaseLoading} 
-                  icon={<Icon source={CartSaleIcon} tone="base" />} 
+                <Button
+                  loading={purchaseLoading}
+                  icon={<Icon source={CartSaleIcon} tone="base" />}
                   size="large"
                   onClick={() => handlePurchase(item)}
                 />

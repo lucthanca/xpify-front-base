@@ -14,7 +14,7 @@ type SectionImage = {
 type SectionActions = {
   install: boolean;
   purchase: boolean;
-  play: boolean;
+  plan: boolean;
 };
 export type Install = {
   theme_id: string;
@@ -35,6 +35,7 @@ export interface PricingPlan {
   sort_order: number;
 }
 export interface SectionDataInterface {
+  id: string;
   entity_id: string;
   name: string;
   description: string;

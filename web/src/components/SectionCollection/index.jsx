@@ -5,6 +5,7 @@ import SkeletonProduct from '~/components/product/skeleton';
 import ProductList from '~/components/product/list';
 import Paginate from '~/components/block/paginate/default';
 import { useSectionCollection } from '~/talons/section/useSectionCollection';
+import BestSeller from '~/components/BestSellers';
 
 const SectionCollection = props => {
   const {
@@ -33,6 +34,19 @@ const SectionCollection = props => {
     shouldPinTagFilter,
   } = useSectionCollection();
 
+  const splideConfig = {
+    options: {
+      perPage: 5,
+      gap: '1rem',
+      pagination: false,
+      breakpoints:{
+        425: { perPage: 1 },
+        768: { perPage: 3, gap: '0.5rem' },
+        2560: { perPage: 5 }
+      },
+    },
+  }
+
   return (
     <>
       <Layout.Section>
@@ -54,6 +68,9 @@ const SectionCollection = props => {
           {/*/>*/}
 
           <Box padding='600'>
+            <BlockStack gap='200'>
+              <BestSeller configSplide={splideConfig} />
+            </BlockStack>
             <BlockStack gap='200'>
               {
                 !debounceLoading && sections !== undefined ? (

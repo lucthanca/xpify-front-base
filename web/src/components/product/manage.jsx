@@ -27,7 +27,7 @@ const titleRoleTheme = {
   'development': 'Dev',
 };
 
-function ModalInstallSection({section, reloadSection, fullWith = true}) {
+function ModalInstallSection({refectQuery, section, reloadSection, fullWith = true}) {
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState(undefined);
   const [bannerSuccess, setBannerSuccess] = useState(undefined);
@@ -51,7 +51,7 @@ function ModalInstallSection({section, reloadSection, fullWith = true}) {
     skip: !Array.isArray(section?.child_ids) || section?.child_ids?.length === 0,
   });
   const childSections = useMemo(() => groupChildSections?.getSections?.items || [], [groupChildSections]);
-  
+
   const handleSelectChange = useCallback(
     (value) => setSelected(value),
     [],
@@ -91,7 +91,7 @@ function ModalInstallSection({section, reloadSection, fullWith = true}) {
         } else {
           content = [getUpdateMessage(section, theme.id)];
         }
-  
+
         content = content.filter(item => item !== undefined);
         if (content.length) {
           status = 'Installed';
@@ -145,11 +145,15 @@ function ModalInstallSection({section, reloadSection, fullWith = true}) {
     return false;
   }, [selected, options]);
 
-  const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION);
-  const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION);
+  const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION, {
+    refetchQueries: [refectQuery],
+  });
+  const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION, {
+    refetchQueries: [refectQuery],
+  });
 
   const handleUpdate = useCallback(async () => {
-    await updateAction({ 
+    await updateAction({
       variables: {
         theme_id: selected,
         key: section?.url_key
@@ -157,7 +161,7 @@ function ModalInstallSection({section, reloadSection, fullWith = true}) {
     });
   }, [selected]);
   const handleDelete = useCallback(async () => {
-    await deleteAction({ 
+    await deleteAction({
       variables: {
         theme_id: selected,
         key: section?.url_key
@@ -191,14 +195,14 @@ function ModalInstallSection({section, reloadSection, fullWith = true}) {
         });
       }
 
-      reloadSection();
+      // reloadSection();
       childSectionReload();
     }
   }, [dataUpdate]);
   useEffect(() => {
     if (dataDelete) {
       toast.show('Deleted...');
-      reloadSection();
+      // reloadSection();
       childSectionReload();
     }
   }, [dataDelete]);

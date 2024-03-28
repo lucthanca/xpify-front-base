@@ -22,6 +22,7 @@ const CommonSectionField = gql`
       plan
     }
     installed {
+      id
       theme_id
       product_version
     }
@@ -80,7 +81,6 @@ export const SECTION_QUERY = gql`
   query GetSectionByKey($key: String!) {
     getSection(key: $key) {
       __typename
-      entity_id
       ...CommonSectionField
       ... on Section { plan_id src version release_note ...PricingPlanFragment }
       categories
@@ -179,4 +179,31 @@ export const SECTIONS_INSTALLED_QUERY = gql`
     }
   }
   ${CommonSectionField}
+`;
+
+const commonSectionFragment = gql`
+  fragment CommonSectionFragment on SectionInterface {
+    ...CommonSectionField
+    ... on Section { plan_id src version release_note ...PricingPlanFragment }
+    categoriesV2 { id name }
+  }
+  ${CommonSectionField}
+  ${PricingPlanFragment}
+`;
+export const BEST_SELLER_QUERY = gql`
+  query GetBestSeller {
+    bestSeller {
+      ...CommonSectionFragment
+    }
+  }
+  ${commonSectionFragment}
+`;
+export const SECTION_V2_QUERY_KEY = 'section';
+export const SECTION_V2_QUERY = gql`
+  query GetSectionByKeyV2($key: String!) {
+    ${SECTION_V2_QUERY_KEY}(key: $key) {
+      ...CommonSectionFragment
+    }
+  }
+  ${commonSectionFragment}
 `;
