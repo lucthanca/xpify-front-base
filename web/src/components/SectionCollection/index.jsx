@@ -42,6 +42,7 @@ const SectionCollection = props => {
       breakpoints:{
         425: { perPage: 1 },
         768: { perPage: 3, gap: '0.5rem' },
+        1200: { perPage: 4 },
         2560: { perPage: 5 }
       },
     },
@@ -71,13 +72,13 @@ const SectionCollection = props => {
             <BlockStack gap='200'>
               <BestSeller configSplide={splideConfig} />
             </BlockStack>
-            <BlockStack gap='200'>
-              {
-                !debounceLoading && sections !== undefined ? (
-                  <ProductList items={sections ?? []} columns={{sm: 1, md: 2, lg: 4}} />
-                ) : (<SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />)
-              }
-            </BlockStack>
+            {/*<BlockStack gap='200'>*/}
+            {/*  {*/}
+            {/*    !debounceLoading && sections !== undefined ? (*/}
+            {/*      <ProductList items={sections ?? []} columns={{sm: 1, md: 2, lg: 4}} />*/}
+            {/*    ) : (<SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />)*/}
+            {/*  }*/}
+            {/*</BlockStack>*/}
           </Box>
         </Card>
       </Layout.Section>

@@ -29,21 +29,21 @@ import ModalInstallSection from '~/components/product/manage'
 import GallerySlider from '~/components/splide/gallery';
 import BannerDefault from '~/components/block/banner/alert';
 import BadgeTag from '~/components/block/badge/tag';
-import { SECTION_QUERY } from "~/queries/section-builder/product.gql";
+import { SECTION_QUERY, SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builder/product.gql';
 import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
 import { useRedirectPlansPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 
-function ModalInstall({section, setSectionDetail, isShowPopup, setIsShowPopup}) {
-  const { data:sectionDetail, refetch:sectionDetailReload } = useQuery(SECTION_QUERY, {
+function ModalInstall({section, url_key, setSectionDetail, isShowPopup, setIsShowPopup}) {
+  const { data:sectionDetail, refetch:sectionDetailReload } = useQuery(SECTION_V2_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
-      key: section?.url_key ?? '',
-      skip: Boolean(!section?.url_key),
+      key: url_key,
+      skip: !url_key,
     }
   });
   const product = useMemo(() => {
-    return {...section, ...sectionDetail?.getSection};
-  }, [section, sectionDetail]);
+    return sectionDetail?.[SECTION_V2_QUERY_KEY];
+  }, [sectionDetail]);
   useEffect(() => {
     setSectionDetail(product);
   }, [product]);

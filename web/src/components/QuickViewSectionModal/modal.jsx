@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { lazy, memo, Suspense } from 'react';
 import { useQuickView } from '~/talons/section/useQuickView';
 import {
   BlockStack,
@@ -10,6 +10,8 @@ import {
   InlineStack,
   Modal,
   SkeletonDisplayText,
+  SkeletonTabs,
+  SkeletonBodyText,
   Text,
   Tooltip,
 } from '@shopify/polaris';
@@ -20,8 +22,9 @@ import BannerDefault from '~/components/block/banner/alert.jsx';
 import ModalInstallSection from '~/components/product/manage.jsx';
 import { PaymentIcon } from '@shopify/polaris-icons';
 import { SECTION_V2_QUERY } from '~/queries/section-builder/product.gql.js';
-import PricingPlan from '~/components/QuickViewSectionModal/pricingPlan.jsx';
 import './style.scss';
+import { PricingPlanSkeleton } from '~/components/QuickViewSectionModal';
+const PricingPlan = lazy(() => import('~/components/QuickViewSectionModal/pricingPlan'));
 
 const QuickViewModal = ({ url_key, show, onClose }) => {
   const talonProps = useQuickView({ key: url_key });
@@ -29,16 +32,19 @@ const QuickViewModal = ({ url_key, show, onClose }) => {
     section,
     loadingWithoutData,
     handlePurchase,
-    handleRedirectProductPage,
+    navigateToSectionPage,
     bannerAlert,
     setBannerAlert,
     purchaseLoading,
+    loading: loadingInBackground,
   } = talonProps;
+
+  const showContent = show && !!section;
 
   return (
     <Modal size='large' open={show} onClose={onClose} title={section?.name ?? 'Loading...'}>
       <Modal.Section>
-        {show && !loadingWithoutData && (
+        {showContent && (
           <InlineGrid columns={{ sm: 1, md: ['twoThirds', 'oneThird'] }} gap='400'>
             <div className='h-full'>
               <div className='sticky top-4'>
@@ -53,7 +59,7 @@ const QuickViewModal = ({ url_key, show, onClose }) => {
               <Card title='Infomation'>
                 <BlockStack gap='200'>
                   <InlineStack gap='200'>
-                    <div className='pointer' onClick={() => handleRedirectProductPage(section.url_key)}>
+                    <div className='pointer' onClick={navigateToSectionPage}>
                       <Text variant='headingMd' as='h2'>
                         {section.name}
                       </Text>
@@ -107,7 +113,11 @@ const QuickViewModal = ({ url_key, show, onClose }) => {
                 </Card>
               )}
 
-              <PricingPlan plan={section?.pricing_plan} subscribable={section?.actions.plan} />
+              {section?.plan_id && (
+                <Suspense fallback={<PricingPlanSkeleton />}>
+                  <PricingPlan loading={loadingInBackground} plan={section?.pricing_plan} subscribable={section?.actions.plan} />
+                </Suspense>
+              )}
             </BlockStack>
           </InlineGrid>
         )}

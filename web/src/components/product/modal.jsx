@@ -36,6 +36,7 @@ import { useRedirectPlansPage, useRedirectSectionPage } from '~/hooks/section-bu
 import { usePurchase } from '~/hooks/section-builder/purchase';
 
 function ModalProduct({section, isShowPopup, setIsShowPopup}) {
+  return null;
   const { data:sectionDetail, refetch:reloadSectionDetail } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
@@ -46,7 +47,7 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
   const product = useMemo(() => {
     return {...section, ...sectionDetail?.getSection};
   }, [section, sectionDetail]);
-  const [bannerAlert, setBannerAlert] = useState(undefined); 
+  const [bannerAlert, setBannerAlert] = useState(undefined);
   const handleChange = useCallback(() => {
     setIsShowPopup(!isShowPopup);
     setBannerAlert(undefined);
@@ -87,13 +88,13 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
                   product?.tags &&
                   <BadgeTag tags={product.tags} />
                 }
-                
+
                 <Text variant="bodyMd" as="p">Version: {product.version}</Text>
 
                 <Text variant="bodyLg" as="p" fontWeight='bold'>${product.price}</Text>
 
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
-                
+
                 {
                   product.actions?.install &&
                   <ModalInstallSection section={product} reloadSection={reloadSectionDetail} />
@@ -104,11 +105,11 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
                   ? <>
                     {
                       product.actions?.purchase &&
-                      <Button 
-                        loading={purchaseLoading} 
-                        icon={<Icon source={PaymentIcon} tone="base" />} 
+                      <Button
+                        loading={purchaseLoading}
+                        icon={<Icon source={PaymentIcon} tone="base" />}
                         size="large"
-                        fullWidth 
+                        fullWidth
                         onClick={() => handlePurchase(product)}
                       >
                         Purchase
@@ -129,7 +130,7 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
             </Card>
 
             {
-              product.description && 
+              product.description &&
               <Card title="USP">
                 <Box>
                   <BlockStack gap={200}>
@@ -138,7 +139,7 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
                 </Box>
               </Card>
             }
-          
+
             {
               product.pricing_plan
               ? <Card title="Plan">
@@ -168,7 +169,7 @@ function ModalProduct({section, isShowPopup, setIsShowPopup}) {
                   }
                   <Button
                     size="large"
-                    fullWidth 
+                    fullWidth
                     disabled={!product.actions?.plan}
                     onClick={handleRedirectPlansPage}
                   >

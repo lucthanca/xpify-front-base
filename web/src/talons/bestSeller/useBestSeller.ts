@@ -10,6 +10,9 @@ type BestSellerQueryData = {
 export const useBestSeller = () => {
   const client = useApolloClient();
   const cache = client.cache;
+
+  // mark that the component has been initialized
+  const [initialized, setInitialized] = useState(false);
   const { data, loading, error } = useQuery<BestSellerQueryData>(BEST_SELLER_QUERY, {
     fetchPolicy: 'cache-and-network',
   });
@@ -25,19 +28,28 @@ export const useBestSeller = () => {
   const loadingWithoutData = loading && !data;
 
   useEffect(() => {
-    if (items.length === 0) return;
+    // only run this effect when items are available and the component has not been initialized
+    if (items.length === 0 || initialized) return;
 
     // lặp vào ghi luôn vào cache query cho từng section luôn. sau useQuery section_v2 thì sẽ có cache luôn
     items.forEach(item => {
+      let moreInfo: {
+        [K in keyof SectionData]: SectionData[K];
+      } = {} as any;
+      if (!item?.pricing_plan?.id) {
+        moreInfo.pricing_plan = null;
+      }
       cache.writeQuery({
         query: SECTION_V2_QUERY,
         data: {
-          [SECTION_V2_QUERY_KEY]: item,
+          [SECTION_V2_QUERY_KEY]: { ...item, ...moreInfo },
         },
         variables: { key: item.url_key },
       });
+      // mark that the component has been initialized
+      setInitialized(true);
     });
-  }, [items]);
+  }, [items, initialized]);
   return {
     items,
     loadingWithoutData,

@@ -31,7 +31,7 @@ const CommonSectionField = gql`
 const PricingPlanFragment = gql`
   fragment PricingPlanFragment on Section {
     pricing_plan {
-      name code prices { interval amount } description
+      id name code prices { interval amount } description
     }
   }
 `;
@@ -55,16 +55,13 @@ export const SECTIONS_QUERY = gql`
       currentPage: $currentPage
     ) {
       items {
-        __typename
         ...CommonSectionField
         ... on GroupSection {
           child_ids
         }
         ... on Section {
           version release_note src plan_id
-          ...PricingPlanFragment
         }
-        entity_id
       }
       total_count
       page_info {
@@ -75,7 +72,6 @@ export const SECTIONS_QUERY = gql`
     }
   }
   ${CommonSectionField}
-  ${PricingPlanFragment}
 `;
 export const SECTION_QUERY = gql`
   query GetSectionByKey($key: String!) {
@@ -184,11 +180,10 @@ export const SECTIONS_INSTALLED_QUERY = gql`
 const commonSectionFragment = gql`
   fragment CommonSectionFragment on SectionInterface {
     ...CommonSectionField
-    ... on Section { plan_id src version release_note ...PricingPlanFragment }
+    ... on Section { plan_id src version release_note }
     categoriesV2 { id name }
   }
   ${CommonSectionField}
-  ${PricingPlanFragment}
 `;
 export const BEST_SELLER_QUERY = gql`
   query GetBestSeller {
@@ -203,7 +198,11 @@ export const SECTION_V2_QUERY = gql`
   query GetSectionByKeyV2($key: String!) {
     ${SECTION_V2_QUERY_KEY}(key: $key) {
       ...CommonSectionFragment
+      ...on Section {
+        ...PricingPlanFragment
+      }
     }
   }
   ${commonSectionFragment}
+  ${PricingPlanFragment}
 `;

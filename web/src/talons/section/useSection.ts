@@ -52,7 +52,7 @@ export interface SectionDataInterface {
 export type SectionData = SectionDataInterface & {
   actions: SectionActions;
   installed: Install[];
-  pricing_plan: PricingPlan;
+  pricing_plan: PricingPlan | null | undefined;
   version: String;
   release_note: String;
   src: String

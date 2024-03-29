@@ -10,30 +10,51 @@ import {
   Text
 } from '@shopify/polaris';
 import { ViewIcon, PlusCircleIcon, CartSaleIcon } from '@shopify/polaris-icons';
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import BadgeTag from '~/components/block/badge/tag';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
 import { usePurchase } from '~/hooks/section-builder/purchase';
 import { useRedirectGroupPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
+import { useSectionListContext } from '~/context';
 
 const productType = {
   'simple': 1,
   'group': 2
 };
 
-function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, onQuickViewClick, lazyLoadImg = true}) {
-  console.log('re-render-productCard');
-
+const QuickViewButton = props => {
+  const { item } = props;
+  const [{ isQuickViewModalLoading }, { setActiveSection }] = useSectionListContext();
+  const [localLoading, setLocalLoading] = useState(false);
   const handleQuickView = useCallback(() => {
-    setIsShowPopup && setIsShowPopup(prev => !prev);
-    setSection && setSection(item);
-    if (onQuickViewClick) {
-      onQuickViewClick(item);
-    }
+    setLocalLoading(true);
+
+    // make this set active section to another process
+    setTimeout(() => {
+      setActiveSection && setActiveSection(item);
+    }, [0]);
   }, [item]);
+  const loading = useMemo(() => {
+    return localLoading;
+  }, [isQuickViewModalLoading, localLoading]);
+  useEffect(() => {
+    setLocalLoading(isQuickViewModalLoading);
+  }, [isQuickViewModalLoading]);
+  return (
+    <Button
+      icon={<Icon source={ViewIcon} tone="base" />}
+      size="large"
+      onClick={handleQuickView}
+      loading={loading}
+    />
+  );
+};
+
+function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, lazyLoadImg = true}) {
+  console.log('re-render-productCard');
   const handleInstall = useCallback((item) => {
     setIsShowPopupInstall && setIsShowPopupInstall(prev => !prev);
-    setSection(item);
+    setSection && setSection(item);
   }, []);
 
   const handleRedirectProductPage = useRedirectSectionPage();
@@ -82,15 +103,8 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, o
                 </Text>
               }
             </BlockStack>
-            <InlineStack gap={200}>
-              {
-                item.type_id == productType.simple &&
-                <Button
-                  icon={<Icon source={ViewIcon} tone="base" />}
-                  size="large"
-                  onClick={handleQuickView}
-                />
-              }
+            <InlineStack gap='200'>
+              {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} />)}
               {
                 item.actions?.install &&
                 <Button

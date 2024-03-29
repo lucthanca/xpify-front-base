@@ -1,13 +1,23 @@
 import { memo } from 'react';
-import { BlockStack, Button, Card, Icon, InlineStack, Text } from '@shopify/polaris';
+import {
+  BlockStack,
+  Button,
+  Card,
+  Icon,
+  InlineStack,
+  Text,
+} from '@shopify/polaris';
 import { CheckIcon } from '@shopify/polaris-icons';
 import PropTypes from 'prop-types';
-import { useRedirectPlansPage } from '~/hooks/section-builder/redirect.js';
+import { useRedirectPlansPage } from '~/hooks/section-builder/redirect';
+import Skeleton from '~/components/QuickViewSectionModal/pricingPlanSkeleton';
 
 const SectionPricingPlan = props => {
-  const { plan, subscribable } = props;
+  const { loading, plan, subscribable } = props;
   const handleRedirectPlansPage = useRedirectPlansPage();
 
+  console.log({ plan });
+  if (loading && !plan) return <Skeleton />;
   if (!plan) return null;
   return (
     <Card title='Plan'>

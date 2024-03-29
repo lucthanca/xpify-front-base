@@ -23,7 +23,7 @@ function ProductList({items, columns, isSimple = true}) {
   }
 
   return (
-    <InlineGrid columns={columns} gap={600}>
+    <InlineGrid columns={columns} gap='600'>
       {
         items.map(item => {
           if (sectionDetail?.entity_id == item.entity_id && item !== sectionDetail) {
