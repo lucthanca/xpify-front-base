@@ -9,6 +9,7 @@ import {
   Image,
   InlineGrid,
   InlineStack,
+  List,
   Text
 } from "@shopify/polaris";
 import {
@@ -16,6 +17,7 @@ import {
   ChevronDownIcon
 } from '@shopify/polaris-icons';
 import CollapsibleGuide from "~/components/block/collapsible/guide";
+import { useGetThemeUrl } from "~/hooks/section-builder/redirect";
 
 const totalStep = 3;
 
@@ -25,6 +27,8 @@ function GuideCard() {
   const [progress, setProgress] = useState(0);
 
   const handleToggle = useCallback(() => setOpen((open) => !open), []);
+  const urlEmbedApp = useGetThemeUrl('quickstart-249efe07.myshopify.com', 140402884850, 'editor?context=apps');
+  const urlEditTheme = useGetThemeUrl('quickstart-249efe07.myshopify.com', 140402884850, '/editor');
 
   return (
     <Card padding={0}>
@@ -38,13 +42,13 @@ function GuideCard() {
               icon={<Icon source={open ? ChevronUpIcon : ChevronDownIcon} tone="base" />}
             />
           </InlineGrid>
-          <Text variant="bodySm">Only {totalStep} simple steps to add any sections & blocks to your theme</Text>
+          <Text variant="bodySm">Use this guide to start customizing your Shopify theme with fresh sections and quickly enhance your store's UI/UX.</Text>
 
           <InlineStack>
             <div className="step-complete">
               <Text variant="bodyMd">
                 {
-                  progress === totalStep
+                  progress >= totalStep
                   ? `Done`
                   : `${progress} / ${totalStep} completed`
                 }
@@ -64,8 +68,9 @@ function GuideCard() {
             <CollapsibleGuide
               options={{
                 'id': 'step_1',
-                'title': 'Step 1',
-                'content': 'By giving values to a key, this technique is used to store objects in localStorage. This value can be of any datatype, including text, integer, object, array, and so on.'
+                'title': '1. Enable the app embed in theme editor',
+                'content': <Button url={urlEmbedApp} target="_blank">Go to themes</Button>,
+                'demo': <Image source="https://sections.puco.io/images/general/enable-app.gif" />
               }}
               setProgress={setProgress}
               openChild={openChild}
@@ -74,9 +79,16 @@ function GuideCard() {
             <CollapsibleGuide
               options={{
                 'id': 'step_2',
-                'title': 'Step 2',
-                'content': 'By giving values to a key',
-                'image': <Image source="https://sections.puco.io/images/general/enable-app.gif" />
+                'title': '2. Install sections to theme',
+                'content': <>
+                  <Text>Description</Text>
+                  <List>
+                    <List.Item>Find sections</List.Item>
+                    <List.Item>Purchase sections</List.Item>
+                    <List.Item>Add sections to themes</List.Item>
+                  </List>
+                </>,
+                'demo': <iframe width="100%" height="200px" src="https://www.youtube.com/embed/UTdCvYEm-C4?si=WdXmN40TkjDYRpHb" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
               }}
               setProgress={setProgress}
               openChild={openChild}
@@ -85,8 +97,9 @@ function GuideCard() {
             <CollapsibleGuide
               options={{
                 'id': 'step_3',
-                'title': 'Step 3',
-                'content': 'This value can be of any datatype'
+                'title': '3. Customize themes with the added sections',
+                'content': <Button url={urlEditTheme} target="_blank">Go to theme editer</Button>,
+                'demo': <Image source="https://sections.puco.io/images/general/enable-app.gif" />
               }}
               setProgress={setProgress}
               openChild={openChild}

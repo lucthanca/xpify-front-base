@@ -52,7 +52,7 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, o
     item &&
     <>
       <Card padding='0' background="bg-surface-secondary" className='h-full'>
-        <div className='pointer aspect-square' onClick={() => handleRedirect(item)}>
+        <div className='pointer aspect-video' onClick={() => handleRedirect(item)}>
           <img
             src={item.images[0]?.src}
             alt={item.name}

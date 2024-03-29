@@ -73,13 +73,13 @@ function CollapsibleButton({options, setProgress, openChild, setOpenChild}) {
                 expandOnPrint
               >
                 <BlockStack gap={200}>
-                  <InlineGrid columns={options.image ? ['twoThirds', 'oneHalf'] : 1}>
+                  <InlineGrid columns={options.demo ? {sm: 1, md: ['twoThirds', 'oneThird']} : 1}>
                     <BlockStack gap={200} inlineAlign="start">
-                      <Text as="p" variant="bodyMd" tone='subdued'>
+                      <Text as="div" variant="bodyMd" tone='subdued'>
                         {options.content}
                       </Text>
                     </BlockStack>
-                    {options.image}
+                    {options.demo}
                   </InlineGrid>
                 </BlockStack>
               </Collapsible>

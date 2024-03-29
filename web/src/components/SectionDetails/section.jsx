@@ -50,7 +50,7 @@ const SectionFullpageDetails = props => {
     <>
       {sectionLoading && <Loading />}
       <Page
-        backAction={{content: 'Products', onAction: () => handleBackPage()}}
+        backAction={{onAction: handleBackPage}}
         title={section.name}
         titleMetadata={
           <InlineStack gap={200}>
