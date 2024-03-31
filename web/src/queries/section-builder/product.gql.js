@@ -206,3 +206,13 @@ export const SECTION_V2_QUERY = gql`
   ${commonSectionFragment}
   ${PricingPlanFragment}
 `;
+
+export const LATEST_RELEASE_QUERY_KEY = 'recentlyUpdated';
+export const LATEST_RELEASE_QUERY = gql`
+  query GetLatestRelease {
+    ${LATEST_RELEASE_QUERY_KEY} {
+      ...CommonSectionFragment
+    }
+  }
+  ${commonSectionFragment}
+`;

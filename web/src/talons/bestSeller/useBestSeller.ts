@@ -1,28 +1,25 @@
 import { BEST_SELLER_QUERY, SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builder/product.gql';
-import { useApolloClient, useQuery } from '@apollo/client';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { DocumentNode, useApolloClient, useQuery } from '@apollo/client';
+import { useEffect, useMemo, useState } from 'react';
 import { SectionData } from '~/talons/section/useSection';
 
 type BestSellerQueryData = {
-  bestSeller: SectionData[];
+  [key: string]: SectionData[];
 }
 
-export const useBestSeller = () => {
+export const useBestSeller = (query: DocumentNode | undefined, dataKey: string | undefined) => {
   const client = useApolloClient();
   const cache = client.cache;
-
+  const [queryToUse] = useState(() => query || BEST_SELLER_QUERY);
+  const [dataKeyToUse] = useState(() => dataKey || 'bestSeller');
   // mark that the component has been initialized
   const [initialized, setInitialized] = useState(false);
-  const { data, loading, error } = useQuery<BestSellerQueryData>(BEST_SELLER_QUERY, {
+  const { data, loading, error } = useQuery<BestSellerQueryData>(queryToUse, {
     fetchPolicy: 'cache-and-network',
   });
-  const [quickViewProduct, setQuickViewProduct] = useState<SectionData | null>(null);
-  const handleQuickView = useCallback((product: SectionData) => {
-    setQuickViewProduct(product);
-  }, []);
 
   const items = useMemo(() => {
-    return data?.bestSeller || [];
+    return data?.[dataKeyToUse] || [];
   }, [data]);
 
   const loadingWithoutData = loading && !data;
@@ -54,7 +51,5 @@ export const useBestSeller = () => {
     items,
     loadingWithoutData,
     loading,
-    quickViewProduct,
-    handleQuickView,
   };
 };

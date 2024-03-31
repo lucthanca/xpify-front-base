@@ -1,18 +1,14 @@
 import { memo, useMemo } from 'react';
-import { Splide, SplideSlide } from '@splidejs/react-splide';
-import ProductCard from '~/components/product/card.jsx';
-import { useBestSeller } from '~/talons/bestSeller/useBestSeller';
-import './style.scss';
-import BestSellerSlider from '~/components/QuickViewSectionModal/slider';
+import { useLatestRelease } from '~/talons/latestrelease/useLatestRelease';
 import { SectionListProvider } from '~/context';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import ProductCard from '~/components/product/card';
+import QuickViewSlider from '~/components/QuickViewSectionModal/slider';
 
-const BestSeller = props => {
-  const { configSplide } = props;
-  const talonProps = useBestSeller();
+const LatestRelease = ({ configSplide }) => {
   const {
     items,
-  } = talonProps;
-
+  } = useLatestRelease();
   const keys = useMemo(() => {
     return items.map(item => item.url_key);
   }, [items]);
@@ -29,9 +25,9 @@ const BestSeller = props => {
           )
         })}
       </Splide>
-      <BestSellerSlider keys={keys} />
+      <QuickViewSlider keys={keys} />
     </SectionListProvider>
   );
-};
+}
 
-export default memo(BestSeller);
+export default memo(LatestRelease);
