@@ -1,62 +1,38 @@
-import { memo } from 'react';
-import {
-  BlockStack,
-  Box,
-  Card,
-  Text
-} from '@shopify/polaris';
-import ProductCarousel from '~/components/splide/product';
+import React, { memo, useMemo } from 'react';
+import { BlockStack, Card, Text, Box } from '@shopify/polaris';
+import ProductCarousel from '~/components/ProductCarousel';
 import SkeletonProduct from '~/components/product/skeleton';
-import PropTypes from 'prop-types';
+import { SECTIONS_QUERY, QUERY_SECTION_COLLECTION_KEY } from '~/queries/section-builder/product.gql';
+import { useRelatedProducts } from '~/talons/relatedProducts/useRelatedProducts';
 
 const RelatedProducts = props => {
-  const { products, error } = props;
+  const { variables, extractItemList, slideOptions, slidePerPage } = useRelatedProducts();
+  const skeleton = useMemo(() => {
+    return (
+      <Box paddingBlockStart='200'>
+        <SkeletonProduct total={slidePerPage} columns={{ sm: 1, md: 2, lg: 3 }} />
+      </Box>
+    );
+  }, [slidePerPage]);
   // should render error when error is not null
   return (
-    <Card title="Related">
+    <Card title='Related'>
       <BlockStack gap='200'>
-        <Text variant="headingMd" as="h2">Related sections</Text>
-        {products?.length > 0 ? (
-          <Box paddingBlockStart="200">
-            <ProductCarousel
-              configSplide={{
-                options: {
-                  perPage: 3,
-                  gap: '1rem',
-                  pagination: false,
-                  breakpoints:{
-                    425: {
-                      perPage: 1
-                    },
-                    768: {
-                      perPage: 2,
-                      gap: '0.5rem'
-                    },
-                    2560: {
-                      perPage: 3
-                    }
-                  },
-                  autoplay: true,
-                  interval: 3000,
-                  rewind: true
-                }
-              }}
-              items={products}
-            />
-          </Box>
-        ) : (
-          <Box paddingBlockStart="200">
-            <SkeletonProduct total={3} columns={{ sm: 1, md: 2, lg: 3 }} />
-          </Box>
-        )}
+        <Text variant='headingMd' as='h2'>
+          Related sections
+        </Text>
+
+        <ProductCarousel
+          query={SECTIONS_QUERY}
+          queryKey={QUERY_SECTION_COLLECTION_KEY}
+          queryVariables={variables}
+          slideOptions={slideOptions}
+          extractItems={extractItemList}
+          skeleton={skeleton}
+        />
       </BlockStack>
     </Card>
   );
-};
-
-RelatedProducts.propTypes = {
-  products: PropTypes.array,
-  error: PropTypes.object
 };
 
 export default memo(RelatedProducts);

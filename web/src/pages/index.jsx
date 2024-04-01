@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useState } from 'react';
 import {
   BlockStack,
   Box,
@@ -26,6 +26,7 @@ import NavCard from '~/components/block/card/nav';
 import { useRedirectGroupsPage, useRedirectHelpCenterPage, useRedirectMyLibraryPage, useRedirectSectionsPage } from '~/hooks/section-builder/redirect';
 import { useQuery } from "@apollo/client";
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
+import { BestSeller, LatestRelease } from '~/components/hompage';
 
 function HomePage() {
   const { data: myShop } = useQuery(MY_SHOP, {
@@ -90,47 +91,8 @@ function HomePage() {
               </BlockStack>
             </Box>
 
-            <Box>
-              <BlockStack gap={400}>
-                <TitleBlock title='Best Seller' subTitle='See a few examples of magically adding a theme section to your store in a few clicks.' />
-
-                <InlineGrid gap="400" columns={{ sm: 1, md: 2, lg: 3 }}>
-                  <div>
-                    <Tutorial mediaCard={{
-                      portrait: true,
-                      title: "Quickstart 1",
-                      primaryAction: {
-                        content: 'Watch 1',
-                        onAction: () => {},
-                      }
-                    }}
-                    />
-                  </div>
-                  <div>
-                    <Tutorial mediaCard={{
-                      portrait: true,
-                      title: "Quickstart 2",
-                      primaryAction: {
-                        content: 'Watch 2',
-                        onAction: () => {},
-                      }
-                    }}
-                  />
-                  </div>
-                  <div>
-                    <Tutorial mediaCard={{
-                      portrait: true,
-                      title: "Quickstart 3",
-                      primaryAction: {
-                        content: 'Watch 3',
-                        onAction: () => {},
-                      }
-                    }}
-                  />
-                  </div>
-                </InlineGrid>
-              </BlockStack>
-            </Box>
+            <BestSeller />
+            <LatestRelease />
           </BlockStack>
         </Layout.Section>
       </Layout>

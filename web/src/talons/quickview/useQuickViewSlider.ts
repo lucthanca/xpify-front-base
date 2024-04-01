@@ -4,19 +4,22 @@ import { SectionData } from '~/talons/section/useSection';
 
 type SectionListContextState = {
   activeSection: SectionData | null;
+  modal: string;
 };
 type SectionListContextApi = {
   setActiveSection: (section: SectionData | null) => void;
-  setQuickViewModalLoading: (loading: boolean) => void;
+  setModalLoading: (loading: boolean) => void;
+  setModal: (modalName: string | null) => void;
 };
-type SectionListContext = [SectionListContextState, SectionListContextApi];
+export type SectionListContext = [SectionListContextState, SectionListContextApi];
 export const useQuickViewSlider = () => {
-  const [{ activeSection }, { setActiveSection, setQuickViewModalLoading }] = useSectionListContext() as unknown as SectionListContext;
+  const [{ activeSection, modal }, { setActiveSection, setModalLoading, setModal }] = useSectionListContext() as unknown as SectionListContext;
   const onCloseQuickViewModal = useCallback(() => {
-    setQuickViewModalLoading(false);
+    setModalLoading(false);
     setActiveSection(null);
+    setModal(null);
   }, [setActiveSection]);
-  const show = !!activeSection;
+  const show = modal === 'quickView' && !!activeSection;
   return {
     activeSection,
     show,

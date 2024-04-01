@@ -5,7 +5,6 @@ import { ApolloError, useQuery } from '@apollo/client';
 import { SECTION_QUERY } from '~/queries/section-builder/product.gql';
 import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
 import type { ApolloQueryResult } from '@apollo/client/core/types';
-import { useRelatedProducts } from '~/talons/relatedProducts/useRelatedProducts';
 
 type SectionImage = {
   src: string;
@@ -34,6 +33,10 @@ export interface PricingPlan {
   description: string;
   sort_order: number;
 }
+type Category = {
+  id: string;
+  name: string;
+};
 export interface SectionDataInterface {
   id: string;
   entity_id: string;
@@ -46,8 +49,9 @@ export interface SectionDataInterface {
   demo_link: string;
   images: SectionImage[];
   url_key: string;
-  categories: string[];
-  tags: string[];
+  categories: string[] | null;
+  categoriesV2: Category[] | null;
+  tags: string[] | null;
 }
 export type SectionData = SectionDataInterface & {
   actions: SectionActions;
@@ -73,7 +77,6 @@ export type SectionTalon = {
   reloadSection: () => Promise<ApolloQueryResult<SectionData>>;
   themes: ThemeData[] | [];
   section: SectionData | {};
-  relatedProducts: SectionData[];
   sectionError: ApolloError | undefined;
   loadingWithoutData: boolean;
 };
@@ -81,7 +84,6 @@ export type SectionTalon = {
 export const useSection = (): SectionTalon => {
   const { key } = useParams();
   const { purchaseSection, loading: purchaseLoading, error: purchaseError } = useSectionPurchase();
-  const { products: relatedProducts } = useRelatedProducts();
 
   const { data: loadedSection, loading: sectionLoading, error: sectionError, refetch: reloadSection } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
@@ -107,7 +109,6 @@ export const useSection = (): SectionTalon => {
     reloadSection,
     themes,
     section,
-    relatedProducts,
     sectionError,
     loadingWithoutData: sectionLoading && !loadedSection,
   };

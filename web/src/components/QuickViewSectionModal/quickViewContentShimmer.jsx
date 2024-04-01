@@ -31,6 +31,7 @@ export default memo(({ title }) => {
               <SkeletonBodyText lines={5} />
             </BlockStack>
           </Card>
+          <PricingPlanSkeleton />
         </BlockStack>
       </div>
     </InlineGrid>

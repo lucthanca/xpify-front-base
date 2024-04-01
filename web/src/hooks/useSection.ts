@@ -1,7 +1,9 @@
 import { SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builder/product.gql';
-import { ApolloError, DocumentNode, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import type { ApolloError, DocumentNode } from '@apollo/client';
 import { SectionData } from '~/talons/section/useSection';
 import { useMemo } from 'react';
+import type { ApolloQueryResult, OperationVariables } from '@apollo/client/core/types';
 
 type QueryData = {
   [key: string]: SectionData,
@@ -18,6 +20,7 @@ export type UseSectionTalon = {
   loadingWithoutData: boolean,
   loading: boolean,
   error: ApolloError | undefined,
+  refetch: (variables?: Partial<OperationVariables>) => Promise<ApolloQueryResult<QueryData>>,
 };
 
 export const useSection = (props: UseSectionProps): UseSectionTalon => {
@@ -26,7 +29,7 @@ export const useSection = (props: UseSectionProps): UseSectionTalon => {
     query = SECTION_V2_QUERY,
     queryKey = SECTION_V2_QUERY_KEY,
   } = props;
-  const { data, loading, error } = useQuery<QueryData>(query, {
+  const { data, loading, error, refetch } = useQuery<QueryData>(query, {
     fetchPolicy: 'cache-and-network',
     variables: { key },
     skip: !key,
@@ -41,5 +44,6 @@ export const useSection = (props: UseSectionProps): UseSectionTalon => {
     loadingWithoutData: loading && !data,
     loading,
     error,
+    refetch,
   };
 };

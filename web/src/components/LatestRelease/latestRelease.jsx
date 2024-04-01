@@ -1,32 +1,14 @@
-import { memo, useMemo } from 'react';
-import { useLatestRelease } from '~/talons/latestrelease/useLatestRelease';
-import { SectionListProvider } from '~/context';
-import { Splide, SplideSlide } from '@splidejs/react-splide';
-import ProductCard from '~/components/product/card';
-import QuickViewSlider from '~/components/QuickViewSectionModal/slider';
+import { memo } from 'react';
+import ProductCarousel from '~/components/ProductCarousel';
+import { LATEST_RELEASE_QUERY, LATEST_RELEASE_QUERY_KEY } from '~/queries/section-builder/product.gql';
 
-const LatestRelease = ({ configSplide }) => {
-  const {
-    items,
-  } = useLatestRelease();
-  const keys = useMemo(() => {
-    return items.map(item => item.url_key);
-  }, [items]);
+const LatestRelease = ({ sliderConfig }) => {
   return (
-    <SectionListProvider>
-      <Splide {...configSplide}>
-        {items.map((item) => {
-          return (
-            <SplideSlide key={item.id}>
-              <div className='bestSellerCardRoot'>
-                <ProductCard key={item.id} item={item} lazyLoadImg={false} />
-              </div>
-            </SplideSlide>
-          )
-        })}
-      </Splide>
-      <QuickViewSlider keys={keys} />
-    </SectionListProvider>
+    <ProductCarousel
+      query={LATEST_RELEASE_QUERY}
+      queryKey={LATEST_RELEASE_QUERY_KEY}
+      slideOptions={sliderConfig}
+    />
   );
 }
 

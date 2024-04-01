@@ -36,7 +36,7 @@ const PricingPlanFragment = gql`
   }
 `;
 
-const QUERY_SECTION_COLLECTION_KEY = `getSections`;
+export const QUERY_SECTION_COLLECTION_KEY = `getSections`;
 
 /* Simple Product */
 export const SECTIONS_QUERY = gql`
@@ -185,9 +185,10 @@ const commonSectionFragment = gql`
   }
   ${CommonSectionField}
 `;
+export const BEST_SELLER_QUERY_KEY = 'bestSeller';
 export const BEST_SELLER_QUERY = gql`
   query GetBestSeller {
-    bestSeller {
+    ${BEST_SELLER_QUERY_KEY} {
       ...CommonSectionFragment
     }
   }

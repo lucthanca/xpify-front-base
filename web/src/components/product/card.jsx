@@ -23,39 +23,53 @@ const productType = {
 };
 
 const QuickViewButton = props => {
-  const { item } = props;
-  const [{ isQuickViewModalLoading }, { setActiveSection }] = useSectionListContext();
+  const { item, modalName = 'quickView', icon } = props;
+  const [{ modalLoading, modal }, { setActiveSection, setModal }] = useSectionListContext();
   const [localLoading, setLocalLoading] = useState(false);
   const handleQuickView = useCallback(() => {
     setLocalLoading(true);
+    setModal(modalName);
 
     // make this set active section to another process
     setTimeout(() => {
       setActiveSection && setActiveSection(item);
-    }, [0]);
+    }, 0);
   }, [item]);
   const loading = useMemo(() => {
     return localLoading;
-  }, [isQuickViewModalLoading, localLoading]);
+  }, [modalLoading, localLoading]);
+  const btnIcon = useMemo(() => {
+    return icon || (<Icon source={ViewIcon} tone="base" />);
+  }, [icon]);
   useEffect(() => {
-    setLocalLoading(isQuickViewModalLoading);
-  }, [isQuickViewModalLoading]);
+    if (modal !== modalName) return;
+    if (!modalLoading) {
+      setLocalLoading(false);
+      return;
+    }
+    setLocalLoading(modalLoading && item.id === setActiveSection.id);
+  }, [modalLoading]);
   return (
     <Button
-      icon={<Icon source={ViewIcon} tone="base" />}
+      icon={btnIcon}
       size="large"
       onClick={handleQuickView}
       loading={loading}
     />
   );
 };
+const InstallButton = props => {
+  return (
+    <QuickViewButton item={props.item} modalName={'install'} icon={<Icon source={PlusCircleIcon} tone="base" />} />
+  );
+};
 
-function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, lazyLoadImg = true}) {
+function ProductCard({item, lazyLoadImg = true}) {
   console.log('re-render-productCard');
-  const handleInstall = useCallback((item) => {
-    setIsShowPopupInstall && setIsShowPopupInstall(prev => !prev);
-    setSection && setSection(item);
-  }, []);
+  // const handleInstall = useCallback((item) => {
+  //   setIsShowPopupInstall && setIsShowPopupInstall(prev => !prev);
+  //   setSection && setSection(item);
+  // }, []);
 
   const handleRedirectProductPage = useRedirectSectionPage();
   const handleRedirectGroupPage = useRedirectGroupPage();
@@ -105,15 +119,7 @@ function ProductCard({item, setSection, setIsShowPopup, setIsShowPopupInstall, l
             </BlockStack>
             <InlineStack gap='200'>
               {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} />)}
-              {
-                item.actions?.install &&
-                <Button
-                  loading={false}
-                  icon={<Icon source={PlusCircleIcon} tone="base" />}
-                  size="large"
-                  onClick={() => handleInstall(item)}
-                />
-              }
+              {item.actions?.install && <InstallButton item={item} />}
               {
                 item.actions?.purchase &&
                 <Button

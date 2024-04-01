@@ -1,27 +1,34 @@
-import { BEST_SELLER_QUERY, SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builder/product.gql';
+import { SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builder/product.gql';
 import { DocumentNode, useApolloClient, useQuery } from '@apollo/client';
 import { useEffect, useMemo, useState } from 'react';
-import { SectionData } from '~/talons/section/useSection';
+import type { SectionData } from '~/talons/section/useSection';
+import type { OperationVariables } from '@apollo/client/core/types';
 
-type BestSellerQueryData = {
+export type QueryData = {
   [key: string]: SectionData[];
 }
 
-export const useBestSeller = (query: DocumentNode | undefined, dataKey: string | undefined) => {
+export type ExtractItemsCallback = (data?: QueryData) => SectionData[];
+
+export const useCarousel = (query: DocumentNode, dataKey: string, queryVariables?: OperationVariables | undefined, extractItems?: ExtractItemsCallback) => {
   const client = useApolloClient();
   const cache = client.cache;
-  const [queryToUse] = useState(() => query || BEST_SELLER_QUERY);
-  const [dataKeyToUse] = useState(() => dataKey || 'bestSeller');
   // mark that the component has been initialized
   const [initialized, setInitialized] = useState(false);
-  const { data, loading, error } = useQuery<BestSellerQueryData>(queryToUse, {
+  const { data, loading, error } = useQuery<QueryData>(query, {
     fetchPolicy: 'cache-and-network',
+    variables: queryVariables || {},
   });
 
   const items = useMemo(() => {
-    return data?.[dataKeyToUse] || [];
-  }, [data]);
-
+    if (extractItems) {
+      return extractItems(data);
+    }
+    return data?.[dataKey] || [];
+  }, [data, extractItems]);
+  const keys = useMemo(() => {
+    return items.map(item => item.url_key);
+  }, [items]);
   const loadingWithoutData = loading && !data;
 
   useEffect(() => {
@@ -35,6 +42,9 @@ export const useBestSeller = (query: DocumentNode | undefined, dataKey: string |
       } = {} as any;
       if (!item?.pricing_plan?.id) {
         moreInfo.pricing_plan = null;
+      }
+      if (!item?.categoriesV2?.length) {
+        moreInfo.categoriesV2 = null;
       }
       cache.writeQuery({
         query: SECTION_V2_QUERY,
@@ -51,5 +61,6 @@ export const useBestSeller = (query: DocumentNode | undefined, dataKey: string |
     items,
     loadingWithoutData,
     loading,
+    keys,
   };
 };

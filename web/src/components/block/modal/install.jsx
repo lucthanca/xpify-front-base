@@ -55,7 +55,7 @@ function ModalInstall({section, url_key, setSectionDetail, isShowPopup, setIsSho
         title={`Install "${product?.name ?? ''}" to theme`}
       >
         <Modal.Section>
-          <BlockStack gap={400}>
+          <BlockStack gap='400'>
             <ModalInstallSection section={product} reloadSection={sectionDetailReload} />
           </BlockStack>
         </Modal.Section>

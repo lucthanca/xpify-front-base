@@ -1,20 +1,14 @@
-import { memo, useCallback, useState } from 'react';
+import { memo } from 'react';
 import {
-  Badge,
-  Banner,
   BlockStack,
   Box,
-  Button,
   Card,
-  InlineGrid,
   InlineStack,
   Layout,
-  List,
   Page,
-  Select,
   Text
 } from '@shopify/polaris';
-import { PaymentIcon, ViewIcon, LockIcon } from '@shopify/polaris-icons';
+import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
 import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
 import BadgeTag from '~/components/block/badge/tag';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
@@ -33,14 +27,10 @@ const SectionFullpageDetails = props => {
     handlePurchase,
     themes,
     reloadSection,
-    relatedProducts,
     sectionError,
   } = props;
   const handleBackPage = useBackPage();
   const handleRedirectPlansPage = useRedirectPlansPage();
-  const [isShowPopupManage, setIsShowPopupManage] = useState(false);
-  const [bannerAlert, setBannerAlert] = useState(undefined);
-  const handleShowPopup = useCallback(() => setIsShowPopupManage(prev => !prev), []);
 
   if (sectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity') {
     return <NotFound />;
@@ -119,7 +109,7 @@ const SectionFullpageDetails = props => {
 
               <Box>
                 {section.description && (
-                  <Card title="Description"> 
+                  <Card title="Description">
                     <Text variant="headingMd">Description</Text>
                     <Box padding="200">
                       <div dangerouslySetInnerHTML={{__html: section.description}}></div>
@@ -131,7 +121,7 @@ const SectionFullpageDetails = props => {
               <Box>
                 <SectionGallery images={section?.images || []} />
               </Box>
-              
+
               <Box>
                 {section.release_note && (
                   <Card title="Release Note">
@@ -143,7 +133,7 @@ const SectionFullpageDetails = props => {
                 )}
               </Box>
 
-              <RelatedProducts products={relatedProducts} />
+              <RelatedProducts />
             </BlockStack>
           </Layout.Section>
         </Layout>

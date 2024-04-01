@@ -35,16 +35,14 @@ const SectionCollection = props => {
   } = useSectionCollection();
 
   const splideConfig = {
-    options: {
-      perPage: 5,
-      gap: '1rem',
-      pagination: false,
-      breakpoints:{
-        425: { perPage: 1 },
-        768: { perPage: 3, gap: '0.5rem' },
-        1200: { perPage: 4 },
-        2560: { perPage: 5 }
-      },
+    perPage: 5,
+    gap: '1rem',
+    pagination: false,
+    breakpoints:{
+      425: { perPage: 1 },
+      768: { perPage: 3, gap: '0.5rem' },
+      1200: { perPage: 4 },
+      2560: { perPage: 5 }
     },
   }
 
@@ -52,33 +50,33 @@ const SectionCollection = props => {
     <>
       <Layout.Section>
         <Card padding='0'>
-          {/*<Search*/}
-          {/*  searchFilter={searchFilter} setSearchFilter={setSearchFilter}*/}
-          {/*  planFilter={planFilter} setPlanFilter={setPlanFilter}*/}
-          {/*  categoryFilter={categoryFilter} setCategoryFilter={setCategoryFilter}*/}
-          {/*  tagFilter={tagFilter} setTagFilter={setTagFilter}*/}
-          {/*  priceFilter={priceFilter} setPriceFilter={setPriceFilter}*/}
-          {/*  sortSelected={sortSelected} setSortSelected={setSortSelected}*/}
-          {/*  pricingPlans={pricingPlanOptions}*/}
-          {/*  categories={categoriesOptions}*/}
-          {/*  tags={tagOptions}*/}
-          {/*  sortOptions={sortOptions}*/}
-          {/*  debounceLoading={debounceLoading}*/}
-          {/*  setDebounceLoading={setDebounceLoading}*/}
-          {/*  shouldPinTagFilter={shouldPinTagFilter}*/}
-          {/*/>*/}
+          <Search
+            searchFilter={searchFilter} setSearchFilter={setSearchFilter}
+            planFilter={planFilter} setPlanFilter={setPlanFilter}
+            categoryFilter={categoryFilter} setCategoryFilter={setCategoryFilter}
+            tagFilter={tagFilter} setTagFilter={setTagFilter}
+            priceFilter={priceFilter} setPriceFilter={setPriceFilter}
+            sortSelected={sortSelected} setSortSelected={setSortSelected}
+            pricingPlans={pricingPlanOptions}
+            categories={categoriesOptions}
+            tags={tagOptions}
+            sortOptions={sortOptions}
+            debounceLoading={debounceLoading}
+            setDebounceLoading={setDebounceLoading}
+            shouldPinTagFilter={shouldPinTagFilter}
+          />
 
           <Box padding='600'>
             <BlockStack gap='200'>
-              <BestSeller configSplide={splideConfig} />
+              <BestSeller slideConfig={splideConfig} />
             </BlockStack>
-            {/*<BlockStack gap='200'>*/}
-            {/*  {*/}
-            {/*    !debounceLoading && sections !== undefined ? (*/}
-            {/*      <ProductList items={sections ?? []} columns={{sm: 1, md: 2, lg: 4}} />*/}
-            {/*    ) : (<SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />)*/}
-            {/*  }*/}
-            {/*</BlockStack>*/}
+            <BlockStack gap='200'>
+              {
+                !debounceLoading && sections !== undefined ? (
+                  <ProductList items={sections ?? []} columns={{sm: 1, md: 2, lg: 4}} />
+                ) : (<SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />)
+              }
+            </BlockStack>
           </Box>
         </Card>
       </Layout.Section>
