@@ -1,0 +1,51 @@
+diff --git a/node_modules/@shopify/polaris/build/esm/components/IndexFilters/components/SortButton/SortButton.js b/node_modules/@shopify/polaris/build/esm/components/IndexFilters/components/SortButton/SortButton.js
+index 5fce0ee..57ba749 100644
+--- a/node_modules/@shopify/polaris/build/esm/components/IndexFilters/components/SortButton/SortButton.js
++++ b/node_modules/@shopify/polaris/build/esm/components/IndexFilters/components/SortButton/SortButton.js
+@@ -81,6 +81,22 @@ function SortButton({
+     disabled: disabled,
+     accessibilityLabel: i18n.translate('Polaris.IndexFilters.SortButton.ariaLabel')
+   }));
++  const directionBox = selectedDirection.toLowerCase() !== 'false' && /*#__PURE__*/React.createElement(Box, {
++    paddingInlineStart: "150",
++    paddingInlineEnd: "150",
++    paddingBlockStart: "200",
++    paddingBlockEnd: "200"
++  }, /*#__PURE__*/React.createElement(DirectionButton, {
++    direction: "asc",
++    active: selectedDirection === SortButtonDirection.Asc,
++    onClick: handleChangeDirection,
++    value: selectedChoices?.[0]?.value
++  }, selectedChoices?.[0]?.directionLabel), /*#__PURE__*/React.createElement(DirectionButton, {
++    direction: "desc",
++    active: selectedDirection === SortButtonDirection.Desc,
++    onClick: handleChangeDirection,
++    value: selectedChoices?.[1]?.value
++  }, selectedChoices?.[1]?.directionLabel))
+   return /*#__PURE__*/React.createElement(Popover, {
+     active: active && !disabled,
+     activator: sortButton,
+@@ -101,22 +117,7 @@ function SortButton({
+     choices: choiceListChoices,
+     selected: selected,
+     onChange: handleChangeChoiceList
+-  })), /*#__PURE__*/React.createElement(Box, {
+-    paddingInlineStart: "150",
+-    paddingInlineEnd: "150",
+-    paddingBlockStart: "200",
+-    paddingBlockEnd: "200"
+-  }, /*#__PURE__*/React.createElement(DirectionButton, {
+-    direction: "asc",
+-    active: selectedDirection === SortButtonDirection.Asc,
+-    onClick: handleChangeDirection,
+-    value: selectedChoices?.[0]?.value
+-  }, selectedChoices?.[0]?.directionLabel), /*#__PURE__*/React.createElement(DirectionButton, {
+-    direction: "desc",
+-    active: selectedDirection === SortButtonDirection.Desc,
+-    onClick: handleChangeDirection,
+-    value: selectedChoices?.[1]?.value
+-  }, selectedChoices?.[1]?.directionLabel)));
++  })), directionBox);
+ }
+ 
+ export { SortButton, SortButtonDirection };
