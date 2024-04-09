@@ -20,7 +20,7 @@ export const useCategoryCollection = () => {
   const { data, loading, error } = useQuery(CATEGORIES_QUERY_V2, {
     fetchPolicy: 'cache-and-network',
     variables: {
-      pageSize: 5,
+      pageSize: 1,
       currentPage: 1,
     },
   });
@@ -29,9 +29,8 @@ export const useCategoryCollection = () => {
   }, [data]);
   const pageInfo = useMemo(() => {
     return data?.[CATEGORIES_QUERY_KEY]?.page_info || {};
-  }, []);
+  }, [data]);
 
-  console.log({ categories });
   return {
     categories,
     currentPage,

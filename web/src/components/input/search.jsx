@@ -6,11 +6,12 @@ import {
   RangeSlider,
 } from '@shopify/polaris';
 import { debounce } from 'lodash';
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { PRICING_PLANS_QUERY, SORT_OPTIONS_QUERY, SORT_OPTIONS_QUERY_KEY } from '~/queries/section-builder/other.gql';
 import { CATEGORIES_QUERY, CATEGORIES_QUERY_KEY } from '~/queries/section-builder/category.gql';
 import { useTags } from '~/hooks/useTags';
+import { useSearchParams } from 'react-router-dom';
 
 export const TAG_FILTER_KEY = 'tag';
 export const PLAN_FILTER_KEY = 'plan';
@@ -18,12 +19,15 @@ export const CATEGORY_FILTER_KEY = 'category';
 export const PRICE_FILTER_KEY = 'price';
 export const QUERY_SEARCH_KEY = '__query__';
 
+export const SORT_OPTION_NONE = 'none false';
+
 function buildFilterKey (key) {
   return `${key}_filter`;
 }
 
 const useSearch = props => {
-  const { onFilterChange, onFilterRemove, onSortChange } = props;
+  const { onFilterChange, onSortChange } = props;
+  const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState("");
   const searchSection = useCallback(async (value) => {
     if (onFilterChange) onFilterChange(QUERY_SEARCH_KEY, value);
@@ -77,16 +81,33 @@ const useSearch = props => {
   }, [onFilterChange]);
 
   const [tagFilter, setTagFilter] = useState([]);
+  /**
+   * To determine if has search tags in URL -> pin the tag filter
+   */
+  const [shouldPinTagFilter, setShouldPinTagFilter] = useState(() => {
+      return searchParams.has('tags');
+    });
+  const handleTagFilterParams = useCallback((value) => {
+    // use window.location.search because searchParams is not updated yet
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    if (!value?.length && Boolean(currentUrlParams.has('tags'))) {
+      currentUrlParams.delete('tags');
+      setSearchParams(currentUrlParams);
+      setShouldPinTagFilter(false);
+    }
+  }, []);
   const handleTagFilterChange = useCallback((value) => {
+    handleTagFilterParams(value);
     if (onFilterChange) onFilterChange(TAG_FILTER_KEY, value);
     setTagFilter(value);
-  }, [onFilterChange]);
+  }, [onFilterChange, handleTagFilterParams]);
   const handleTagFilterRemove = useCallback(() => {
+    handleTagFilterParams([]);
     if (onFilterChange) onFilterChange(TAG_FILTER_KEY, []);
     setTagFilter([]);
-  }, [onFilterChange]);
+  }, [onFilterChange, handleTagFilterParams]);
 
-  const [sortSelected, setSortSelected] = useState(['name asc']);
+  const [sortSelected, setSortSelected] = useState([SORT_OPTION_NONE]);
   const handleSortChange = useCallback((value) => {
     if (onSortChange) onSortChange(value);
     setSortSelected(value);
@@ -108,7 +129,11 @@ const useSearch = props => {
     })) : [];
   }, [categories]);
   const sortOptions = useMemo(() => {
-    return sortOptionsdt?.[SORT_OPTIONS_QUERY_KEY] ?? [];
+    const baseOptions = [{
+      label: 'None',
+      value: SORT_OPTION_NONE,
+    }];
+    return [...baseOptions, ...(sortOptionsdt?.[SORT_OPTIONS_QUERY_KEY] ?? [])];
   }, [sortOptionsdt]);
   const handleFiltersClearAll = useCallback(() => {
     handlePriceFilterRemove();
@@ -145,6 +170,18 @@ const useSearch = props => {
       onRemove: handlePriceFilterRemove,
     });
   }
+  const searchTags = useMemo(() => {
+    return searchParams.get('tags')?.toLowerCase()?.split(',');
+  }, [searchParams]);
+  useEffect(() => {
+    if (!tagOptions?.length || !searchTags?.length) return;
+    const tagIdsMapping = tagOptions.map((item) => {
+      if (searchTags.includes(item.label?.toLowerCase())) return item.value;
+      return undefined;
+    }).filter((item) => item !== undefined);
+    handleTagFilterChange(tagIdsMapping);
+    setShouldPinTagFilter(true);
+  }, [searchTags, tagOptions]);
 
   return {
     pricingPlanOptions,
@@ -166,22 +203,11 @@ const useSearch = props => {
     handleSearchFilterRemove,
     sortSelected,
     handleSortChange,
+    shouldPinTagFilter,
   };
 };
 
 export default function Search({
-  // searchFilter, setSearchFilter,
-  // planFilter, setPlanFilter,
-  // categoryFilter, setCategoryFilter,
-  // tagFilter, setTagFilter,
-  // priceFilter, setPriceFilter,
-  // debounceLoading, setDebounceLoading,
-  // sortSelected, setSortSelected,
-  // pricingPlans,
-  // categories,
-  // tags,
-  // sortOptions,
-  shouldPinTagFilter,
   onFilterChange,
   onSortChange,
 }) {
@@ -205,6 +231,7 @@ export default function Search({
     handleSearchFilterRemove,
     sortSelected,
     handleSortChange,
+    shouldPinTagFilter,
   } = useSearch({ onFilterChange, onSortChange });
 
   // const [search, setSearch] = useState(searchFilter);

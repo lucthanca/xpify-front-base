@@ -13,6 +13,11 @@ export const CATEGORIES_QUERY = gql`
 export const CATEGORIES_QUERY_V2 = gql`
   query GetCategoryCollection($filter: CategoryFilterInput, $pageSize: Int = 20, $currentPage: Int = 1) {
     ${CATEGORIES_QUERY_KEY}(filters: $filter, pageSize: $pageSize, currentPage: $currentPage) {
+      page_info {
+        current_page
+        page_size
+        total_pages
+      }
       items {
         id
         name
