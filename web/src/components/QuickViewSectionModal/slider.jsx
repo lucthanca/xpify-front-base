@@ -1,35 +1,21 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo } from 'react';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import SliderItem from '~/components/QuickViewSectionModal/sliderItem';
 import { Modal } from '@shopify/polaris';
-import { onINP } from 'web-vitals';
 import { useQuickViewSlider } from '~/talons/quickview/useQuickViewSlider';
 import PropTypes from 'prop-types';
+import { useModalContent } from '~/talons/quickview/useModalContent';
 
 const ModalContent = props => {
-  const { keys, activeSection } = props;
-  const startIndex = keys.indexOf(activeSection?.url_key);
-  const [movedIndex, setMovedIndex] = useState(startIndex);
-  const sliderOpts = {
-    perPage: 1,
-    pagination: false,
-    gap: '1rem',
-    start: startIndex,
-  };
-  const handleMoved = useCallback((_, currentIndex) => {
-    setMovedIndex(currentIndex);
-  }, []);
-  useEffect(() => {
-    onINP(
-      metric => {
-        console.log(`INPT metric của ${props.activeSection?.name}`, metric);
-      },
-      { reportAllChanges: true },
-    );
-  }, []);
+  const { keys } = props;
+  const {
+    sliderOpts,
+    handleSliderMoved,
+    movedIndex,
+  } = useModalContent(keys);
 
   return (
-    <Splide options={sliderOpts} onMoved={handleMoved}>
+    <Splide options={sliderOpts} onMoved={handleSliderMoved}>
       {keys.map((k, index) => {
         const shouldLoad = index === movedIndex || index === movedIndex + 1 || index === movedIndex - 1;
         return (
@@ -50,7 +36,7 @@ const QuickViewModalSlider = props => {
 
   return (
     <Modal size='large' open={show} onClose={onCloseQuickViewModal} title={activeSection?.name ?? 'Loading...'} noScroll>
-      <ModalContent keys={keys} activeSection={activeSection} />
+      <ModalContent keys={keys} />
     </Modal>
   );
 };

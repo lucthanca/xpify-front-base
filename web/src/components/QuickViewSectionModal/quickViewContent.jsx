@@ -23,6 +23,7 @@ import { PricingPlanSkeleton } from '~/components/QuickViewSectionModal';
 import QuickViewContentSkeleton from '~/components/QuickViewSectionModal/quickViewContentShimmer';
 const PricingPlan = lazy(() => import('~/components/QuickViewSectionModal/pricingPlan'));
 import './style.scss';
+import BannerAlert from '~/components/block/banner/alert';
 
 const LazyQuickViewContent = props => {
   const { url_key } = props;
@@ -39,6 +40,14 @@ const LazyQuickViewContent = props => {
   } = talonProps;
 
   if (loadingWithoutData) return <QuickViewContentSkeleton title={url_key} />;
+  if (!section && !loadingWithoutData) {
+    return (
+      <>
+        <div className='mt-4'><BannerAlert bannerAlert={{ content: [{ message: "Failed to load section. Please reload page!" }] }} /></div>
+        <QuickViewContentSkeleton title={url_key} />
+      </>
+    );
+  }
   return (
     <Scrollable className='quickViewModal__scrollable__content px-2 pl-4 pb-4'>
       <InlineGrid columns={{ sm: 1, md: ['twoThirds', 'oneThird'] }} gap='400'>

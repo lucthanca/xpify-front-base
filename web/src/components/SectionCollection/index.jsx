@@ -6,6 +6,9 @@ import ProductList from '~/components/product/list';
 import Paginate from '~/components/block/paginate/default';
 import { useSectionCollection } from '~/talons/section/useSectionCollection';
 import BestSeller from '~/components/BestSellers';
+import CategoryCollection from '~/components/SectionCollection/categoryCollection';
+import { ComplexSectionCollectionProvider } from '~/context';
+import SectionListing from '~/components/SectionCollection/sectionListing';
 
 const SectionCollection = props => {
   const {
@@ -57,25 +60,26 @@ const SectionCollection = props => {
             tagFilter={tagFilter} setTagFilter={setTagFilter}
             priceFilter={priceFilter} setPriceFilter={setPriceFilter}
             sortSelected={sortSelected} setSortSelected={setSortSelected}
-            pricingPlans={pricingPlanOptions}
-            categories={categoriesOptions}
-            tags={tagOptions}
-            sortOptions={sortOptions}
+            // pricingPlans={pricingPlanOptions}
+            // categories={categoriesOptions}
+            // tags={tagOptions}
+            // sortOptions={sortOptions}
             debounceLoading={debounceLoading}
             setDebounceLoading={setDebounceLoading}
             shouldPinTagFilter={shouldPinTagFilter}
           />
 
           <Box padding='600'>
-            <BlockStack gap='200'>
+            <BlockStack gap='400'>
               <BestSeller slideConfig={splideConfig} />
-            </BlockStack>
-            <BlockStack gap='200'>
-              {
-                !debounceLoading && sections !== undefined ? (
-                  <ProductList items={sections ?? []} columns={{sm: 1, md: 2, lg: 4}} />
-                ) : (<SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />)
-              }
+              <BlockStack gap='200'>
+                {/*{*/}
+                {/*  !debounceLoading && sections !== undefined ? (*/}
+                {/*    <ProductList items={sections ?? []} columns={{sm: 1, md: 2, lg: 4}} />*/}
+                {/*  ) : (<SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />)*/}
+                {/*}*/}
+                <CategoryCollection />
+              </BlockStack>
             </BlockStack>
           </Box>
         </Card>
@@ -92,4 +96,17 @@ const SectionCollection = props => {
   );
 };
 
-export default memo(SectionCollection);
+const SectionCollectionV2 = props => {
+
+  return (
+    <ComplexSectionCollectionProvider>
+      <Layout.Section>
+        <Card padding='400'>
+          <SectionListing />
+        </Card>
+      </Layout.Section>
+    </ComplexSectionCollectionProvider>
+  );
+};
+
+export default memo(SectionCollectionV2);

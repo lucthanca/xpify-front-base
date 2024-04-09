@@ -2,7 +2,7 @@ import { SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builde
 import { useQuery } from '@apollo/client';
 import type { ApolloError, DocumentNode } from '@apollo/client';
 import { SectionData } from '~/talons/section/useSection';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import type { ApolloQueryResult, OperationVariables } from '@apollo/client/core/types';
 
 type QueryData = {
@@ -29,14 +29,20 @@ export const useSection = (props: UseSectionProps): UseSectionTalon => {
     query = SECTION_V2_QUERY,
     queryKey = SECTION_V2_QUERY_KEY,
   } = props;
+  const [prevSection, setPrevSection] = useState<SectionData | undefined>(undefined);
   const { data, loading, error, refetch } = useQuery<QueryData>(query, {
     fetchPolicy: 'cache-and-network',
     variables: { key },
     skip: !key,
+    onCompleted: (data) => {
+      if (data?.[queryKey]) {
+        setPrevSection(data[queryKey]);
+      }
+    },
   });
 
   const section: SectionData | undefined = useMemo(() => {
-    return data?.[queryKey];
+    return data?.[queryKey] || prevSection;
   }, [data]);
 
   return {

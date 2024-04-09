@@ -42,7 +42,7 @@ export const QUERY_SECTION_COLLECTION_KEY = `getSections`;
 export const SECTIONS_QUERY = gql`
   query GetSectionCollection(
     $search: String,
-    $filter: SectionFilterInput,
+    $filter: SectionFilterInputV2,
     $sort: SectionSortInput,
     $pageSize: Int = 20,
     $currentPage: Int = 1
@@ -177,7 +177,7 @@ export const SECTIONS_INSTALLED_QUERY = gql`
   ${CommonSectionField}
 `;
 
-const commonSectionFragment = gql`
+export const commonSectionFragment = gql`
   fragment CommonSectionFragment on SectionInterface {
     ...CommonSectionField
     ... on Section { plan_id src version release_note }

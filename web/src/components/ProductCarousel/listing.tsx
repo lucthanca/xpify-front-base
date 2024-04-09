@@ -38,9 +38,6 @@ const Carousel: React.FC<CarouselProps> = (props) => {
                   key={item.id}
                   item={item}
                   lazyLoadImg={false}
-                  setSection={() => {}}
-                  setIsShowPopup={() => {}}
-                  setIsShowPopupInstall={() => {}}
                 />
               </div>
             </SplideSlide>

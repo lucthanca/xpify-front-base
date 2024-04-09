@@ -19,7 +19,7 @@ export const useQuickView = (props: UseQuickViewProps): UseQuickViewTalon => {
   const { key } = props;
   const { section, loadingWithoutData, loading, error } = useSection({ key });
 
-  console.log('Run useQuickView:  + ' + key);
+  console.log('Run useQuickView:  + ' + key + '| error: ' + error);
   const [bannerAlert, setBannerAlert] = useState(undefined);
   const { handlePurchase: purchase, purchaseLoading} = usePurchase();
 
