@@ -37,7 +37,7 @@ import { usePurchase } from '~/hooks/section-builder/purchase';
 
 function ModalProduct({section, isShowPopup, setIsShowPopup}) {
   return null;
-  const { data:sectionDetail, refetch:reloadSectionDetail } = useQuery(SECTION_QUERY, {
+  const { data:sectionDetail } = useQuery(SECTION_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       key: section?.url_key ?? '',

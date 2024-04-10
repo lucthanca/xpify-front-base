@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useSectionPurchase } from '~/hooks/useSectionPurchase';
 import { useCallback, useMemo } from 'react';
 import { ApolloError, useQuery } from '@apollo/client';
-import { SECTION_QUERY } from '~/queries/section-builder/product.gql';
+import { SECTION_QUERY, SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builder/product.gql';
 import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
 import type { ApolloQueryResult } from '@apollo/client/core/types';
 
@@ -74,7 +74,6 @@ export type SectionTalon = {
   handlePurchase: () => Promise<void>;
   purchaseLoading: boolean;
   sectionLoading: boolean;
-  reloadSection: () => Promise<ApolloQueryResult<SectionData>>;
   themes: ThemeData[] | [];
   section: SectionData | {};
   sectionError: ApolloError | undefined;
@@ -85,16 +84,25 @@ export const useSection = (): SectionTalon => {
   const { key } = useParams();
   const { purchaseSection, loading: purchaseLoading, error: purchaseError } = useSectionPurchase();
 
-  const { data: loadedSection, loading: sectionLoading, error: sectionError, refetch: reloadSection } = useQuery(SECTION_QUERY, {
+  const { data:loadedSection, loading: sectionLoading, error: sectionError } = useQuery(SECTION_V2_QUERY, {
     fetchPolicy: "cache-and-network",
-    variables: { key }
+    variables: {
+      key: key
+    }
   });
   const section = useMemo(() => {
-    return loadedSection?.getSection || {};
+    return loadedSection?.[SECTION_V2_QUERY_KEY];
   }, [loadedSection]);
+  // const { data: loadedSection, loading: sectionLoading, error: sectionError } = useQuery(SECTION_QUERY, {
+  //   fetchPolicy: "cache-and-network",
+  //   variables: { key }
+  // });
+  // const section = useMemo(() => {
+  //   return loadedSection?.getSection || {};
+  // }, [loadedSection]);
   const { data:themesData, loading:themesL, error:themesE } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
-    skip: Boolean(!section.entity_id),
+    skip: Boolean(!section?.entity_id),
   });
   const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
   const handlePurchase = useCallback(async () => {
@@ -106,7 +114,6 @@ export const useSection = (): SectionTalon => {
     handlePurchase,
     purchaseLoading,
     sectionLoading,
-    reloadSection,
     themes,
     section,
     sectionError,

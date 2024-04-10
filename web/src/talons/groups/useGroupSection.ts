@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GROUP_SECTION_QUERY, SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
+import { GROUP_SECTION_QUERY, SECTIONS_QUERY, SECTION_V2_QUERY } from '~/queries/section-builder/product.gql';
 import { useParams } from 'react-router-dom';
 import { useSectionPurchase } from '~/hooks';
 import { useCallback, useMemo } from 'react';
@@ -7,11 +7,11 @@ import { useCallback, useMemo } from 'react';
 export const useGroupSection = () => {
   const { key } = useParams();
   const { purchaseSection, loading: purchaseLoading, error: purchaseError } = useSectionPurchase();
-  const { data, loading: groupSectionLoading, error: groupSectionError, refetch: groupSectionReload } = useQuery(GROUP_SECTION_QUERY, {
+  const { data, loading: groupSectionLoading, error: groupSectionError } = useQuery(SECTION_V2_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: { key }
   });
-  const groupSection = useMemo(() => data?.getGroupSection || {}, [data]);
+  const groupSection = useMemo(() => data?.section || {}, [data]);
   const { data: groupChildSections, loading: childSectionLoading, error: childSectionError } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
@@ -36,7 +36,6 @@ export const useGroupSection = () => {
     groupSection,
     groupSectionLoading,
     groupSectionError,
-    groupSectionReload,
     childSections,
     handlePurchase,
     purchaseLoading,

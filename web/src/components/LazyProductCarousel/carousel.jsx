@@ -39,7 +39,7 @@ const LazyCarousel = props => {
     query: fetchQuery,
     queryRootKey,
     variables: {
-      sort: { column: 'qty_sold', order: 'desc' },
+      sort: { column: 'entity_id', order: 'desc' },
       ...variables
     }
   });

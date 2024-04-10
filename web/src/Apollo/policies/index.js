@@ -15,7 +15,7 @@ const typePolicies = {
     keyFields: 'url_key',
   },
   Section: {
-    keyFields: 'url_key',
+    keyFields: 'url_key'
   },
   GroupSection: {
     keyFields: 'url_key',

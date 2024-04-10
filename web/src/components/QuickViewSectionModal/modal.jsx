@@ -79,7 +79,7 @@ const QuickViewModal = ({ url_key, show, onClose }) => {
 
                   <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
 
-                  {section.actions?.install && <ModalInstallSection section={section} refectQuery={SECTION_V2_QUERY} />}
+                  {section.actions?.install && <ModalInstallSection section={section} />}
 
                   {section.actions ? (
                     <>

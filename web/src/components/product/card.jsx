@@ -98,23 +98,18 @@ function ProductCard({item, lazyLoadImg = true}) {
 
         <Box padding={400}>
           <BlockStack gap={200}>
-            <BlockStack>
+            <BlockStack gap={200}>
               <InlineStack align='space-between'>
-                <InlineStack gap={200}>
-                  <div className='pointer' onClick={() => handleRedirect(item)}>
-                    <Text variant="headingMd" as="h2">{item.name}</Text>
-                  </div>
-                  <InlineStack gap={200}>
-                    <BadgeStatusSection item={item} />
-                  </InlineStack>
-                </InlineStack>
-                <Text variant="bodyMd">${item.price}</Text>
+                <div className='pointer' onClick={() => handleRedirect(item)}>
+                  <Text variant="headingMd" as="h2">{item.name}</Text>
+                </div>
+                <Text variant="bodyLg" fontWeight='bold'>${item.price}</Text>
               </InlineStack>
-              {
-                item.version &&
-                <Text as="div" variant="bodyMd">
-                  Version: {item.version}
-                </Text>
+              <InlineStack gap={200}>
+                <BadgeStatusSection item={item} />
+              </InlineStack>
+              {item.version &&
+                <Text variant="bodyXs">Version {item.version}</Text>
               }
             </BlockStack>
             <InlineStack gap='200'>

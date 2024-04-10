@@ -27,11 +27,9 @@ const titleRoleTheme = {
   'development': 'Dev',
 };
 
-function ModalInstallSection({refectQuery, section, reloadSection, fullWith = true}) {
+function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState(undefined);
-  const [bannerSuccess, setBannerSuccess] = useState(undefined);
-  const [bannerError, setBannerError] = useState(undefined);
   const toast = useToast();
 
   const { data:themesData } = useQuery(THEMES_QUERY, {
@@ -39,7 +37,7 @@ function ModalInstallSection({refectQuery, section, reloadSection, fullWith = tr
     skip: Boolean(!section.entity_id),
   });
   const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
-  const { data: groupChildSections, loading: groupChildSectionsLoad, refetch: childSectionReload } = useQuery(SECTIONS_QUERY, {
+  const { data: groupChildSections, loading: groupChildSectionsLoad } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       filter: {
@@ -52,10 +50,9 @@ function ModalInstallSection({refectQuery, section, reloadSection, fullWith = tr
   });
   const childSections = useMemo(() => groupChildSections?.getSections?.items || [], [groupChildSections]);
 
-  const handleSelectChange = useCallback(
-    (value) => setSelected(value),
-    [],
-  );
+  const handleSelectChange = useCallback((value) => {
+    setSelected(typeSelect ? value : value[0]);
+  }, []);
   const getUpdateMessage = useCallback((item, currentTheme, parent = null) => {
     const installVersion = item?.installed && item.installed.find(item => item.theme_id == currentTheme)?.product_version;
     if (installVersion) {
@@ -113,6 +110,43 @@ function ModalInstallSection({refectQuery, section, reloadSection, fullWith = tr
     };
   }, [section, themes, groupChildSectionsLoad]);
 
+  const options1 = useMemo(() => {
+    return themes
+    ? themes.map(theme => {
+      var status = 'Not install';
+      const installedInTheme = section?.installed && section.installed.find(item => item.theme_id == theme.id);
+
+      if (installedInTheme) {
+        var content = [];
+        if (childSections.length) {
+          if (!groupChildSectionsLoad) {
+            content = childSections.map(item => getUpdateMessage(item, theme.id, section))
+          }
+        } else {
+          content = [getUpdateMessage(section, theme.id)];
+        }
+
+        content = content.filter(item => item !== undefined);
+        if (content.length) {
+          status = 'Installed';
+        }
+        content = content.filter(item => item !== "");
+        if (content.length) {
+          status = 'Should update';
+        }
+      }
+
+      return ({
+        value: theme.id,
+        label: `${theme.name} (${titleRoleTheme[theme.role]}) - ${status}`
+      })
+    })
+    : {
+      value: 0,
+      label: `Loading...`
+    };
+  }, [section, themes]);
+
   const installed = useMemo(() => {
     setBannerAlert(undefined);
     if (!section?.installed) {
@@ -146,10 +180,10 @@ function ModalInstallSection({refectQuery, section, reloadSection, fullWith = tr
   }, [selected, options]);
 
   const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION, {
-    refetchQueries: [refectQuery],
+
   });
   const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION, {
-    refetchQueries: [refectQuery],
+
   });
 
   const handleUpdate = useCallback(async () => {
@@ -170,45 +204,34 @@ function ModalInstallSection({refectQuery, section, reloadSection, fullWith = tr
   }, [selected]);
 
   useEffect(() => {
-    if (dataUpdate && dataUpdate.updateAsset.length) {
-      const updateSuccess = dataUpdate.updateAsset.filter(item => (!item?.errors && item?.key));
-      const updateFail = dataUpdate.updateAsset.filter(item => (item?.errors || !item?.key));
+    if (dataUpdate && dataUpdate.updateAsset) {
+      const updateSuccess = dataUpdate.updateAsset;
 
       if (updateSuccess.length) {
-        setBannerSuccess({
-          'title': `This product has been successfully installed in theme ` + themes.find(item => item.id == selected).name,
+        setBannerAlert({
+          'title': `Section installed successfully. Go to theme editor to use this section.`,
           'tone': 'success',
           'action': {content: 'Customize', icon: WrenchIcon},
           'content': updateSuccess.map(item => {
             return {message: 'Add successfully the section ' + item.name};
           })
         });
-      }
-
-      if (updateFail.length) {
-        setBannerError({
+      } else {
+        setBannerAlert({
           'title': `Error`,
-          'tone': 'critical',
-          'content': updateFail.map(item => {
-            return {message: `Fail ${item.name}. ${item.errors ?? ""}`};
-          })
+          'tone': 'critical'
         });
       }
-
-      // reloadSection();
-      childSectionReload();
     }
   }, [dataUpdate]);
   useEffect(() => {
     if (dataDelete) {
-      toast.show('Deleted...');
-      // reloadSection();
-      childSectionReload();
+      toast.show('Deleted');
     }
   }, [dataDelete]);
   useEffect(() => {
     if (dataUpdateE) {
-      setBannerError({
+      setBannerAlert({
         'title': dataUpdateE.message,
         'tone': 'critical',
         'content': dataUpdateE.graphQLErrors ?? []
@@ -219,11 +242,8 @@ function ModalInstallSection({refectQuery, section, reloadSection, fullWith = tr
   return (
     themes &&
     <BlockStack gap='200'>
-      {
-        (bannerAlert || bannerSuccess || bannerError) &&
+      {bannerAlert &&
         <Box>
-          <BannerDefault bannerAlert={bannerSuccess} setBannerAlert={setBannerSuccess} />
-          <BannerDefault bannerAlert={bannerError} setBannerAlert={setBannerError} />
           <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
         </Box>
       }
@@ -232,12 +252,20 @@ function ModalInstallSection({refectQuery, section, reloadSection, fullWith = tr
 
       <InlineGrid columns={fullWith ? 1 : {sm: 1, md: ['twoThirds', 'oneThird']}} gap={200} alignItems='center'>
         <div>
-          <Select
-            labelInline
-            options={options}
-            onChange={handleSelectChange}
-            value={selected}
-          />
+          {
+            typeSelect
+            ? <Select
+              labelInline
+              options={options}
+              onChange={handleSelectChange}
+              value={selected}
+            />
+            : <OptionList
+              onChange={handleSelectChange}
+              options={options}
+              selected={selected}
+            />
+          }
         </div>
         <div>
           <InlineGrid columns={2} gap={200}>
@@ -252,6 +280,7 @@ function ModalInstallSection({refectQuery, section, reloadSection, fullWith = tr
             </Button>
             <Button
               onClick={handleDelete}
+              variant='primary'
               tone="critical"
               disabled={section.installed ? !installed : true}
               loading={dataDeleteL}

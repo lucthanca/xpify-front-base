@@ -5,7 +5,7 @@ function BadgeStatusSection({item}) {
 	const owned = useMemo(() => {
 		if (!item.actions?.purchase && item.price > 0) {
 			return <Badge tone='info' size="small">
-         <Tooltip content="Owned forever">
+         <Tooltip content="Owned">
           <Text>Purchased</Text>
         </Tooltip>
       </Badge>
@@ -13,30 +13,28 @@ function BadgeStatusSection({item}) {
   }, [item]);
 
 	const shouldUpdate = useMemo(() => {
-    if (!item.actions?.install) {
-			return <></>;
-		}
+    if (item?.installed && item.installed.length) {
+      // Group not handle check should update - optimize performance
+      if (item?.child_ids) {
+        return <Badge tone='success' size="small">
+          <Text>Installed</Text>
+        </Badge>;
+      }
 
-    if (!item?.installed) {
+      const updated = item.installed.find(data => data.product_version == item.version);
+      if (updated) {
+        return <Badge tone='success' size="small" progress='complete'>
+          <Tooltip content="Installed laster version">
+            <Text>Installed</Text>
+          </Tooltip>
+        </Badge>;
+      }
       return <Badge tone='success' size="small" progress='incomplete'>
-        <Tooltip content="Not installed yet">
-          <Text>Ready</Text>
+        <Tooltip content="Should update now">
+          <Text>Installed</Text>
         </Tooltip>
       </Badge>;
     }
-    const updated = item.installed.find(data => data.product_version == item.version);
-    if (updated || item?.child_ids) {
-      return <Badge tone='success' size="small" progress='complete'>
-        <Tooltip content="Installed laster version">
-          <Text>Ready</Text>
-        </Tooltip>
-      </Badge>;
-    }
-    return <Badge tone='success' size="small" progress={'partiallyComplete'}>
-      <Tooltip content="Should update now">
-        <Text>Ready</Text>
-      </Tooltip>
-    </Badge>;
   }, [item]);
 
   return <>{shouldUpdate} {owned}</>;

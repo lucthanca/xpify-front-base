@@ -46,8 +46,8 @@ export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
   const perpage = useMemo(() => {
     if (width < 425) return 1;
     if (width < 768) return 3;
-    if (width < 2560) return 5;
-    return 5;
+    if (width < 2560) return 4;
+    return 4;
   }, [width]);
   const [splideConfig] = useState(() => ({
     options: {
@@ -57,7 +57,7 @@ export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
       breakpoints:{
         425: { perPage: 1 },
         768: { perPage: 3, gap: '0.5rem' },
-        2560: { perPage: 5 }
+        2560: { perPage: 4 }
       },
     },
   }));

@@ -44,14 +44,13 @@ const SectionListing = props => {
     handleSortChange,
   } = talonProps;
   const bestSellerSliderConfig = {
-    perPage: 5,
+    perPage: 4,
     gap: '1rem',
     pagination: false,
     breakpoints:{
       425: { perPage: 1 },
       768: { perPage: 3, gap: '0.5rem' },
-      1200: { perPage: 4 },
-      2560: { perPage: 5 }
+      2560: { perPage: 4 }
     },
   }
   return (

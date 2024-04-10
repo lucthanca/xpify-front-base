@@ -3,12 +3,13 @@ import {
   BlockStack,
   Box,
   Card,
+  Icon,
   InlineStack,
   Layout,
   Page,
   Text
 } from '@shopify/polaris';
-import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
+import { PaymentIcon, ViewIcon, CheckIcon } from '@shopify/polaris-icons';
 import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
 import BadgeTag from '~/components/block/badge/tag';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
@@ -25,8 +26,6 @@ const SectionFullpageDetails = props => {
     purchaseLoading,
     sectionLoading,
     handlePurchase,
-    themes,
-    reloadSection,
     sectionError,
   } = props;
   const handleBackPage = useBackPage();
@@ -105,35 +104,57 @@ const SectionFullpageDetails = props => {
 
               {/* <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} /> */}
 
-              <ModalInstallSection section={section} themes={themes} reloadSection={reloadSection} fullWith={false} />
+              <ModalInstallSection section={section} fullWith={false} />
 
-              <Box>
-                {section.description && (
+              {section?.short_description &&
+                <Box>
+                  <Card title="USP">
+                    <Text variant="headingMd">USP</Text>
+                    <Box padding="200">
+                      {
+                        section.short_description.split('\n').map((content, key) => {
+                          return (
+                            <InlineStack key={key} gap='200' blockAlign="start">
+                              <div>
+                                <Icon source={CheckIcon} tone="info"/>
+                              </div>
+                              <Text>{content}</Text>
+                            </InlineStack>
+                          );
+                        })
+                      }
+                    </Box>
+                  </Card>
+                </Box>
+              }
+
+              {section.description &&
+                <Box>
                   <Card title="Description">
                     <Text variant="headingMd">Description</Text>
                     <Box padding="200">
                       <div dangerouslySetInnerHTML={{__html: section.description}}></div>
                     </Box>
                   </Card>
-                )}
-              </Box>
+                </Box>
+              }
 
               <Box>
                 <SectionGallery images={section?.images || []} />
               </Box>
 
-              <Box>
-                {section.release_note && (
-                  <Card title="Release Note">
-                    <Text variant="headingMd">Release Note</Text>
-                    <Box padding="200">
-                      <div dangerouslySetInnerHTML={{__html: section.release_note}}></div>
-                    </Box>
-                  </Card>
-                )}
-              </Box>
+              <RelatedProducts url_key={section.url_key} />
 
-              <RelatedProducts />
+              {section.release_note && (
+                <Box>
+                    <Card title="Release Note">
+                      <Text variant="headingMd">Release Note</Text>
+                      <Box padding="200">
+                        <div dangerouslySetInnerHTML={{__html: section.release_note}}></div>
+                      </Box>
+                    </Card>
+                </Box>
+              )}
             </BlockStack>
           </Layout.Section>
         </Layout>

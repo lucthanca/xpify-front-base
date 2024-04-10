@@ -79,6 +79,7 @@ export const SECTION_QUERY = gql`
       __typename
       ...CommonSectionField
       ... on Section { plan_id src version release_note ...PricingPlanFragment }
+      ... on GroupSection { child_ids }
       categories
     }
   }
@@ -88,42 +89,16 @@ export const SECTION_QUERY = gql`
 export const RELATED_SECTIONS_QUERY = gql`
   query GET($key: String!) {
     getRelatedSections(key: $key) {
-      entity_id
-      is_enable
-      plan_id
-      name
-      images {
-        src
+      ...CommonSectionField
+      ... on GroupSection {
+        child_ids
       }
-      url_key
-      price
-      src
-      version
-      description
-      release_note
-      demo_link
-      pricing_plan {
-        name
-        code
-        prices {
-          interval
-          amount
-        }
-        description
-      }
-      categories
-      tags { id name }
-      actions {
-        install
-        purchase
-        plan
-      }
-      installed {
-        theme_id
-        product_version
+      ... on Section {
+        version release_note src plan_id
       }
     }
   }
+  ${CommonSectionField}
 `;
 
 /* Group Product */
@@ -202,6 +177,7 @@ export const SECTION_V2_QUERY = gql`
       ...on Section {
         ...PricingPlanFragment
       }
+      ... on GroupSection { child_ids }
     }
   }
   ${commonSectionFragment}

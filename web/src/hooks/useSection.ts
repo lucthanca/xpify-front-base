@@ -20,7 +20,6 @@ export type UseSectionTalon = {
   loadingWithoutData: boolean,
   loading: boolean,
   error: ApolloError | undefined,
-  refetch: (variables?: Partial<OperationVariables>) => Promise<ApolloQueryResult<QueryData>>,
 };
 
 export const useSection = (props: UseSectionProps): UseSectionTalon => {
@@ -30,7 +29,7 @@ export const useSection = (props: UseSectionProps): UseSectionTalon => {
     queryKey = SECTION_V2_QUERY_KEY,
   } = props;
   const [prevSection, setPrevSection] = useState<SectionData | undefined>(undefined);
-  const { data, loading, error, refetch } = useQuery<QueryData>(query, {
+  const { data, loading, error } = useQuery<QueryData>(query, {
     fetchPolicy: 'cache-and-network',
     variables: { key },
     skip: !key,
@@ -50,6 +49,5 @@ export const useSection = (props: UseSectionProps): UseSectionTalon => {
     loadingWithoutData: loading && !data,
     loading,
     error,
-    refetch,
   };
 };

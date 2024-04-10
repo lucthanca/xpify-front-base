@@ -33,21 +33,7 @@ import { SECTION_QUERY, SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries
 import { REDIRECT_BILLING_PAGE_MUTATION } from "~/queries/section-builder/other.gql";
 import { useRedirectPlansPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 
-function ModalInstall({section, url_key, setSectionDetail, isShowPopup, setIsShowPopup}) {
-  const { data:sectionDetail } = useQuery(SECTION_V2_QUERY, {
-    fetchPolicy: "cache-and-network",
-    variables: {
-      key: url_key,
-      skip: !url_key,
-    }
-  });
-  const product = useMemo(() => {
-    return sectionDetail?.[SECTION_V2_QUERY_KEY];
-  }, [sectionDetail]);
-  useEffect(() => {
-    setSectionDetail(product);
-  }, [product]);
-
+function ModalInstall() {
   return (
     <Modal
         open={isShowPopup}
@@ -56,7 +42,18 @@ function ModalInstall({section, url_key, setSectionDetail, isShowPopup, setIsSho
       >
         <Modal.Section>
           <BlockStack gap='400'>
-            <ModalInstallSection section={product} />
+            <InlineGrid columns={2} gap={200}>
+              <Button>
+                Cancel
+              </Button>
+              <Button
+                variant='primary'
+                tone="critical"
+                fullWidth
+              >
+                Delete
+              </Button>
+            </InlineGrid>
           </BlockStack>
         </Modal.Section>
       </Modal>

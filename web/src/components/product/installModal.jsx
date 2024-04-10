@@ -23,7 +23,7 @@ const InstallModal = props => {
   const talonProps = useInstallModal();
   const { show, handleCloseModal, activeSection } = talonProps;
   const sectionTalonProps = useSection({ key: activeSection?.url_key });
-  const { refetch } = sectionTalonProps;
+  const { section } = sectionTalonProps;
   return (
     <Modal
       open={show}
@@ -32,7 +32,7 @@ const InstallModal = props => {
     >
       <Modal.Section>
         <BlockStack gap='400'>
-          <ModalInstallSection section={activeSection} reloadSection={refetch} />
+          <ModalInstallSection section={section} typeSelect={false} />
         </BlockStack>
       </Modal.Section>
     </Modal>

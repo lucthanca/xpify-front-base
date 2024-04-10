@@ -2,15 +2,18 @@ import React, { memo, useMemo } from 'react';
 import { BlockStack, Card, Text, Box } from '@shopify/polaris';
 import ProductCarousel from '~/components/ProductCarousel';
 import SkeletonProduct from '~/components/product/skeleton';
-import { SECTIONS_QUERY, QUERY_SECTION_COLLECTION_KEY } from '~/queries/section-builder/product.gql';
+import { SECTIONS_QUERY, QUERY_SECTION_COLLECTION_KEY, RELATED_SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
 import { useRelatedProducts } from '~/talons/relatedProducts/useRelatedProducts';
 
 const RelatedProducts = props => {
-  const { variables, extractItemList, slideOptions, slidePerPage } = useRelatedProducts();
+  const variables = {
+    key: props.url_key
+  };
+  const { slideOptions, slidePerPage } = useRelatedProducts();
   const skeleton = useMemo(() => {
     return (
       <Box paddingBlockStart='200'>
-        <SkeletonProduct total={slidePerPage} columns={{ sm: 1, md: 2, lg: 3 }} />
+        <SkeletonProduct total={slidePerPage} columns={{ sm: 1, md: 2 }} />
       </Box>
     );
   }, [slidePerPage]);
@@ -23,11 +26,10 @@ const RelatedProducts = props => {
         </Text>
 
         <ProductCarousel
-          query={SECTIONS_QUERY}
-          queryKey={QUERY_SECTION_COLLECTION_KEY}
+          query={RELATED_SECTIONS_QUERY}
+          queryKey={'getRelatedSections'}
           queryVariables={variables}
           slideOptions={slideOptions}
-          extractItems={extractItemList}
           skeleton={skeleton}
         />
       </BlockStack>

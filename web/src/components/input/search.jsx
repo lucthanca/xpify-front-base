@@ -276,12 +276,12 @@ export default function Search({
       <RangeSlider
         label="Price is between"
         labelHidden
-        value={priceFilter}
+        value={priceFilter || [0,50]}
         prefix="$"
         output
         min={0}
-        max={999}
-        step={10}
+        max={100}
+        step={1}
         onChange={handlePriceFilterChange}
       />
     );

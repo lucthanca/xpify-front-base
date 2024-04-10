@@ -13,7 +13,7 @@ export const useTopSellProducts = () => {
   const { data, loading, error } = useQuery<CollectionQueryData>(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
-      sort: { column: 'qty_sold', order: 'desc' },
+      sort: { column: 'entity_id', order: 'desc' },
       pageSize: 12,
       currentPage: 1
     }
