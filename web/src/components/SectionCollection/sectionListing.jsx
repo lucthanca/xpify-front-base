@@ -1,39 +1,23 @@
 import CategoryCollection from '~/components/SectionCollection/categoryCollection';;
-import { BlockStack, Box } from '@shopify/polaris';
-import BestSeller from '~/components/BestSellers/bestSellerSlider';
-import { useSectionCollection, useSectionListing } from '~/talons/section/useSectionCollection';
+import { BlockStack } from '@shopify/polaris';
+import { useSectionListing } from '~/talons/section/useSectionCollection';
 import Search from '~/components/input/search';
-import ProductList from '~/components/product/list.jsx';
-const LISTING_TYPE_CATEGORY = 'categories';
-const LISTING_TYPE_SECTION = 'sections';
+import ProductList from '~/components/product/list';
+import Pagination from '~/components/Pagination';
+import { Loading } from '@shopify/app-bridge-react';
+
+const SectionCollection = props => {
+  const { items, onPageChange, currentPage, totalPages } = props;
+  return (
+    <>
+      <ProductList items={items ?? []} columns={{sm: 1, md: 2, lg: 4}} />
+      <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} />
+    </>
+  );
+};
 
 const SectionListing = props => {
-
-  // const {
-  //   searchFilter,
-  //   setSearchFilter,
-  //   planFilter,
-  //   setPlanFilter,
-  //   categoryFilter,
-  //   setCategoryFilter,
-  //   tagFilter,
-  //   setTagFilter,
-  //   priceFilter,
-  //   setPriceFilter,
-  //   sortSelected,
-  //   setSortSelected,
-  //   pricingPlanOptions,
-  //   categoriesOptions,
-  //   tagOptions,
-  //   sortOptions,
-  //   sections,
-  //   currentPage,
-  //   setCurrentPage,
-  //   sectionCollectionPageInfo,
-  //   debounceLoading,
-  //   setDebounceLoading,
-  //   shouldPinTagFilter,
-  // } = useSectionCollection();
+  const { disableCategory } = props;
 
   const talonProps = useSectionListing();
   const {
@@ -42,7 +26,11 @@ const SectionListing = props => {
     hasFilter,
     shouldPinTagFilter,
     handleSortChange,
+    handlePageChange,
+    pageInfo,
+    loading,
   } = talonProps;
+<<<<<<< HEAD
   const bestSellerSliderConfig = {
     perPage: 4,
     gap: '1rem',
@@ -53,13 +41,17 @@ const SectionListing = props => {
       2560: { perPage: 4 }
     },
   }
+=======
+>>>>>>> b4298023110480e04ede4f7cffe477860777bf45
   return (
     <>
-      <Search shouldPinTagFilter={shouldPinTagFilter} onFilterChange={handleFilterChange} onSortChange={handleSortChange} />
+      {loading && hasFilter && <Loading />}
       <BlockStack gap='400'>
-        <BestSeller slideConfig={bestSellerSliderConfig} />
-        {hasFilter && (<ProductList items={sections ?? []} columns={{sm: 1, md: 2, lg: 4}} /> )}
-        {!hasFilter && <CategoryCollection />}
+        <Search shouldPinTagFilter={shouldPinTagFilter} onFilterChange={handleFilterChange} onSortChange={handleSortChange} />
+        <BlockStack gap='400'>
+          {hasFilter && (<SectionCollection items={sections} onPageChange={handlePageChange} currentPage={pageInfo?.current_page} totalPages={pageInfo?.total_pages} />)}
+          {!hasFilter && !disableCategory && <CategoryCollection />}
+        </BlockStack>
       </BlockStack>
     </>
   );

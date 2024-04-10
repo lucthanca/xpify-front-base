@@ -15,7 +15,7 @@
   "dependencies": {
     "@shopify/app": "^3.57.0",
     "@shopify/cli": "^3.57.0",
-    "@shopify/polaris": "^12.19.2",
+    "@shopify/polaris": "^12.27.0",
     "@xpify/buildpack": "file:./@xpify/buildpack",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0"

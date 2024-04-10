@@ -7,9 +7,15 @@ import { CATEGORIES_QUERY } from '~/queries/section-builder/category.gql';
 import { TAGS_QUERY } from '~/queries/section-builder/tag.gql';
 import { PricingPlan, SectionData } from '~/talons/section/useSection';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { CATEGORY_FILTER_KEY, PLAN_FILTER_KEY, PRICE_FILTER_KEY, TAG_FILTER_KEY, QUERY_SEARCH_KEY } from '~/components/input/search';
+import {
+  CATEGORY_FILTER_KEY,
+  PLAN_FILTER_KEY,
+  PRICE_FILTER_KEY,
+  TAG_FILTER_KEY,
+  QUERY_SEARCH_KEY,
+  SORT_OPTION_NONE,
+} from '~/components/input/search';
 import { isEmpty } from '~/utils/isEmpty';
-import { useTags } from '~/hooks/useTags'
 
 const productType = {
   'simple': 1,
@@ -28,13 +34,18 @@ type Tag = {
   entity_id: string;
   name: string;
 }
+type PageInfo = {
+  total_pages: number;
+  current_page: number;
+  page_size: number;
+}
 
 export const useSectionCollection = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchFilter, setSearchFilter] = useState('');
-  const [sortSelected, setSortSelected] = useState(['main_table.name asc']);
+  const [sortSelected, setSortSelected] = useState([SORT_OPTION_NONE]);
   const [planFilter, setPlanFilter] = useState(undefined);
   const [categoryFilter, setCategoryFilter] = useState(undefined);
   const [tagFilter, setStateTagFilter] = useState([] as string[]);
@@ -194,7 +205,7 @@ export const useSectionCollection = () => {
 };
 
 
-const FILTER_FIELDS_MAPPING = {
+const FILTER_FIELDS_MAPPING: { [key: string]: string } = {
   [TAG_FILTER_KEY]: 'tag_id',
   [PLAN_FILTER_KEY]: 'plan_id',
   [CATEGORY_FILTER_KEY]: 'category_id',
@@ -202,20 +213,11 @@ const FILTER_FIELDS_MAPPING = {
 };
 
 export const useSectionListing = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const [filterParts, setFilterParts] = useState({});
   const [searchFilter, setSearchFilter] = useState('');
-  const [sort, setSort] = useState(['name asc']);
+  const [stateSections, setSections] = useState<SectionData[]>([]);
+  const [sort, setSort] = useState([SORT_OPTION_NONE]);
   const [currentPage, setCurrentPage] = useState(1);
-  /**
-   * To determine if has search tags in URL -> pin the tag filter
-   */
-  const [shouldPinTagFilter, setShouldPinTagFilter] = useState(() => {
-    return searchParams.has('tags');
-  });
-  const searchTags = useMemo(() => {
-    return searchParams.get('tags')?.toLowerCase()?.split(',');
-  }, [searchParams]);
   const [information] = useState(() => {
     const currentPath = location.pathname;
     if (currentPath === '/my-library') {
@@ -244,7 +246,8 @@ export const useSectionListing = () => {
       }
     }
   });
-  const { data: sectionsData } = useQuery(SECTIONS_QUERY, {
+  const isSortNone = useMemo(() => !sort || sort[0] === SORT_OPTION_NONE, [sort]);
+  const { data: sectionsData, loading } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       search: searchFilter,
@@ -253,23 +256,19 @@ export const useSectionListing = () => {
         type_id: information.sectionType,
         owned: information.isOwned
       },
-      sort: sort ? (([column, order]) => ({ column, order }))(sort[0].split(' ')) : {},
+      sort: !isSortNone ? (([column, order]) => ({ column, order }))(sort[0].split(' ')) : {},
       pageSize: 12,
       currentPage: currentPage
-    }
+    },
+    onCompleted: (data) => {
+      setSections(data?.[QUERY_SECTION_COLLECTION_KEY]?.items || []);
+    },
   });
-  const { tagOptions } = useTags();
-  const handleTagFilterParams = useCallback((value: any) => {
-    const currentUrlParams = new URLSearchParams(window.location.search);
-    if (!value?.length && Boolean(currentUrlParams.has('tags'))) {
-      currentUrlParams.delete('tags');
-      setSearchParams(currentUrlParams);
-      setShouldPinTagFilter(false);
-    }
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
   }, []);
 
   const handleFilterChange = useCallback((type: string, value: any) => {
-    if (type === TAG_FILTER_KEY) handleTagFilterParams(value);
     if (type === QUERY_SEARCH_KEY) {
       setSearchFilter(value);
       return;
@@ -284,7 +283,7 @@ export const useSectionListing = () => {
           return prevState;
         }
       }
-      const newState = {
+      const newState: {[key: string]: string} = {
         ...prevState,
         [FILTER_FIELDS_MAPPING[type]]: tValue,
       };
@@ -301,28 +300,23 @@ export const useSectionListing = () => {
     setSort(value);
   }, []);
   const sections: SectionData[] | null | undefined = useMemo(() => {
-    return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items;
-  }, [sectionsData]);
+    return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items || stateSections || [];
+  }, [sectionsData, stateSections]);
 
   const hasFilter = useMemo(() => {
-    return !isEmpty(filterParts) || !!searchFilter;
-  }, [filterParts, searchFilter]);
-
-  useEffect(() => {
-    if (!tagOptions?.length || !searchTags?.length) return;
-    const tagIdsMapping = tagOptions.map((item) => {
-      if (searchTags.includes(item.label?.toLowerCase())) return item.value;
-      return undefined;
-    }).filter((item) => item !== undefined) as string[];
-    handleFilterChange(TAG_FILTER_KEY, tagIdsMapping);
-    setShouldPinTagFilter(true);
-  }, [searchTags, tagOptions]);
+    return !isEmpty(filterParts) || !!searchFilter || !isSortNone;
+  }, [filterParts, searchFilter, isSortNone]);
+  const pageInfo = useMemo<PageInfo>(() => {
+    return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.page_info || {};
+  }, [sectionsData]);
 
   return {
     handleFilterChange,
     sections,
     hasFilter,
-    shouldPinTagFilter,
     handleSortChange,
+    pageInfo,
+    handlePageChange,
+    loading,
   };
 };

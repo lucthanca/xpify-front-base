@@ -63,7 +63,6 @@ export const SECTIONS_QUERY = gql`
           version release_note src plan_id
         }
       }
-      total_count
       page_info {
         current_page
         page_size
