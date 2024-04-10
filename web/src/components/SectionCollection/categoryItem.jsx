@@ -44,7 +44,8 @@ const CategoryItem = props => {
         fetchQuery={SECTIONS_QUERY}
         queryRootKey={QUERY_SECTION_COLLECTION_KEY}
         skeletonLoader={<Skeleton total={1} />}
-        variables={lazyProductCarouselVariablesProp} />
+        variables={lazyProductCarouselVariablesProp}
+        pageSize={5} />
     </BlockStack>
   );
 };

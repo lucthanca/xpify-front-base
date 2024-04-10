@@ -27,6 +27,9 @@ export const CATEGORIES_QUERY_V2 = gql`
         ) {
           items {
             ...CommonSectionFragment
+            ... on Section {
+              version release_note src plan_id
+            }
           }
           page_info {
             current_page

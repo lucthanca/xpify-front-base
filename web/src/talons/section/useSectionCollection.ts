@@ -34,6 +34,11 @@ type Tag = {
   entity_id: string;
   name: string;
 }
+type PageInfo = {
+  total_pages: number;
+  current_page: number;
+  page_size: number;
+}
 
 export const useSectionCollection = () => {
   const { t } = useTranslation();
@@ -210,6 +215,7 @@ const FILTER_FIELDS_MAPPING: { [key: string]: string } = {
 export const useSectionListing = () => {
   const [filterParts, setFilterParts] = useState({});
   const [searchFilter, setSearchFilter] = useState('');
+  const [stateSections, setSections] = useState<SectionData[]>([]);
   const [sort, setSort] = useState([SORT_OPTION_NONE]);
   const [currentPage, setCurrentPage] = useState(1);
   const [information] = useState(() => {
@@ -241,7 +247,7 @@ export const useSectionListing = () => {
     }
   });
   const isSortNone = useMemo(() => !sort || sort[0] === SORT_OPTION_NONE, [sort]);
-  const { data: sectionsData } = useQuery(SECTIONS_QUERY, {
+  const { data: sectionsData, loading } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       search: searchFilter,
@@ -253,8 +259,14 @@ export const useSectionListing = () => {
       sort: !isSortNone ? (([column, order]) => ({ column, order }))(sort[0].split(' ')) : {},
       pageSize: 12,
       currentPage: currentPage
-    }
+    },
+    onCompleted: (data) => {
+      setSections(data?.[QUERY_SECTION_COLLECTION_KEY]?.items || []);
+    },
   });
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
 
   const handleFilterChange = useCallback((type: string, value: any) => {
     if (type === QUERY_SEARCH_KEY) {
@@ -288,17 +300,23 @@ export const useSectionListing = () => {
     setSort(value);
   }, []);
   const sections: SectionData[] | null | undefined = useMemo(() => {
-    return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items;
-  }, [sectionsData]);
+    return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items || stateSections || [];
+  }, [sectionsData, stateSections]);
 
   const hasFilter = useMemo(() => {
     return !isEmpty(filterParts) || !!searchFilter || !isSortNone;
   }, [filterParts, searchFilter, isSortNone]);
+  const pageInfo = useMemo<PageInfo>(() => {
+    return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.page_info || {};
+  }, [sectionsData]);
 
   return {
     handleFilterChange,
     sections,
     hasFilter,
     handleSortChange,
+    pageInfo,
+    handlePageChange,
+    loading,
   };
 };

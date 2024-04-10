@@ -22,8 +22,8 @@ type CarouselProps = {
 };
 
 const Carousel: React.FC<CarouselProps> = (props) => {
-  const { skeleton, query, queryKey, slideOptions, extractItems } = props;
-  const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, undefined, extractItems);
+  const { skeleton, query, queryKey, slideOptions, extractItems, queryVariables } = props;
+  const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractItems);
   if (loadingWithoutData && skeleton) {
     return <>{skeleton}</>;
   }

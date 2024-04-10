@@ -66,6 +66,7 @@ export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
   const [pageSize, setPageSize] = useState(propPageSize);
   const [currentPage, setPage] = useState(1);
   const [stateItems, setItems] = useState<any[]>([]);
+
   const { data, loading, error } = useQuery(query, {
     fetchPolicy: "cache-and-network",
     variables: {

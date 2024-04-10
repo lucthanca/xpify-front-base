@@ -3,8 +3,10 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import { useLazyCarousel } from '~/talons/lazyCarousel/useLazyCarousel';
 import PropTypes from 'prop-types';
 import { SectionListProvider } from '~/context';
-import QuickViewSlider from '~/components/QuickViewSectionModal/slider.jsx';
-import InstallModal from '~/components/product/installModal.jsx';
+import QuickViewSlider from '~/components/QuickViewSectionModal/slider';
+import InstallModal from '~/components/product/installModal';
+import '~/components/ProductCarousel/style.scss';
+import { Skeleton } from '~/components/product';
 
 /**
  * @typedef {Object} SectionsQueryFilter
@@ -34,14 +36,12 @@ import InstallModal from '~/components/product/installModal.jsx';
  * @constructor
  */
 const LazyCarousel = props => {
-  const { fetchQuery, queryRootKey, renderItem, skeletonLoader, variables } = props;
+  const { fetchQuery, queryRootKey, renderItem, skeletonLoader, variables, pageSize = 10 } = props;
   const talonProps = useLazyCarousel({
     query: fetchQuery,
     queryRootKey,
-    variables: {
-      sort: { column: 'qty_sold', order: 'desc' },
-      ...variables
-    }
+    variables,
+    pageSize,
   });
   const {
     items,
@@ -53,16 +53,21 @@ const LazyCarousel = props => {
   } = talonProps;
   const keys = items.map(item => item.url_key);
 
-  if (!renderItem || loadingWithoutData) return null;
+  if (loadingWithoutData) {
+    return (<Skeleton total={pageSize} columns={pageSize} />);
+  }
+  if (!renderItem) return null;
   return (
     <SectionListProvider>
       <Splide {...splideConfig} onMoved={handleSplideMoved} ref={splideRef}>
         {items.map((item, index) => {
           return (
             <SplideSlide key={index}>
-              {renderItem(item)}
+              <div className="sliderItemCardRoot">
+                {renderItem(item)}
+              </div>
             </SplideSlide>
-          )
+        )
         })}
         {(canLoadMore && skeletonLoader) && (
           <SplideSlide>
