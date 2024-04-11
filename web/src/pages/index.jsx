@@ -46,7 +46,7 @@ function HomePage() {
               <Card>
                 <BlockStack gap={200}>
                 <Text as="p" variant="bodyLg">
-                  Hi {myShop?.myShop?.shop_owner ?? 'you'}, welcome to your fresh batch of sections and templates to jazz up your Shopify theme!
+                  Hi {myShop?.myShop?.shop_owner}, welcome to your fresh batch of sections and templates to jazz up your Shopify theme!
                 </Text>
                 <Text as="p" variant="bodyLg">
                   Once you've got these installed, just hop into the theme editor, and keep an eye out for 'Simi' in the search box.

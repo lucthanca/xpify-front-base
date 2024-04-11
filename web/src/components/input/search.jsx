@@ -107,11 +107,19 @@ const useSearch = props => {
     setTagFilter([]);
   }, [onFilterChange, handleTagFilterParams]);
 
-  const [sortSelected, setSortSelected] = useState([SORT_OPTION_NONE]);
+  const [sortSelected, setSortSelected] = useState(() => {
+    let output = [SORT_OPTION_NONE];
+    if (location.pathname === '/my-library') {
+      output = ['main_table.name asc'];
+    }
+    return output;
+  });
   const handleSortChange = useCallback((value) => {
-    if (onSortChange) onSortChange(value);
     setSortSelected(value);
   }, [onSortChange]);
+  useEffect(() => {
+    if (onSortChange) onSortChange(sortSelected);
+  }, [sortSelected]);
   const { tagOptions } = useTags();
   const { data: pricingPlans } = useQuery(PRICING_PLANS_QUERY, { fetchPolicy: "cache-and-network" });
   const { data: categories } = useQuery(CATEGORIES_QUERY, { fetchPolicy: "cache-and-network" });
@@ -129,7 +137,7 @@ const useSearch = props => {
     })) : [];
   }, [categories]);
   const sortOptions = useMemo(() => {
-    const baseOptions = [{
+    const baseOptions = location.pathname === '/my-library' ? [] : [{
       label: 'None',
       value: SORT_OPTION_NONE,
     }];
