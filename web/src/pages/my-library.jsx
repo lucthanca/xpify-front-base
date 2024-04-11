@@ -1,5 +1,5 @@
 import { Box, Button, InlineGrid, InlineStack, Layout, OptionList, Page, Popover, Text } from '@shopify/polaris';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import SectionCollection from '~/components/SectionCollection';
 import GroupCollection from '~/components/GroupCollection';
 import { useNavigate, createSearchParams, useSearchParams } from 'react-router-dom';
@@ -36,11 +36,11 @@ function MyLibrary() {
     setPopoverActive(false);
   }, [selected]);
 
-  const activator = (
-    <Button onClick={togglePopoverActive} variant='tertiary' size='large' disclosure>
-      {selected}
-    </Button>
-  );
+  const activator = useMemo(() => {
+    return <Button onClick={togglePopoverActive} variant='tertiary' size='large' disclosure>
+      {options.find(item => item.value === selected[0])?.label}
+    </Button>;
+  }, [selected]);
 
   return (
     <Page fullWidth>

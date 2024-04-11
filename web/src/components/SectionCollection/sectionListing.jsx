@@ -30,19 +30,6 @@ const SectionListing = props => {
     pageInfo,
     loading,
   } = talonProps;
-<<<<<<< HEAD
-  const bestSellerSliderConfig = {
-    perPage: 4,
-    gap: '1rem',
-    pagination: false,
-    breakpoints:{
-      425: { perPage: 1 },
-      768: { perPage: 3, gap: '0.5rem' },
-      2560: { perPage: 4 }
-    },
-  }
-=======
->>>>>>> b4298023110480e04ede4f7cffe477860777bf45
   return (
     <>
       {loading && hasFilter && <Loading />}

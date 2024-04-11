@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import {
   BlockStack,
   Box,
@@ -17,7 +17,9 @@ import {
   ChevronDownIcon
 } from '@shopify/polaris-icons';
 import CollapsibleGuide from "~/components/block/collapsible/guide";
-import { useGetThemeUrl } from "~/hooks/section-builder/redirect";
+import { useQuery } from "@apollo/client";
+import { MY_SHOP } from '~/queries/section-builder/other.gql';
+import { THEMES_QUERY } from "~/queries/section-builder/theme.gql";
 
 const totalStep = 3;
 
@@ -27,8 +29,22 @@ function GuideCard() {
   const [progress, setProgress] = useState(0);
 
   const handleToggle = useCallback(() => setOpen((open) => !open), []);
-  const urlEmbedApp = useGetThemeUrl('quickstart-249efe07.myshopify.com', 140402884850, 'editor?context=apps');
-  const urlEditTheme = useGetThemeUrl('quickstart-249efe07.myshopify.com', 140402884850, '/editor');
+
+  const { data: myShop } = useQuery(MY_SHOP, {
+    fetchPolicy: "cache-and-network",
+  });
+  const { data:themesData } = useQuery(THEMES_QUERY, {
+    fetchPolicy: "cache-and-network"
+  });
+
+  const { urlEmbedApp, urlEditTheme } = useMemo(() => {
+    if (myShop?.myShop?.domain && themesData?.getThemes && themesData.getThemes[0]?.id) {
+      const urlEmbedApp = 'https://' + myShop?.myShop?.domain + '/admin/themes/' + themesData.getThemes[0].id + '/editor?context=apps';
+      const urlEditTheme = 'https://' + myShop?.myShop?.domain + '/admin/themes/' + themesData.getThemes[0].id + '/editor';
+      return {urlEmbedApp, urlEditTheme};
+    }
+    return {};
+  }, [myShop, themesData]);
 
   return (
     <Card padding={0}>

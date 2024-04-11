@@ -75,10 +75,6 @@ export const useBackPage = () => {
   return result;
 }
 
-export const useGetThemeUrl = (domain, id, param = '') => {
-  return `https://${domain}/admin/themes/${id}/${param}`;
-}
-
 export const useScrollToTop = () => {
   window.scrollTo(0,0);
 }

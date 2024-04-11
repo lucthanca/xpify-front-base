@@ -20,6 +20,7 @@ import BannerDefault from '~/components/block/banner/alert';
 import { UPDATE_ASSET_MUTATION, DELETE_ASSET_MUTATION } from "~/queries/section-builder/asset.gql";
 import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
 import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
+import { MY_SHOP } from '~/queries/section-builder/other.gql';
 
 const titleRoleTheme = {
   'main': 'Live',
@@ -68,6 +69,16 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
     }
   }, []);
 
+  const { data: myShop } = useQuery(MY_SHOP, {
+    fetchPolicy: "cache-and-network",
+  });
+  const urlEditTheme = useMemo(() => {
+    if (myShop?.myShop?.domain && selected) {
+      return 'https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor';
+    }
+    return '#';
+  }, [myShop, selected]);
+
   useMemo(() => {
     if (themes && themes.length) {
       setSelected(themes[0]['id'] ?? "");
@@ -110,43 +121,6 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
     };
   }, [section, themes, groupChildSectionsLoad]);
 
-  const options1 = useMemo(() => {
-    return themes
-    ? themes.map(theme => {
-      var status = 'Not install';
-      const installedInTheme = section?.installed && section.installed.find(item => item.theme_id == theme.id);
-
-      if (installedInTheme) {
-        var content = [];
-        if (childSections.length) {
-          if (!groupChildSectionsLoad) {
-            content = childSections.map(item => getUpdateMessage(item, theme.id, section))
-          }
-        } else {
-          content = [getUpdateMessage(section, theme.id)];
-        }
-
-        content = content.filter(item => item !== undefined);
-        if (content.length) {
-          status = 'Installed';
-        }
-        content = content.filter(item => item !== "");
-        if (content.length) {
-          status = 'Should update';
-        }
-      }
-
-      return ({
-        value: theme.id,
-        label: `${theme.name} (${titleRoleTheme[theme.role]}) - ${status}`
-      })
-    })
-    : {
-      value: 0,
-      label: `Loading...`
-    };
-  }, [section, themes]);
-
   const installed = useMemo(() => {
     setBannerAlert(undefined);
     if (!section?.installed) {
@@ -179,12 +153,8 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
     return false;
   }, [selected, options]);
 
-  const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION, {
-
-  });
-  const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION, {
-
-  });
+  const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION, {});
+  const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION, {});
 
   const handleUpdate = useCallback(async () => {
     await updateAction({
@@ -211,7 +181,7 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
         setBannerAlert({
           'title': `Section installed successfully. Go to theme editor to use this section.`,
           'tone': 'success',
-          'action': {content: 'Customize', icon: WrenchIcon},
+          'action': {content: 'Customize', icon: WrenchIcon, url: urlEditTheme},
           'content': updateSuccess.map(item => {
             return {message: 'Add successfully the section ' + item.name};
           })

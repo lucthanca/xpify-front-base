@@ -40,15 +40,8 @@ const LazyCarousel = props => {
   const talonProps = useLazyCarousel({
     query: fetchQuery,
     queryRootKey,
-<<<<<<< HEAD
-    variables: {
-      sort: { column: 'entity_id', order: 'desc' },
-      ...variables
-    }
-=======
     variables,
     pageSize,
->>>>>>> b4298023110480e04ede4f7cffe477860777bf45
   });
   const {
     items,
