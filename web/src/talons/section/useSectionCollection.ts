@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { SECTIONS_QUERY, QUERY_SECTION_COLLECTION_KEY } from '~/queries/section-builder/product.gql';
 import { PRICING_PLANS_QUERY, SORT_OPTIONS_QUERY } from '~/queries/section-builder/other.gql';
@@ -247,6 +247,11 @@ export const useSectionListing = () => {
     }
   });
   const isSortNone = useMemo(() => !sort || sort[0] === SORT_OPTION_NONE, [sort]);
+
+  const hasFilter = useMemo(() => {
+    return !isEmpty(filterParts) || !!searchFilter || !isSortNone;
+  }, [filterParts, searchFilter, isSortNone]);
+
   const { data: sectionsData, loading } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
@@ -263,10 +268,12 @@ export const useSectionListing = () => {
     onCompleted: (data) => {
       setSections(data?.[QUERY_SECTION_COLLECTION_KEY]?.items || []);
     },
+    skip: !hasFilter,
   });
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
   }, []);
+  const lastModeIsCate = useRef(false);
 
   const handleFilterChange = useCallback((type: string, value: any) => {
     if (type === QUERY_SEARCH_KEY) {
@@ -302,13 +309,10 @@ export const useSectionListing = () => {
   const sections: SectionData[] | null | undefined = useMemo(() => {
     return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items || stateSections || [];
   }, [sectionsData, stateSections]);
-
-  const hasFilter = useMemo(() => {
-    return !isEmpty(filterParts) || !!searchFilter || !isSortNone;
-  }, [filterParts, searchFilter, isSortNone]);
   const pageInfo = useMemo<PageInfo>(() => {
     return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.page_info || {};
-  }, [sectionsData]);
+  }, [sectionsData, hasFilter]);
+  const loadingWithoutData = loading && stateSections.length === 0 && sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items === null || sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items === undefined;
 
   return {
     handleFilterChange,
@@ -318,5 +322,6 @@ export const useSectionListing = () => {
     pageInfo,
     handlePageChange,
     loading,
+    loadingWithoutData,
   };
 };

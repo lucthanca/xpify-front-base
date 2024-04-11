@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useQuery, DocumentNode, ApolloError } from '@apollo/client';
+import { useQuery, DocumentNode, ApolloError, useApolloClient } from '@apollo/client';
 import { Splide } from '@splidejs/react-splide';
 import React from 'react';
 
@@ -41,6 +41,7 @@ type LazyCarouselTalon<T = any> = {
 };
 
 export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
+  const client = useApolloClient();
   const { queryRootKey, query, pageSize: propPageSize = 7, variables = {} } = props;
   const width = window.innerWidth;
   const perpage = useMemo(() => {
@@ -63,9 +64,17 @@ export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
   }));
   const splideRef = useRef<Splide>(null);
   const perpageRef = useRef(perpage);
-  const [pageSize, setPageSize] = useState(propPageSize);
+  const loadingRef = useRef(false);
+  const [pageSize] = useState(propPageSize);
   const [currentPage, setPage] = useState(1);
-  const [stateItems, setItems] = useState<any[]>([]);
+
+  const loadCachedItems = useCallback((nextPage: number | null = null) => {
+    const page = nextPage ?? currentPage;
+    const cacheData = client.readQuery<QueryData>({ query, variables: { ...variables, pageSize: propPageSize, currentPage: page } });
+    return cacheData?.[queryRootKey]?.items ?? [];
+  }, [query, variables, propPageSize, currentPage]);
+
+  const [items, setItems] = useState<any[]>([]);
 
   const { data, loading, error } = useQuery(query, {
     fetchPolicy: "cache-and-network",
@@ -83,20 +92,16 @@ export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
   });
   const canLoadMoreRef = useRef(false);
   const totalPage = useMemo(() => data?.[queryRootKey]?.page_info?.total_pages ?? 1, [data]);
-  const canLoadMore = useMemo(() => totalPage > 1, [data, totalPage]);
-
-  const items = useMemo(() => {
-    return data?.[queryRootKey]?.items ?? stateItems;
-  }, [data, queryRootKey, stateItems]);
+  const canLoadMore = useMemo(() => totalPage > 1 && currentPage < totalPage, [data, totalPage]);
 
   const handleSplideMoved = useCallback((_: any, currentIndex: number) => {
     if (!splideRef.current || !splideRef.current?.splide || !canLoadMoreRef.current) return;
     const slideLength = splideRef.current.splide.length;
-    const shouldLoadmore = currentIndex >= slideLength - (perpageRef.current + 1);
-    if (shouldLoadmore) {
-      setPageSize(prevPage => prevPage + propPageSize);
+    const shouldLoadmore = currentIndex >= slideLength - (perpageRef.current + 1) && canLoadMoreRef.current;
+    if (shouldLoadmore && !loadingRef.current) {
+      setPage(prevPage => prevPage + 1);
     }
-  }, [propPageSize]);
+  }, []);
 
   useEffect(() => {
     // use ref because the splidejs event handler is not change when the deps change
@@ -106,11 +111,14 @@ export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
   useEffect(() => {
     perpageRef.current = perpage;
   }, [perpage]);
+  useEffect(() => {
+    loadingRef.current = loading;
+  }, [loading]);
 
   return {
     items,
     loading,
-    loadingWithoutData: !loading && items === undefined,
+    loadingWithoutData: loading && !items?.length,
     error,
     canLoadMore,
     handleSplideMoved,
