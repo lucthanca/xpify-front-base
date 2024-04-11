@@ -91,5 +91,6 @@ export const useCategoryCollection = () => {
     loading,
     error,
     pageInfo,
+    loadingWithoutData: loading && !data?.[CATEGORIES_QUERY_KEY] && stateCategories.length === 0,
   };
 };

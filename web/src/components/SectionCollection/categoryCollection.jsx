@@ -3,6 +3,7 @@ import { useCategoryCollection } from '~/talons/category/useCategoryCollection';
 import CategoryItem from './categoryItem';
 import { Loading } from '@shopify/app-bridge-react';
 import Pagination from '~/components/Pagination';
+import Skeleton from './categoryItemShimmer';
 
 const CategoryCollection = props => {
   const talonProps = useCategoryCollection();
@@ -12,7 +13,9 @@ const CategoryCollection = props => {
     pageInfo,
     handlePageChange,
     loading,
+    loadingWithoutData,
   } = talonProps;
+  if (loadingWithoutData) return <Skeleton itemNumber={5} />
 
   return (
     <>
