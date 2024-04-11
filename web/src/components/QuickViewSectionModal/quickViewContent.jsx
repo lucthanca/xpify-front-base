@@ -24,6 +24,7 @@ import QuickViewContentSkeleton from '~/components/QuickViewSectionModal/quickVi
 const PricingPlan = lazy(() => import('~/components/QuickViewSectionModal/pricingPlan'));
 import './style.scss';
 import BannerAlert from '~/components/block/banner/alert';
+import DocInstall from '../block/card/docInstall';
 
 const LazyQuickViewContent = props => {
   const { url_key } = props;
@@ -52,13 +53,14 @@ const LazyQuickViewContent = props => {
     <Scrollable className='quickViewModal__scrollable__content px-2 pl-4 pb-4'>
       <InlineGrid columns={{ sm: 1, md: ['twoThirds', 'oneThird'] }} gap='400'>
         <div className='h-full py-4'>
-          <div className='sticky top-4'>
+          <BlockStack gap={400}>
             <Card title='Gallery' padding='0'>
               <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee] sticky'>
                 <GallerySlider gallery={section.images} />
               </div>
             </Card>
-          </div>
+            <DocInstall />
+          </BlockStack>
         </div>
         <div className='py-4'>
           <BlockStack gap='400'>
@@ -100,7 +102,7 @@ const LazyQuickViewContent = props => {
                       </Button>
                     )}
                     <Button size='large' fullWidth url={section.demo_link} disabled={!Boolean(section.demo_link)}>
-                      <Tooltip content={'View demo store'} />
+                      <Text>View in demo store</Text>
                     </Button>
                   </>
                 ) : (

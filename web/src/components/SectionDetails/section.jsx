@@ -4,10 +4,12 @@ import {
   Box,
   Card,
   Icon,
+  InlineGrid,
   InlineStack,
   Layout,
   Page,
-  Text
+  Text,
+  List
 } from '@shopify/polaris';
 import { PaymentIcon, ViewIcon, CheckIcon } from '@shopify/polaris-icons';
 import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
@@ -19,6 +21,7 @@ import SectionGallery from '~/components/SectionDetails/gallery';
 import RelatedProducts from '~/components/SectionDetails/RelatedProducts';
 import { Loading } from '@shopify/app-bridge-react';
 import NotFound from '~/pages/NotFound';
+import DocInstall from '../block/card/docInstall';
 
 const SectionFullpageDetails = props => {
   const {
@@ -141,6 +144,10 @@ const SectionFullpageDetails = props => {
 
               <Box>
                 <SectionGallery images={section?.images || []} />
+              </Box>
+
+              <Box>
+                <DocInstall />
               </Box>
 
               <RelatedProducts url_key={section.url_key} />
