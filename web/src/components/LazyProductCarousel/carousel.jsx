@@ -53,7 +53,6 @@ const LazyCarousel = props => {
   } = talonProps;
   const keys = items.map(item => item.url_key);
 
-  console.log({ canLoadMore, items });
   if (loadingWithoutData) {
     return (<Skeleton total={pageSize} columns={pageSize} />);
   }

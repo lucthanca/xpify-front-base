@@ -312,7 +312,7 @@ export const useSectionListing = () => {
   const pageInfo = useMemo<PageInfo>(() => {
     return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.page_info || {};
   }, [sectionsData, hasFilter]);
-  const loadingWithoutData = loading && sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items === null || sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items === undefined;
+  const loadingWithoutData = loading && stateSections.length === 0 && sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items === null || sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items === undefined;
 
   return {
     handleFilterChange,
