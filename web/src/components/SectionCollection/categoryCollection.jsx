@@ -4,6 +4,7 @@ import CategoryItem from './categoryItem';
 import { Loading } from '@shopify/app-bridge-react';
 import Pagination from '~/components/Pagination';
 import Skeleton from './categoryItemShimmer';
+import BannerError from '~/components/block/banner/alert';
 
 const CategoryCollection = props => {
   const talonProps = useCategoryCollection();
@@ -16,6 +17,15 @@ const CategoryCollection = props => {
     loadingWithoutData,
   } = talonProps;
   if (loadingWithoutData) return <Skeleton itemNumber={5} />
+  if (!loading && error) {
+    const errs = error?.graphQLErrors ?? [{ message: error.message }];
+    const bannerProps = {
+      title: error.message,
+      tone: 'critical',
+      content: errs,
+    };
+    return <BannerError bannerAlert={bannerProps} />
+  }
 
   return (
     <>

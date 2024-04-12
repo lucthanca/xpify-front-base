@@ -21,7 +21,7 @@ function BannerWarningNotPurchase({section, config}) {
           {
             section.actions?.plan &&
             <List.Item>
-              <Text variant="bodySm">Periodic payments: Own all sections included in the plan ({section.pricing_plan.name})</Text>
+              <Text variant="bodySm">Periodic payments: Own all sections included in the plan ({section?.pricing_plan?.name})</Text>
             </List.Item>
           }
         </List>

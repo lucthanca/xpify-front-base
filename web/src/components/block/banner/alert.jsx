@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from 'react';
 import {
   Banner,
   BlockStack,
@@ -6,11 +6,14 @@ import {
   Text
 } from "@shopify/polaris";
 
-function BannerDefault({bannerAlert, setBannerAlert}) {
+function BannerDefault({bannerAlert, setBannerAlert, noDismiss }) {
   console.log('re-render banner');
+  const handleDismiss = useCallback(() => {
+    setBannerAlert && setBannerAlert(undefined);
+  }, [setBannerAlert]);
   return (
     bannerAlert &&
-    <Banner {...bannerAlert} onDismiss={() => {setBannerAlert(undefined)}}>
+    <Banner {...bannerAlert} onDismiss={noDismiss ? undefined : handleDismiss}>
       {
         bannerAlert.content &&
         <BlockStack gap={200}>

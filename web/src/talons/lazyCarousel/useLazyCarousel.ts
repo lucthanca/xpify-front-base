@@ -15,6 +15,8 @@ type QueryData<T = any> = {
     items: T[];
     page_info: {
       total_pages: number;
+      current_page: number;
+      page_size: number;
     };
   } | undefined;
 };
@@ -40,7 +42,11 @@ type LazyCarouselTalon<T = any> = {
   };
 };
 
-export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
+type ItemParts<T = any> = {
+  [key: string]: T[];
+}
+
+export const useLazyCarousel = <T extends any>(props: Props): LazyCarouselTalon<T> => {
   const client = useApolloClient();
   const { queryRootKey, query, pageSize: propPageSize = 7, variables = {} } = props;
   const width = window.innerWidth;
@@ -70,11 +76,14 @@ export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
 
   const loadCachedItems = useCallback((nextPage: number | null = null) => {
     const page = nextPage ?? currentPage;
-    const cacheData = client.readQuery<QueryData>({ query, variables: { ...variables, pageSize: propPageSize, currentPage: page } });
-    return cacheData?.[queryRootKey]?.items ?? [];
+    return client.readQuery<QueryData>({ query, variables: { ...variables, pageSize: propPageSize, currentPage: page } });
   }, [query, variables, propPageSize, currentPage]);
 
-  const [items, setItems] = useState<any[]>([]);
+  const [listParts, setListParts] = useState<ItemParts<T>>(() => {
+    const cachedData = loadCachedItems();
+    const curPage = cachedData?.[queryRootKey]?.page_info?.current_page ?? 1;
+    return { ['p_' + curPage]: cachedData?.[queryRootKey]?.items || [] };
+  });
 
   const { data, loading, error } = useQuery(query, {
     fetchPolicy: "cache-and-network",
@@ -83,12 +92,6 @@ export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
       pageSize,
       currentPage,
     },
-    onCompleted: (data: QueryData) => {
-      const newItems = data?.[queryRootKey]?.items;
-      if (newItems) {
-        setItems(prevItems => [...prevItems, ...newItems]);
-      }
-    }
   });
   const canLoadMoreRef = useRef(false);
   const totalPage = useMemo(() => data?.[queryRootKey]?.page_info?.total_pages ?? 1, [data]);
@@ -104,6 +107,16 @@ export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
   }, []);
 
   useEffect(() => {
+    const currPage = data?.[queryRootKey]?.page_info?.current_page ?? 1;
+    setListParts(prev => {
+      return {
+        ...prev,
+        ['p_' + currPage]: data?.[queryRootKey]?.items || [],
+      };
+    });
+  }, [data]);
+
+  useEffect(() => {
     // use ref because the splidejs event handler is not change when the deps change
     canLoadMoreRef.current = canLoadMore;
   }, [canLoadMore]);
@@ -115,10 +128,14 @@ export const useLazyCarousel = (props: Props): LazyCarouselTalon => {
     loadingRef.current = loading;
   }, [loading]);
 
+  const extractedItems = useMemo(() => {
+    return Object.values(listParts).reduce((acc, curr) => [...acc, ...curr], []);
+  }, [listParts]);
+
   return {
-    items,
+    items: extractedItems,
     loading,
-    loadingWithoutData: loading && !items?.length,
+    loadingWithoutData: loading && !extractedItems?.length,
     error,
     canLoadMore,
     handleSplideMoved,

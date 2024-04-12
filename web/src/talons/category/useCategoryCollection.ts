@@ -70,7 +70,7 @@ export const useCategoryCollection = () => {
   const { data, loading, error } = useQuery(CATEGORIES_QUERY_V2, {
     fetchPolicy: 'cache-and-network',
     variables: {
-      pageSize: 1,
+      pageSize: 5,
       currentPage: currentPage,
       sectionFilter: { type_id: sectionType.sectionType, owned: sectionType.isOwned },
     },
@@ -81,7 +81,7 @@ export const useCategoryCollection = () => {
     },
   });
   const categories = useMemo(() => {
-    return data?.[CATEGORIES_QUERY_KEY]?.items || stateCategories || [];
+    return (data?.[CATEGORIES_QUERY_KEY]?.items || stateCategories || []).filter((category: Category) => category.sections?.items?.length);
   }, [data, stateCategories]);
   const pageInfo = useMemo(() => {
     return data?.[CATEGORIES_QUERY_KEY]?.page_info || {};
