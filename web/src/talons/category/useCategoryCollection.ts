@@ -4,6 +4,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SectionData } from '~/talons/section/useSection';
 import { SECTIONS_QUERY, QUERY_SECTION_COLLECTION_KEY } from '~/queries/section-builder/product.gql';
+import { useSectionType } from '~/hooks/useSectionType';
 
 type SectionsQueryData = {
   items: SectionData[];
@@ -23,6 +24,7 @@ export const useCategoryCollection = () => {
   const client = useApolloClient();
   const cache = client.cache;
   const initializedRef = useRef(false);
+  const { sectionType } = useSectionType();
   const [stateCategories, setCategories] = useState<Category[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(() => {
@@ -60,16 +62,17 @@ export const useCategoryCollection = () => {
         variables: {
           pageSize: 5,
           currentPage: 1,
-          filter: { category_id: [category.id] }
+          filter: { category_id: [category.id], type_id: sectionType.sectionType, owned: sectionType.isOwned }
         },
       })
     }
-  }, []);
+  }, [sectionType]);
   const { data, loading, error } = useQuery(CATEGORIES_QUERY_V2, {
     fetchPolicy: 'cache-and-network',
     variables: {
       pageSize: 1,
       currentPage: currentPage,
+      sectionFilter: { type_id: sectionType.sectionType, owned: sectionType.isOwned },
     },
     onCompleted: (data) => {
       const comingCategories = data?.[CATEGORIES_QUERY_KEY]?.items || [];

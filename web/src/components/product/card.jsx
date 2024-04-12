@@ -125,7 +125,7 @@ function ProductCard({item, lazyLoadImg = true}) {
                 />
               }
             </InlineStack>
-            <Box paddingBlockStart={200}>
+            <Box>
               {
                 item?.tags &&
                 <BadgeTag tags={item.tags} />

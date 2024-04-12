@@ -5,6 +5,7 @@ import { QUERY_SECTION_COLLECTION_KEY, SECTIONS_QUERY } from '~/queries/section-
 import { Skeleton } from '~/components/product';
 import { memo, useCallback, useState } from 'react';
 import ProductCard from '~/components/product/card';
+import { useSectionType } from '~/hooks/useSectionType';
 
 /**
  * @typedef {object} CategoryItemProps
@@ -28,25 +29,37 @@ const CategoryItem = props => {
       />
     );
   }, []);
+  const { sectionType } = useSectionType();
   const [lazyProductCarouselVariablesProp] = useState(() => {
     return {
       filter: {
-        category_id: [categoryId]
+        category_id: [categoryId],
+        type_id: sectionType.sectionType,
+        owned: sectionType.isOwned,
       }
     };
   });
 
+  const SkeletonLoader = (
+    <div className='sliderItemCardRoot'>
+      <Skeleton total={1} />
+    </div>
+  );
+
   return (
-    <BlockStack gap='200'>
-      <Text variant="headingMd" as="h2">{name ?? 'N/A'}</Text>
+    <>
+      <Text variant='headingMd' as='h2'>
+        {name ?? 'N/A'}
+      </Text>
       <LazyProductCarousel
         renderItem={renderProduct}
         fetchQuery={SECTIONS_QUERY}
         queryRootKey={QUERY_SECTION_COLLECTION_KEY}
-        skeletonLoader={<Skeleton total={1} />}
+        skeletonLoader={SkeletonLoader}
         variables={lazyProductCarouselVariablesProp}
-        pageSize={5} />
-    </BlockStack>
+        pageSize={5}
+      />
+    </>
   );
 };
 

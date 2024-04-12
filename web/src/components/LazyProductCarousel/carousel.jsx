@@ -52,6 +52,7 @@ const LazyCarousel = props => {
     splideConfig,
   } = talonProps;
   const keys = items.map(item => item.url_key);
+  console.log({ loadingWithoutData });
 
   if (loadingWithoutData) {
     return (<Skeleton total={pageSize} columns={pageSize} />);

@@ -12,22 +12,23 @@ function Skeleton({total, columns}) {
   const listSkeleton = [];
   for (let i = 1; i <= total; i++) {
     listSkeleton.push(
-      <Card key={i} padding={0}>
-          <div style={{height: '200px'}}>
-          </div>
-          <Box background="bg-surface-secondary" padding="400">
-            <BlockStack gap={200}>
-              <SkeletonDisplayText size='small'></SkeletonDisplayText>
-              <SkeletonBodyText lines={2}></SkeletonBodyText>
-              <SkeletonDisplayText maxWidth="true"></SkeletonDisplayText>
-            </BlockStack>
-          </Box>
-        </Card>
+      <Card key={i} padding='0' background="bg-surface-secondary">
+        <div className='aspect-video bg-white'>
+        </div>
+        <Box padding="400">
+          <BlockStack gap='200'>
+            <SkeletonDisplayText size='small' />
+            <SkeletonBodyText lines={2} />
+            <SkeletonDisplayText maxWidth="true" />
+            <SkeletonBodyText lines={1} />
+          </BlockStack>
+        </Box>
+      </Card>
     );
   }
 
   return (
-    <InlineGrid columns={columns} gap={600}>
+    <InlineGrid columns={columns} gap='600'>
       {listSkeleton}
     </InlineGrid>
   );

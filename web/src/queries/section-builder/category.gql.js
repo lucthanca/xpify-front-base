@@ -11,7 +11,7 @@ export const CATEGORIES_QUERY = gql`
 `;
 
 export const CATEGORIES_QUERY_V2 = gql`
-  query GetCategoryCollection($filter: CategoryFilterInput, $pageSize: Int = 20, $currentPage: Int = 1) {
+  query GetCategoryCollection($filter: CategoryFilterInput, $sectionFilter: SectionFilterInputV2, $pageSize: Int = 20, $currentPage: Int = 1) {
     ${CATEGORIES_QUERY_KEY}(filters: $filter, pageSize: $pageSize, currentPage: $currentPage) {
       page_info {
         current_page
@@ -24,11 +24,15 @@ export const CATEGORIES_QUERY_V2 = gql`
         sections(
           pageSize: 5
           currentPage: 1
+          filter: $sectionFilter
         ) {
           items {
             ...CommonSectionFragment
             ... on Section {
               version release_note src plan_id
+            }
+            ... on GroupSection {
+              child_ids
             }
           }
           page_info {

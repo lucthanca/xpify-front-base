@@ -1,75 +1,14 @@
-import { memo, useState } from 'react';
-import { BlockStack, Box, Card, Layout, Page, SkeletonDisplayText, Text } from '@shopify/polaris';
-import Search from '~/components/input/search';
-import ProductCarousel from '~/components/splide/product';
-import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
-import SkeletonProduct from '~/components/product/skeleton';
-import ProductList from '~/components/product/list';
-import Paginate from '~/components/block/paginate/default';
-import { useSectionCollection } from '~/talons/section/useSectionCollection';
-import { useSearchParams } from 'react-router-dom';
+import { memo } from 'react';
+import { Card, Layout } from '@shopify/polaris';
+import SectionListing from '~/components/SectionCollection/sectionListing';
 
 const GroupCollection = props => {
-  const {
-    searchFilter,
-    setSearchFilter,
-    categoryFilter,
-    setCategoryFilter,
-    tagFilter,
-    setTagFilter,
-    priceFilter,
-    setPriceFilter,
-    sortSelected,
-    setSortSelected,
-    categoriesOptions,
-    tagOptions,
-    sortOptions,
-    sections,
-    currentPage,
-    setCurrentPage,
-    sectionCollectionPageInfo,
-    debounceLoading,
-    setDebounceLoading
-  } = useSectionCollection();
-
-  const [searchParams, setSearchParams] = useSearchParams();
-  console.log(searchParams);
-
   return (
     <>
       <Layout.Section>
-        <Card padding='0'>
-          <Search
-            searchFilter={searchFilter} setSearchFilter={setSearchFilter}
-            categoryFilter={categoryFilter} setCategoryFilter={setCategoryFilter}
-            tagFilter={tagFilter} setTagFilter={setTagFilter}
-            priceFilter={priceFilter} setPriceFilter={setPriceFilter}
-            sortSelected={sortSelected} setSortSelected={setSortSelected}
-            categories={categoriesOptions}
-            tags={tagOptions}
-            sortOptions={sortOptions}
-            debounceLoading={debounceLoading}
-            setDebounceLoading={setDebounceLoading}
-          />
-
-          <Box padding='600'>
-            <BlockStack gap='200'>
-              {
-                !debounceLoading && sections !== undefined ? (
-                  <ProductList items={sections ?? []} columns={{sm: 1, md: 2, lg: 4}} />
-                ) : (<SkeletonProduct total={4} columns={{ sm: 1, md: 2, lg: 4 }} />)
-              }
-            </BlockStack>
-          </Box>
+        <Card padding='400'>
+          <SectionListing />
         </Card>
-      </Layout.Section>
-
-      <Layout.Section>
-        <Paginate
-          pageInfo={sectionCollectionPageInfo ?? []}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
       </Layout.Section>
     </>
   );

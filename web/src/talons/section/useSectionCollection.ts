@@ -273,7 +273,6 @@ export const useSectionListing = () => {
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
   }, []);
-  const lastModeIsCate = useRef(false);
 
   const handleFilterChange = useCallback((type: string, value: any) => {
     if (type === QUERY_SEARCH_KEY) {
