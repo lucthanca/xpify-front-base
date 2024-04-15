@@ -16,9 +16,10 @@ import GallerySlider from '~/components/splide/gallery';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
 import BadgeTag from '~/components/block/badge/tag';
 import BannerDefault from '~/components/block/banner/alert';
+import CardUSP from '~/components/block/card/usp';
 import ModalInstallSection from '~/components/product/manage';
 import { SECTION_V2_QUERY } from '~/queries/section-builder/product.gql';
-import { PaymentIcon } from '@shopify/polaris-icons';
+import { PaymentIcon, CheckIcon } from '@shopify/polaris-icons';
 import { PricingPlanSkeleton } from '~/components/QuickViewSectionModal';
 import QuickViewContentSkeleton from '~/components/QuickViewSectionModal/quickViewContentShimmer';
 const PricingPlan = lazy(() => import('~/components/QuickViewSectionModal/pricingPlan'));
@@ -81,10 +82,6 @@ const LazyQuickViewContent = props => {
                   Version: {section.version}
                 </Text>
 
-                <Text variant='bodyLg' as='p' fontWeight='bold'>
-                  ${section.price}
-                </Text>
-
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
 
                 {section.actions?.install && <ModalInstallSection section={section} refectQuery={SECTION_V2_QUERY} />}
@@ -97,12 +94,13 @@ const LazyQuickViewContent = props => {
                         icon={<Icon source={PaymentIcon} tone='base' />}
                         size='large'
                         fullWidth
-                        onClick={handlePurchase}>
-                        Purchase
+                        onClick={handlePurchase}
+                      >
+                        Purchase ${section.price}
                       </Button>
                     )}
                     <Button size='large' fullWidth url={section.demo_link} disabled={!Boolean(section.demo_link)}>
-                      <Text>View in demo store</Text>
+                      <Text>View in demo site</Text>
                     </Button>
                   </>
                 ) : (
@@ -111,14 +109,10 @@ const LazyQuickViewContent = props => {
               </BlockStack>
             </Card>
 
-            {section.description && (
-              <Card title='USP'>
-                <Box>
-                  <BlockStack gap='200'>
-                    <div dangerouslySetInnerHTML={{ __html: section.description }}></div>
-                  </BlockStack>
-                </Box>
-              </Card>
+            {section?.short_description && (
+              <Box>
+                <CardUSP short_description={section.short_description} />
+              </Box>
             )}
 
             {section?.plan_id && (

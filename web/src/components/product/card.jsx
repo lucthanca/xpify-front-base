@@ -103,7 +103,9 @@ function ProductCard({item, lazyLoadImg = true}) {
                 <div className='pointer' onClick={() => handleRedirect(item)}>
                   <Text variant="headingMd" as="h2">{item.name}</Text>
                 </div>
-                <Text variant="bodyLg" fontWeight='bold'>${item.price}</Text>
+                {item.price > 0 &&
+                  <Text variant="bodyLg" fontWeight='bold'>${item.price}</Text>
+                }
               </InlineStack>
               <InlineStack gap={200}>
                 <BadgeStatusSection item={item} />

@@ -14,6 +14,7 @@ import {
 import { PaymentIcon, ViewIcon, CheckIcon } from '@shopify/polaris-icons';
 import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
 import BadgeTag from '~/components/block/badge/tag';
+import CardUSP from '~/components/block/card/usp';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
 import ModalInstallSection from '~/components/product/manage';
 import BannerWarningNotPurchase from '~/components/block/banner/warningPurchase';
@@ -56,8 +57,10 @@ const SectionFullpageDetails = props => {
         subtitle={"version " + section.version}
         compactTitle
         primaryAction={{
-          content: 'Purchase',
-          disabled: true
+          content: !section.actions?.purchase ? 'Owned' : 'Purchase',
+          disabled: !section.actions?.purchase,
+          loading: purchaseLoading || sectionLoading,
+          onAction: section.actions?.purchase && handlePurchase
         }}
         secondaryActions={[
           {
@@ -67,13 +70,6 @@ const SectionFullpageDetails = props => {
             disabled: !section?.demo_link || sectionLoading,
             helpText: !section?.demo_link ? 'This product has no demo yet.' : '',
             onAction: () => {}
-          },
-          {
-            content: !section.actions?.purchase ? 'Owned' : 'Purchase',
-            disabled: !section.actions?.purchase,
-            helpText: section.actions?.purchase && 'Own forever this section.',
-            loading: purchaseLoading || sectionLoading,
-            onAction: section.actions?.purchase && handlePurchase
           }
         ]}
       >
@@ -109,27 +105,11 @@ const SectionFullpageDetails = props => {
 
               <ModalInstallSection section={section} fullWith={false} />
 
-              {section?.short_description &&
+              {section?.short_description && (
                 <Box>
-                  <Card title="USP">
-                    <Text variant="headingMd">USP</Text>
-                    <Box padding="200">
-                      {
-                        section.short_description.split('\n').map((content, key) => {
-                          return (
-                            <InlineStack key={key} gap='200' blockAlign="start">
-                              <div>
-                                <Icon source={CheckIcon} tone="info"/>
-                              </div>
-                              <Text>{content}</Text>
-                            </InlineStack>
-                          );
-                        })
-                      }
-                    </Box>
-                  </Card>
+                  <CardUSP short_description={section.short_description} />
                 </Box>
-              }
+              )}
 
               {section.description &&
                 <Box>

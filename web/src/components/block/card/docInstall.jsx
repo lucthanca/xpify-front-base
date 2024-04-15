@@ -3,10 +3,7 @@ import { BlockStack, Box, Button, Card, InlineGrid, Text, List } from "@shopify/
 
 function DocInstall() {
   return (
-    <InlineGrid columns={2} gap={400}>
-      <Card title='Video guide'>
-      </Card>
-      <Card title='Doc'>
+    <Card title='Doc'>
         <Box>
           <Text variant="headingMd">How to add section your theme</Text>
           <Box padding="200">
@@ -39,13 +36,12 @@ function DocInstall() {
                 <Text>Navigate to the places you want to add sections</Text>
               </List.Item>
               <List.Item>
-                <Text>Click ""Add section"" and look for ""Simi"" in the search box</Text>
+                <Text>Click "Add section" and look for "OT" in the search box</Text>
               </List.Item>
             </List>
           </Box>
         </Box>
       </Card>
-    </InlineGrid>
   );
 }
 
