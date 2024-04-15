@@ -3,8 +3,14 @@ import { Badge, Text, Tooltip } from "@shopify/polaris";
 
 function BadgeStatusSection({item}) {
 	const owned = useMemo(() => {
+    if (item.price <= 0) {
+			return <Badge tone='success' size="small">
+        <Text>Free</Text>
+      </Badge>
+		}
+
 		if (!item.actions?.purchase && item.price > 0) {
-			return <Badge tone='info' size="small">
+			return <Badge tone='success' size="small">
          <Tooltip content="Owned">
           <Text>Purchased</Text>
         </Tooltip>
@@ -37,7 +43,7 @@ function BadgeStatusSection({item}) {
     }
   }, [item]);
 
-  return <>{shouldUpdate} {owned}</>;
+  return <>{owned} {shouldUpdate}</>;
 }
 
 export default memo(BadgeStatusSection);

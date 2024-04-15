@@ -6,14 +6,12 @@ import LatestRelease from '~/components/LatestRelease';
 const LatestReleaseHomePage = () => {
   const [spliderConfig] = useState(() => {
     return {
-      perPage: 3,
+      perPage: 2,
       gap: '1rem',
       pagination: false,
       breakpoints:{
         425: { perPage: 1 },
-        768: { perPage: 3, gap: '0.5rem' },
-        1200: { perPage: 3 },
-        2560: { perPage: 3 }
+        1024: { perPage: 2, gap: '0.5rem' }
       },
     };
   });

@@ -14,7 +14,7 @@ function ProductList({ items, columns, isSimple = true }) {
     return items.map(item => item.url_key);
   }, [items]);
   if (!items.length) {
-    return <EmptySections heading={'No result'} action={() => {}} content={'TEst'} />;
+    return <EmptySections heading={'No result'} content={'Try changing the filters or search term.'} />;
   }
 
   return (
