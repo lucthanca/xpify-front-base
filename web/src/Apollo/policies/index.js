@@ -11,6 +11,15 @@ const typePolicies = {
   StoreConfig: {
     keyFields: ['store_code'],
   },
+  SectionInterface: {
+    keyFields: 'url_key',
+  },
+  Section: {
+    keyFields: 'url_key'
+  },
+  GroupSection: {
+    keyFields: 'url_key',
+  },
   App: {
     keyFields: 'id',
   },

@@ -1,0 +1,12 @@
+div.quickViewModal__scrollable__content {
+    @apply max-h-[calc(100vh-9rem)];
+}
+.quickViewModal__gallery__root > div,
+.quickViewModal__gallery__root > div > div.splide__track,
+.quickViewModal__gallery__root > div > div.splide__track > ul > li img {
+    @apply w-full h-full;
+}
+.quickViewModal__gallery__root > div > div.splide__track > ul > li img {
+    @apply object-contain;
+}
+

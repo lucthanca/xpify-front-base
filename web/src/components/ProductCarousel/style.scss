@@ -1,0 +1,6 @@
+.sliderItemCardRoot {
+    @apply h-full;
+    &> div {
+        @apply h-full;
+    }
+}

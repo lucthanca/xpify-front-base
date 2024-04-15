@@ -27,18 +27,16 @@ App template này đi kèm với các tính năng sau:
 
 Template chạy trên Shopify CLI 3.0, một package bạn có thể thêm vào trong projecc. Có thể cài nó dùng package manager:
 
-[Shopify CLI](https://shopify.dev/docs/apps/tools/cli) sẽ kết nối App với tài khoản partner của bạn.
-Nó cung cấp các biến môi trường, chạy các lệnh, cập nhật app để phát triển một cách nhanh chóng.
-
-### Bạn có thể cài đặt template bằng các cách sau
-
-#### Sử dụng shopfiy app create
-
 ```shell
 npm init @shopify/app@3.57.0 -- --template <url_của_repo_này>
 ```
 
 Điều này sẽ clone template và cài cli vào project.
+
+### Làm việc với template
+
+[Shopify CLI](https://shopify.dev/docs/apps/tools/cli) sẽ kết nối App với tài khoản partner của bạn.
+Nó cung cấp các biến môi trường, chạy các lệnh, cập nhật app để phát triển một cách nhanh chóng.
 
 lần đầu sau khi đã cài đặt template:
 1. đầu tiên hãy cd vào project
@@ -48,9 +46,17 @@ lần đầu sau khi đã cài đặt template:
 1. chạy lệnh `npm run dev -- --reset` đối với lần đầu để khởi tạo config cho app.
 
 các lần sau đó bạn có thể phát triển trên môi trường local sử dụng lệnh sau đây:
+
 ```shell
 npm run dev
 ```
+
+Mở URL được tạo trong cmd. Sau khi cấp quyền cho app, bạn có thể bắt đầu dev được rồi.
+
+### Build
+
+Đang cập nhật...
+=======
 Mở URL được tạo trong cmd. Sau khi cấp quyền cho app, bạn có thể bắt đầu dev được rồi.
 
 #### Cài đặt thủ công

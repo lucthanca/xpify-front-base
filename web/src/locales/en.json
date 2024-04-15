@@ -6,15 +6,17 @@
     }
   },
   "HomePage": {
-    "heading": "Ngon rồi, app lên rồi 🎉",
-    "learnMore": "Nhấp vào đây để xem <ShopifyTutorialLink>hướng dẫn build Shopify App</ShopifyTutorialLink> 📚",
-    "startPopulatingYourApp": "Chiến thôi!",
-    "title": "Xpify Base App - Template",
-    "trophyAltText": "Nice work on building a Shopify app",
-    "yourAppIsReadyToExplore": "App đã sẵn sàng để quẩy! Nó đã bao gồm các thư viện và component để bạn có thể nghịch ví dụ như <PolarisLink>Polaris</PolarisLink>, <AdminApiLink>Shopify Admin API</AdminApiLink>, và <AppBridgeLink>App Bridge</AppBridgeLink>."
+    "tutorialTitle": "Tutorial",
+    "sectionTitle": "Sections"
   },
   "NavigationMenu": {
-    "pageName": "Page name"
+    "pageName": "Page name",
+    "mySections": "My sections",
+    "sections": "Sections",
+    "groups": "Groups",
+    "myLibrary": "My Library",
+    "plans": "Pricing Plans",
+    "helpCenter": "Help Center"
   },
   "NotFound": {
     "description": "Check the URL and try again, or use the search bar to find what you need.",
