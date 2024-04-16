@@ -56,7 +56,7 @@ const GroupSectionDetails = props => {
         }}
         secondaryActions={[
           {
-            content: 'View in demo site',
+            content: 'View in demo store',
             icon: ViewIcon,
             url: groupSection?.demo_link,
             disabled: !groupSection?.demo_link,
@@ -136,7 +136,7 @@ const GroupSectionDetails = props => {
                       <Text variant="headingMd">Release Note</Text>
                       {childSections.map(item => (
                         item.release_note &&
-                        <Box padding="200">
+                        <Box padding="200" key={item.id}>
                           <Text variant="headingSm">{item.name}:</Text>
                           <div dangerouslySetInnerHTML={{__html: item.release_note}}></div>
                         </Box>

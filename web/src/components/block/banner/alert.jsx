@@ -2,6 +2,7 @@ import { memo, useCallback } from 'react';
 import {
   Banner,
   BlockStack,
+  Link,
   List,
   Text
 } from "@shopify/polaris";
@@ -14,6 +15,7 @@ function BannerDefault({bannerAlert, setBannerAlert, noDismiss }) {
   return (
     bannerAlert &&
     <Banner {...bannerAlert} onDismiss={noDismiss ? undefined : handleDismiss}>
+      {bannerAlert?.urlSuccessEditTheme && <div>Section installed successfully. Go to <Link url={bannerAlert.urlSuccessEditTheme}>theme editer</Link> use this section.</div>}
       {
         bannerAlert.content &&
         <BlockStack gap={200}>

@@ -7,9 +7,10 @@ import {
   Icon,
   InlineGrid,
   InlineStack,
-  Text
+  Text,
+  Tooltip
 } from '@shopify/polaris';
-import { ViewIcon, PlusCircleIcon, CartSaleIcon } from '@shopify/polaris-icons';
+import { ViewIcon, PlusCircleIcon, PaymentFilledIcon, ExternalIcon } from '@shopify/polaris-icons';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import BadgeTag from '~/components/block/badge/tag';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
@@ -23,7 +24,7 @@ const productType = {
 };
 
 const QuickViewButton = props => {
-  const { item, modalName = 'quickView', icon } = props;
+  const { item, modalName = 'quickView', icon, tooltip } = props;
   const [{ modalLoading, modal }, { setActiveSection, setModal }] = useSectionListContext();
   const [localLoading, setLocalLoading] = useState(false);
   const handleQuickView = useCallback(() => {
@@ -50,17 +51,19 @@ const QuickViewButton = props => {
     setLocalLoading(modalLoading && item.id === setActiveSection.id);
   }, [modalLoading]);
   return (
-    <Button
-      icon={btnIcon}
-      size="large"
-      onClick={handleQuickView}
-      loading={loading}
-    />
+    <Tooltip content={tooltip}>
+      <Button
+        icon={btnIcon}
+        size="large"
+        onClick={handleQuickView}
+        loading={loading}
+      />
+    </Tooltip>
   );
 };
 const InstallButton = props => {
   return (
-    <QuickViewButton item={props.item} modalName={'install'} icon={<Icon source={PlusCircleIcon} tone="base" />} />
+    <QuickViewButton item={props.item} modalName={'install'} icon={<Icon source={PlusCircleIcon} tone="base" />} tooltip="Add to theme" />
   );
 };
 
@@ -115,16 +118,28 @@ function ProductCard({item, lazyLoadImg = true}) {
               }
             </BlockStack>
             <InlineStack gap='200'>
-              {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} />)}
+              {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="Quick view" />)}
+              {
+                item?.demo_link &&
+                <Tooltip content="View in demo store">
+                  <Button
+                    icon={<Icon source={ExternalIcon} tone="base" />}
+                    size="large"
+                    url={item.demo_link}
+                  />
+                </Tooltip>
+              }
               {item.actions?.install && <InstallButton item={item} />}
               {
                 item.actions?.purchase &&
-                <Button
-                  loading={purchaseLoading}
-                  icon={<Icon source={CartSaleIcon} tone="base" />}
-                  size="large"
-                  onClick={() => handlePurchase(item)}
-                />
+                <Tooltip content="Purchase now">
+                  <Button
+                    loading={purchaseLoading}
+                    icon={<Icon source={PaymentFilledIcon} tone="base" />}
+                    size="large"
+                    onClick={() => handlePurchase(item)}
+                  />
+                </Tooltip>
               }
             </InlineStack>
             <Box>

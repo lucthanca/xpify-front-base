@@ -64,7 +64,7 @@ const SectionFullpageDetails = props => {
         }}
         secondaryActions={[
           {
-            content: 'View in demo site',
+            content: 'View in demo store',
             icon: ViewIcon,
             url: section?.demo_link,
             disabled: !section?.demo_link || sectionLoading,
