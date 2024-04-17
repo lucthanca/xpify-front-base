@@ -15,7 +15,7 @@ const ModalContent = props => {
   } = useModalContent(keys);
 
   return (
-    <Splide options={sliderOpts} onMoved={handleSliderMoved}>
+    <Splide className='splide-modal-section' options={sliderOpts} onMoved={handleSliderMoved}>
       {keys.map((k, index) => {
         const shouldLoad = index === movedIndex || index === movedIndex + 1 || index === movedIndex - 1;
         return (

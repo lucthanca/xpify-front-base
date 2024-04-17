@@ -36,7 +36,6 @@ function HomePage() {
   const handleRedirectGroupsPage = useRedirectGroupsPage();
   const handleRedirectMyLibraryPage = useRedirectMyLibraryPage();
   const handleRedirectHelpCenterPage = useRedirectHelpCenterPage();
-
   return (
     <Page title="Dashboard">
       <Layout>

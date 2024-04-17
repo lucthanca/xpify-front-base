@@ -19,6 +19,20 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
     setIsOpen(prev => !prev);
   }, []);
 
+  useEffect(() => { // Overlay modal section
+    const splideModal = document.querySelector('.splide-modal-section');
+    if (splideModal) {
+      const parentEle = splideModal.closest('.Polaris-Modal-Dialog__Container')
+      if (parentEle) {
+        if (isOpen) {
+          parentEle.classList.add('z-index10');
+        } else {
+          parentEle.classList.remove('z-index10');
+        }
+      }
+    }
+  }, [isOpen]);
+
   return (
     section?.name && theme?.name
     ? <Modal
