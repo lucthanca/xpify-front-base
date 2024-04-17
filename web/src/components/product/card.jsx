@@ -117,6 +117,7 @@ function ProductCard({item, lazyLoadImg = true}) {
                 <Text variant="bodyXs">Version {item.version}</Text>
               }
             </BlockStack>
+            
             <InlineStack gap='200'>
               {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="Quick view" />)}
               {
@@ -142,12 +143,12 @@ function ProductCard({item, lazyLoadImg = true}) {
                 </Tooltip>
               }
             </InlineStack>
-            <Box>
-              {
-                item?.tags &&
+
+            {item?.tags &&
+              <Box>
                 <BadgeTag tags={item.tags} />
-              }
-            </Box>
+              </Box>
+            }
           </BlockStack>
         </Box>
       </Card>

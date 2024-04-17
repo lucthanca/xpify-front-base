@@ -43,7 +43,7 @@ const SectionCollection = props => {
     pagination: false,
     breakpoints:{
       425: { perPage: 1 },
-      768: { perPage: 3, gap: '0.5rem' },
+      768: { perPage: 2, gap: '0.5rem' },
       2560: { perPage: 4 }
     },
   }

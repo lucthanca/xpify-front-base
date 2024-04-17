@@ -6,7 +6,7 @@ import BestSeller from '~/components/BestSellers/bestSellerSlider';
 const BestSellersHomepage = () => {
   const [spliderConfig] = useState(() => {
     return {
-      perPage: 3,
+      perPage: 2,
       gap: '1rem',
       pagination: false,
       breakpoints:{

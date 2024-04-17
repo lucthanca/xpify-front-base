@@ -4,7 +4,7 @@ import { Skeleton as ProductCardShimmer } from '~/components/product';
 import PropTypes from 'prop-types';
 
 const Skeleton = (props) => {
-  const { childNumber = 5, itemRows = 2 } = props;
+  const { childNumber = 4, itemRows = 2 } = props;
   return (
     <>
       <BlockStack gap='400'>

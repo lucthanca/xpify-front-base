@@ -16,7 +16,7 @@ const CategoryCollection = props => {
     loading,
     loadingWithoutData,
   } = talonProps;
-  if (loadingWithoutData) return <Skeleton itemNumber={5} />
+  if (loadingWithoutData) return <Skeleton itemNumber={4} />
   if (!loading && error) {
     const errs = error?.graphQLErrors ?? [{ message: error.message }];
     const bannerProps = {

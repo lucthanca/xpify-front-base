@@ -13,7 +13,8 @@ import {
   Box,
   Text,
   Link,
-  Card
+  Card,
+  Spinner
 } from '@shopify/polaris';
 import { NoteIcon, WrenchIcon } from '@shopify/polaris-icons';
 import { useToast } from '@shopify/app-bridge-react';
@@ -90,17 +91,25 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
     }
   }, [themes]);
   const options = useMemo(() => {
-    return themes
-    ? themes.map(theme => {
+    if (!themes?.length
+      || !section?.url_key
+      || (section?.child_ids && !childSections?.length)
+    ) {
+      return {};
+    }
+
+    let result = themes.map(theme => {
+      if (theme.role == 'demo') { // Demo theme không thể thêm section
+        return false;
+      }
+
       var status = 'Not install';
       const installedInTheme = section?.installed && section.installed.find(item => item.theme_id == theme.id);
 
       if (installedInTheme) {
         var content = [];
         if (childSections.length) {
-          if (!groupChildSectionsLoad) {
-            content = childSections.map(item => getUpdateMessage(item, theme.id, section))
-          }
+          content = childSections.map(item => getUpdateMessage(item, theme.id, section))
         } else {
           content = [getUpdateMessage(section, theme.id)];
         }
@@ -117,15 +126,12 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
 
       return ({
         value: theme.id,
-        label: `${theme.name}(${titleRoleTheme[theme.role]}) - ${status}`
-      })
-    })
-    : {
-      value: 0,
-      label: `Loading...`
-    };
-  }, [section, themes, groupChildSectionsLoad]);
+        label: `${theme.name}(${titleRoleTheme[theme.role] ?? theme.role}) - ${status}`
+      });
+    });
 
+    return result.filter(item => item?.value);
+  }, [section, themes, childSections]);
   const installed = useMemo(() => {
     setBannerAlert(undefined);
     if (!section?.installed) {
@@ -137,9 +143,7 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
     if (installedInTheme) {
       var content = [];
       if (childSections.length) {
-        if (!groupChildSectionsLoad) {
-          content = childSections.map(item => getUpdateMessage(item, selected, section));
-        }
+        content = childSections.map(item => getUpdateMessage(item, selected, section));
       } else {
         content = [getUpdateMessage(section, selected)];
       }
@@ -222,8 +226,8 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
   }, [dataUpdateE]);
 
   return (
-    themes &&
-    <BlockStack gap='200'>
+    themes.length && options.length
+    ? <BlockStack gap='200'>
       {bannerAlert &&
         fullWith
         ? <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
@@ -277,6 +281,9 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
         </div>
       </InlineGrid>
     </BlockStack>
+    : <InlineStack align="center">
+      <Spinner accessibilityLabel="loading" size="small" />
+    </InlineStack>
   );
 }
 
