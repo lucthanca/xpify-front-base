@@ -30,10 +30,6 @@ const Skeleton = () => {
               </Text>
             </Card>
             <BlockStack gap={400}>
-              <BlockStack gap={200}>
-                <SkeletonDisplayText size='small' />
-                <SkeletonBodyText lines={1} />
-              </BlockStack>
               <SkeletonProduct total={2} columns={{ sm: 1, md: 2 }} />
             </BlockStack>
             <Card sectioned>

@@ -114,8 +114,12 @@ function ProductCard({item, lazyLoadImg = true}) {
                 <BadgeStatusSection item={item} />
               </InlineStack>
               {item.version &&
-                <Text variant="bodyXs">Version {item.version}</Text>
+                <Text variant="bodyXs">Version: {item.version}</Text>
               }
+              {item?.categoriesV2 && item.categoriesV2.length
+                ? <Text variant="bodyXs">Category: {item.categoriesV2.map(category => category.name).join(', ')}</Text>
+              : <></> 
+            }
             </BlockStack>
             
             <InlineStack gap='200'>
@@ -145,9 +149,9 @@ function ProductCard({item, lazyLoadImg = true}) {
             </InlineStack>
 
             {item?.tags &&
-              <Box>
+              <InlineStack align='end'>
                 <BadgeTag tags={item.tags} />
-              </Box>
+              </InlineStack>
             }
           </BlockStack>
         </Box>

@@ -9,6 +9,7 @@ import SkeletonFaq from "~/components/skeleton/faq";
 import CollapsibleDefault from "~/components/block/collapsible/faq";
 import { FAQS_QUERY } from "~/queries/section-builder/faq.gql";
 import { useBackPage } from "~/hooks/section-builder/redirect";
+import Footer from "~/components/block/footer";
 
 function Faq() {
   const { data:faqs } = useQuery(FAQS_QUERY, {
@@ -34,6 +35,8 @@ function Faq() {
           </BlockStack>
         </Layout.Section>
       </Layout>
+
+      <Footer />
     </Page>
   );
 }

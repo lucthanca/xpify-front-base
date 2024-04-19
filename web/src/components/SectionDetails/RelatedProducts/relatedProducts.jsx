@@ -19,21 +19,15 @@ const RelatedProducts = props => {
   }, [slidePerPage]);
   // should render error when error is not null
   return (
-    <Card title='Related'>
-      <BlockStack gap='200'>
-        <Text variant='headingMd' as='h2'>
-          Related sections
-        </Text>
-
-        <ProductCarousel
-          query={RELATED_SECTIONS_QUERY}
-          queryKey={'getRelatedSections'}
-          queryVariables={variables}
-          slideOptions={slideOptions}
-          skeleton={skeleton}
-        />
-      </BlockStack>
-    </Card>
+    <ProductCarousel
+      query={RELATED_SECTIONS_QUERY}
+      queryKey={'getRelatedSections'}
+      queryVariables={variables}
+      slideOptions={slideOptions}
+      skeleton={skeleton}
+      title="Recommended Products"
+      subTitle="Refer to a few other related products"
+    />
   );
 };
 

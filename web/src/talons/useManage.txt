@@ -1,33 +1,56 @@
-import {useCallback, memo, useState, useMemo, useEffect} from 'react';
-import {
-  InlineGrid,
-  OptionList,
-  BlockStack,
-  Select,
-  InlineStack,
-  Button,
-  Text,
-  Card,
-  Spinner
-} from '@shopify/polaris';
+import { useMutation, useQuery } from '@apollo/client';
 import { useToast } from '@shopify/app-bridge-react';
-import { useQuery, useMutation } from "@apollo/client";
-import ModalConfirm from '~/components/block/modal/confirm';
-import BannerDefault from '~/components/block/banner/alert';
-import { UPDATE_ASSET_MUTATION, DELETE_ASSET_MUTATION } from "~/queries/section-builder/asset.gql";
-import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
-import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { usePurchase } from '~/hooks/section-builder/purchase';
+import { useRedirectSectionPage } from '~/hooks/section-builder/redirect';
+import { useSection, UseSectionTalon } from '~/hooks/useSection';
+import { DELETE_ASSET_MUTATION, UPDATE_ASSET_MUTATION } from '~/queries/section-builder/asset.gql';
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
+import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
+import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
 
 const titleRoleTheme = {
-  'main': 'Live',
-  'unpublished': 'Trial',
-  'development': 'Dev',
+  main: 'Live',
+  unpublished: 'Trial',
+  development: 'Dev',
 };
 
-function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction, setIsShowConfirm, typeSelect = true, fullWith = true}) {
+export type ThemeData = {
+  id: string;
+  name: string;
+  role: string;
+  previewable?: string;
+  processing?: string;
+  admin_graphql_api_id?: string;
+};
+
+interface BannerAlert {
+  title?: string;
+  tone?: string;
+  content?: any;
+  urlSuccessEditTheme?: string;
+}
+
+type UseQuickViewProps = {
+  section: any;
+  typeSelect: string;
+  setConfirmAction: (func: any) => void;
+  setIsShowConfirm: (isShow: boolean) => void;
+  setCurrentThemeSelected: (theme: any) => void;
+};
+
+type UseQuickViewTalon = UseSectionTalon & {
+  handlePurchase: () => void,
+  navigateToSectionPage: () => void,
+  bannerAlert: any,
+  setBannerAlert: any,
+  purchaseLoading: boolean,
+};
+
+export const useQuickView = (props: UseQuickViewProps): UseQuickViewTalon => {
+  const { section, typeSelect, setConfirmAction, setIsShowConfirm, setCurrentThemeSelected } = props;
   const [selected, setSelected] = useState("");
-  const [bannerAlert, setBannerAlert] = useState(undefined);
+  const [bannerAlert, setBannerAlert] = useState<BannerAlert | undefined>(undefined);
   const [isShowConfirmSelect, setIsShowConfirmSelect] = useState(false);
   const [confirmActionSelect, setConfirmActionSelect] = useState(() => {});
   const toast = useToast();
@@ -50,11 +73,11 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
   });
   const childSections = useMemo(() => groupChildSections?.getSections?.items || [], [groupChildSections]);
 
-  const handleSelectChange = useCallback((value) => {
+  const handleSelectChange = useCallback((value: any) => {
     setSelected(typeSelect ? value : value[0]);
   }, []);
-  const getUpdateMessage = useCallback((item, currentTheme, parent = null) => {
-    const installVersion = item?.installed && item.installed.find(item => item.theme_id == currentTheme)?.product_version;
+  const getUpdateMessage = useCallback((item: any, currentTheme: any, parent: any = null) => {
+    const installVersion = item?.installed && item.installed.find((item: any) => item.theme_id == currentTheme)?.product_version;
     if (installVersion) {
       if (installVersion != item.version) {
         return {message: `Update ${item.name} v${installVersion} to v${item.version}`};
@@ -66,6 +89,7 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
         return {message: `Add ${item.name} v${item.version}`};
       }
     }
+    return '';
   }, []);
 
   const { data: myShop } = useQuery(MY_SHOP, {
@@ -91,27 +115,27 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
       return {};
     }
 
-    let result = themes.map(theme => {
+    let result = themes.map((theme: ThemeData) => {
       if (theme.role == 'demo') { // Demo theme không thể thêm section
         return false;
       }
 
       var status = 'Not install';
-      const installedInTheme = section?.installed && section.installed.find(item => item.theme_id == theme.id);
+      const installedInTheme = section?.installed && section.installed.find((item: any) => item.theme_id == theme.id);
 
       if (installedInTheme) {
         var content = [];
         if (childSections.length) {
-          content = childSections.map(item => getUpdateMessage(item, theme.id, section))
+          content = childSections.map((item: any) => getUpdateMessage(item, theme.id, section))
         } else {
           content = [getUpdateMessage(section, theme.id)];
         }
 
-        content = content.filter(item => item !== undefined);
+        content = content.filter((item: string) => item !== undefined);
         if (content.length) {
           status = 'Installed';
         }
-        content = content.filter(item => item !== "");
+        content = content.filter((item: string) => item !== "");
         if (content.length) {
           status = 'Should update';
         }
@@ -123,7 +147,7 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
       });
     });
 
-    return result.filter(item => item?.value);
+    return result.filter((item: any) => item?.value);
   }, [section, themes, childSections]);
   const installed = useMemo(() => {
     setBannerAlert(undefined);
@@ -131,17 +155,17 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
       return false;
     }
 
-    const installedInTheme = section?.installed && section.installed.find(item => item.theme_id == selected);
+    const installedInTheme = section?.installed && section.installed.find((item: any) => item.theme_id == selected);
 
     if (installedInTheme) {
       var content = [];
       if (childSections.length) {
-        content = childSections.map(item => getUpdateMessage(item, selected, section));
+        content = childSections.map((item: any) => getUpdateMessage(item, selected, section));
       } else {
         content = [getUpdateMessage(section, selected)];
       }
-      content = content.filter(item => item !== undefined);
-      const contentUpdate = content.filter(item => item !== "");
+      content = content.filter((item: any) => item !== undefined);
+      const contentUpdate = content.filter((item: any) => item !== "");
       if (contentUpdate.length) {
         setBannerAlert({
           'title': 'You should update section to laster version!',
@@ -177,7 +201,7 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
   }, [selected]);
 
   const currentThemeSelected = useMemo(() => {
-    return themes.find(item => item.id == selected);
+    return themes.find((item: any) => item.id == selected);
   }, [selected]);
 
   const confirmDelete = useCallback(() => {
@@ -189,7 +213,7 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
       setConfirmActionSelect(() => handleDelete);
       setIsShowConfirmSelect(true);
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (dataUpdate && dataUpdate.updateAsset) {
@@ -217,67 +241,15 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
       });
     }
   }, [dataUpdateE]);
-
-  return (
-    themes.length && options.length
-    ? <BlockStack gap='200'>
-      {bannerAlert &&
-        fullWith
-        ? <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
-        : <Card padding={0}>
-          <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
-        </Card>
-      }
-      <Text variant='bodySm' fontWeight='bold'>Choose theme for installation:</Text>
-
-      <InlineGrid columns={fullWith ? 1 : {sm: 1, md: ['twoThirds', 'oneThird']}} gap={200} alignItems='center'>
-        <div>
-          {
-            typeSelect
-            ? <Select
-              labelInline
-              options={options}
-              onChange={handleSelectChange}
-              value={selected}
-            />
-            : <OptionList
-              onChange={handleSelectChange}
-              options={options}
-              selected={selected}
-            />
-          }
-        </div>
-        <div>
-          <InlineGrid columns={2} gap={200}>
-            <Button
-              onClick={confirmDelete}
-              variant='primary'
-              tone="critical"
-              disabled={section.installed ? !installed : true}
-              loading={dataDeleteL}
-              fullWidth
-            >
-              Delete from theme
-            </Button>
-            <Button
-              onClick={handleUpdate}
-              variant='primary'
-              disabled={!section.actions?.install || !selected}
-              loading={dataUpdateL}
-              fullWidth
-            >
-              {installed ? 'Reinstall to theme' : 'Install to theme'}
-            </Button>
-          </InlineGrid>
-
-          {typeSelect && <ModalConfirm section={section} theme={currentThemeSelected} isOpen={isShowConfirmSelect} setIsOpen={setIsShowConfirmSelect} onConfirm={confirmActionSelect} />}
-        </div>
-      </InlineGrid>
-    </BlockStack>
-    : <InlineStack align="center">
-      <Spinner accessibilityLabel="loading" size="small" />
-    </InlineStack>
-  );
-}
-
-export default memo(ModalInstallSection);
+  return {
+    section,
+    loadingWithoutData,
+    loading,
+    error,
+    handlePurchase,
+    navigateToSectionPage,
+    bannerAlert,
+    setBannerAlert,
+    purchaseLoading,
+  };
+};

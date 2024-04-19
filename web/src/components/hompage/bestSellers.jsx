@@ -16,13 +16,7 @@ const BestSellersHomepage = () => {
     };
   });
   return (
-    <Box>
-      <BlockStack gap='400'>
-        <TitleBlock title='Best Seller' subTitle='See a few examples of magically adding a theme section to your store in a few clicks.' />
-
-        <BestSeller slideConfig={spliderConfig} />
-      </BlockStack>
-    </Box>
+    <BestSeller slideConfig={spliderConfig} />
   );
 };
 

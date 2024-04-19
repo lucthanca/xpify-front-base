@@ -6,7 +6,7 @@ function CardUSP({short_description}) {
   return (
     <Card title="Short description">
       <Text variant="headingMd">USP</Text>
-      <Box padding="200" as='ul'>
+      <Box paddingBlockStart="200" as='ul'>
         {
           short_description.split('\n').map((content, key) => {
             return (

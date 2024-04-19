@@ -8,6 +8,8 @@ const BestSeller = props => {
   const { slideConfig } = props;
   return (
     <ProductCarousel
+      title="Best Sellers"
+      subTitle="Our best selling products"
       query={BEST_SELLER_QUERY}
       queryKey={BEST_SELLER_QUERY_KEY}
       slideOptions={slideConfig} />

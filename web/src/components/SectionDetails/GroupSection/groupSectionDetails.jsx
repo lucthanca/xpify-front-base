@@ -99,11 +99,7 @@ const GroupSectionDetails = props => {
                 )}
 
                 <Box>
-                  <BlockStack gap='400'>
-                    <BlockStack>
-                      <Text variant="headingMd" as="h2">Group</Text>
-                      <Text variant="bodyXs" as="p" tone="subdued">"{groupSection.name}" consists of 9 sections. Sections included in group:</Text>
-                    </BlockStack>
+                  <BlockStack gap='200'>
                     {childSections.length > 0 ? (
                       <ProductList items={childSections} columns={{sm: 1, md: 2}} />
                     ) : (

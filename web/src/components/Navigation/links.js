@@ -15,10 +15,10 @@ export const useNavigationLinks = () => {
       label: t('NavigationMenu.myLibrary'),
       destination: '/my-library',
     },
-    {
-      label: t('NavigationMenu.plans'),
-      destination: '/plans',
-    },
+    // {
+    //   label: t('NavigationMenu.plans'),
+    //   destination: '/plans',
+    // },
     {
       label: t('NavigationMenu.helpCenter'),
       destination: '/help-center',

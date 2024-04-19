@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { Layout, Page } from '@shopify/polaris';
 import GroupCollection from '~/components/GroupCollection';
+import Footer from '~/components/block/footer';
 
 function GroupsPage() {
   return (
@@ -8,6 +9,7 @@ function GroupsPage() {
       <Layout>
         <GroupCollection />
       </Layout>
+      <Footer />
     </Page>
   );
 }

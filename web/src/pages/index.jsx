@@ -4,29 +4,19 @@ import {
   Box,
   Button,
   Card,
-  Icon,
   InlineGrid,
-  InlineStack,
   Layout,
-  List,
   Page,
   Text
 } from "@shopify/polaris";
-import {
-  ProductIcon,
-  HeartIcon,
-  NotificationIcon,
-  QuestionCircleIcon
-} from '@shopify/polaris-icons';
 import GuideCard from '~/components/block/card/guide';
-import Tutorial from '~/components/media/tutorial';
-import SectionList from '~/components/block/mySections';
 import TitleBlock from '~/components/block/title';
 import NavCard from '~/components/block/card/nav';
 import { useRedirectGroupsPage, useRedirectHelpCenterPage, useRedirectMyLibraryPage, useRedirectSectionsPage } from '~/hooks/section-builder/redirect';
 import { useQuery } from "@apollo/client";
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
 import { BestSeller, LatestRelease } from '~/components/hompage';
+import Footer from '~/components/block/footer';
 
 function HomePage() {
   const { data: myShop } = useQuery(MY_SHOP, {
@@ -36,8 +26,9 @@ function HomePage() {
   const handleRedirectGroupsPage = useRedirectGroupsPage();
   const handleRedirectMyLibraryPage = useRedirectMyLibraryPage();
   const handleRedirectHelpCenterPage = useRedirectHelpCenterPage();
+
   return (
-    <Page title="Dashboard">
+    <Page title="Welcome to Omni Themes Section Builder!">
       <Layout>
         <Layout.Section>
           <BlockStack gap={600}>
@@ -48,7 +39,7 @@ function HomePage() {
                   Hi {myShop?.myShop?.shop_owner}, welcome to your fresh batch of sections and templates to jazz up your Shopify theme!
                 </Text>
                 <Text as="p" variant="bodyLg">
-                  Once you've got these installed, just hop into the theme editor, and keep an eye out for 'Simi' in the search box.
+                  Once you've got these installed, just hop into the theme editor, and keep an eye out for 'OT' in the search box.
                 </Text>
                 <Text as="p" variant="bodyLg">
                   Happy customizing!
@@ -63,7 +54,7 @@ function HomePage() {
 
             <Box>
               <BlockStack gap={400}>
-                <TitleBlock title='Overview' subTitle='Sections and Blocks that you have installed.' />
+                <TitleBlock title='Overview' subTitle='All main content in our application' />
 
                 <InlineGrid gap="400" columns={2}>
                   <NavCard
@@ -95,6 +86,7 @@ function HomePage() {
           </BlockStack>
         </Layout.Section>
       </Layout>
+      <Footer />
     </Page>
   )
 }

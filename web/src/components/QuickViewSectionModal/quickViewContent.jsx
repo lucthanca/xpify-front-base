@@ -25,7 +25,6 @@ import QuickViewContentSkeleton from '~/components/QuickViewSectionModal/quickVi
 const PricingPlan = lazy(() => import('~/components/QuickViewSectionModal/pricingPlan'));
 import './style.scss';
 import BannerAlert from '~/components/block/banner/alert';
-import DocInstall from '../block/card/docInstall';
 
 const LazyQuickViewContent = props => {
   const { url_key } = props;
@@ -60,7 +59,6 @@ const LazyQuickViewContent = props => {
                 <GallerySlider gallery={section.images} />
               </div>
             </Card>
-            <DocInstall />
           </BlockStack>
         </div>
         <div className='py-4'>
@@ -81,6 +79,10 @@ const LazyQuickViewContent = props => {
                 <Text variant='bodyMd' as='p'>
                   Version: {section.version}
                 </Text>
+                {section?.categoriesV2 && section.categoriesV2.length
+                  ? <Text variant="bodyXs">Category: {section.categoriesV2.map(category => category.name).join(', ')}</Text>
+                : <></>
+                }
 
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
 
@@ -121,6 +123,10 @@ const LazyQuickViewContent = props => {
                              subscribable={section?.actions.plan} />
               </Suspense>
             )}
+
+            <Card>
+              <iframe width="100%" height="230px" src="https://www.youtube.com/embed/UTdCvYEm-C4?si=WdXmN40TkjDYRpHb" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+            </Card>
           </BlockStack>
         </div>
       </InlineGrid>
