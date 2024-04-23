@@ -70,7 +70,7 @@ export const useCategoryCollection = () => {
   const { data, loading, error } = useQuery(CATEGORIES_QUERY_V2, {
     fetchPolicy: 'cache-and-network',
     variables: {
-      pageSize: 5,
+      pageSize: 3,
       currentPage: currentPage,
       sectionFilter: { type_id: sectionType.sectionType, owned: sectionType.isOwned },
     },

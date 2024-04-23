@@ -6,12 +6,14 @@ import GallerySlider from '~/components/splide/gallery';
 import ProductList from '~/components/product/list';
 import ModalInstallSection from '~/components/product/manage';
 import SkeletonProduct from '~/components/product/skeleton';
+import CardUSP from '~/components/block/card/usp';
 import BannerWarningNotPurchase from '~/components/block/banner/warningPurchase';
 import BadgeTag from '~/components/block/badge/tag';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
 import { Loading } from '@shopify/app-bridge-react';
 import NotFound from '~/pages/NotFound.jsx';
 import RelatedProducts from '../RelatedProducts/relatedProducts';
+import DocInstall from '~/components/block/card/docInstall';
 
 const GroupSectionDetails = props => {
   const handleBackPage = useBackPage();
@@ -49,7 +51,6 @@ const GroupSectionDetails = props => {
         primaryAction={{
           content: !groupSection?.actions?.purchase ? 'Owned' : 'Purchase',
           disabled: sectionLoading || purchaseLoading || !groupSection?.actions?.purchase,
-          helpText: 'Own forever this groupSection.',
           loading: sectionLoading || purchaseLoading,
           onAction: (!sectionLoading && !purchaseLoading) && handlePurchase,
         }}
@@ -93,23 +94,7 @@ const GroupSectionDetails = props => {
 
                 {groupSection?.short_description && (
                   <Box>
-                    <Card title="Description">
-                      <Text variant="headingMd">USP</Text>
-                      <Box padding="200">
-                        {
-                          groupSection.short_description.split('\n').map((content, key) => {
-                            return (
-                              <InlineStack key={key} gap='200' blockAlign="start">
-                                <div>
-                                  <Icon source={CheckIcon} tone="info"/>
-                                </div>
-                                <Text>{content}</Text>
-                              </InlineStack>
-                            );
-                          })
-                        }
-                      </Box>
-                    </Card>
+                    <CardUSP short_description={groupSection.short_description} />
                   </Box>
                 )}
 
@@ -128,7 +113,7 @@ const GroupSectionDetails = props => {
                 </Box>
 
                 {groupSection.description && (
-                  <Box paddingBlockEnd='600'>
+                  <Box>
                     <Card title="Description">
                       <Text variant="headingMd">Description</Text>
                       <Box padding="400">
@@ -138,7 +123,28 @@ const GroupSectionDetails = props => {
                   </Box>
                 )}
 
+                <Box>
+                  <DocInstall />
+                </Box>
+
                 <RelatedProducts url_key={groupSection.url_key} />
+
+                {childSections.length > 0 &&
+                  <Box>
+                    <BlockStack gap='400'>
+                      <Card title="Release Note">
+                      <Text variant="headingMd">Release Note</Text>
+                      {childSections.map(item => (
+                        item.release_note &&
+                        <Box padding="200">
+                          <Text variant="headingSm">{item.name}:</Text>
+                          <div dangerouslySetInnerHTML={{__html: item.release_note}}></div>
+                        </Box>
+                      ))}
+                      </Card>
+                    </BlockStack>
+                  </Box>
+                }
               </BlockStack>
             </Box>
           </Layout.Section>
