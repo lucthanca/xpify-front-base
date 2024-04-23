@@ -71,6 +71,9 @@ Mở URL được tạo trong cmd. Sau khi cấp quyền cho app, bạn có th�
 
 `npm run build`
 
+* Khi config nginx server cho site react, cần include thêm file nginx.conf trong thư mục root của project
+* Chỉnh sửa backend url trong file nginx.conf và `X-Xpify-App-Token` hợp lệ
+
 ### Các vấn đề đã biết
 
 #### Dev trên server
@@ -83,7 +86,7 @@ Cách giải quyết chính là sử dụng `SHOPIFY_CLI_PARTNERS_TOKEN`.
 1. Chọn partner account. Sau đó vào Settings > CLI Token > Manage tokens
 1. Tạo 1 token mới. Sau đó copy token đó.
 1. Khi chạy lệnh `npm run dev -- --reset` hoặc `npm run dev` thì thêm `SHOPIFY_CLI_PARTNERS_TOKEN=<token_vừa_copy>` vào trước lệnh.
-ví dụ
+   ví dụ
 ```shell
 SHOPIFY_CLI_PARTNERS_TOKEN=asdasasdamnasmbnkjghlkshd npm run dev -- --reset
 ```
