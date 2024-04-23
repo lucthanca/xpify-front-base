@@ -36,7 +36,8 @@ export async function verifyToken(token, appName) {
     } catch (error) {
         if (error.constructor.name === 'GraphQLClientError') {
 
-            if (error.errors?.[0]?.extensions?.category === 'graphql-authorization') {
+            const isCannotQueryFieldAppError = error.errors?.[0]?.message.includes('Cannot query field "app" on type "Query"');
+            if (error.errors?.[0]?.extensions?.category === 'graphql-authorization' || isCannotQueryFieldAppError) {
                 throw new Error('x-graphql-authorization');
             }
 
