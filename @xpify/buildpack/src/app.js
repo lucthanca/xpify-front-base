@@ -7,14 +7,14 @@ import { XPIFY_SECRET_KEY } from './backendAuth/secretKeyInput.js';
 const APP_QUERY = gql `
     query GetApp($remoteId: String!) {
         app (field: remote_id, value: $remoteId) {
-            id name api_key secret_key scopes api_version
+            id name api_key secret_key scopes api_version token
         }
     }
 `;
 const CREATE_APP_MUTATION = gql `
     mutation CreateApp($input: SaveAppInput!) {
         saveApp(input: $input) {
-            id
+            id token
         }
     }
 `;
@@ -68,6 +68,7 @@ export async function ensureXpifyApp (config) {
 	}
 	process.env.XPIFY_APP_ID = app.id;
 	process.env.XPIFY_APP_REMOTE_ID = config.remoteApp.id;
+	process.env.XPIFY_APP_TOKEN = app.token;
 }
 
 const createApp = async (config) => {

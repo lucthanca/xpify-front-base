@@ -9,5 +9,5 @@ const shopDomain = new URLSearchParams(window.location.search).get('shop');
 initI18n().then(() => {
   const container = document.getElementById('app');
   const root = createRoot(container);
-  root.render(<Adapter domain={shopDomain} origin={process.env.XPIFY_BACKEND_URL} />);
+  root.render(<Adapter domain={shopDomain} origin={window.location.origin} />);
 });

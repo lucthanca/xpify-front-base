@@ -41,13 +41,17 @@ export default defineConfig(async ({ mode }) => {
   if (!process.env.SHOPIFY_API_KEY) process.env.SHOPIFY_API_KEY = process.env.VITE_SHOPIFY_API_KEY;
   if (!process.env.XPIFY_BACKEND_URL) process.env.XPIFY_BACKEND_URL = process.env.VITE_XPIFY_BACKEND_URL
   if (!process.env.XPIFY_APP_ID) process.env.XPIFY_APP_ID = process.env.VITE_XPIFY_APP_ID
+  if (!process.env.XPIFY_APP_TOKEN) process.env.XPIFY_APP_TOKEN = process.env.VITE_XPIFY_APP_TOKEN;
 
   const proxyOptions = {
-      target: process.env.XPIFY_BACKEND_URL,
-      changeOrigin: true,
-      secure: true,
-      ws: false,
-    };
+    target: process.env.XPIFY_BACKEND_URL,
+    changeOrigin: true,
+    secure: true,
+    ws: false,
+    headers: {
+      'X-Xpify-App-Token': process.env.XPIFY_APP_TOKEN || process.env.VITE_XPIFY_APP_TOKEN,
+    },
+  };
   return {
     root: dirname(fileURLToPath(import.meta.url)),
     plugins: [react(), splitVendorChunkPlugin()],
