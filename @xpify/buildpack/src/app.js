@@ -7,14 +7,14 @@ import { XPIFY_SECRET_KEY } from './backendAuth/secretKeyInput.js';
 const APP_QUERY = gql `
     query GetApp($remoteId: String!) {
         app (field: remote_id, value: $remoteId) {
-            id name api_key secret_key scopes api_version
+            id name api_key secret_key scopes api_version token
         }
     }
 `;
 const CREATE_APP_MUTATION = gql `
     mutation CreateApp($input: SaveAppInput!) {
         saveApp(input: $input) {
-            id
+            id token
         }
     }
 `;
@@ -34,7 +34,7 @@ export async function ensureXpifyApp (config) {
 				task: async () => {
 					if (app) {
 						const apiSecret = getApiScecret(config.remoteApp);
-						const remoteAppHandle = config.localApp?.configuration?.handle ?? resolveAppHandleFromName(config.remoteApp.title);
+						const remoteAppHandle = config.remoteApp?.configuration?.handle ?? resolveAppHandleFromName(config.remoteApp.title);
 						const changes = {
 							api_key: app.api_key !== config.remoteApp.apiKey ? config.remoteApp.apiKey : undefined,
 							secret_key: app.secret_key !== apiSecret ? apiSecret : undefined,
@@ -68,6 +68,7 @@ export async function ensureXpifyApp (config) {
 	}
 	process.env.XPIFY_APP_ID = app.id;
 	process.env.XPIFY_APP_REMOTE_ID = config.remoteApp.id;
+	process.env.XPIFY_APP_TOKEN = app.token;
 }
 
 const createApp = async (config) => {
@@ -79,7 +80,7 @@ const createApp = async (config) => {
 		remote_id: remoteApp.id,
 		scopes: localApp.configuration?.['access_scopes']?.scopes || null,
 		api_version: config.localApp.configuration?.['webhooks']?.['api_version'] || '2024-01',
-		handle: localApp.configuration?.handle ?? resolveAppHandleFromName(remoteApp.title),
+		handle: remoteApp.configuration?.handle ?? resolveAppHandleFromName(remoteApp.title),
 	}, 'XpifyCreateApp');
 	if (!result.saveApp?.id) {
 		throw new Error('Không tạo được app vào backend, check lại!')
