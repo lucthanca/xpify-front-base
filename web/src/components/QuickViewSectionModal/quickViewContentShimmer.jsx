@@ -7,11 +7,19 @@ export default memo(({ title }) => {
     <InlineGrid columns={{ sm: 1, md: ['twoThirds', 'oneThird'] }} gap='400'>
       <div className='h-full py-4'>
         <div className='sticky top-4'>
-          <Card title='Gallery' padding='0'>
-            <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee] sticky'>
-              <div className='w-full h-full' />
-            </div>
-          </Card>
+          <BlockStack gap={400}>
+            <Card title='Gallery' padding='0'>
+              <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee] sticky'>
+                <div className='w-full h-full' />
+              </div>
+            </Card>
+            <Card title='USP'>
+              <BlockStack gap='400'>
+                <SkeletonDisplayText size='small'></SkeletonDisplayText>
+                <SkeletonBodyText lines={4} />
+              </BlockStack>
+            </Card>
+          </BlockStack>
         </div>
       </div>
       <div className='py-4'>
@@ -28,13 +36,10 @@ export default memo(({ title }) => {
               <SkeletonDisplayText maxWidth="100%" size='small'></SkeletonDisplayText>
             </BlockStack>
           </Card>
-          <Card title='USP'>
-            <BlockStack gap='400'>
-              <SkeletonDisplayText size='small'></SkeletonDisplayText>
-              <SkeletonBodyText lines={5} />
-            </BlockStack>
+          {/* <PricingPlanSkeleton /> */}
+          <Card title="Video guide">
+            <div style={{height: '220px'}} />
           </Card>
-          <PricingPlanSkeleton />
         </BlockStack>
       </div>
     </InlineGrid>

@@ -4,9 +4,9 @@ import { useLazyCarousel } from '~/talons/lazyCarousel/useLazyCarousel';
 import PropTypes from 'prop-types';
 import { SectionListProvider } from '~/context';
 import QuickViewSlider from '~/components/QuickViewSectionModal/slider';
-import InstallModal from '~/components/product/installModal';
+import InstallModal from '~/components/block/product/installModal';
 import '~/components/ProductCarousel/style.scss';
-import { Skeleton } from '~/components/product';
+import { Skeleton } from '~/components/block/product';
 
 /**
  * @typedef {Object} SectionsQueryFilter
@@ -54,7 +54,7 @@ const LazyCarousel = props => {
   const keys = items.map(item => item.url_key);
 
   if (loadingWithoutData) {
-    return (<Skeleton total={pageSize} columns={pageSize} />);
+    return (<Skeleton total={4} columns={{sm: 1, md: 2, lg: 4}} />);
   }
   if (!renderItem) return null;
   return (

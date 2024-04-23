@@ -2,6 +2,7 @@ import { memo, useCallback, useMemo } from 'react';
 import { Divider, InlineStack, Text, Pagination as PolarisPagination } from '@shopify/polaris';
 import PaginationItem from './item';
 import PropTypes from 'prop-types';
+import { useScrollToTop } from '~/hooks/section-builder/redirect';
 
 const Pagination = props => {
   const { currentPage, onPageChange, totalPages } = props;
@@ -11,7 +12,7 @@ const Pagination = props => {
       const baseClass = {};
       if (currentPage !== i + 1) {
         baseClass.underline = true;
-        baseClass.pointer = true;
+        baseClass.cursorPointer = true;
       }
       return <PaginationItem key={i} page={i + 1} className={baseClass} onPageChange={onPageChange} />;
     });
@@ -19,9 +20,11 @@ const Pagination = props => {
   }, [totalPages, currentPage]);
   const handleNextPage = useCallback(() => {
     onPageChange && onPageChange(currentPage + 1);
+    useScrollToTop();
   }, [currentPage]);
   const handlePrevPage = useCallback(() => {
     onPageChange && onPageChange(currentPage - 1);
+    useScrollToTop();
   }, [currentPage]);
   const hasNext = useMemo(() => currentPage < totalPages, [totalPages, currentPage]);
   const hasPrev = useMemo(() => currentPage > 1, [currentPage]);

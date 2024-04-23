@@ -2,9 +2,9 @@
 import { BlockStack, Text } from '@shopify/polaris';
 import LazyProductCarousel from '~/components/LazyProductCarousel/carousel';
 import { QUERY_SECTION_COLLECTION_KEY, SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
-import { Skeleton } from '~/components/product';
+import { Skeleton } from '~/components/block/product';
 import { memo, useCallback, useState } from 'react';
-import ProductCard from '~/components/product/card';
+import ProductCard from '~/components/block/product/card';
 import { useSectionType } from '~/hooks/useSectionType';
 
 /**
@@ -25,7 +25,6 @@ const CategoryItem = props => {
       <ProductCard
         key={item.id}
         item={item}
-        lazyLoadImg={false}
       />
     );
   }, []);

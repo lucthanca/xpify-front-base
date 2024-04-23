@@ -19,7 +19,7 @@ import GallerySlider from '~/components/splide/gallery.jsx';
 import BadgeStatusSection from '~/components/block/badge/statusSection.jsx';
 import BadgeTag from '~/components/block/badge/tag.jsx';
 import BannerDefault from '~/components/block/banner/alert.jsx';
-import ModalInstallSection from '~/components/product/manage.jsx';
+import ModalInstallSection from '~/components/block/product/manage.jsx';
 import { PaymentIcon } from '@shopify/polaris-icons';
 import { SECTION_V2_QUERY } from '~/queries/section-builder/product.gql.js';
 import './style.scss';
@@ -59,7 +59,7 @@ const QuickViewModal = ({ url_key, show, onClose }) => {
               <Card title='Infomation'>
                 <BlockStack gap='200'>
                   <InlineStack gap='200'>
-                    <div className='pointer' onClick={navigateToSectionPage}>
+                    <div className='cursor-pointer' onClick={navigateToSectionPage}>
                       <Text variant='headingMd' as='h2'>
                         {section.name}
                       </Text>
@@ -67,7 +67,7 @@ const QuickViewModal = ({ url_key, show, onClose }) => {
                     <BadgeStatusSection item={section} />
                   </InlineStack>
 
-                  {section?.tags && <BadgeTag tags={section.tags} />}
+                  {section?.tags && <BadgeTag section={section} afterClick={onClose} />}
 
                   <Text variant='bodyMd' as='p'>
                     Version: {section.version}

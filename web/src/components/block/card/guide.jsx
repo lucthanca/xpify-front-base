@@ -101,7 +101,7 @@ function GuideCard() {
                   <List.Item>Purchase sections</List.Item>
                   <List.Item>Add sections to themes</List.Item>
                 </List>,
-                'demo': <iframe width="100%" height="200px" src="https://www.youtube.com/embed/UTdCvYEm-C4?si=WdXmN40TkjDYRpHb" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+                'demo': <iframe className='aspect-video' width="100%" src="https://www.youtube.com/embed/UTdCvYEm-C4?si=WdXmN40TkjDYRpHb" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
               }}
               setProgress={setProgress}
               openChild={openChild}

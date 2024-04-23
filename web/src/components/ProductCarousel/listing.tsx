@@ -2,14 +2,14 @@ import React, { memo } from 'react';
 import { useCarousel } from '~/talons/carousel/useCarousel';
 import { Splide, SplideSlide, Options } from '@splidejs/react-splide';
 import { SectionListProvider } from '~/context';
-import ProductCard from '~/components/product/card';
+import ProductCard from '~/components/block/product/card';
 import QuickViewSlider from '~/components/QuickViewSectionModal/slider';
 import type { ExtractItemsCallback } from '~/talons/carousel/useCarousel';
 import type { DocumentNode } from '@apollo/client';
 import type { OperationVariables } from '@apollo/client/core/types';
 import './style.scss';
 import PropTypes from 'prop-types';
-import InstallModal from '~/components/product/installModal';
+import InstallModal from '~/components/block/product/installModal';
 import { BlockStack, Box } from '@shopify/polaris';
 import TitleBlock from '~/components/block/title';
 
@@ -47,7 +47,6 @@ const Carousel: React.FC<CarouselProps> = (props) => {
                     <ProductCard
                       key={item.id}
                       item={item}
-                      lazyLoadImg={false}
                     />
                   </div>
                 </SplideSlide>

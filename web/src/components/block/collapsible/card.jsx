@@ -13,7 +13,7 @@ import {
   CircleChevronDownIcon
 } from '@shopify/polaris-icons';
 
-function CollapsibleFaq({title, content}) {
+function CollapsibleCard({title, content}) {
   const [open, setOpen] = useState(false);
 
   const handleToggle = useCallback(() => setOpen((open) => !open), []);
@@ -22,7 +22,7 @@ function CollapsibleFaq({title, content}) {
     <Card>
       <InlineStack>
         <div className='title-collapsible cursor-pointer' onClick={handleToggle}>
-          <Text as="p" variant="bodyLg">
+          <Text as="p" variant="headingMd">
             {title}
           </Text>
 
@@ -31,7 +31,7 @@ function CollapsibleFaq({title, content}) {
           </BlockStack>
         </div>
 
-        <Box paddingBlockStart={400}>
+        <Box paddingBlockStart={200}>
           <Collapsible
             open={open}
             id="basic-collapsible"
@@ -39,7 +39,7 @@ function CollapsibleFaq({title, content}) {
             expandOnPrint
           >
             <Box paddingInline={200}>
-              <Text as="div" variant="bodyMd" tone='subdued'>
+              <Text as="div" variant="bodyMd">
                 <div dangerouslySetInnerHTML={{__html: content}}></div>
               </Text>
             </Box>
@@ -50,4 +50,4 @@ function CollapsibleFaq({title, content}) {
   );
 }
 
-export default memo(CollapsibleFaq);
+export default memo(CollapsibleCard);

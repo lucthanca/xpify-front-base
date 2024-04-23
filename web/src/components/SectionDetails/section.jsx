@@ -3,26 +3,25 @@ import {
   BlockStack,
   Box,
   Card,
-  Icon,
-  InlineGrid,
   InlineStack,
   Layout,
   Page,
   Text,
-  List
 } from '@shopify/polaris';
-import { PaymentIcon, ViewIcon, CheckIcon } from '@shopify/polaris-icons';
+import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
 import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
 import BadgeTag from '~/components/block/badge/tag';
 import CardUSP from '~/components/block/card/usp';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
-import ModalInstallSection from '~/components/product/manage';
+import ModalInstallSection from '~/components/block/product/manage';
 import BannerWarningNotPurchase from '~/components/block/banner/warningPurchase';
-import SectionGallery from '~/components/SectionDetails/gallery';
+import GallerySlider from '~/components/splide/gallery';
 import RelatedProducts from '~/components/SectionDetails/RelatedProducts';
 import { Loading } from '@shopify/app-bridge-react';
 import NotFound from '~/pages/NotFound';
 import DocInstall from '../block/card/docInstall';
+import Footer from "~/components/block/footer";
+import CollapsibleCard from "~/components/block/collapsible/card";
 
 const SectionFullpageDetails = props => {
   const {
@@ -48,20 +47,20 @@ const SectionFullpageDetails = props => {
         titleMetadata={
           <InlineStack gap={200}>
             <BadgeStatusSection item={section} key={sectionLoading} />
-            {
+            {/* {
               section?.tags &&
               <BadgeTag tags={section.tags} />
-            }
+            } */}
           </InlineStack>
         }
         subtitle={"version " + section.version}
         compactTitle
-        primaryAction={{
-          content: !section.actions?.purchase ? 'Owned' : 'Purchase',
-          disabled: !section.actions?.purchase,
-          loading: purchaseLoading || sectionLoading,
-          onAction: section.actions?.purchase && handlePurchase
-        }}
+        // primaryAction={{ // Skip vì all section đang Free
+        //   content: !section.actions?.purchase ? 'Owned' : 'Purchase',
+        //   disabled: !section.actions?.purchase,
+        //   loading: purchaseLoading || sectionLoading,
+        //   onAction: section.actions?.purchase && handlePurchase
+        // }}
         secondaryActions={[
           {
             content: 'View in demo store',
@@ -85,7 +84,7 @@ const SectionFullpageDetails = props => {
                       title: "You cann't use this section now!",
                       tone: 'warning',
                       action: {
-                        content: 'Purchase $' + section.price,
+                        content: 'Purchase by $' + section.price,
                         icon: PaymentIcon,
                         loading: purchaseLoading,
                         onAction: handlePurchase,
@@ -101,9 +100,11 @@ const SectionFullpageDetails = props => {
                 />
               }
 
-              {/* <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} /> */}
-
-              <ModalInstallSection section={section} fullWith={false} />
+              {section.actions?.install && 
+                <Box>
+                  <ModalInstallSection section={section} fullWith={false} />
+                </Box>
+              }
 
               {section?.short_description && (
                 <Box>
@@ -113,38 +114,32 @@ const SectionFullpageDetails = props => {
 
               {section.description &&
                 <Box>
-                  <Card title="Description">
-                    <Text variant="headingMd">Description</Text>
-                    <Box padding="200">
-                      <div dangerouslySetInnerHTML={{__html: section.description}}></div>
-                    </Box>
-                  </Card>
+                  <CollapsibleCard title={"Description"} content={section.description} />
                 </Box>
               }
 
-              <Box>
-                <SectionGallery images={section?.images || []} />
-              </Box>
+              <Card title='Gallery' padding='0'>
+                <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee]'>
+                  <GallerySlider gallery={section?.images || []} />
+                </div>
+              </Card>
 
               <Box>
                 <DocInstall />
               </Box>
 
-              <RelatedProducts url_key={section.url_key} />
+              <RelatedProducts section={section} />
 
               {section.release_note && (
                 <Box>
-                    <Card title="Release Note">
-                      <Text variant="headingMd">Release Note</Text>
-                      <Box padding="200">
-                        <div dangerouslySetInnerHTML={{__html: section.release_note}}></div>
-                      </Box>
-                    </Card>
+                  <CollapsibleCard title={"Release Note"} content={section.release_note} />
                 </Box>
               )}
             </BlockStack>
           </Layout.Section>
         </Layout>
+
+        <Footer />
       </Page>
     </>
   );

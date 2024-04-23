@@ -119,7 +119,7 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
 
       return ({
         value: theme.id,
-        label: `${theme.name}(${titleRoleTheme[theme.role] ?? theme.role}) - ${status}`
+        label: `${theme.name} (${titleRoleTheme[theme.role] ?? theme.role}) - ${status}`
       });
     });
 
@@ -219,8 +219,7 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
   }, [dataUpdateE]);
 
   return (
-    themes.length && options.length
-    ? <BlockStack gap='200'>
+    <BlockStack gap='200'>
       {bannerAlert &&
         fullWith
         ? <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
@@ -231,7 +230,8 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
       <Text variant='bodySm' fontWeight='bold'>Choose theme for installation:</Text>
 
       <InlineGrid columns={fullWith ? 1 : {sm: 1, md: ['twoThirds', 'oneThird']}} gap={200} alignItems='center'>
-        <div>
+        {themes.length && options.length
+        ? <div>
           {
             typeSelect
             ? <Select
@@ -247,13 +247,18 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
             />
           }
         </div>
+        : <InlineStack align="center">
+          <Spinner accessibilityLabel="loading" size="small" />
+        </InlineStack>
+        }
+
         <div>
           <InlineGrid columns={2} gap={200}>
             <Button
               onClick={confirmDelete}
               variant='primary'
               tone="critical"
-              disabled={section.installed ? !installed : true}
+              disabled={section?.installed ? !installed : true}
               loading={dataDeleteL}
               fullWidth
             >
@@ -262,7 +267,7 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
             <Button
               onClick={handleUpdate}
               variant='primary'
-              disabled={!section.actions?.install || !selected}
+              disabled={!section?.actions?.install || !options.length}
               loading={dataUpdateL}
               fullWidth
             >
@@ -274,9 +279,6 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
         </div>
       </InlineGrid>
     </BlockStack>
-    : <InlineStack align="center">
-      <Spinner accessibilityLabel="loading" size="small" />
-    </InlineStack>
   );
 }
 

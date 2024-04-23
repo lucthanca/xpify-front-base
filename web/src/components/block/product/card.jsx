@@ -67,7 +67,7 @@ const InstallButton = props => {
   );
 };
 
-function ProductCard({item, lazyLoadImg = true}) {
+function ProductCard({item}) {
   console.log('re-render-productCard');
   // const handleInstall = useCallback((item) => {
   //   setIsShowPopupInstall && setIsShowPopupInstall(prev => !prev);
@@ -90,11 +90,11 @@ function ProductCard({item, lazyLoadImg = true}) {
     item &&
     <>
       <Card padding='0' background="bg-surface-secondary" className='h-full'>
-        <div className='pointer aspect-video' onClick={() => handleRedirect(item)}>
+        <div className='cursor-pointer aspect-video' onClick={() => handleRedirect(item)}>
           <img
             src={item.images[0]?.src}
             alt={item.name}
-            loading={lazyLoadImg ? "lazy" : "eager"}
+            loading="lazy"
             className='object-cover w-full h-full'
           />
         </div>
@@ -103,7 +103,7 @@ function ProductCard({item, lazyLoadImg = true}) {
           <BlockStack gap={200}>
             <BlockStack gap={200}>
               <InlineStack align='space-between'>
-                <div className='pointer' onClick={() => handleRedirect(item)}>
+                <div className='cursor-pointer' onClick={() => handleRedirect(item)}>
                   <Text variant="headingMd" as="h2">{item.name}</Text>
                 </div>
                 {item.price > 0 &&
@@ -150,7 +150,7 @@ function ProductCard({item, lazyLoadImg = true}) {
 
             {item?.tags &&
               <InlineStack align='end'>
-                <BadgeTag tags={item.tags} />
+                <BadgeTag section={item} />
               </InlineStack>
             }
           </BlockStack>

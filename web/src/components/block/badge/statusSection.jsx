@@ -1,10 +1,13 @@
 import { memo, useMemo } from "react";
 import { Badge, Text, Tooltip } from "@shopify/polaris";
+import {
+  LockIcon
+} from '@shopify/polaris-icons';
 
 function BadgeStatusSection({item}) {
 	const owned = useMemo(() => {
     if (item.price <= 0) {
-			return <Badge tone='success' size="small">
+			return <Badge tone='info' size="small">
         <Text>Free</Text>
       </Badge>
 		}
@@ -16,6 +19,14 @@ function BadgeStatusSection({item}) {
         </Tooltip>
       </Badge>
 		}
+
+    return (
+      <Badge tone='critical' size="small" icon={LockIcon}>
+        <Tooltip content="Pay to use">
+          <Text>Lock</Text>
+        </Tooltip>
+      </Badge>
+    );
   }, [item]);
 
 	const shouldUpdate = useMemo(() => {

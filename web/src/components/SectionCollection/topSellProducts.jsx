@@ -2,8 +2,8 @@ import { memo, useCallback, useState } from 'react';
 import { BlockStack, Box, Text } from '@shopify/polaris';
 import LazyProductCarousel from '~/components/LazyProductCarousel';
 import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
-import ProductCard, { Skeleton } from '~/components/product';
-import ModalProduct from '~/components/product/modal.jsx';
+import ProductCard, { Skeleton } from '~/components/block/product';
+import ModalProduct from '~/components/block/product/modal.jsx';
 
 const topSellProducts = props => {
   const [currentProduct, setCurrentProduct] = useState(undefined);
@@ -16,7 +16,6 @@ const topSellProducts = props => {
       item={item}
       setSection={setCurrentProduct}
       setIsShowPopup={setIsShowPopup}
-      lazyLoadImg={false}
     />
   }, [])
   return (

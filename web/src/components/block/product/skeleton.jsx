@@ -16,10 +16,10 @@ function Skeleton({total, columns}) {
         <div className='aspect-video bg-white'>
         </div>
         <Box padding="400">
-          <BlockStack gap='200'>
+          <BlockStack gap='400'>
             <SkeletonDisplayText size='small' />
-            <SkeletonBodyText lines={2} />
-            <SkeletonDisplayText maxWidth="true" />
+            <SkeletonBodyText lines={3} />
+            <SkeletonDisplayText maxWidth="true" size='small' />
             <SkeletonBodyText lines={1} />
           </BlockStack>
         </Box>

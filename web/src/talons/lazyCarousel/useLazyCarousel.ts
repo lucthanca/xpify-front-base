@@ -65,7 +65,7 @@ export const useLazyCarousel = <T extends any>(props: Props): LazyCarouselTalon<
         425: { perPage: 1 },
         768: { perPage: 2, gap: '0.5rem' },
         2560: { perPage: 4 }
-      },
+      }
     },
   }));
   const splideRef = useRef<Splide>(null);
@@ -107,13 +107,15 @@ export const useLazyCarousel = <T extends any>(props: Props): LazyCarouselTalon<
   }, []);
 
   useEffect(() => {
-    const currPage = data?.[queryRootKey]?.page_info?.current_page ?? 1;
-    setListParts(prev => {
-      return {
-        ...prev,
-        ['p_' + currPage]: data?.[queryRootKey]?.items || [],
-      };
-    });
+    if (data) {
+      const currPage = data?.[queryRootKey]?.page_info?.current_page ?? 1;
+      setListParts(prev => {
+        return {
+          ...prev,
+          ['p_' + currPage]: data?.[queryRootKey]?.items || [],
+        };
+      });
+    }
   }, [data]);
 
   useEffect(() => {

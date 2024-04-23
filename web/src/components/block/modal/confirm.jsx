@@ -33,12 +33,16 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
     }
   }, [isOpen]);
 
+  const type = useMemo(() => {
+    return section?.child_ids ? 'group' : 'section';
+  }, [section]);
+
   return (
     section?.name && theme?.name
     ? <Modal
       open={isOpen}
       onClose={handleCloseModal}
-      title={`Confirm`}
+      title={`Delete ${type}`}
       primaryAction={{
         destructive: true,
         content: 'Delete',
@@ -55,10 +59,10 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
       <Modal.Section>
         <BlockStack gap='400'>
           <BlockStack gap='100'>
-          <Text>Do you really want to delete section {section.name} from theme {theme.name}?</Text>
+          <Text>Do you really want to delete {type} {section.name} from theme {theme.name}?</Text>
           <Text>If you want to use {section.name} on {theme.name} again, you will have to reinstall section to theme.</Text>
           </BlockStack>
-          <Text>
+          <Text tone='subdued'>
             Note: This action won't affect other themes.
           </Text>
         </BlockStack>

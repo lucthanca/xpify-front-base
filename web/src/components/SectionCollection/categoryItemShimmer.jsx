@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { SkeletonTabs, BlockStack } from '@shopify/polaris';
-import { Skeleton as ProductCardShimmer } from '~/components/product';
+import { Skeleton as ProductCardShimmer } from '~/components/block/product';
 import PropTypes from 'prop-types';
 
 const Skeleton = (props) => {

@@ -1,6 +1,6 @@
 import { useSection } from '~/hooks/useSection';
 import { BlockStack, InlineStack, Modal, SkeletonBodyText, Spinner } from '@shopify/polaris';
-import ModalInstallSection from '~/components/product/manage';
+import ModalInstallSection from '~/components/block/product/manage';
 import ModalConfirm from '~/components/block/modal/confirm';
 import { useSectionListContext } from '~/context';
 import { useCallback, useState } from 'react';
@@ -38,12 +38,7 @@ const InstallModal = props => {
     >
       <Modal.Section>
         <BlockStack gap='400'>
-          {section && section?.url_key == activeSection?.url_key
-          ? <ModalInstallSection section={section} typeSelect={false} setCurrentThemeSelected={setCurrentThemeSelected} setConfirmAction={setConfirmAction} setIsShowConfirm={setIsShowConfirm} />
-          : <InlineStack align="center">
-            <Spinner accessibilityLabel="loading" size="small" />
-          </InlineStack>
-          }
+          <ModalInstallSection section={section?.url_key === activeSection?.url_key ? section : {}} typeSelect={false} setCurrentThemeSelected={setCurrentThemeSelected} setConfirmAction={setConfirmAction} setIsShowConfirm={setIsShowConfirm} />
         </BlockStack>
       </Modal.Section>
     </Modal>

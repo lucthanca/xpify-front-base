@@ -2,7 +2,7 @@ import { memo } from 'react';
 import {
   Card
 } from '@shopify/polaris';
-import SkeletonProduct from '~/components/product/skeleton';
+import SkeletonProduct from '~/components/block/product/skeleton';
 
 const Skeleton = () => {
   return (

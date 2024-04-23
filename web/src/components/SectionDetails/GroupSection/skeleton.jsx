@@ -8,7 +8,7 @@ import {
   SkeletonPage,
   Text
 } from '@shopify/polaris';
-import SkeletonProduct from '~/components/product/skeleton';
+import SkeletonProduct from '~/components/block/product/skeleton';
 import RelatedProductSkeleton from '~/components/SectionDetails/RelatedProducts/skeleton';
 
 const Skeleton = () => {
