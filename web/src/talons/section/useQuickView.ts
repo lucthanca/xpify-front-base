@@ -5,6 +5,7 @@ import { useSection, UseSectionTalon } from '~/hooks/useSection';
 
 type UseQuickViewProps = {
   key: string;
+  onClose: () => void
 };
 
 type UseQuickViewTalon = UseSectionTalon & {
@@ -16,7 +17,7 @@ type UseQuickViewTalon = UseSectionTalon & {
 };
 
 export const useQuickView = (props: UseQuickViewProps): UseQuickViewTalon => {
-  const { key } = props;
+  const { key, onClose } = props;
   const { section, loadingWithoutData, loading, error } = useSection({ key });
 
   console.log('Run useQuickView:  + ' + key + '| error: ' + error);
@@ -28,8 +29,9 @@ export const useQuickView = (props: UseQuickViewProps): UseQuickViewTalon => {
     purchase(section);
   }, [section, purchase])
   const handleRedirectProductPage = useRedirectSectionPage();
-  const navigateToSectionPage = useCallback(() => {
+  const navigateToSectionPage = useCallback(async () => {
     if (!key) return;
+    await onClose();
     handleRedirectProductPage(key);
   }, [handleRedirectProductPage, key])
   return {

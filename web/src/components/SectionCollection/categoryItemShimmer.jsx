@@ -1,10 +1,10 @@
 import { memo } from 'react';
 import { SkeletonTabs, BlockStack } from '@shopify/polaris';
-import { Skeleton as ProductCardShimmer } from '~/components/product';
+import { Skeleton as ProductCardShimmer } from '~/components/block/product';
 import PropTypes from 'prop-types';
 
 const Skeleton = (props) => {
-  const { childNumber = 5, itemRows = 2 } = props;
+  const { childNumber = 4, itemRows = 2 } = props;
   return (
     <>
       <BlockStack gap='400'>

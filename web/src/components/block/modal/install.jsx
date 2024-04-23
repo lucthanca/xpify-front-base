@@ -25,7 +25,7 @@ import {
   CheckIcon
 } from '@shopify/polaris-icons';
 import { useQuery, useMutation } from "@apollo/client";
-import ModalInstallSection from '~/components/product/manage'
+import ModalInstallSection from '~/components/block/product/manage'
 import GallerySlider from '~/components/splide/gallery';
 import BannerDefault from '~/components/block/banner/alert';
 import BadgeTag from '~/components/block/badge/tag';

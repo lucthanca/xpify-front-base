@@ -6,7 +6,7 @@ import BestSeller from '~/components/BestSellers/bestSellerSlider';
 const BestSellersHomepage = () => {
   const [spliderConfig] = useState(() => {
     return {
-      perPage: 3,
+      perPage: 2,
       gap: '1rem',
       pagination: false,
       breakpoints:{
@@ -16,13 +16,7 @@ const BestSellersHomepage = () => {
     };
   });
   return (
-    <Box>
-      <BlockStack gap='400'>
-        <TitleBlock title='Best Seller' subTitle='See a few examples of magically adding a theme section to your store in a few clicks.' />
-
-        <BestSeller slideConfig={spliderConfig} />
-      </BlockStack>
-    </Box>
+    <BestSeller slideConfig={spliderConfig} />
   );
 };
 

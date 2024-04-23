@@ -1,7 +1,7 @@
 import CategoryCollection from '~/components/SectionCollection/categoryCollection';
 import { BlockStack } from '@shopify/polaris';
 import { useSectionListing } from '~/talons/section/useSectionCollection';
-import Search from '~/components/input/search';
+import Search from '~/components/block/input/search';
 import { Loading } from '@shopify/app-bridge-react';
 import SectionCollection from '~/components/SectionCollection/sectionCollection';
 

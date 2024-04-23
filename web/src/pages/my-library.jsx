@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import SectionCollection from '~/components/SectionCollection';
 import GroupCollection from '~/components/GroupCollection';
 import { useNavigate, createSearchParams, useSearchParams } from 'react-router-dom';
+import Footer from '~/components/block/footer';
 
 const defaultSelected = 'simple';
 const options = [
@@ -63,6 +64,7 @@ function MyLibrary() {
 
         {pageActive}
       </Layout>
+      <Footer />
     </Page>
   );
 }

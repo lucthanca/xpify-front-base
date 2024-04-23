@@ -1,8 +1,8 @@
 import { memo, useState } from 'react';
 import { BlockStack, Box, Card, Layout, Page, SkeletonDisplayText, Text } from '@shopify/polaris';
-import Search from '~/components/input/search';
-import SkeletonProduct from '~/components/product/skeleton';
-import ProductList from '~/components/product/list';
+import Search from '~/components/block/input/search';
+import SkeletonProduct from '~/components/block/product/skeleton';
+import ProductList from '~/components/block/product/list';
 import Paginate from '~/components/block/paginate/default';
 import { useSectionCollection } from '~/talons/section/useSectionCollection';
 import BestSeller from '~/components/BestSellers';
@@ -43,7 +43,7 @@ const SectionCollection = props => {
     pagination: false,
     breakpoints:{
       425: { perPage: 1 },
-      768: { perPage: 3, gap: '0.5rem' },
+      768: { perPage: 2, gap: '0.5rem' },
       2560: { perPage: 4 }
     },
   }

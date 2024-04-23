@@ -17,6 +17,9 @@
   cursor: pointer;
 }
 
+.z-index10 {
+  z-index: var(--p-z-index-10) !important;
+}
 
 .title-collapsible {
   width: 100%;

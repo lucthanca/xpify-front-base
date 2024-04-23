@@ -5,6 +5,7 @@ import {
   Layout
 } from "@shopify/polaris";
 import SectionCollection from '~/components/SectionCollection';
+import Footer from '~/components/block/footer';
 
 const SectionsPage = props => {
   return (
@@ -12,6 +13,7 @@ const SectionsPage = props => {
       <Layout>
         <SectionCollection {...props} />
       </Layout>
+      <Footer />
     </Page>
   );
 }

@@ -1,21 +1,18 @@
 import {useCallback, memo, useState, useMemo, useEffect} from 'react';
 import {
   InlineGrid,
-  ExceptionList,
-  Modal,
   OptionList,
-  Badge,
   BlockStack,
   Select,
   InlineStack,
   Button,
-  Icon,
-  Box,
-  Text
+  Text,
+  Card,
+  Spinner
 } from '@shopify/polaris';
-import { NoteIcon, WrenchIcon } from '@shopify/polaris-icons';
 import { useToast } from '@shopify/app-bridge-react';
 import { useQuery, useMutation } from "@apollo/client";
+import ModalConfirm from '~/components/block/modal/confirm';
 import BannerDefault from '~/components/block/banner/alert';
 import { UPDATE_ASSET_MUTATION, DELETE_ASSET_MUTATION } from "~/queries/section-builder/asset.gql";
 import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
@@ -28,14 +25,16 @@ const titleRoleTheme = {
   'development': 'Dev',
 };
 
-function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
+function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction, setIsShowConfirm, typeSelect = true, fullWith = true}) {
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState(undefined);
+  const [isShowConfirmSelect, setIsShowConfirmSelect] = useState(false);
+  const [confirmActionSelect, setConfirmActionSelect] = useState(() => {});
   const toast = useToast();
 
   const { data:themesData } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
-    skip: Boolean(!section.entity_id),
+    skip: Boolean(!section?.entity_id),
   });
   const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
   const { data: groupChildSections, loading: groupChildSectionsLoad } = useQuery(SECTIONS_QUERY, {
@@ -85,17 +84,25 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
     }
   }, [themes]);
   const options = useMemo(() => {
-    return themes
-    ? themes.map(theme => {
+    if (!themes?.length
+      || !section?.url_key
+      || (section?.child_ids && !childSections?.length)
+    ) {
+      return {};
+    }
+
+    let result = themes.map(theme => {
+      if (theme.role == 'demo') { // Demo theme không thể thêm section
+        return false;
+      }
+
       var status = 'Not install';
       const installedInTheme = section?.installed && section.installed.find(item => item.theme_id == theme.id);
 
       if (installedInTheme) {
         var content = [];
         if (childSections.length) {
-          if (!groupChildSectionsLoad) {
-            content = childSections.map(item => getUpdateMessage(item, theme.id, section))
-          }
+          content = childSections.map(item => getUpdateMessage(item, theme.id, section))
         } else {
           content = [getUpdateMessage(section, theme.id)];
         }
@@ -112,15 +119,12 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
 
       return ({
         value: theme.id,
-        label: `${theme.name}(${titleRoleTheme[theme.role]}) - ${status}`
-      })
-    })
-    : {
-      value: 0,
-      label: `Loading...`
-    };
-  }, [section, themes, groupChildSectionsLoad]);
+        label: `${theme.name} (${titleRoleTheme[theme.role] ?? theme.role}) - ${status}`
+      });
+    });
 
+    return result.filter(item => item?.value);
+  }, [section, themes, childSections]);
   const installed = useMemo(() => {
     setBannerAlert(undefined);
     if (!section?.installed) {
@@ -132,9 +136,7 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
     if (installedInTheme) {
       var content = [];
       if (childSections.length) {
-        if (!groupChildSectionsLoad) {
-          content = childSections.map(item => getUpdateMessage(item, selected, section));
-        }
+        content = childSections.map(item => getUpdateMessage(item, selected, section));
       } else {
         content = [getUpdateMessage(section, selected)];
       }
@@ -156,8 +158,8 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
   const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION, {});
   const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION, {});
 
-  const handleUpdate = useCallback(async () => {
-    await updateAction({
+  const handleUpdate = useCallback(() => {
+    updateAction({
       variables: {
         theme_id: selected,
         key: section?.url_key
@@ -171,7 +173,23 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
         key: section?.url_key
       }
     });
+    toast.show('Deleted successfully');
   }, [selected]);
+
+  const currentThemeSelected = useMemo(() => {
+    return themes.find(item => item.id == selected);
+  }, [selected]);
+
+  const confirmDelete = useCallback(() => {
+    if (!typeSelect) { // Is modal install list
+      setConfirmAction(() => handleDelete);
+      setIsShowConfirm(true);
+      setCurrentThemeSelected(currentThemeSelected);
+    } else {
+      setConfirmActionSelect(() => handleDelete);
+      setIsShowConfirmSelect(true);
+    }
+  });
 
   useEffect(() => {
     if (dataUpdate && dataUpdate.updateAsset) {
@@ -179,26 +197,17 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
 
       if (updateSuccess.length) {
         setBannerAlert({
-          'title': `Section installed successfully. Go to theme editor to use this section.`,
-          'tone': 'success',
-          'action': {content: 'Customize', icon: WrenchIcon, url: urlEditTheme},
-          'content': updateSuccess.map(item => {
-            return {message: 'Add successfully the section ' + item.name};
-          })
+          'urlSuccessEditTheme': urlEditTheme,
+          'tone': 'success'
         });
       } else {
         setBannerAlert({
-          'title': `Error`,
+          'title': `Error. Try later`,
           'tone': 'critical'
         });
       }
     }
   }, [dataUpdate]);
-  useEffect(() => {
-    if (dataDelete) {
-      toast.show('Deleted');
-    }
-  }, [dataDelete]);
   useEffect(() => {
     if (dataUpdateE) {
       setBannerAlert({
@@ -210,18 +219,19 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
   }, [dataUpdateE]);
 
   return (
-    themes &&
     <BlockStack gap='200'>
       {bannerAlert &&
-        <Box>
+        fullWith
+        ? <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
+        : <Card padding={0}>
           <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
-        </Box>
+        </Card>
       }
-
       <Text variant='bodySm' fontWeight='bold'>Choose theme for installation:</Text>
 
       <InlineGrid columns={fullWith ? 1 : {sm: 1, md: ['twoThirds', 'oneThird']}} gap={200} alignItems='center'>
-        <div>
+        {themes.length && options.length
+        ? <div>
           {
             typeSelect
             ? <Select
@@ -237,28 +247,35 @@ function ModalInstallSection({section, typeSelect = true, fullWith = true}) {
             />
           }
         </div>
+        : <InlineStack align="center">
+          <Spinner accessibilityLabel="loading" size="small" />
+        </InlineStack>
+        }
+
         <div>
           <InlineGrid columns={2} gap={200}>
             <Button
-              onClick={handleUpdate}
-              variant='primary'
-              disabled={!section.actions?.install || !selected}
-              loading={dataUpdateL}
-              fullWidth
-            >
-              {installed ? 'Reinstall to theme' : 'Install to theme'}
-            </Button>
-            <Button
-              onClick={handleDelete}
+              onClick={confirmDelete}
               variant='primary'
               tone="critical"
-              disabled={section.installed ? !installed : true}
+              disabled={section?.installed ? !installed : true}
               loading={dataDeleteL}
               fullWidth
             >
               Delete from theme
             </Button>
+            <Button
+              onClick={handleUpdate}
+              variant='primary'
+              disabled={!section?.actions?.install || !options.length}
+              loading={dataUpdateL}
+              fullWidth
+            >
+              {installed ? 'Reinstall to theme' : 'Install to theme'}
+            </Button>
           </InlineGrid>
+
+          {typeSelect && <ModalConfirm section={section} theme={currentThemeSelected} isOpen={isShowConfirmSelect} setIsOpen={setIsShowConfirmSelect} onConfirm={confirmActionSelect} />}
         </div>
       </InlineGrid>
     </BlockStack>

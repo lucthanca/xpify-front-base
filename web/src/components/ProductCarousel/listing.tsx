@@ -2,17 +2,21 @@ import React, { memo } from 'react';
 import { useCarousel } from '~/talons/carousel/useCarousel';
 import { Splide, SplideSlide, Options } from '@splidejs/react-splide';
 import { SectionListProvider } from '~/context';
-import ProductCard from '~/components/product/card';
+import ProductCard from '~/components/block/product/card';
 import QuickViewSlider from '~/components/QuickViewSectionModal/slider';
 import type { ExtractItemsCallback } from '~/talons/carousel/useCarousel';
 import type { DocumentNode } from '@apollo/client';
 import type { OperationVariables } from '@apollo/client/core/types';
 import './style.scss';
 import PropTypes from 'prop-types';
-import InstallModal from '~/components/product/installModal';
+import InstallModal from '~/components/block/product/installModal';
+import { BlockStack, Box } from '@shopify/polaris';
+import TitleBlock from '~/components/block/title';
 
 
 type CarouselProps = {
+  title: string;
+  subTitle: string;
   query: DocumentNode;
   queryKey: string;
   slideOptions: Options;
@@ -22,31 +26,39 @@ type CarouselProps = {
 };
 
 const Carousel: React.FC<CarouselProps> = (props) => {
-  const { skeleton, query, queryKey, slideOptions, extractItems, queryVariables } = props;
+  const { title, subTitle, skeleton, query, queryKey, slideOptions, extractItems, queryVariables } = props;
   const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractItems);
   if (loadingWithoutData && skeleton) {
     return <>{skeleton}</>;
   }
   return (
-    <SectionListProvider>
-      <Splide options={slideOptions}>
-        {items.map((item) => {
-          return (
-            <SplideSlide key={item.id}>
-              <div className='sliderItemCardRoot'>
-                <ProductCard
-                  key={item.id}
-                  item={item}
-                  lazyLoadImg={false}
-                />
-              </div>
-            </SplideSlide>
-          )
-        })}
-      </Splide>
-      <QuickViewSlider keys={keys} />
-      <InstallModal />
-    </SectionListProvider>
+    items && items.length
+    ?
+    <Box>
+      <BlockStack gap='200'>
+        <TitleBlock title={title} subTitle={subTitle} />
+
+        <SectionListProvider>
+          <Splide options={slideOptions}>
+            {items.map((item) => {
+              return (
+                <SplideSlide key={item.id}>
+                  <div className='sliderItemCardRoot'>
+                    <ProductCard
+                      key={item.id}
+                      item={item}
+                    />
+                  </div>
+                </SplideSlide>
+              )
+            })}
+          </Splide>
+          <QuickViewSlider keys={keys} />
+          <InstallModal />
+        </SectionListProvider>
+      </BlockStack>
+    </Box>
+    : <></>
   );
 };
 

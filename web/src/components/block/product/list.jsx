@@ -1,10 +1,10 @@
 import { memo, useMemo } from 'react';
 import { InlineGrid } from '@shopify/polaris';
-import ProductCard from '~/components/product/card';
+import ProductCard from '~/components/block/product/card';
 import EmptySections from '~/components/block/emptyState';
 import { SectionListProvider } from '~/context';
 import QuickViewSlider from '~/components/QuickViewSectionModal/slider';
-import InstallModal from '~/components/product/installModal';
+import InstallModal from '~/components/block/product/installModal';
 
 function ProductList({ items, columns, isSimple = true }) {
   console.log('re-render-productList');

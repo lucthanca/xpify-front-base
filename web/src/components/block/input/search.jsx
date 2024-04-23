@@ -80,7 +80,11 @@ const useSearch = props => {
     setCategoryFilter([]);
   }, [onFilterChange]);
 
-  const [tagFilter, setTagFilter] = useState([]);
+  const [tagFilter, setTagFilter] = useState(() => {
+    return searchParams.has('tags')
+    ? [''] // Trigger tag filter
+    : [];
+  });
   /**
    * To determine if has search tags in URL -> pin the tag filter
    */
@@ -322,6 +326,7 @@ export default function Search({
     );
   }, [priceFilter, handlePriceFilterChange]);
   const planFilterJsx = useMemo(() => {
+    return null; //Skip vì chưa có Plan trong bản MVP
     if (!pricingPlans) return null;
     return (
       <ChoiceList
@@ -428,7 +433,7 @@ export default function Search({
       sortOptions={sortOptions}
       sortSelected={sortSelected}
       queryValue={search}
-      queryPlaceholder="Searching in all sections"
+      queryPlaceholder="Searching"
       onQueryChange={handleSearchFilterChange}
       onQueryClear={handleSearchFilterRemove}
       onSort={handleSortChange}

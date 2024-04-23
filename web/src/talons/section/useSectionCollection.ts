@@ -14,7 +14,7 @@ import {
   TAG_FILTER_KEY,
   QUERY_SEARCH_KEY,
   SORT_OPTION_NONE,
-} from '~/components/input/search';
+} from '~/components/block/input/search';
 import { isEmpty } from '~/utils/isEmpty';
 
 const productType = {
@@ -60,7 +60,7 @@ export const useSectionCollection = () => {
     return searchParams.has('tags');
   });
   const searchTags = useMemo(() => {
-      return searchParams.get('tags')?.toLowerCase()?.split(',');
+    return searchParams.get('tags')?.toLowerCase()?.split(',');
   }, [searchParams]);
 
   const setTagFilter = useCallback((value: any) => {

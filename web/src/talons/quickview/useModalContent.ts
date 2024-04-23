@@ -20,6 +20,8 @@ export const useModalContent = (keys: string[]) => {
     pagination: false,
     gap: '1rem',
     start: startIndex,
+    drag: false,
+    dragAngleThreshold: 0 // Disable drag tránh conflict drag gallery
   };
   const handleSliderMoved = useCallback((_: any, currentIndex: number) => {
     setMovedIndex(currentIndex);

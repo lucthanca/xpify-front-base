@@ -13,6 +13,9 @@ const CommonSectionField = gql`
     demo_link
     images { src }
     type_id
+    categoriesV2 {
+      name id
+    }
     tags {
       name id
     }

@@ -17,10 +17,10 @@ function DocInstall() {
             <Text fontWeight='bold'>2. Purchase sections/ Add sections to themes: </Text>
             <List gap='100'>
               <List.Item>
-                <Text>If you purchase a section, you will own it and can always access its updated version in the future regardless of the plan it is put in. Please use the ""Purchase"" button.</Text>
+                <Text>If you purchase a section, you will own it and can always access its updated version in the future regardless of the plan it is put in. Please use the "Purchase" button.</Text>
               </List.Item>
               <List.Item>
-                <Text>You can add to themes as many of sections as you want, provided that they are included in your pricing plan. Please use the ""Add to theme"" button.</Text>
+                <Text>You can add to themes as many of sections as you want, provided that they are included in your pricing plan. Please use the "Add to theme" button.</Text>
               </List.Item>
               <List.Item>
                 <Text>If you are on a free plan, you can still access a lot of free sections in our collections. </Text>

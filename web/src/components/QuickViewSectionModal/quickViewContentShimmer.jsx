@@ -7,31 +7,39 @@ export default memo(({ title }) => {
     <InlineGrid columns={{ sm: 1, md: ['twoThirds', 'oneThird'] }} gap='400'>
       <div className='h-full py-4'>
         <div className='sticky top-4'>
-          <Card title='Gallery' padding='0'>
-            <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee] sticky'>
-              <div className='w-full h-full' />
-            </div>
-          </Card>
-          <span>{title}</span>
+          <BlockStack gap={400}>
+            <Card title='Gallery' padding='0'>
+              <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee] sticky'>
+                <div className='w-full h-full' />
+              </div>
+            </Card>
+            <Card title='USP'>
+              <BlockStack gap='400'>
+                <SkeletonDisplayText size='small'></SkeletonDisplayText>
+                <SkeletonBodyText lines={4} />
+              </BlockStack>
+            </Card>
+          </BlockStack>
         </div>
       </div>
       <div className='py-4'>
         <BlockStack gap='400'>
           <Card title='Infomation'>
-            <BlockStack gap='200'>
-              <SkeletonTabs count={2} fitted />
-              <SkeletonBodyText lines={3} />
-              <SkeletonDisplayText maxWidth='true' size='small'></SkeletonDisplayText>
-              <SkeletonDisplayText maxWidth='true' size='small'></SkeletonDisplayText>
-            </BlockStack>
-          </Card>
-          <Card title='Description'>
             <BlockStack gap='400'>
-              <SkeletonDisplayText size='small'></SkeletonDisplayText>
-              <SkeletonBodyText lines={5} />
+              <SkeletonDisplayText maxWidth="40%" size='small'></SkeletonDisplayText>
+              <SkeletonBodyText lines={3} />
+              <SkeletonBodyText lines={1} />
+              <InlineGrid columns={2} gap={200}>
+                <SkeletonDisplayText maxWidth="100%" size='small' />
+                <SkeletonDisplayText maxWidth="100%" size='small' />
+              </InlineGrid>
+              <SkeletonDisplayText maxWidth="100%" size='small'></SkeletonDisplayText>
             </BlockStack>
           </Card>
-          <PricingPlanSkeleton />
+          {/* <PricingPlanSkeleton /> */}
+          <Card title="Video guide">
+            <div style={{height: '220px'}} />
+          </Card>
         </BlockStack>
       </div>
     </InlineGrid>

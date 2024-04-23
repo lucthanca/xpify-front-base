@@ -16,13 +16,7 @@ const LatestReleaseHomePage = () => {
     };
   });
   return (
-    <Box>
-      <BlockStack gap='400'>
-        <TitleBlock title='Latest Releases' subTitle='See a few examples of magically adding a theme section to your store in a few clicks.' />
-
-        <LatestRelease sliderConfig={spliderConfig} />
-      </BlockStack>
-    </Box>
+    <LatestRelease sliderConfig={spliderConfig} />
   );
 };
 
