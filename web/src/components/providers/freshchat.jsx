@@ -1,9 +1,10 @@
-import { memo, useEffect } from 'react';
+import { createContext, memo, useCallback, useContext, useEffect, useMemo } from 'react';
 function initFreshChat() {
   window.fcWidget.init({
     token: "63b4c80e-6420-42e4-ac23-0bb1c8f48f4d",
     host: "https://bsscommerce2.freshchat.com",
-    widgetUuid: "75de2c86-ca7e-49c0-9166-f8d24bfa1a01"
+    widgetUuid: "75de2c86-ca7e-49c0-9166-f8d24bfa1a01",
+    open: false,
   });
 }
 function initialize(i,t){
@@ -12,18 +13,34 @@ function initialize(i,t){
 }
 function initiateCall(){initialize(document,"Freshchat-js-sdk")}
 
-const FreshChat = props => {
-  const { children } = props;
+const FreshChatContext = createContext(undefined);
 
+const FreshChatProvider = props => {
+  const open = useCallback(() => {
+    if (!window.fcWidget.isOpen()) {
+      window.fcWidget.open();
+    }
+  }, []);
+  const close = useCallback(() => {
+    if (window.fcWidget.isOpen()) {
+      window.fcWidget.close();
+    }
+  }, []);
+
+  const api = useMemo(() => {
+    return { open, close };
+  }, [open]);
   useEffect(() => {
     initiateCall();
   }, []);
 
   return (
-    <>
-      {children}
-    </>
+    <FreshChatContext.Provider value={api}>
+      {props.children}
+    </FreshChatContext.Provider>
   );
 }
 
-export default memo(FreshChat);
+export const useFreshChat = () => useContext(FreshChatContext);
+
+export default FreshChatProvider;
