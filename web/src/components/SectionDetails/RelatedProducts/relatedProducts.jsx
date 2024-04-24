@@ -27,7 +27,7 @@ const RelatedProducts = props => {
       slideOptions={slideOptions}
       skeleton={skeleton}
       title={"Recommended " + type}
-      subTitle="Refer to a few other related products"
+      //subTitle="Refer to a few other related products"
     />
   );
 };

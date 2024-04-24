@@ -18,9 +18,9 @@ function Skeleton({total, columns}) {
         <Box padding="400">
           <BlockStack gap='400'>
             <SkeletonDisplayText size='small' />
-            <SkeletonBodyText lines={3} />
-            <SkeletonDisplayText maxWidth="true" size='small' />
             <SkeletonBodyText lines={1} />
+            <SkeletonBodyText lines={2} />
+            <SkeletonDisplayText maxWidth="true" size='small' />
           </BlockStack>
         </Box>
       </Card>
