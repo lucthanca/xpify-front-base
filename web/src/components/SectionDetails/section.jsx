@@ -19,7 +19,8 @@ import GallerySlider from '~/components/splide/gallery';
 import RelatedProducts from '~/components/SectionDetails/RelatedProducts';
 import { Loading } from '@shopify/app-bridge-react';
 import NotFound from '~/pages/NotFound';
-import DocInstall from '../block/card/docInstall';
+import DocInstall from '~/components/block/card/docInstall';
+import VideoGuideInstall from '~/components/block/card/videoInstall';
 import Footer from "~/components/block/footer";
 import CollapsibleCard from "~/components/block/collapsible/card";
 
@@ -123,6 +124,10 @@ const SectionFullpageDetails = props => {
                   <GallerySlider gallery={section?.images || []} />
                 </div>
               </Card>
+
+              <Box>
+                <VideoGuideInstall />
+              </Box>
 
               <Box>
                 <DocInstall />

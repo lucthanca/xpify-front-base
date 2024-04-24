@@ -60,12 +60,6 @@ const LazyQuickViewContent = props => {
                   <GallerySlider gallery={section.images} />
                 </div>
               </Card>
-
-              {section?.short_description && (
-                <Box>
-                  <CardUSP short_description={section.short_description} />
-                </Box>
-              )}
             </BlockStack>
           </div>
         </div>
@@ -82,7 +76,7 @@ const LazyQuickViewContent = props => {
                   <BadgeStatusSection item={section} />
                 </InlineStack>
 
-                {section?.tags && <BadgeTag section={section} />}
+                {section?.tags && <BadgeTag section={section} afterClick={onClose} />}
 
                 <Text variant='bodyMd' as='p'>
                   Version: {section.version}
@@ -124,6 +118,12 @@ const LazyQuickViewContent = props => {
                 <PricingPlan loading={loadingInBackground} plan={section?.pricing_plan}
                              subscribable={section?.actions.plan} />
               </Suspense>
+            )}
+
+            {section?.short_description && (
+              <Box>
+                <CardUSP short_description={section.short_description} />
+              </Box>
             )}
 
             <Card>

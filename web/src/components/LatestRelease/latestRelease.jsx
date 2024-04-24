@@ -6,7 +6,7 @@ const LatestRelease = ({ sliderConfig }) => {
   return (
     <ProductCarousel
       title="Latest Releases"
-      subTitle="Recently updated products"
+      //subTitle="Recently updated products"
       query={LATEST_RELEASE_QUERY}
       queryKey={LATEST_RELEASE_QUERY_KEY}
       slideOptions={sliderConfig}

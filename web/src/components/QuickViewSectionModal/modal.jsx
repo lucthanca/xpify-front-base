@@ -67,7 +67,7 @@ const QuickViewModal = ({ url_key, show, onClose }) => {
                     <BadgeStatusSection item={section} />
                   </InlineStack>
 
-                  {section?.tags && <BadgeTag section={section} afterClick={onClose} />}
+                  {section?.tags && <BadgeTag section={section} />}
 
                   <Text variant='bodyMd' as='p'>
                     Version: {section.version}

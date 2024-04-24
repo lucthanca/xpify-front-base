@@ -13,12 +13,6 @@ export default memo(({ title }) => {
                 <div className='w-full h-full' />
               </div>
             </Card>
-            <Card title='USP'>
-              <BlockStack gap='400'>
-                <SkeletonDisplayText size='small'></SkeletonDisplayText>
-                <SkeletonBodyText lines={4} />
-              </BlockStack>
-            </Card>
           </BlockStack>
         </div>
       </div>
@@ -34,6 +28,12 @@ export default memo(({ title }) => {
                 <SkeletonDisplayText maxWidth="100%" size='small' />
               </InlineGrid>
               <SkeletonDisplayText maxWidth="100%" size='small'></SkeletonDisplayText>
+            </BlockStack>
+          </Card>
+          <Card title='USP'>
+            <BlockStack gap='400'>
+              <SkeletonDisplayText size='small'></SkeletonDisplayText>
+              <SkeletonBodyText lines={4} />
             </BlockStack>
           </Card>
           {/* <PricingPlanSkeleton /> */}

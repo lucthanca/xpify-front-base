@@ -67,17 +67,17 @@ function HomePage() {
                     />
                     <NavCard
                       title='Groups'
-                      content="Don't know where to start? Select a whole solution for your store!"
+                      content="Don't know where to start? Select a whole pack of solution for your store!"
                       actions={<Button onClick={handleRedirectGroupsPage}>Browse Groups</Button>}
                     />
                     <NavCard
                       title='My Library'
-                      content='All your purchased sections in one place, ready to tailor your store'
+                      content='All your added sections in one place, ready to tailor your store.'
                       actions={<Button onClick={handleRedirectMyLibraryPage}>My Library</Button>}
                     />
                     <NavCard
                       title='Help Center'
-                      content='Need a helping hand? Check our FAQs for quick and friendly support.'
+                      content='Need a helping hand? Check our FAQs or chat directly with our support agents for quick and friendly support.'
                       actions={<Button onClick={handleRedirectHelpCenterPage}>Help Center</Button>}
                     />
                   </InlineGrid>

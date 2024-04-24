@@ -112,10 +112,12 @@ const useSearch = props => {
   }, [onFilterChange, handleTagFilterParams]);
 
   const [sortSelected, setSortSelected] = useState(() => {
-    let output = [SORT_OPTION_NONE];
-    if (location.pathname === '/my-library') {
-      output = ['main_table.name asc'];
-    }
+    // Không chia list category nữa
+    // let output = [SORT_OPTION_NONE];
+    // if (location.pathname === '/my-library') {
+    //   output = ['main_table.name asc'];
+    // }
+    let output = ['main_table.name asc'];
     return output;
   });
   const handleSortChange = useCallback((value) => {
@@ -141,10 +143,11 @@ const useSearch = props => {
     })) : [];
   }, [categories]);
   const sortOptions = useMemo(() => {
-    const baseOptions = location.pathname === '/my-library' ? [] : [{
-      label: 'None',
-      value: SORT_OPTION_NONE,
-    }];
+    // const baseOptions = location.pathname === '/my-library' ? [] : [{
+    //   label: 'None',
+    //   value: SORT_OPTION_NONE,
+    // }];
+    const baseOptions = [];
     return [...baseOptions, ...(sortOptionsdt?.[SORT_OPTIONS_QUERY_KEY] ?? [])];
   }, [sortOptionsdt]);
   const handleFiltersClearAll = useCallback(() => {

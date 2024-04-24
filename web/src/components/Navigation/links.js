@@ -19,9 +19,9 @@ export const useNavigationLinks = () => {
     //   label: t('NavigationMenu.plans'),
     //   destination: '/plans',
     // },
-    {
-      label: t('NavigationMenu.helpCenter'),
-      destination: '/help-center',
-    }
+    // {
+    //   label: t('NavigationMenu.helpCenter'),
+    //   destination: '/help-center',
+    // }
   ];
 };

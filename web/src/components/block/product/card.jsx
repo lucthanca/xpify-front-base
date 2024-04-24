@@ -118,8 +118,13 @@ function ProductCard({item}) {
               }
               {item?.categoriesV2 && item.categoriesV2.length
                 ? <Text variant="bodyXs">Category: {item.categoriesV2.map(category => category.name).join(', ')}</Text>
-              : <></> 
-            }
+                : <></>
+              }
+              {item?.tags &&
+                <InlineStack>
+                  <BadgeTag section={item} />
+                </InlineStack>
+              }
             </BlockStack>
             
             <InlineStack gap='200'>
@@ -147,12 +152,6 @@ function ProductCard({item}) {
                 </Tooltip>
               }
             </InlineStack>
-
-            {item?.tags &&
-              <InlineStack align='end'>
-                <BadgeTag section={item} />
-              </InlineStack>
-            }
           </BlockStack>
         </Box>
       </Card>

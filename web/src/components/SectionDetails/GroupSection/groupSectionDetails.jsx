@@ -13,6 +13,7 @@ import { Loading } from '@shopify/app-bridge-react';
 import NotFound from '~/pages/NotFound.jsx';
 import RelatedProducts from '../RelatedProducts/relatedProducts';
 import DocInstall from '~/components/block/card/docInstall';
+import VideoGuideInstall from '~/components/block/card/videoInstall';
 import Footer from "~/components/block/footer";
 
 const GroupSectionDetails = props => {
@@ -122,6 +123,10 @@ const GroupSectionDetails = props => {
                     </Card>
                   </Box>
                 )}
+
+                <Box>
+                  <VideoGuideInstall />
+                </Box>
 
                 <Box>
                   <DocInstall />
