@@ -2,10 +2,9 @@ import { useParams } from 'react-router-dom';
 import { useSectionPurchase } from '~/hooks/useSectionPurchase';
 import { useCallback, useMemo } from 'react';
 import { ApolloError, useQuery } from '@apollo/client';
-import { SECTION_QUERY } from '~/queries/section-builder/product.gql';
+import { SECTION_QUERY, SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builder/product.gql';
 import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
 import type { ApolloQueryResult } from '@apollo/client/core/types';
-import { useRelatedProducts } from '~/talons/relatedProducts/useRelatedProducts';
 
 type SectionImage = {
   src: string;
@@ -14,7 +13,7 @@ type SectionImage = {
 type SectionActions = {
   install: boolean;
   purchase: boolean;
-  play: boolean;
+  plan: boolean;
 };
 export type Install = {
   theme_id: string;
@@ -34,7 +33,12 @@ export interface PricingPlan {
   description: string;
   sort_order: number;
 }
+type Category = {
+  id: string;
+  name: string;
+};
 export interface SectionDataInterface {
+  id: string;
   entity_id: string;
   name: string;
   description: string;
@@ -45,13 +49,14 @@ export interface SectionDataInterface {
   demo_link: string;
   images: SectionImage[];
   url_key: string;
-  categories: string[];
-  tags: string[];
+  categories: string[] | null;
+  categoriesV2: Category[] | null;
+  tags: string[] | null;
 }
 export type SectionData = SectionDataInterface & {
   actions: SectionActions;
   installed: Install[];
-  pricing_plan: PricingPlan;
+  pricing_plan: PricingPlan | null | undefined;
   version: String;
   release_note: String;
   src: String
@@ -69,10 +74,8 @@ export type SectionTalon = {
   handlePurchase: () => Promise<void>;
   purchaseLoading: boolean;
   sectionLoading: boolean;
-  reloadSection: () => Promise<ApolloQueryResult<SectionData>>;
   themes: ThemeData[] | [];
   section: SectionData | {};
-  relatedProducts: SectionData[];
   sectionError: ApolloError | undefined;
   loadingWithoutData: boolean;
 };
@@ -80,18 +83,26 @@ export type SectionTalon = {
 export const useSection = (): SectionTalon => {
   const { key } = useParams();
   const { purchaseSection, loading: purchaseLoading, error: purchaseError } = useSectionPurchase();
-  const { products: relatedProducts } = useRelatedProducts();
 
-  const { data: loadedSection, loading: sectionLoading, error: sectionError, refetch: reloadSection } = useQuery(SECTION_QUERY, {
+  const { data:loadedSection, loading: sectionLoading, error: sectionError } = useQuery(SECTION_V2_QUERY, {
     fetchPolicy: "cache-and-network",
-    variables: { key }
+    variables: {
+      key: key
+    }
   });
   const section = useMemo(() => {
-    return loadedSection?.getSection || {};
+    return loadedSection?.[SECTION_V2_QUERY_KEY];
   }, [loadedSection]);
+  // const { data: loadedSection, loading: sectionLoading, error: sectionError } = useQuery(SECTION_QUERY, {
+  //   fetchPolicy: "cache-and-network",
+  //   variables: { key }
+  // });
+  // const section = useMemo(() => {
+  //   return loadedSection?.getSection || {};
+  // }, [loadedSection]);
   const { data:themesData, loading:themesL, error:themesE } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
-    skip: Boolean(!section.entity_id),
+    skip: Boolean(!section?.entity_id),
   });
   const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
   const handlePurchase = useCallback(async () => {
@@ -103,10 +114,8 @@ export const useSection = (): SectionTalon => {
     handlePurchase,
     purchaseLoading,
     sectionLoading,
-    reloadSection,
     themes,
     section,
-    relatedProducts,
     sectionError,
     loadingWithoutData: sectionLoading && !loadedSection,
   };

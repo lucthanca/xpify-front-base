@@ -19,10 +19,11 @@ export const PRICING_PLANS_QUERY = gql`
   }
 `;
 
+export const SORT_OPTIONS_QUERY_KEY = 'getSortOptions';
 /* Sort options use */
 export const SORT_OPTIONS_QUERY = gql`
-  query Get {
-    getSortOptions {
+  query GetSortOptions {
+    ${SORT_OPTIONS_QUERY_KEY} {
       label
       value
       directionLabel
@@ -63,6 +64,19 @@ export const CANCEL_PLAN_MUTATION = gql`
     cancelPlan(name: $name) {
       message
       tone
+    }
+  }
+`;
+
+
+/* Sort options use */
+export const MY_SHOP = gql`
+  query Get {
+    myShop {
+      email
+      name
+      shop_owner
+      domain
     }
   }
 `;

@@ -1,15 +1,24 @@
-import { memo, useCallback, useMemo } from 'react';
-import { ViewIcon } from '@shopify/polaris-icons';
-import { BlockStack, Box, Card, Layout, Page, Text } from '@shopify/polaris';
-import { useBackPage } from '~/hooks/section-builder/redirect';
-import GallerySlider from '~/components/splide/gallery';
-import ProductList from '~/components/product/list';
-import SkeletonProduct from '~/components/product/skeleton';
+import { memo } from 'react';
+import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
+import { BlockStack, Box, Card, InlineStack, Layout, Page, Text } from '@shopify/polaris';
+import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
+import ProductList from '~/components/block/product/list';
+import ModalInstallSection from '~/components/block/product/manage';
+import SkeletonProduct from '~/components/block/product/skeleton';
+import CardUSP from '~/components/block/card/usp';
+import BannerWarningNotPurchase from '~/components/block/banner/warningPurchase';
+import BadgeTag from '~/components/block/badge/tag';
+import BadgeStatusSection from '~/components/block/badge/statusSection';
 import { Loading } from '@shopify/app-bridge-react';
 import NotFound from '~/pages/NotFound.jsx';
+import RelatedProducts from '../RelatedProducts/relatedProducts';
+import DocInstall from '~/components/block/card/docInstall';
+import VideoGuideInstall from '~/components/block/card/videoInstall';
+import Footer from "~/components/block/footer";
 
 const GroupSectionDetails = props => {
   const handleBackPage = useBackPage();
+  const handleRedirectPlansPage = useRedirectPlansPage();
   const {
     groupSectionLoading: sectionLoading,
     groupSection,
@@ -19,7 +28,9 @@ const GroupSectionDetails = props => {
     groupSectionError,
   } = props;
 
-  if (groupSectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity') {
+  if (groupSectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity'
+    || !groupSection?.child_ids
+  ) {
     return <NotFound />;
   }
 
@@ -29,18 +40,26 @@ const GroupSectionDetails = props => {
       <Page
         backAction={{content: 'Products', onAction: () => handleBackPage()}}
         title={groupSection.name}
-        subtitle={groupSection.price ? `$${groupSection.price}` : 'Free'}
+        titleMetadata={
+          <InlineStack gap={200}>
+            <BadgeStatusSection item={groupSection} key={sectionLoading} />
+            {/* {
+              groupSection?.tags &&
+              <BadgeTag tags={groupSection.tags} />
+            } */}
+          </InlineStack>
+        }
+        subtitle={groupSection.version}
         compactTitle
         primaryAction={{
           content: !groupSection?.actions?.purchase ? 'Owned' : 'Purchase',
           disabled: sectionLoading || purchaseLoading || !groupSection?.actions?.purchase,
-          helpText: 'Own forever this groupSection.',
           loading: sectionLoading || purchaseLoading,
           onAction: (!sectionLoading && !purchaseLoading) && handlePurchase,
         }}
         secondaryActions={[
           {
-            content: 'View in demo site',
+            content: 'View in demo store',
             icon: ViewIcon,
             url: groupSection?.demo_link,
             disabled: !groupSection?.demo_link,
@@ -51,29 +70,51 @@ const GroupSectionDetails = props => {
         <Layout>
           <Layout.Section>
             <Box>
-              <BlockStack gap='600'>
-                <Box>
-                  <Card title="Gallery" padding={0}>
-                    <GallerySlider gallery={groupSection?.images || []} />
-                  </Card>
-                </Box>
+              <BlockStack gap='400'>
+                {
+                  (!groupSection.actions?.install) &&
+                  <BannerWarningNotPurchase
+                    section={groupSection}
+                    config={
+                      {
+                        title: "You cann't use this group section now!",
+                        tone: 'warning',
+                        action: {
+                          content: 'Purchase by $' + groupSection.price,
+                          icon: PaymentIcon,
+                          loading: purchaseLoading,
+                          onAction: handlePurchase,
+                          disabled: sectionLoading || purchaseLoading
+                        }
+                      }
+                    }
+                  />
+                }
+
+                {groupSection.actions?.install &&
+                  <Box>
+                    <ModalInstallSection section={groupSection} fullWith={false} />
+                  </Box>
+                }
+
+                {groupSection?.short_description && (
+                  <Box>
+                    <CardUSP short_description={groupSection.short_description} />
+                  </Box>
+                )}
 
                 <Box>
-                  <BlockStack gap='400'>
-                    <BlockStack>
-                      <Text variant="headingMd" as="h2">Group</Text>
-                      <Text variant="bodyXs" as="p" tone="subdued">"{groupSection.name}" consists of {groupSection.child_ids.length} sections. Sections included in group:</Text>
-                    </BlockStack>
+                  <BlockStack gap='200'>
                     {childSections.length > 0 ? (
-                      <ProductList items={childSections} columns={{sm: 1, md: 2, lg: 3}} />
+                      <ProductList items={childSections} columns={{sm: 1, md: 2}} />
                     ) : (
-                      <SkeletonProduct total={3} columns={{ sm: 1, md: 2, lg: 3 }} />
+                      <SkeletonProduct total={2} columns={{ sm: 1, md: 2 }} />
                     )}
                   </BlockStack>
                 </Box>
 
                 {groupSection.description && (
-                  <Box paddingBlockEnd='600'>
+                  <Box>
                     <Card title="Description">
                       <Text variant="headingMd">Description</Text>
                       <Box padding="400">
@@ -82,10 +123,39 @@ const GroupSectionDetails = props => {
                     </Card>
                   </Box>
                 )}
+
+                <Box>
+                  <VideoGuideInstall />
+                </Box>
+
+                <Box>
+                  <DocInstall />
+                </Box>
+
+                <RelatedProducts section={groupSection} />
+
+                {childSections.length > 0 &&
+                  <Box>
+                    <BlockStack gap='400'>
+                      <Card title="Release Note">
+                      <Text variant="headingMd">Release Note</Text>
+                      {childSections.map(item => (
+                        item.release_note &&
+                        <Box padding="200" key={item.id}>
+                          <Text variant="headingSm">{item.name}:</Text>
+                          <div dangerouslySetInnerHTML={{__html: item.release_note}}></div>
+                        </Box>
+                      ))}
+                      </Card>
+                    </BlockStack>
+                  </Box>
+                }
               </BlockStack>
             </Box>
           </Layout.Section>
         </Layout>
+
+        <Footer />
       </Page>
     </>
   );

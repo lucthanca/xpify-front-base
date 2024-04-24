@@ -1,0 +1,6 @@
+.bestSellerCardRoot {
+    @apply h-full;
+    &> div {
+        @apply h-full;
+    }
+}

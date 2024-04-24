@@ -12,12 +12,16 @@ export const useNavigationLinks = () => {
       destination: '/groups',
     },
     {
-      label: t('NavigationMenu.plans'),
-      destination: '/plans',
+      label: t('NavigationMenu.myLibrary'),
+      destination: '/my-library',
     },
-    {
-      label: t('NavigationMenu.faqs'),
-      destination: '/faqs',
-    }
+    // {
+    //   label: t('NavigationMenu.plans'),
+    //   destination: '/plans',
+    // },
+    // {
+    //   label: t('NavigationMenu.helpCenter'),
+    //   destination: '/help-center',
+    // }
   ];
 };

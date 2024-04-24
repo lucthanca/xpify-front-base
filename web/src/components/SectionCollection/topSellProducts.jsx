@@ -1,56 +1,30 @@
-import { memo, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { BlockStack, Box, Text } from '@shopify/polaris';
-import ProductCarousel from '~/components/splide/product';
-import SkeletonProduct from '~/components/product/skeleton';
-import { useTopSellProducts } from '~/talons/section/useTopSellProducts';
-import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
+import LazyProductCarousel from '~/components/LazyProductCarousel';
+import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
+import ProductCard, { Skeleton } from '~/components/block/product';
+import ModalProduct from '~/components/block/product/modal.jsx';
+
 const topSellProducts = props => {
-  const { products: productTopSells, loading, error, loadingWithoutData } = useTopSellProducts();
-  const [productCarouselConfigSplide] = useState(() => ({
-    options: {
-      perPage: 5,
-      gap: '1rem',
-      pagination: false,
-      breakpoints:{
-        425: {
-          perPage: 1
-        },
-        768: {
-          perPage: 3,
-          gap: '0.5rem'
-        },
-        2560: {
-          perPage: 5
-        }
-      },
-      autoScroll: {
-        pauseOnHover: true,
-        pauseOnFocus: true,
-        rewind: true,
-        speed: 1.5
-      }
-    },
-    extensions: {AutoScroll}
-  }))
-  if (!loadingWithoutData && !productTopSells || productTopSells?.length === 0) return null;
+  const [currentProduct, setCurrentProduct] = useState(undefined);
+  const [isShowPopup, setIsShowPopup] = useState(undefined);
+  const renderProduct = useCallback((item) => {
+    console.log('RENDER item');
+    return <ProductCard
+      debug={true}
+      key={item.entity_id}
+      item={item}
+      setSection={setCurrentProduct}
+      setIsShowPopup={setIsShowPopup}
+    />
+  }, [])
   return (
     <Box padding='600'>
       <BlockStack gap='200'>
         <Text variant="headingMd" as="h2">Top Sells</Text>
-        {loadingWithoutData && <SkeletonProduct total={5} columns={{ sm: 1, md: 3, lg: 5 }} />}
-        {!loadingWithoutData && (
-          <ProductCarousel
-            configSplide={productCarouselConfigSplide}
-            breakpoints={{
-              425: { perPage: 1 },
-              768: { perPage: 3, gap: '0.5rem' },
-              1024: { perPage: 5 },
-              2560: { perPage: 6 }
-            }}
-            items={productTopSells}
-          />
-        )}
+        <LazyProductCarousel renderItem={renderProduct} fetchQuery={SECTIONS_QUERY} queryRootKey={'getSections'} skeletonLoader={<Skeleton total={1} />} />
       </BlockStack>
+      <ModalProduct section={currentProduct} isShowPopup={isShowPopup} setIsShowPopup={setIsShowPopup} />
     </Box>
   );
 }

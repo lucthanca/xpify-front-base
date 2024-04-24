@@ -48,6 +48,9 @@ const fetchQuery = query => {
     if (!backendUrl) {
         return Promise.reject(new Error('API endpoint missing!'));
     }
+    if (!process.env.XPIFY_APP_TOKEN) {
+      return Promise.reject(new Error('App token missing!'));
+    }
     const targetURL = new URL('graphql', backendUrl);
     const headers = {
         'Content-Type': 'application/json',
@@ -56,6 +59,7 @@ const fetchQuery = query => {
         'User-Agent': 'xpify-buildpack',
         Host: targetURL.host,
         'x-auth-required': '0',
+        'X-Xpify-App-Token': process.env.XPIFY_APP_TOKEN,
     };
 
     // debug('Fetching query: %s', query);

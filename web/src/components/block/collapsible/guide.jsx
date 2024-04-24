@@ -7,7 +7,8 @@ import {
   Box,
   Button,
   InlineGrid,
-  Tooltip
+  Tooltip,
+  Card
 } from '@shopify/polaris';
 import { DottedCircleIcon } from '~/assets/dottedCircle';
 import { DoneCircleIcon } from '~/assets/doneCircle';
@@ -41,7 +42,7 @@ function CollapsibleButton({options, setProgress, openChild, setOpenChild}) {
   }, []);
 
   return (
-    <div className='bss-setup-guide pointer' onClick={() => setOpenChild(options.id)}>
+    <div className='bss-setup-guide cursor-pointer' onClick={() => setOpenChild(options.id)}>
       <Box background={openChild === options.id ? 'bg-surface-active' : ''} padding={200} borderRadius='200'>
         <div className='grid-guide'>
           <Tooltip content={isDone ? 'Mark as not done' : 'Mark as done'}>
@@ -73,13 +74,17 @@ function CollapsibleButton({options, setProgress, openChild, setOpenChild}) {
                 expandOnPrint
               >
                 <BlockStack gap={200}>
-                  <InlineGrid columns={options.image ? ['twoThirds', 'oneHalf'] : 1}>
+                  <InlineGrid columns={options.demo ? {sm: 1, md: ['twoThirds', 'oneThird']} : 1}>
                     <BlockStack gap={200} inlineAlign="start">
-                      <Text as="p" variant="bodyMd" tone='subdued'>
+                      <Text as="div" variant="bodyMd" tone='subdued'>
                         {options.content}
                       </Text>
                     </BlockStack>
-                    {options.image}
+                    {options.demo &&
+                      <Card padding={0} roundedAbove='xs'>
+                        {options.demo}
+                      </Card>
+                    }
                   </InlineGrid>
                 </BlockStack>
               </Collapsible>

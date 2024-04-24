@@ -1,7 +1,8 @@
-import { ApolloError, useQuery } from '@apollo/client';
-import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
-import { useMemo } from 'react';
-import { SectionData } from '../section/useSection';
+import { useCallback, useMemo, useState } from 'react';
+import { QUERY_SECTION_COLLECTION_KEY } from '~/queries/section-builder/product.gql';
+import type { ExtractItemsCallback } from '~/talons/carousel/useCarousel';
+import type { OperationVariables } from '@apollo/client/core/types';
+import type { Options } from '@splidejs/react-splide';
 
 type RelatedProductsTalonProps = {
   pageSize?: number;
@@ -9,34 +10,32 @@ type RelatedProductsTalonProps = {
 };
 
 export type RelatedProductsTalon = {
-  products: SectionData[];
-  loading: boolean;
-  loadingWithoutData: boolean;
-  error: ApolloError | undefined;
+  slideOptions: Options;
+  slidePerPage: number;
 };
 
 export const useRelatedProducts = (props: RelatedProductsTalonProps = {}): RelatedProductsTalon => {
-  const { pageSize = 12, currentPage = 1 } = props;
-  const { data: productRelated, loading, error } = useQuery(SECTIONS_QUERY, {
-    fetchPolicy: "cache-and-network",
-    variables: {
-      sort: {
-        'column': 'qty_sold',
-        'order': 'desc'
-      },
-      pageSize,
-      currentPage,
-    }
-  });
-
-  const products: SectionData[] = useMemo(() => {
-    return productRelated?.getSections?.items || [];
-  }, [productRelated]);
+  const wInner = window.innerWidth;
+  const slidePerPage = useMemo(() => {
+    if (wInner < 425) return 1;
+    if (wInner < 768) return 2;
+    return 2;
+  }, [wInner])
+  const [slideOptions] = useState(() => ({
+    perPage: 2,
+    gap: '1rem',
+    pagination: false,
+    breakpoints:{
+      425: { perPage: 1 },
+      768: { perPage: 2, gap: '0.5rem' }
+    },
+    autoplay: true,
+    interval: 3000,
+    rewind: true
+  }));
 
   return {
-    products,
-    loading,
-    error,
-    loadingWithoutData: loading && !productRelated,
+    slideOptions,
+    slidePerPage,
   };
 };

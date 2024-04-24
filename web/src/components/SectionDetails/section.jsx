@@ -1,27 +1,28 @@
-import { memo, useCallback, useState } from 'react';
+import { memo } from 'react';
 import {
-  Badge,
-  Banner,
   BlockStack,
   Box,
-  Button,
   Card,
-  InlineGrid,
   InlineStack,
   Layout,
-  List,
   Page,
-  Select,
-  Text
+  Text,
 } from '@shopify/polaris';
 import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
 import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
-import BannerDefault from '~/components/block/banner';
-import ModalInstallSection from '~/components/product/manage';
-import SectionGallery from '~/components/SectionDetails/gallery';
+import BadgeTag from '~/components/block/badge/tag';
+import CardUSP from '~/components/block/card/usp';
+import BadgeStatusSection from '~/components/block/badge/statusSection';
+import ModalInstallSection from '~/components/block/product/manage';
+import BannerWarningNotPurchase from '~/components/block/banner/warningPurchase';
+import GallerySlider from '~/components/splide/gallery';
 import RelatedProducts from '~/components/SectionDetails/RelatedProducts';
 import { Loading } from '@shopify/app-bridge-react';
 import NotFound from '~/pages/NotFound';
+import DocInstall from '~/components/block/card/docInstall';
+import VideoGuideInstall from '~/components/block/card/videoInstall';
+import Footer from "~/components/block/footer";
+import CollapsibleCard from "~/components/block/collapsible/card";
 
 const SectionFullpageDetails = props => {
   const {
@@ -29,16 +30,10 @@ const SectionFullpageDetails = props => {
     purchaseLoading,
     sectionLoading,
     handlePurchase,
-    themes,
-    reloadSection,
-    relatedProducts,
     sectionError,
   } = props;
   const handleBackPage = useBackPage();
   const handleRedirectPlansPage = useRedirectPlansPage();
-  const [isShowPopupManage, setIsShowPopupManage] = useState(false);
-  const [bannerAlert, setBannerAlert] = useState(undefined);
-  const handleShowPopup = useCallback(() => setIsShowPopupManage(prev => !prev), []);
 
   if (sectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity') {
     return <NotFound />;
@@ -48,122 +43,108 @@ const SectionFullpageDetails = props => {
     <>
       {sectionLoading && <Loading />}
       <Page
-        backAction={{content: 'Products', onAction: () => handleBackPage()}}
+        backAction={{onAction: handleBackPage}}
         title={section.name}
-        titleMetadata={<Badge tone="success">v{section.version}</Badge>}
-        subtitle='This is product page'
+        titleMetadata={
+          <InlineStack gap={200}>
+            <BadgeStatusSection item={section} key={sectionLoading} />
+            {/* {
+              section?.tags &&
+              <BadgeTag tags={section.tags} />
+            } */}
+          </InlineStack>
+        }
+        subtitle={"version " + section.version}
         compactTitle
-        primaryAction={{
-          content: 'Purchase',
-          disabled: true
-        }}
+        // primaryAction={{ // Skip vì all section đang Free
+        //   content: !section.actions?.purchase ? 'Owned' : 'Purchase',
+        //   disabled: !section.actions?.purchase,
+        //   loading: purchaseLoading || sectionLoading,
+        //   onAction: section.actions?.purchase && handlePurchase
+        // }}
         secondaryActions={[
           {
-            content: 'View in demo site',
+            content: 'View in demo store',
             icon: ViewIcon,
             url: section?.demo_link,
             disabled: !section?.demo_link || sectionLoading,
             helpText: !section?.demo_link ? 'This product has no demo yet.' : '',
             onAction: () => {}
-          },
-          {
-            content: !section.actions?.purchase ? 'Owned' : 'Purchase',
-            disabled: !section.actions?.purchase,
-            helpText: section.actions?.purchase && 'Own forever this section.',
-            loading: purchaseLoading || sectionLoading,
-            onAction: section.actions?.purchase && handlePurchase
           }
         ]}
       >
         <Layout>
           <Layout.Section>
             <BlockStack gap='400'>
-              <InlineStack gap={200}>
-                {
-                  section?.tags
-                  ? section.tags.map(tag => {
-                    return <Badge key={tag} tone="info" size='small'>#{tag}</Badge>
-                  })
-                  : <></>
-                }
-              </InlineStack>
-
               {
                 (!section.actions?.install) &&
-                <Banner
-                  title="You cann't use this section now!"
-                  action={{
-                    content: 'Purchase $' + section.price,
-                    icon: PaymentIcon,
-                    loading: purchaseLoading,
-                    onAction: handlePurchase,
-                    disabled: sectionLoading || purchaseLoading
-                  }}
-                  secondaryAction={{
-                    content: 'View Plans',
-                    icon: ViewIcon,
-                    onAction: handleRedirectPlansPage
-                  }}
-                  tone='warning'
-                >
-                  <BlockStack gap='200'>
-                    <Text variant="headingSm">How to use this section?</Text>
-                    <List>
-                      {
-                        section.actions?.purchase &&
-                        <List.Item>
-                          <Text variant="bodySm">Own forever: Purchase once.</Text>
-                        </List.Item>
+                <BannerWarningNotPurchase
+                  section={section}
+                  config={
+                    {
+                      title: "You cann't use this section now!",
+                      tone: 'warning',
+                      action: {
+                        content: 'Purchase by $' + section.price,
+                        icon: PaymentIcon,
+                        loading: purchaseLoading,
+                        onAction: handlePurchase,
+                        disabled: sectionLoading || purchaseLoading
+                      },
+                      secondaryAction: {
+                        content: 'View Plans',
+                        icon: ViewIcon,
+                        onAction: handleRedirectPlansPage
                       }
-                      {
-                        section.actions?.plan &&
-                        <List.Item>
-                          <Text variant="bodySm">Periodic payments: Own all sections included in the plan ({section.pricing_plan.name})</Text>
-                        </List.Item>
-                      }
-                    </List>
-                  </BlockStack>
-                </Banner>
+                    }
+                  }
+                />
               }
 
-              {/* <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} /> */}
-              <Card>
-                <BlockStack gap='200'>
-                  <Text variant='bodySm' fontWeight='bold'>Choose theme for installation:</Text>
-                  <ModalInstallSection section={section} themes={themes} reloadSection={reloadSection} />
-                </BlockStack>
+              {section.actions?.install && 
+                <Box>
+                  <ModalInstallSection section={section} fullWith={false} />
+                </Box>
+              }
+
+              {section?.short_description && (
+                <Box>
+                  <CardUSP short_description={section.short_description} />
+                </Box>
+              )}
+
+              {section.description &&
+                <Box>
+                  <CollapsibleCard title={"Description"} content={section.description} />
+                </Box>
+              }
+
+              <Card title='Gallery' padding='0'>
+                <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee]'>
+                  <GallerySlider gallery={section?.images || []} />
+                </div>
               </Card>
 
               <Box>
-                <SectionGallery images={section?.images || []} />
+                <VideoGuideInstall />
               </Box>
 
               <Box>
-                {section.description && (
-                  <Card title="Description"> 
-                    <Text variant="headingMd">Description</Text>
-                    <Box padding="200">
-                      <div dangerouslySetInnerHTML={{__html: section.description}}></div>
-                    </Box>
-                  </Card>
-                )}
-              </Box>
-              
-              <Box>
-                {section.release_note && (
-                  <Card title="Release Note">
-                    <Text variant="headingMd">Release Note</Text>
-                    <Box padding="200">
-                      <div dangerouslySetInnerHTML={{__html: section.release_note}}></div>
-                    </Box>
-                  </Card>
-                )}
+                <DocInstall />
               </Box>
 
-              <RelatedProducts products={relatedProducts} />
+              <RelatedProducts section={section} />
+
+              {section.release_note && (
+                <Box>
+                  <CollapsibleCard title={"Release Note"} content={section.release_note} />
+                </Box>
+              )}
             </BlockStack>
           </Layout.Section>
         </Layout>
+
+        <Footer />
       </Page>
     </>
   );

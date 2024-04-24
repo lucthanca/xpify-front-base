@@ -1,7 +1,17 @@
+import { memo } from 'react';
+import { Layout, Page } from '@shopify/polaris';
 import GroupCollection from '~/components/GroupCollection';
+import Footer from '~/components/block/footer';
 
-function Groups() {
-  return <GroupCollection />;
+function GroupsPage() {
+  return (
+    <Page fullWidth>
+      <Layout>
+        <GroupCollection />
+      </Layout>
+      <Footer />
+    </Page>
+  );
 }
 
-export default Groups;
+export default memo(GroupsPage);

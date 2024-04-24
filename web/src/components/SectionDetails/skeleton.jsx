@@ -7,6 +7,7 @@ import {
   SkeletonPage,
   SkeletonBodyText,
   SkeletonDisplayText,
+  Box,
 } from '@shopify/polaris';
 import RelatedProductSkeleton from '~/components/SectionDetails/RelatedProducts/skeleton';
 
@@ -16,14 +17,35 @@ const Skeleton = () => {
       <Layout>
         <Layout.Section>
           <BlockStack gap={400}>
+            <BlockStack gap={400}>
+              <SkeletonDisplayText size='small' />
+              <SkeletonBodyText lines={1} />
+            </BlockStack>
             <Card sectioned>
-              <SkeletonBodyText lines={7} />
+              <Text as='div'>
+                <BlockStack gap={400}>
+                  <SkeletonDisplayText size='small' />
+                  <SkeletonBodyText lines={3} />
+                </BlockStack>
+              </Text>
             </Card>
             <Card sectioned>
               <Text as='div'>
                 <BlockStack gap={400}>
                   <SkeletonDisplayText size='small' />
                   <SkeletonBodyText lines={5} />
+                </BlockStack>
+              </Text>
+            </Card>
+            <Card>
+              <div style={{height: '500px'}}></div>
+            </Card>
+            <RelatedProductSkeleton />
+            <Card sectioned>
+              <Text as='div'>
+                <BlockStack gap={400}>
+                  <SkeletonDisplayText size='small' />
+                  <SkeletonBodyText lines={3} />
                 </BlockStack>
               </Text>
             </Card>
@@ -35,7 +57,6 @@ const Skeleton = () => {
                 </BlockStack>
               </Text>
             </Card>
-            <RelatedProductSkeleton />
           </BlockStack>
         </Layout.Section>
       </Layout>

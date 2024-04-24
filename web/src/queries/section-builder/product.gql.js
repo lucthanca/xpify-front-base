@@ -2,52 +2,55 @@ import { gql } from '@apollo/client';
 
 const CommonSectionField = gql`
   fragment CommonSectionField on SectionInterface {
+    id
     entity_id
     is_enable
     name
     url_key
     price
+    short_description
     description
     demo_link
     images { src }
     type_id
-  }
-`;
-const SectionActionsFragment = gql`
-  fragment SectionActionsFragment on Section {
+    categoriesV2 {
+      name id
+    }
+    tags {
+      name id
+    }
     actions {
-      install
       purchase
+      install
       plan
+    }
+    installed {
+      id
+      theme_id
+      product_version
     }
   }
 `;
 const PricingPlanFragment = gql`
   fragment PricingPlanFragment on Section {
     pricing_plan {
-      name code prices { interval amount } description
+      id name code prices { interval amount } description
     }
   }
 `;
-const SectionInstalledFragment = gql`
-  fragment SectionInstalledFragment on Section {
-    installed {
-      theme_id
-      product_version
-    }
-  }
-`;
+
+export const QUERY_SECTION_COLLECTION_KEY = `getSections`;
 
 /* Simple Product */
 export const SECTIONS_QUERY = gql`
   query GetSectionCollection(
     $search: String,
-    $filter: SectionFilterInput,
+    $filter: SectionFilterInputV2,
     $sort: SectionSortInput,
     $pageSize: Int = 20,
     $currentPage: Int = 1
   ) {
-    getSections(
+    ${QUERY_SECTION_COLLECTION_KEY}(
       search: $search,
       filter: $filter,
       sort: $sort,
@@ -55,20 +58,14 @@ export const SECTIONS_QUERY = gql`
       currentPage: $currentPage
     ) {
       items {
-        __typename
         ...CommonSectionField
         ... on GroupSection {
           child_ids
         }
         ... on Section {
           version release_note src plan_id
-          ...PricingPlanFragment
-          ...SectionActionsFragment
-          ...SectionInstalledFragment
         }
-        entity_id
       }
-      total_count
       page_info {
         current_page
         page_size
@@ -77,65 +74,33 @@ export const SECTIONS_QUERY = gql`
     }
   }
   ${CommonSectionField}
-  ${PricingPlanFragment}
-  ${SectionActionsFragment}
-  ${SectionInstalledFragment}
 `;
 export const SECTION_QUERY = gql`
   query GetSectionByKey($key: String!) {
     getSection(key: $key) {
       __typename
-      entity_id
       ...CommonSectionField
-      ... on Section { plan_id src version release_note ...PricingPlanFragment ...SectionActionsFragment ...SectionInstalledFragment }
+      ... on Section { plan_id src version release_note ...PricingPlanFragment }
+      ... on GroupSection { child_ids }
       categories
-      tags
     }
   }
   ${CommonSectionField}
   ${PricingPlanFragment}
-  ${SectionActionsFragment}
-  ${SectionInstalledFragment}
 `;
 export const RELATED_SECTIONS_QUERY = gql`
   query GET($key: String!) {
     getRelatedSections(key: $key) {
-      entity_id
-      is_enable
-      plan_id
-      name
-      images {
-        src
+      ...CommonSectionField
+      ... on GroupSection {
+        child_ids
       }
-      url_key
-      price
-      src
-      version
-      description
-      release_note
-      demo_link
-      pricing_plan {
-        name
-        code
-        prices {
-          interval
-          amount
-        }
-        description
-      }
-      categories
-      tags
-      actions {
-        install
-        purchase
-        plan
-      }
-      installed {
-        theme_id
-        product_version
+      ... on Section {
+        version release_note src plan_id
       }
     }
   }
+  ${CommonSectionField}
 `;
 
 /* Group Product */
@@ -183,9 +148,50 @@ export const SECTIONS_INSTALLED_QUERY = gql`
   query GET {
     getSectionsInstall {
       ...CommonSectionField
-      ...on Section { version ...SectionInstalledFragment }
+      ...on Section { version }
     }
   }
   ${CommonSectionField}
-  ${SectionInstalledFragment}
+`;
+
+export const commonSectionFragment = gql`
+  fragment CommonSectionFragment on SectionInterface {
+    ...CommonSectionField
+    ... on Section { plan_id src version release_note }
+    categoriesV2 { id name }
+  }
+  ${CommonSectionField}
+`;
+export const BEST_SELLER_QUERY_KEY = 'bestSeller';
+export const BEST_SELLER_QUERY = gql`
+  query GetBestSeller {
+    ${BEST_SELLER_QUERY_KEY} {
+      ...CommonSectionFragment
+    }
+  }
+  ${commonSectionFragment}
+`;
+export const SECTION_V2_QUERY_KEY = 'section';
+export const SECTION_V2_QUERY = gql`
+  query GetSectionByKeyV2($key: String!) {
+    ${SECTION_V2_QUERY_KEY}(key: $key) {
+      ...CommonSectionFragment
+      ...on Section {
+        ...PricingPlanFragment
+      }
+      ... on GroupSection { child_ids }
+    }
+  }
+  ${commonSectionFragment}
+  ${PricingPlanFragment}
+`;
+
+export const LATEST_RELEASE_QUERY_KEY = 'recentlyUpdated';
+export const LATEST_RELEASE_QUERY = gql`
+  query GetLatestRelease {
+    ${LATEST_RELEASE_QUERY_KEY} {
+      ...CommonSectionFragment
+    }
+  }
+  ${commonSectionFragment}
 `;

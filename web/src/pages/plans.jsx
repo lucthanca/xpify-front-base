@@ -20,17 +20,20 @@ import { useQuery } from "@apollo/client";
 import TitleBlock from '~/components/block/title';
 import PricingPlanCard from '~/components/block/card/plan';
 import { PRICING_PLAN_QUERY_KEY, PRICING_PLANS_QUERY } from '~/queries/section-builder/other.gql';
+import { useBackPage } from '~/hooks/section-builder/redirect';
 
 function Plans() {
   const { data, loading } = useQuery(PRICING_PLANS_QUERY, {
     fetchPolicy: "cache-and-network",
   });
+  const handleBackPage = useBackPage();
   const pricingPlans = useMemo(() => data?.[PRICING_PLAN_QUERY_KEY], [data]);
   const loadingWithoutData = useMemo(() => loading && !pricingPlans, [loading, pricingPlans]);
 
   return (
     <Page
       title="Pricing plans"
+      backAction={{onAction: handleBackPage}}
       subtitle="7-Day Free Trial, 30-Day Money Back Guarantee. No Questions Asked!"
     >
       <Layout>
