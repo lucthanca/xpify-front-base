@@ -7,7 +7,6 @@ import ModalInstallSection from '~/components/block/product/manage';
 import SkeletonProduct from '~/components/block/product/skeleton';
 import CardUSP from '~/components/block/card/usp';
 import BannerWarningNotPurchase from '~/components/block/banner/warningPurchase';
-import BadgeTag from '~/components/block/badge/tag';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
 import { Loading } from '@shopify/app-bridge-react';
 import NotFound from '~/pages/NotFound.jsx';
