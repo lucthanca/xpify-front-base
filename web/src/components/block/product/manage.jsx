@@ -227,7 +227,7 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
           <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
         </Card>
       }
-      <Text variant='bodyMd' fontWeight='bold'>Choose theme for installation:</Text>
+      <Text variant='bodyMd' fontWeight='bold'>Choose theme for installation</Text>
 
       <InlineGrid columns={fullWith ? 1 : {sm: 1, md: ['twoThirds', 'oneThird']}} gap={200} alignItems='center'>
         {themes.length && options.length

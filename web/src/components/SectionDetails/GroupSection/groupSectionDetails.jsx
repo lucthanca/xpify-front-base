@@ -50,12 +50,12 @@ const GroupSectionDetails = props => {
         }
         subtitle={groupSection.version}
         compactTitle
-        primaryAction={{
-          content: !groupSection?.actions?.purchase ? 'Owned' : 'Purchase',
-          disabled: sectionLoading || purchaseLoading || !groupSection?.actions?.purchase,
-          loading: sectionLoading || purchaseLoading,
-          onAction: (!sectionLoading && !purchaseLoading) && handlePurchase,
-        }}
+        // primaryAction={{
+        //   content: !groupSection?.actions?.purchase ? 'Owned' : 'Purchase',
+        //   disabled: sectionLoading || purchaseLoading || !groupSection?.actions?.purchase,
+        //   loading: sectionLoading || purchaseLoading,
+        //   onAction: (!sectionLoading && !purchaseLoading) && handlePurchase,
+        // }}
         secondaryActions={[
           {
             content: 'View demo store',
