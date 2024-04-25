@@ -65,14 +65,15 @@ function GuideCard() {
           <Text variant="bodyMd">Use this guide to start customizing your Shopify theme with fresh sections and quickly enhance your store's UI/UX.</Text>
 
           <InlineStack>
-            <div className="step-complete">
-              <div>
-                {
-                  progress >= totalStep
-                  ? <Text variant="bodyMd">Done</Text>
-                  : <Text variant="bodyMd">{progress} / {totalStep} completed</Text>
-                }
-                </div>
+            <div className={progress >= totalStep ? `step-complete` : `step-complete step-complete-padding-left`}>
+              {
+                progress >= totalStep
+                ? <InlineStack>
+                  <Icon source={CheckIcon} />
+                  <Text variant="bodyMd">Done</Text>
+                </InlineStack>
+                : <Text variant="bodyMd">{progress} / {totalStep} completed</Text>
+              }
             </div>
           </InlineStack>
         </BlockStack>

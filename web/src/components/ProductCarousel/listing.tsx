@@ -29,17 +29,19 @@ type CarouselProps = {
 const Carousel: React.FC<CarouselProps> = (props) => {
   const { title, subTitle, skeleton, query, queryKey, slideOptions, extractItems, queryVariables } = props;
   const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractItems);
-  if (loadingWithoutData && skeleton) {
-    return <>{skeleton}</>;
-  }
-
   const options = useMemo(() => {
     if (items && items.length <= 2) {
       slideOptions.arrows = false;
+    } else {
+      slideOptions.arrows = true;
     }
 
     return slideOptions;
   }, [items]);
+
+  if (loadingWithoutData && skeleton) {
+    return <>{skeleton}</>;
+  }
 
   return (
     items && items.length

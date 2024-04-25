@@ -31,8 +31,8 @@ const BadgeList = (props) => {
   const { items, itemContentRenderer, onClick, searchKey, title } = props;
   return (
     <InlineStack blockAlign='center' gap='200'>
-      <Text as="span" variant="bodyXs">{title}:</Text>
-      <InlineStack gap='200' blockAlign='start'>
+      <Text as="span" variant="bodySm">{title}:</Text>
+      <InlineStack gap='100' blockAlign='start'>
         {items.map(item => (
           <BadgeItem key={item.id} item={item} renderBadgeItem={itemContentRenderer} onClick={onClick} searchKey={searchKey} isSimpleSection={!item?.child_ids?.length} />
         ))}

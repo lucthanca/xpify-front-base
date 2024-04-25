@@ -408,7 +408,7 @@ export default function Search({
       sortOptions={sortOptions}
       sortSelected={sortSelected}
       queryValue={search}
-      queryPlaceholder="Searching"
+      queryPlaceholder="Searching in all"
       onQueryChange={handleSearchFilterChange}
       onQueryClear={handleSearchFilterRemove}
       onSort={handleSortChange}

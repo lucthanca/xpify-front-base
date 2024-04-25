@@ -41,7 +41,7 @@ const LazyQuickViewContent = props => {
     purchaseLoading,
     loading: loadingInBackground,
   } = talonProps;
-  const tagBadgeItemRender = useCallback((item) => `#${item.name}`, []);
+  const tagBadgeItemRender = useCallback((item) => `${item.name}`, []);
 
   if (loadingWithoutData) return <QuickViewContentSkeleton title={url_key} />;
   if (!section && !loadingWithoutData) {
@@ -79,16 +79,15 @@ const LazyQuickViewContent = props => {
                   <BadgeStatusSection item={section} />
                 </InlineStack>
 
-                {section?.tags?.length > 0 &&
-                  <Badges items={section.tags} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={onClose} />
-                }
-
-                <Text variant='bodyMd' as='p'>
+                <Text variant='bodySm' as='p'>
                   Version: {section.version}
                 </Text>
                 {section?.categoriesV2?.length > 0 && (
                   <Badges items={section.categoriesV2} searchKey={'category'} title={'Categories'} onClick={onClose} />
                 )}
+                {section?.tags?.length > 0 &&
+                  <Badges items={section.tags} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={onClose} />
+                }
 
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
 
