@@ -14,12 +14,14 @@ import {
 } from "@shopify/polaris";
 import {
   ChevronUpIcon,
-  ChevronDownIcon
+  ChevronDownIcon,
+  CheckIcon
 } from '@shopify/polaris-icons';
 import CollapsibleGuide from "~/components/block/collapsible/guide";
 import { useQuery } from "@apollo/client";
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
 import { THEMES_QUERY } from "~/queries/section-builder/theme.gql";
+import { useRedirectGroupsPage, useRedirectSectionsPage } from "~/hooks/section-builder/redirect";
 
 const totalStep = 3;
 
@@ -29,6 +31,8 @@ function GuideCard() {
   const [progress, setProgress] = useState(0);
 
   const handleToggle = useCallback(() => setOpen((open) => !open), []);
+  const handleRedirectSectionsPage = useRedirectSectionsPage();
+  const handleRedirectGroupsPage = useRedirectGroupsPage();
 
   const { data: myShop } = useQuery(MY_SHOP, {
     fetchPolicy: "cache-and-network",
@@ -51,24 +55,25 @@ function GuideCard() {
       <Box padding={400}>
         <BlockStack gap={200}>
           <InlineGrid columns="1fr auto">
-            <Text variant="headingMd">Setup guide</Text>
+            <Text variant="headingMd" as="h2">Setup guide</Text>
             <Button
               variant="plain"
               onClick={() => handleToggle()}
               icon={<Icon source={open ? ChevronUpIcon : ChevronDownIcon} tone="base" />}
             />
           </InlineGrid>
-          <Text variant="bodySm">Use this guide to start customizing your Shopify theme with fresh sections and quickly enhance your store's UI/UX.</Text>
+          <Text variant="bodyMd">Use this guide to start customizing your Shopify theme with fresh sections and quickly enhance your store's UI/UX.</Text>
 
           <InlineStack>
-            <div className="step-complete">
-              <Text variant="bodyMd">
-                {
-                  progress >= totalStep
-                  ? `Done`
-                  : `${progress} / ${totalStep} completed`
-                }
-                </Text>
+            <div className={progress >= totalStep ? `step-complete` : `step-complete step-complete-padding-left`}>
+              {
+                progress >= totalStep
+                ? <InlineStack>
+                  <Icon source={CheckIcon} />
+                  <Text variant="bodyMd">Done</Text>
+                </InlineStack>
+                : <Text variant="bodyMd">{progress} / {totalStep} completed</Text>
+              }
             </div>
           </InlineStack>
         </BlockStack>
@@ -84,8 +89,8 @@ function GuideCard() {
             <CollapsibleGuide
               options={{
                 'id': 'step_1',
-                'title': '1. Enable the app embed in theme editor',
-                'content': <Button url={urlEmbedApp} target="_blank">Go to themes</Button>,
+                'title': 'Enable the app embed in theme editor',
+                'content': <Button variant='primary' url={urlEmbedApp} target="_blank">Go to themes</Button>,
                 'demo': <Image source="https://sections.puco.io/images/general/enable-app.gif" />
               }}
               setProgress={setProgress}
@@ -95,12 +100,16 @@ function GuideCard() {
             <CollapsibleGuide
               options={{
                 'id': 'step_2',
-                'title': '2. Install sections to theme',
-                'content': <List gap="100">
-                  <List.Item>Find sections</List.Item>
-                  <List.Item>Purchase sections</List.Item>
-                  <List.Item>Add sections to themes</List.Item>
-                </List>,
+                'title': 'Install sections to theme',
+                'content': <BlockStack gap={200}><List gap="100">
+                    <List.Item>Find sections</List.Item>
+                    <List.Item>Add sections to themes</List.Item>
+                  </List>
+                  <InlineStack gap={200}>
+                    <Button onClick={handleRedirectSectionsPage}>Browse Sections</Button>
+                    <Button onClick={handleRedirectGroupsPage}>Browse Groups</Button>
+                  </InlineStack>
+                </BlockStack>,
                 'demo': <iframe className='aspect-video' width="100%" src="https://www.youtube.com/embed/UTdCvYEm-C4?si=WdXmN40TkjDYRpHb" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
               }}
               setProgress={setProgress}
@@ -110,8 +119,8 @@ function GuideCard() {
             <CollapsibleGuide
               options={{
                 'id': 'step_3',
-                'title': '3. Customize themes with the added sections',
-                'content': <Button url={urlEditTheme} target="_blank">Go to theme editer</Button>,
+                'title': 'Customize themes with the added sections',
+                'content': <Button variant='primary' url={urlEditTheme} target="_blank">Go to theme editer</Button>,
                 'demo': <Image source="https://sections.puco.io/images/general/enable-app.gif" />
               }}
               setProgress={setProgress}

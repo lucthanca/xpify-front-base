@@ -40,13 +40,13 @@ function HomePage() {
               <Box>
                 <Card>
                   <BlockStack gap={200}>
-                  <Text as="p" variant="bodyLg">
+                  <Text as="p" variant="bodyMd">
                     Hi {myShop?.myShop?.shop_owner}, welcome to your fresh batch of sections and templates to jazz up your Shopify theme!
                   </Text>
-                  <Text as="p" variant="bodyLg">
+                  <Text as="p" variant="bodyMd">
                     Once you've got these installed, just hop into the theme editor, and keep an eye out for 'OT' in the search box.
                   </Text>
-                  <Text as="p" variant="bodyLg">
+                  <Text as="p" variant="bodyMd">
                     Happy customizing!
                   </Text>
                   </BlockStack>
@@ -59,8 +59,6 @@ function HomePage() {
 
               <Box>
                 <BlockStack gap={400}>
-                  <TitleBlock title='Overview' subTitle='All main content in our application' />
-
                   <InlineGrid gap="400" columns={2}>
                     <NavCard
                       title='Sections'

@@ -27,5 +27,14 @@
   <body>
     <div id="app"><!--index.jsx injects App.jsx here--></div>
     <script type="module" src="/index.jsx"></script>
+
+    <script type="module">
+      import {onCLS, onFID, onLCP, onINP} from 'https://unpkg.com/web-vitals?module';
+
+      onCLS(console.log);
+      onFID(console.log);
+      onLCP(console.log);
+      onINP(console.log);
+    </script>
   </body>
 </html>

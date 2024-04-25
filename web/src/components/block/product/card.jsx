@@ -86,7 +86,7 @@ function ProductCard({item}) {
   }, []);
 
   const { handlePurchase, purchaseLoading} = usePurchase();
-  const tagBadgeItemRender = useCallback((item) => `#${item.name}`, []);
+  const tagBadgeItemRender = useCallback((item) => `${item.name}`, []);
 
   return (
     item &&
@@ -116,7 +116,7 @@ function ProductCard({item}) {
                 <BadgeStatusSection item={item} />
               </InlineStack>
               {item.version &&
-                <Text variant="bodyXs">Version: {item.version}</Text>
+                <Text variant="bodySm">Version: {item.version}</Text>
               }
               {item?.categoriesV2?.length > 0 && (
                 <Badges items={item.categoriesV2} searchKey={'category'} title={'Categories'} />
@@ -127,10 +127,10 @@ function ProductCard({item}) {
             </BlockStack>
 
             <InlineStack gap='200'>
-              {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="Quick view" />)}
+              {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="View section" />)}
               {
                 item?.demo_link &&
-                <Tooltip content="View in demo store">
+                <Tooltip content="View demo store">
                   <Button
                     icon={<Icon source={ExternalIcon} tone="base" />}
                     size="large"

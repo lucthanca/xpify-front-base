@@ -58,7 +58,15 @@
 .step-complete{
   border: var(--p-border-width-025) solid var(--p-color-border);
   border-radius: var(--p-border-radius-200);
-  padding: 0 var(--p-space-200);
+  padding-right: var(--p-space-200);
+}
+
+.step-complete-padding-left{
+  padding-left: var(--p-space-200);
+}
+
+button.splide__arrow {
+  background-color: #ffffff;
 }
 
 .splide-gallery-li {
@@ -69,55 +77,4 @@
 
 .splide-gallery-li > img {
   margin: auto;
-}
-
-.section-builder-paginate {
-  display: flex;
-  justify-content: center;
-}
-
-.section-builder-paginate ul {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.section-builder-paginate ul li {
-  cursor: pointer;
-  list-style-type: none;
-  background-color: #fff;
-  margin: 5px;
-  border-radius: 5px;
-  box-shadow: var(--p-shadow-card);
-}
-
-.section-builder-paginate ul li.selected {
-  background-color: var(--p-action-primary);
-  color: #fff;
-}
-
-.section-builder-paginate ul a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #000;
-  text-decoration: none;
-  padding: 10px;
-  min-width: 33px;
-  height: 33px;
-}
-
-.section-builder-paginate ul a[aria-disabled=true] {
-  pointer-events: none;
-  opacity: .2;
-}
-
-.section-builder-paginate ul a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #000;
-  text-decoration: none;
-  padding: 10px;
-  min-width: 33px;
-  height: 33px;
 }

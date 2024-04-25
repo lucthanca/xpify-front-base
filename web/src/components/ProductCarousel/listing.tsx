@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { useCarousel } from '~/talons/carousel/useCarousel';
 import { Splide, SplideSlide, Options } from '@splidejs/react-splide';
 import { SectionListProvider } from '~/context';
@@ -30,17 +30,24 @@ type CarouselProps = {
 const Carousel: React.FC<CarouselProps> = (props) => {
   const { extractKeys, title, subTitle, skeleton, query, queryKey, slideOptions, extractItems, queryVariables } = props;
   const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractItems, extractKeys);
+  const options = useMemo(() => {
+    slideOptions.arrows = items && items.length > 2;
+
+    return slideOptions;
+  }, [items]);
+
   if (loadingWithoutData && skeleton) {
     return <>{skeleton}</>;
   }
   if (!items?.length) return null;
+
   return (
     <Box>
       <BlockStack gap='200'>
         <TitleBlock title={title} subTitle={subTitle} />
 
         <SectionListProvider>
-          <Splide options={slideOptions}>
+          <Splide options={options}>
             {items.map((item) => {
               return (
                 <SplideSlide key={item.id}>

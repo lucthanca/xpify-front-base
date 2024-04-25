@@ -5,7 +5,7 @@ import { CheckIcon } from '@shopify/polaris-icons';
 function CardUSP({short_description}) {
   return (
     <Card title="Short description">
-      <Text variant="headingMd">USP</Text>
+      <Text variant="headingMd" as="h2">USP</Text>
       <Box paddingBlockStart="200" as='ul'>
         {
           short_description.split('\n').map((content, key) => {

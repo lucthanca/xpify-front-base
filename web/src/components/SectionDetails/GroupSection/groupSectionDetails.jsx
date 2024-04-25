@@ -58,7 +58,7 @@ const GroupSectionDetails = props => {
         }}
         secondaryActions={[
           {
-            content: 'View in demo store',
+            content: 'View demo store',
             icon: ViewIcon,
             url: groupSection?.demo_link,
             disabled: !groupSection?.demo_link,
@@ -115,7 +115,7 @@ const GroupSectionDetails = props => {
                 {groupSection.description && (
                   <Box>
                     <Card title="Description">
-                      <Text variant="headingMd">Description</Text>
+                      <Text variant="headingMd" as='h2'>Description</Text>
                       <Box padding="400">
                         <div dangerouslySetInnerHTML={{__html: groupSection.description}}></div>
                       </Box>
@@ -137,11 +137,11 @@ const GroupSectionDetails = props => {
                   <Box>
                     <BlockStack gap='400'>
                       <Card title="Release Note">
-                      <Text variant="headingMd">Release Note</Text>
+                      <Text variant="headingMd" as='h2'>Release Note</Text>
                       {childSections.map(item => (
                         item.release_note &&
                         <Box padding="200" key={item.id}>
-                          <Text variant="headingSm">{item.name}:</Text>
+                          <Text variant="headingSm" as='h3'>{item.name}:</Text>
                           <div dangerouslySetInnerHTML={{__html: item.release_note}}></div>
                         </Box>
                       ))}
