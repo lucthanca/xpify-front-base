@@ -38,6 +38,7 @@ type Category = {
   name: string;
 };
 export interface SectionDataInterface {
+  __typename: string;
   id: string;
   entity_id: string;
   name: string;
@@ -61,6 +62,9 @@ export type SectionData = SectionDataInterface & {
   release_note: String;
   src: String
 };
+export type GroupSection = SectionDataInterface & {
+  child_ids: string[];
+}
 export type ThemeData = {
   id: string;
   name: string;

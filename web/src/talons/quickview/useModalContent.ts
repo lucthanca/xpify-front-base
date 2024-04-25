@@ -33,14 +33,6 @@ export const useModalContent = (keys: string[]) => {
       setActiveSection(activeSection[SECTION_V2_QUERY_KEY]);
     }
   }, []);
-  useEffect(() => {
-    onINP(
-      metric => {
-        console.log(`INPT metric của ${activeSection?.name}`, metric);
-      },
-      { reportAllChanges: true },
-    );
-  }, []);
 
   return {
     sliderOpts,
