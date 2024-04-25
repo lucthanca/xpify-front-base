@@ -70,12 +70,28 @@ const useSearch = props => {
     setPlanFilter([]);
   }, [onFilterChange]);
 
-  const [categoryFilter, setCategoryFilter] = useState([]);
+  const [shouldPinCategoryFilter, setShouldPinCategoryFilter] = useState(() => {
+    return searchParams.has('category');
+  });
+  const [categoryFilter, setCategoryFilter] = useState(() => {
+    return searchParams.has('category') ? [''] : [];
+  });
+  const handleCategoryFilterParams = useCallback((value) => {
+    // use window.location.search because searchParams is not updated yet
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    if (!value?.length && Boolean(currentUrlParams.has('category'))) {
+      currentUrlParams.delete('category');
+      setSearchParams(currentUrlParams);
+      setShouldPinCategoryFilter(false);
+    }
+  }, [])
   const handleCategoryFilterChange = useCallback((value) => {
+    handleCategoryFilterParams(value);
     if (onFilterChange) onFilterChange(CATEGORY_FILTER_KEY, value);
     setCategoryFilter(value);
   }, [onFilterChange]);
   const handleCategoryFilterRemove = useCallback(() => {
+    handleCategoryFilterParams([]);
     if (onFilterChange) onFilterChange(CATEGORY_FILTER_KEY, []);
     setCategoryFilter([]);
   }, [onFilterChange]);
@@ -188,6 +204,9 @@ const useSearch = props => {
   const searchTags = useMemo(() => {
     return searchParams.get('tags')?.toLowerCase()?.split(',');
   }, [searchParams]);
+  const searchCategories = useMemo(() => {
+    return searchParams.get('category')?.toLowerCase()?.split(',');
+  }, [searchParams]);
   useEffect(() => {
     if (!tagOptions?.length || !searchTags?.length) return;
     const tagIdsMapping = tagOptions.map((item) => {
@@ -197,6 +216,16 @@ const useSearch = props => {
     handleTagFilterChange(tagIdsMapping);
     setShouldPinTagFilter(true);
   }, [searchTags, tagOptions]);
+
+  useEffect(() => {
+    if (!tagOptions?.length || !searchCategories?.length) return;
+    const categoryIdsMapping = categoriesOptions.map((item) => {
+      if (searchCategories.includes(item.label?.toLowerCase())) return item.value;
+      return undefined;
+    }).filter((item) => item !== undefined);
+    handleCategoryFilterChange(categoryIdsMapping);
+    setShouldPinCategoryFilter(true);
+  }, [searchCategories, categoriesOptions]);
 
   return {
     pricingPlanOptions,
@@ -219,6 +248,7 @@ const useSearch = props => {
     sortSelected,
     handleSortChange,
     shouldPinTagFilter,
+    shouldPinCategoryFilter,
   };
 };
 
@@ -247,72 +277,12 @@ export default function Search({
     sortSelected,
     handleSortChange,
     shouldPinTagFilter,
+    shouldPinCategoryFilter,
   } = useSearch({ onFilterChange, onSortChange });
 
-  // const [search, setSearch] = useState(searchFilter);
-  // const [price, setPrice] = useState(priceFilter);
   const [selected, setSelected] = useState(0);
   const {mode, setMode} = useSetIndexFiltersMode(IndexFiltersMode.Filtering);
 
-  // const debounceSearch = useCallback(debounce((nextValue) => {
-  //   setSearchFilter(nextValue);
-  //   setDebounceLoading(false);
-  // }, 300), []);
-  // const handleSearchFilterChange = useCallback((value) => {
-  //   setSearch(value);
-  //   debounceSearch(value);
-  //   setDebounceLoading(true);
-  // }, []);
-  // const debouncePrice = useCallback(debounce((nextValue) => {
-  //   setPriceFilter(nextValue);
-  //   setDebounceLoading(false);
-  // }, 200), []);
-  // const handlePriceFilterChange = useCallback((value) => {
-  //   setPrice(value);
-  //   debouncePrice(value);
-  //   setDebounceLoading(true);
-  // }, []);
-  // const handlePlanFilterChange = useCallback(
-  //   (value) => setPlanFilter(value),
-  //   [],
-  // );
-  // const handleCategoryFilterChange = useCallback(
-  //   (value) => setCategoryFilter(value),
-  //   [],
-  // );
-  // const handleTagFilterChange = useCallback((value) => setTagFilter(value), []);
-
-  // const handleSearchFilterRemove = useCallback(
-  //   () => setSearchFilter(undefined),
-  //   [],
-  // );
-  // const handlePlanFilterRemove = useCallback(
-  //   () => setPlanFilter(undefined),
-  //   [],
-  // );
-  // const handleCategoryFilterRemove = useCallback(
-  //   () => setCategoryFilter(undefined),
-  //   [],
-  // );
-  // const handleTagFilterRemove = useCallback(() => setTagFilter([]), [],);
-  // const handlePriceFilterRemove = useCallback(
-  //   () => setPriceFilter(undefined),
-  //   [],
-  // );
-
-  // const handleFiltersClearAll = useCallback(() => {
-  //   if (pricingPlans) {
-  //     handlePlanFilterRemove();
-  //   }
-  //   handleCategoryFilterRemove();
-  //   handleTagFilterRemove();
-  //   handlePriceFilterRemove();
-  // }, [
-  //   handlePlanFilterRemove,
-  //   handleCategoryFilterRemove,
-  //   handleTagFilterRemove,
-  //   handlePriceFilterRemove
-  // ]);
   const priceFilterJsx = useMemo(() => {
     return (
       <RangeSlider
@@ -398,9 +368,10 @@ export default function Search({
     // @see node_modules/@shopify/polaris/build/esm/components/Filters/components/FiltersBar
     // 62: useOnValueChange(filters.length, ...)
     shouldPinTagFilter && result.push({ key: 'dummy' });
+    shouldPinCategoryFilter && result.push({ key: 'dummy_cate' });
 
     return result;
-  }, [tagFilterJsx, shouldPinTagFilter, categoryFilterJsx, priceFilterJsx, planFilterJsx]);
+  }, [shouldPinCategoryFilter, tagFilterJsx, shouldPinTagFilter, categoryFilterJsx, priceFilterJsx, planFilterJsx]);
 
   // const appliedFilters = [];
   // if (planFilter && planFilter.length > 0) {

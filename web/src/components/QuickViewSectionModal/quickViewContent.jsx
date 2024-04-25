@@ -1,5 +1,5 @@
 import { useQuickView } from '~/talons/section/useQuickView';
-import { lazy, memo, Suspense } from 'react';
+import { lazy, memo, Suspense, useCallback } from 'react';
 import {
   BlockStack, Box,
   Button,
@@ -14,6 +14,7 @@ import {
 import GallerySlider from '~/components/splide/gallery';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
 import BadgeTag from '~/components/block/badge/tag';
+import BadgeList from '~/components/block/product/badge/bagList';
 import BannerDefault from '~/components/block/banner/alert';
 import CardUSP from '~/components/block/card/usp';
 import ModalInstallSection from '~/components/block/product/manage';
@@ -24,10 +25,11 @@ import QuickViewContentSkeleton from '~/components/QuickViewSectionModal/quickVi
 const PricingPlan = lazy(() => import('~/components/QuickViewSectionModal/pricingPlan'));
 import './style.scss';
 import BannerAlert from '~/components/block/banner/alert';
+import Badges from '~/components/block/product/badge/bagList.jsx';
 
 const LazyQuickViewContent = props => {
   const { url_key, onClose } = props;
-  const talonProps = useQuickView({ key: url_key, onClose: onClose });
+  const talonProps = useQuickView({ key: url_key, onClose });
 
   const {
     section,
@@ -39,6 +41,7 @@ const LazyQuickViewContent = props => {
     purchaseLoading,
     loading: loadingInBackground,
   } = talonProps;
+  const tagBadgeItemRender = useCallback((item) => `#${item.name}`, []);
 
   if (loadingWithoutData) return <QuickViewContentSkeleton title={url_key} />;
   if (!section && !loadingWithoutData) {
@@ -76,15 +79,16 @@ const LazyQuickViewContent = props => {
                   <BadgeStatusSection item={section} />
                 </InlineStack>
 
-                {section?.tags && <BadgeTag section={section} afterClick={onClose} />}
+                {section?.tags?.length > 0 &&
+                  <Badges items={section.tags} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={onClose} />
+                }
 
                 <Text variant='bodyMd' as='p'>
                   Version: {section.version}
                 </Text>
-                {section?.categoriesV2 && section.categoriesV2.length
-                  ? <Text variant="bodyXs">Category: {section.categoriesV2.map(category => category.name).join(', ')}</Text>
-                : <></>
-                }
+                {section?.categoriesV2?.length > 0 && (
+                  <Badges items={section.categoriesV2} searchKey={'category'} title={'Categories'} onClick={onClose} />
+                )}
 
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
 

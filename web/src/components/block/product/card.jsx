@@ -13,6 +13,7 @@ import {
 import { ViewIcon, PlusCircleIcon, PaymentFilledIcon, ExternalIcon } from '@shopify/polaris-icons';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import BadgeTag from '~/components/block/badge/tag';
+import Badges from '~/components/block/product/badge/bagList';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
 import { usePurchase } from '~/hooks/section-builder/purchase';
 import { useRedirectGroupPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
@@ -85,6 +86,7 @@ function ProductCard({item}) {
   }, []);
 
   const { handlePurchase, purchaseLoading} = usePurchase();
+  const tagBadgeItemRender = useCallback((item) => `#${item.name}`, []);
 
   return (
     item &&
@@ -116,17 +118,14 @@ function ProductCard({item}) {
               {item.version &&
                 <Text variant="bodyXs">Version: {item.version}</Text>
               }
-              {item?.categoriesV2 && item.categoriesV2.length
-                ? <Text variant="bodyXs">Category: {item.categoriesV2.map(category => category.name).join(', ')}</Text>
-                : <></>
-              }
-              {item?.tags &&
-                <InlineStack>
-                  <BadgeTag section={item} />
-                </InlineStack>
+              {item?.categoriesV2?.length > 0 && (
+                <Badges items={item.categoriesV2} searchKey={'category'} title={'Categories'} />
+              )}
+              {item?.tags?.length > 0 &&
+                <Badges items={item.tags} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} />
               }
             </BlockStack>
-            
+
             <InlineStack gap='200'>
               {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="View section" />)}
               {

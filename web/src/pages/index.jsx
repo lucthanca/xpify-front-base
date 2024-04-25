@@ -18,6 +18,7 @@ import { MY_SHOP } from '~/queries/section-builder/other.gql';
 import { BestSeller, LatestRelease } from '~/components/hompage';
 import Footer from '~/components/block/footer';
 import { Loading } from '@shopify/app-bridge-react';
+import { useFreshChat } from '~/components/providers/freshchat';
 
 function HomePage() {
   const { data: myShop, loading: myShopLoading } = useQuery(MY_SHOP, {
@@ -27,6 +28,7 @@ function HomePage() {
   const handleRedirectGroupsPage = useRedirectGroupsPage();
   const handleRedirectMyLibraryPage = useRedirectMyLibraryPage();
   const handleRedirectHelpCenterPage = useRedirectHelpCenterPage();
+  const { open: openChat } = useFreshChat();
 
   return (
     <>
@@ -76,7 +78,7 @@ function HomePage() {
                     <NavCard
                       title='Help Center'
                       content='Need a helping hand? Check our FAQs or chat directly with our support agents for quick and friendly support.'
-                      actions={<Button onClick={handleRedirectHelpCenterPage}>Help Center</Button>}
+                      actions={<Button onClick={openChat}>Help Center</Button>}
                     />
                   </InlineGrid>
                 </BlockStack>
