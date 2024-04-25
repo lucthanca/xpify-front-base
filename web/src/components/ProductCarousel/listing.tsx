@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import InstallModal from '~/components/block/product/installModal';
 import { BlockStack, Box } from '@shopify/polaris';
 import TitleBlock from '~/components/block/title';
+import type { SectionData } from '~/talons/section/useSection';
 
 
 type CarouselProps = {
@@ -23,17 +24,17 @@ type CarouselProps = {
   queryVariables?: OperationVariables;
   extractItems?: ExtractItemsCallback;
   skeleton?: React.ReactNode;
+  extractKeys?: (items: SectionData[]) => string[];
 };
 
 const Carousel: React.FC<CarouselProps> = (props) => {
-  const { title, subTitle, skeleton, query, queryKey, slideOptions, extractItems, queryVariables } = props;
-  const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractItems);
+  const { extractKeys, title, subTitle, skeleton, query, queryKey, slideOptions, extractItems, queryVariables } = props;
+  const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractItems, extractKeys);
   if (loadingWithoutData && skeleton) {
     return <>{skeleton}</>;
   }
+  if (!items?.length) return null;
   return (
-    items && items.length
-    ?
     <Box>
       <BlockStack gap='200'>
         <TitleBlock title={title} subTitle={subTitle} />
@@ -58,7 +59,6 @@ const Carousel: React.FC<CarouselProps> = (props) => {
         </SectionListProvider>
       </BlockStack>
     </Box>
-    : <></>
   );
 };
 
