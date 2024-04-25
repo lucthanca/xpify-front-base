@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { useCarousel } from '~/talons/carousel/useCarousel';
 import { Splide, SplideSlide, Options } from '@splidejs/react-splide';
 import { SectionListProvider } from '~/context';
@@ -23,6 +23,7 @@ type CarouselProps = {
   queryVariables?: OperationVariables;
   extractItems?: ExtractItemsCallback;
   skeleton?: React.ReactNode;
+  options?: Options;
 };
 
 const Carousel: React.FC<CarouselProps> = (props) => {
@@ -31,6 +32,15 @@ const Carousel: React.FC<CarouselProps> = (props) => {
   if (loadingWithoutData && skeleton) {
     return <>{skeleton}</>;
   }
+
+  const options = useMemo(() => {
+    if (items && items.length <= 2) {
+      slideOptions.arrows = false;
+    }
+
+    return slideOptions;
+  }, [items]);
+
   return (
     items && items.length
     ?
@@ -39,7 +49,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
         <TitleBlock title={title} subTitle={subTitle} />
 
         <SectionListProvider>
-          <Splide options={slideOptions}>
+          <Splide options={options}>
             {items.map((item) => {
               return (
                 <SplideSlide key={item.id}>

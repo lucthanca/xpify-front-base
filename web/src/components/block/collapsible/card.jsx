@@ -22,7 +22,7 @@ function CollapsibleCard({title, content}) {
     <Card>
       <InlineStack>
         <div className='title-collapsible cursor-pointer' onClick={handleToggle}>
-          <Text as="p" variant="headingMd">
+          <Text as="h2" variant="headingMd">
             {title}
           </Text>
 

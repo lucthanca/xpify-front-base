@@ -104,7 +104,7 @@ const LazyQuickViewContent = props => {
                       </Button>
                     )}
                     <Button size='large' fullWidth url={section.demo_link} disabled={!Boolean(section.demo_link)}>
-                      <Text>View in demo store</Text>
+                      <Text>View demo store</Text>
                     </Button>
                   </>
                 ) : (

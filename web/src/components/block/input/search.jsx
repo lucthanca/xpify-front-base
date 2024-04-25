@@ -368,12 +368,13 @@ export default function Search({
   }, [tags, tagFilter, handleTagFilterChange]);
 
   const filters = useMemo(() => {
-    const result = [{
-      key: buildFilterKey(PRICE_FILTER_KEY),
-      label: 'Price',
-      filter: priceFilterJsx,
-      shortcut: false
-    }];
+    // const result = [{ // Skip vì section ko có giá
+    //   key: buildFilterKey(PRICE_FILTER_KEY),
+    //   label: 'Price',
+    //   filter: priceFilterJsx,
+    //   shortcut: false
+    // }];
+    const result = [];
     planFilterJsx && result.push({
       key: buildFilterKey(PLAN_FILTER_KEY),
       label: 'Plan',

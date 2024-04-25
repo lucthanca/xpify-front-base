@@ -128,10 +128,10 @@ function ProductCard({item}) {
             </BlockStack>
             
             <InlineStack gap='200'>
-              {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="Quick view" />)}
+              {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="View section" />)}
               {
                 item?.demo_link &&
-                <Tooltip content="View in demo store">
+                <Tooltip content="View demo store">
                   <Button
                     icon={<Icon source={ExternalIcon} tone="base" />}
                     size="large"

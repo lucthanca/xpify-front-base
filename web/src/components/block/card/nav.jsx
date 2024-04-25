@@ -5,10 +5,10 @@ function NavCard({title, content, actions}) {
   return (
     <Card>
       <BlockStack inlineAlign={"start"} gap="200">
-        <Text as="h3" variant="headingSm">
+        <Text as="h2" variant="headingMd">
           {title}
         </Text>
-        <Text variant="bodySm">
+        <Text variant="bodyMd">
           {content}
         </Text>
         {actions}
