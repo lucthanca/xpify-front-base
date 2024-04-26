@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
 import { BlockStack, Box, Card, InlineStack, Layout, Page, Text } from '@shopify/polaris';
 import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
@@ -13,6 +13,7 @@ import NotFound from '~/pages/NotFound.jsx';
 import RelatedProducts from '../RelatedProducts/relatedProducts';
 import DocInstall from '~/components/block/card/docInstall';
 import VideoGuideInstall from '~/components/block/card/videoInstall';
+import CollapsibleCard from "~/components/block/collapsible/card";
 import Footer from "~/components/block/footer";
 
 const GroupSectionDetails = props => {
@@ -114,12 +115,7 @@ const GroupSectionDetails = props => {
 
                 {groupSection.description && (
                   <Box>
-                    <Card title="Description">
-                      <Text variant="headingMd" as='h2'>Description</Text>
-                      <Box padding="400">
-                        <div dangerouslySetInnerHTML={{__html: groupSection.description}}></div>
-                      </Box>
-                    </Card>
+                    <CollapsibleCard title={"Description"} content={groupSection.description} />
                   </Box>
                 )}
 
@@ -135,7 +131,8 @@ const GroupSectionDetails = props => {
 
                 {childSections.length > 0 &&
                   <Box>
-                    <BlockStack gap='400'>
+                    <CollapsibleCard title={"Release Note"} childSections={childSections} />
+                    {/* <BlockStack gap='400'>
                       <Card title="Release Note">
                       <Text variant="headingMd" as='h2'>Release Note</Text>
                       {childSections.map(item => (
@@ -146,7 +143,7 @@ const GroupSectionDetails = props => {
                         </Box>
                       ))}
                       </Card>
-                    </BlockStack>
+                    </BlockStack> */}
                   </Box>
                 }
               </BlockStack>

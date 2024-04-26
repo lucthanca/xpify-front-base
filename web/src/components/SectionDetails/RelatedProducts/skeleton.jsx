@@ -1,15 +1,26 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import {
-  Card
+  BlockStack,
+  Box,
+  Card,
+  SkeletonDisplayText
 } from '@shopify/polaris';
 import SkeletonProduct from '~/components/block/product/skeleton';
 
 const Skeleton = () => {
-  return (
-    <Card sectioned>
-      <SkeletonProduct total={2} columns={{ sm: 1, md: 2 }} />
-    </Card>
-  );
+  const skeleton = useMemo(() => {
+    const slidePerPage = window.innerWidth < 425 ? 1 : 2;
+    return (
+      <BlockStack gap={200}>
+        <SkeletonDisplayText size='small' />
+        <Box paddingBlockStart='200'>
+          <SkeletonProduct total={slidePerPage} columns={{ sm: 1, md: 2 }} />
+        </Box>
+      </BlockStack>
+    );
+  }, []);
+
+  return skeleton;
 };
 
 export default memo(Skeleton);

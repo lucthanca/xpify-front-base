@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react';
-import { BlockStack, Card, Text, Box } from '@shopify/polaris';
+import { BlockStack, Card, Text, Box, SkeletonDisplayText } from '@shopify/polaris';
 import ProductCarousel from '~/components/ProductCarousel';
 import SkeletonProduct from '~/components/block/product/skeleton';
 import { SECTIONS_QUERY, QUERY_SECTION_COLLECTION_KEY, RELATED_SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
@@ -13,9 +13,12 @@ const RelatedProducts = props => {
   const { slideOptions, slidePerPage } = useRelatedProducts();
   const skeleton = useMemo(() => {
     return (
-      <Box paddingBlockStart='200'>
-        <SkeletonProduct total={slidePerPage} columns={{ sm: 1, md: 2 }} />
-      </Box>
+      <BlockStack gap={200}>
+        <SkeletonDisplayText size='small' />
+        <Box paddingBlockStart='200'>
+          <SkeletonProduct total={slidePerPage} columns={{ sm: 1, md: 2 }} />
+        </Box>
+      </BlockStack>
     );
   }, [slidePerPage]);
   // should render error when error is not null

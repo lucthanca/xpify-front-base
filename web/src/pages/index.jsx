@@ -24,10 +24,11 @@ function HomePage() {
   const { data: myShop, loading: myShopLoading } = useQuery(MY_SHOP, {
     fetchPolicy: "cache-and-network",
   });
+
   const handleRedirectSectionsPage = useRedirectSectionsPage();
   const handleRedirectGroupsPage = useRedirectGroupsPage();
   const handleRedirectMyLibraryPage = useRedirectMyLibraryPage();
-  const handleRedirectHelpCenterPage = useRedirectHelpCenterPage();
+
   const { open: openChat } = useFreshChat();
 
   return (

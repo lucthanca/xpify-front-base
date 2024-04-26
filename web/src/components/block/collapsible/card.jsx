@@ -13,7 +13,7 @@ import {
   CircleChevronDownIcon
 } from '@shopify/polaris-icons';
 
-function CollapsibleCard({title, content}) {
+function CollapsibleCard({title, content, childSections}) {
   const [open, setOpen] = useState(false);
 
   const handleToggle = useCallback(() => setOpen((open) => !open), []);
@@ -38,11 +38,20 @@ function CollapsibleCard({title, content}) {
             transition={{duration: '200ms', timingFunction: 'ease-in-out'}}
             expandOnPrint
           >
-            <Box paddingInline={200}>
-              <Text as="div" variant="bodyMd">
-                <div dangerouslySetInnerHTML={{__html: content}}></div>
-              </Text>
-            </Box>
+            {content &&
+              <Box paddingInline={200}>
+                <Text as="div" variant="bodyMd">
+                  <div dangerouslySetInnerHTML={{__html: content}}></div>
+                </Text>
+              </Box>
+            }
+            {childSections && childSections.map(item => (
+              item.release_note &&
+              <Box padding="200" key={item.id}>
+                <Text variant="headingSm" as='h3'>{item.name}:</Text>
+                <div dangerouslySetInnerHTML={{__html: item.release_note}}></div>
+              </Box>
+            ))}
           </Collapsible>
         </Box>
       </InlineStack>

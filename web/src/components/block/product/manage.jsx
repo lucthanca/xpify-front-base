@@ -173,7 +173,12 @@ function ModalInstallSection({section, setCurrentThemeSelected,setConfirmAction,
         key: section?.url_key
       }
     });
-    toast.show('Deleted successfully');
+
+    if (!dataDeleteE) {
+      toast.show('Deleted successfully');
+    } else {
+      toast.show('Deleted fail', { isError: true });
+    }
   }, [selected]);
 
   const currentThemeSelected = useMemo(() => {

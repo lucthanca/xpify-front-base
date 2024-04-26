@@ -8,6 +8,8 @@ import {
   SkeletonBodyText,
   SkeletonDisplayText,
   Box,
+  Spinner,
+  InlineGrid,
 } from '@shopify/polaris';
 import RelatedProductSkeleton from '~/components/SectionDetails/RelatedProducts/skeleton';
 
@@ -22,40 +24,43 @@ const Skeleton = () => {
               <SkeletonBodyText lines={1} />
             </BlockStack>
             <Card sectioned>
-              <Text as='div'>
-                <BlockStack gap={400}>
-                  <SkeletonDisplayText size='small' />
-                  <SkeletonBodyText lines={3} />
-                </BlockStack>
-              </Text>
+              <BlockStack gap={400}>
+                <SkeletonDisplayText size='small' />
+                <SkeletonBodyText lines={3} />
+              </BlockStack>
             </Card>
             <Card sectioned>
-              <Text as='div'>
-                <BlockStack gap={400}>
-                  <SkeletonDisplayText size='small' />
-                  <SkeletonBodyText lines={5} />
-                </BlockStack>
-              </Text>
+              <BlockStack gap={400}>
+                <SkeletonDisplayText size='small' />
+              </BlockStack>
             </Card>
             <Card>
-              <div style={{height: '500px'}}></div>
+              <div className='aspect-video'></div>
+            </Card>
+            <Card sectioned>
+              <InlineGrid columns={{ sm: 1, md: ['oneThird', 'twoThirds'] }}>
+                <div className='aspect-video'></div>
+                <BlockStack gap={400}>
+                  <SkeletonDisplayText size='small' />
+                  <SkeletonBodyText lines={2} />
+                </BlockStack>
+              </InlineGrid>
+            </Card>
+            <Card sectioned>
+              <BlockStack gap={400}>
+                <SkeletonDisplayText size='small' />
+                <BlockStack gap={400}>
+                  <SkeletonBodyText lines={2} />
+                  <SkeletonBodyText lines={2} />
+                  <SkeletonBodyText lines={3} />
+                </BlockStack>
+              </BlockStack>
             </Card>
             <RelatedProductSkeleton />
             <Card sectioned>
-              <Text as='div'>
-                <BlockStack gap={400}>
-                  <SkeletonDisplayText size='small' />
-                  <SkeletonBodyText lines={3} />
-                </BlockStack>
-              </Text>
-            </Card>
-            <Card sectioned>
-              <Text as='div'>
-                <BlockStack gap={400}>
-                  <SkeletonDisplayText size='small' />
-                  <SkeletonBodyText lines={3} />
-                </BlockStack>
-              </Text>
+              <BlockStack gap={400}>
+                <SkeletonDisplayText size='small' />
+              </BlockStack>
             </Card>
           </BlockStack>
         </Layout.Section>

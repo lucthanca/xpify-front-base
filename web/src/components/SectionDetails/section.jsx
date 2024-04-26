@@ -35,7 +35,9 @@ const SectionFullpageDetails = props => {
   const handleBackPage = useBackPage();
   const handleRedirectPlansPage = useRedirectPlansPage();
 
-  if (sectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity') {
+  if (sectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity'
+    || !section?.name
+  ) {
     return <NotFound />;
   }
 
