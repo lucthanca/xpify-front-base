@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react';
-import { Divider, InlineStack, Text, Pagination as PolarisPagination } from '@shopify/polaris';
+import { Divider, InlineStack, Text, Pagination as PolarisPagination, Box } from '@shopify/polaris';
 import PaginationItem from './item';
 import PropTypes from 'prop-types';
 import { useScrollToTop } from '~/hooks/section-builder/redirect';
@@ -31,20 +31,23 @@ const Pagination = props => {
   const shouldRenderPagination = useMemo(() => totalPages > 1, [totalPages]);
   if (!shouldRenderPagination) return null;
   return (
-    <>
-      <Divider />
-      <InlineStack align='space-between' blockAlign={'center'}>
-        <Text as='div' children={`Page ${currentPage} of ${totalPages}`} />
-        <PolarisPagination
-          onPrevious={handlePrevPage}
-          onNext={handleNextPage}
-          type="page"
-          hasNext={hasNext}
-          // label={paginationItems}
-          hasPrevious={hasPrev}
-        />
-      </InlineStack>
-    </>
+    <div className='Polaris-IndexTable__PaginationWrapper'>
+      <Box background='bg-surface-secondary'>
+        <Divider />
+        <Box paddingBlock={200}>
+          <InlineStack align='center' blockAlign={'center'}>
+            <PolarisPagination
+              onPrevious={handlePrevPage}
+              onNext={handleNextPage}
+              type="page"
+              hasNext={hasNext}
+              label={`Page ${currentPage} of ${totalPages}`}
+              hasPrevious={hasPrev}
+            />
+          </InlineStack>
+        </Box>
+      </Box>
+    </div>
   );
 };
 

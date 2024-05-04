@@ -100,7 +100,7 @@ const SectionCollectionV2 = props => {
   return (
     <ComplexSectionCollectionProvider>
       <Layout.Section>
-        <Card padding='400'>
+        <Card padding='0'>
           <SectionListing />
         </Card>
       </Layout.Section>

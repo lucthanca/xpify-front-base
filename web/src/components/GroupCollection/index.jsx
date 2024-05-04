@@ -6,7 +6,7 @@ const GroupCollection = props => {
   return (
     <>
       <Layout.Section>
-        <Card padding='400'>
+        <Card padding='0'>
           <SectionListing />
         </Card>
       </Layout.Section>

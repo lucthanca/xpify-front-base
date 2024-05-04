@@ -11,7 +11,7 @@ const SectionCollection = props => {
   return (
     <>
       <ProductList items={items ?? []} columns={{sm: 1, md: 2, lg: 4}} />
-      <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} />
+      {/* <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} /> */}
     </>
   );
 };

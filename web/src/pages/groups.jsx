@@ -8,7 +8,6 @@ function GroupsPage() {
     <Page fullWidth>
       <Layout>
         <GroupCollection />
-        <div className='mb-14 w-full' />
       </Layout>
       <Footer />
     </Page>

@@ -63,7 +63,6 @@ function MyLibrary() {
         </Layout.Section>
 
         {pageActive}
-        <div className='mb-14 w-full' />
       </Layout>
       <Footer />
     </Page>

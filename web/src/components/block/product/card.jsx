@@ -94,7 +94,7 @@ function ProductCard({item}) {
       <Card padding='0' background="bg-surface-secondary" className='h-full'>
         <div className='cursor-pointer aspect-video' onClick={() => handleRedirect(item)}>
           <img
-            src={item.images[0]?.src}
+            src={item.thumbnail}
             alt={item.name}
             loading="lazy"
             className='object-cover w-full h-full'

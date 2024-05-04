@@ -110,7 +110,7 @@ function GuideCard() {
                     <Button onClick={handleRedirectGroupsPage}>Browse Groups</Button>
                   </InlineStack>
                 </BlockStack>,
-                'demo': <iframe width="100%" className='aspect-video' src="https://www.youtube.com/embed/vn9LHDsK3V8?si=Shj5GFPlR-0BWJUz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                'demo': <iframe width="100%" className='aspect-video' src="https://www.youtube.com/embed/vn9LHDsK3V8?si=Shj5GFPlR-0BWJUz" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
               }}
               setProgress={setProgress}
               openChild={openChild}
@@ -120,7 +120,7 @@ function GuideCard() {
               options={{
                 'id': 'step_3',
                 'title': 'Customize themes with the added sections',
-                'content': <Button variant='primary' url={urlEditTheme} target="_blank">Go to theme editer</Button>,
+                'content': <Button variant='primary' url={urlEditTheme} target="_blank">Go to theme editor</Button>,
                 'demo': <Image source="https://sections.puco.io/images/general/enable-app.gif" />
               }}
               setProgress={setProgress}

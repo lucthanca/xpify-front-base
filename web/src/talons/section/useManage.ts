@@ -10,15 +10,16 @@ import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
 import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
 
 const titleRoleTheme = {
-  main: 'Live',
-  unpublished: 'Trial',
-  development: 'Dev',
+  'main': 'Live',
+  'unpublished': 'Draft',
+  'demo': 'Trial', // Không edit code được loại theme này
+  'development': 'Dev',
 };
 
 export type ThemeData = {
   id: string;
   name: string;
-  role: string;
+  role: 'main' | 'unpublished' | 'demo' | 'development';
   previewable?: string;
   processing?: string;
   admin_graphql_api_id?: string;
@@ -31,28 +32,30 @@ interface BannerAlert {
   urlSuccessEditTheme?: string;
 }
 
-type UseQuickViewProps = {
+type UseManageProps = {
   section: any;
-  typeSelect: string;
-  setConfirmAction: (func: any) => void;
-  setIsShowConfirm: (isShow: boolean) => void;
-  setCurrentThemeSelected: (theme: any) => void;
+  typeSelect: boolean;
 };
 
-type UseQuickViewTalon = UseSectionTalon & {
-  handlePurchase: () => void,
-  navigateToSectionPage: () => void,
-  bannerAlert: any,
+type UseManageTalon = {
+  section: any,
+  installed: boolean,
+  handleUpdate: () => void,
+  handleDelete: () => void,
+  dataUpdateLoading: boolean,
+  dataDeleteLoading: boolean,
+  bannerAlert: BannerAlert | undefined,
   setBannerAlert: any,
-  purchaseLoading: boolean,
+  options: object,
+  selected: string,
+  handleSelectChange: any,
+  currentThemeSelected: ThemeData
 };
 
-export const useQuickView = (props: UseQuickViewProps): UseQuickViewTalon => {
-  const { section, typeSelect, setConfirmAction, setIsShowConfirm, setCurrentThemeSelected } = props;
+export const useManage = (props: UseManageProps): UseManageTalon => {
+  const { section, typeSelect } = props;
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState<BannerAlert | undefined>(undefined);
-  const [isShowConfirmSelect, setIsShowConfirmSelect] = useState(false);
-  const [confirmActionSelect, setConfirmActionSelect] = useState(() => {});
   const toast = useToast();
 
   const { data:themesData } = useQuery(THEMES_QUERY, {
@@ -179,8 +182,8 @@ export const useQuickView = (props: UseQuickViewProps): UseQuickViewTalon => {
     return false;
   }, [selected, options]);
 
-  const [updateAction, { data:dataUpdate, loading:dataUpdateL, error:dataUpdateE }] = useMutation(UPDATE_ASSET_MUTATION, {});
-  const [deleteAction, { data:dataDelete, loading:dataDeleteL, error:dataDeleteE }] = useMutation(DELETE_ASSET_MUTATION, {});
+  const [updateAction, { data:dataUpdate, loading:dataUpdateLoading, error:dataUpdateError }] = useMutation(UPDATE_ASSET_MUTATION, {});
+  const [deleteAction, { data:dataDelete, loading:dataDeleteLoading, error:dataDeleteError }] = useMutation(DELETE_ASSET_MUTATION, {});
 
   const handleUpdate = useCallback(() => {
     updateAction({
@@ -197,23 +200,16 @@ export const useQuickView = (props: UseQuickViewProps): UseQuickViewTalon => {
         key: section?.url_key
       }
     });
-    toast.show('Deleted successfully');
+    if (!dataDeleteError) {
+      toast.show('Deleted successfully');
+    } else {
+      toast.show('Deleted fail', { isError: true });
+    }
   }, [selected]);
 
   const currentThemeSelected = useMemo(() => {
     return themes.find((item: any) => item.id == selected);
   }, [selected]);
-
-  const confirmDelete = useCallback(() => {
-    if (!typeSelect) { // Is modal install list
-      setConfirmAction(() => handleDelete);
-      setIsShowConfirm(true);
-      setCurrentThemeSelected(currentThemeSelected);
-    } else {
-      setConfirmActionSelect(() => handleDelete);
-      setIsShowConfirmSelect(true);
-    }
-  }, []);
 
   useEffect(() => {
     if (dataUpdate && dataUpdate.updateAsset) {
@@ -233,23 +229,27 @@ export const useQuickView = (props: UseQuickViewProps): UseQuickViewTalon => {
     }
   }, [dataUpdate]);
   useEffect(() => {
-    if (dataUpdateE) {
+    if (dataUpdateError) {
       setBannerAlert({
-        'title': dataUpdateE.message,
+        'title': dataUpdateError.message,
         'tone': 'critical',
-        'content': dataUpdateE.graphQLErrors ?? []
+        'content': dataUpdateError.graphQLErrors ?? []
       });
     }
-  }, [dataUpdateE]);
+  }, [dataUpdateError]);
+
   return {
     section,
-    loadingWithoutData,
-    loading,
-    error,
-    handlePurchase,
-    navigateToSectionPage,
+    installed,
+    handleUpdate,
+    handleDelete,
+    dataUpdateLoading,
+    dataDeleteLoading,
     bannerAlert,
     setBannerAlert,
-    purchaseLoading,
+    options,
+    selected,
+    handleSelectChange,
+    currentThemeSelected
   };
 };

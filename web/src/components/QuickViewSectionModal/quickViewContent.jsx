@@ -13,8 +13,6 @@ import {
 } from '@shopify/polaris';
 import GallerySlider from '~/components/splide/gallery';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
-import BadgeTag from '~/components/block/badge/tag';
-import BadgeList from '~/components/block/product/badge/bagList';
 import BannerDefault from '~/components/block/banner/alert';
 import CardUSP from '~/components/block/card/usp';
 import ModalInstallSection from '~/components/block/product/manage';
@@ -99,14 +97,14 @@ const LazyQuickViewContent = props => {
                       <Button
                         loading={purchaseLoading}
                         icon={<Icon source={PaymentIcon} tone='base' />}
-                        size='large'
+                        size='medium'
                         fullWidth
                         onClick={handlePurchase}
                       >
                         Purchase by ${section.price}
                       </Button>
                     )}
-                    <Button size='large' fullWidth url={section.demo_link} disabled={!Boolean(section.demo_link)}>
+                    <Button size='medium' fullWidth url={section.demo_link} disabled={!Boolean(section.demo_link)}>
                       <Text>View demo store</Text>
                     </Button>
                   </>
@@ -130,7 +128,7 @@ const LazyQuickViewContent = props => {
             )}
 
             <Card>
-              <iframe width="100%" className='aspect-video' src="https://www.youtube.com/embed/vn9LHDsK3V8?si=Shj5GFPlR-0BWJUz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              <iframe width="100%" className='aspect-video' src="https://www.youtube.com/embed/vn9LHDsK3V8?si=Shj5GFPlR-0BWJUz" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
             </Card>
           </BlockStack>
         </div>

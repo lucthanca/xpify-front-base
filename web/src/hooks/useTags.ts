@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 export const useTags = () => {
   const { data: tags } = useQuery(TAGS_QUERY, { fetchPolicy: "cache-and-network" });
   const tagOptions = useMemo(() => {
-    return tags?.[TAGS_QUERY_KEY] ? tags[TAGS_QUERY_KEY].map((item) => ({
+    return tags?.[TAGS_QUERY_KEY] ? tags[TAGS_QUERY_KEY].map((item: any) => ({
       value: item.id,
       label: item.name
     })) : [];

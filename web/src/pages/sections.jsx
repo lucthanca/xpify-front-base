@@ -12,7 +12,6 @@ const SectionsPage = props => {
     <Page fullWidth>
       <Layout>
         <SectionCollection {...props} />
-        <div className='mb-14 w-full' />
       </Layout>
       <Footer />
     </Page>

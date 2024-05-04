@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import {
   BlockStack,
   Box,
@@ -10,7 +10,7 @@ import {
 } from '@shopify/polaris';
 import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
 import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
-import BadgeTag from '~/components/block/badge/tag';
+import Badges from '~/components/block/product/badge/bagList.jsx';
 import CardUSP from '~/components/block/card/usp';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
 import ModalInstallSection from '~/components/block/product/manage';
@@ -32,6 +32,7 @@ const SectionFullpageDetails = props => {
     handlePurchase,
     sectionError,
   } = props;
+  const tagBadgeItemRender = useCallback((item) => `${item.name}`, []);
   const handleBackPage = useBackPage();
   const handleRedirectPlansPage = useRedirectPlansPage();
 
@@ -56,7 +57,7 @@ const SectionFullpageDetails = props => {
             } */}
           </InlineStack>
         }
-        subtitle={"version " + section.version}
+        //subtitle={"version " + section.version}
         compactTitle
         // primaryAction={{ // Skip vì all section đang Free
         //   content: !section.actions?.purchase ? 'Owned' : 'Purchase',
@@ -78,6 +79,23 @@ const SectionFullpageDetails = props => {
         <Layout>
           <Layout.Section>
             <BlockStack gap='400'>
+              <Card title='Information'>
+                <Text variant="headingMd" as="h2">General information</Text>
+                <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
+                  <BlockStack gap={200}>
+                    <Text variant='bodySm' as='p'>
+                      Version: {section.version}
+                    </Text>
+                    {section?.categoriesV2?.length > 0 && (
+                      <Badges items={section.categoriesV2} searchKey={'category'} title={'Categories'} onClick={() => {}} />
+                    )}
+                    {section?.tags?.length > 0 &&
+                      <Badges items={section.tags} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={() => {}} />
+                    }
+                  </BlockStack>
+                </Box>
+              </Card>
+
               {
                 (!section.actions?.install) &&
                 <BannerWarningNotPurchase
