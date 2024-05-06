@@ -11,8 +11,11 @@ const BestSellersHomepage = () => {
       pagination: false,
       breakpoints:{
         425: { perPage: 1 },
-        1024: { perPage: 2, gap: '0.5rem' }
+        768: { perPage: 2 }
       },
+      // autoplay: true,
+      // interval: 3000,
+      // rewind: true
     };
   });
   return (

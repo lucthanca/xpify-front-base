@@ -39,11 +39,11 @@ const SectionCollection = props => {
 
   const splideConfig = {
     perPage: 5,
-    gap: '1rem',
+    gap: '0.5rem',
     pagination: false,
     breakpoints:{
       425: { perPage: 1 },
-      768: { perPage: 2, gap: '0.5rem' },
+      768: { perPage: 2 },
       2560: { perPage: 4 }
     },
   }

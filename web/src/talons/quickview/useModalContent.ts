@@ -18,7 +18,7 @@ export const useModalContent = (keys: string[]) => {
   const sliderOpts = {
     perPage: 1,
     pagination: false,
-    gap: '1rem',
+    gap: '0.5rem',
     start: startIndex,
     drag: false,
     dragAngleThreshold: 0 // Disable drag tránh conflict drag gallery

@@ -78,3 +78,11 @@ button.splide__arrow {
 .splide-gallery-li > img {
   margin: auto;
 }
+
+.splide__pagination > li {
+  margin: 0 3px;
+}
+
+.splide__pagination > li > button.splide__pagination__page {
+  background-color: #ffffff;
+}

@@ -123,7 +123,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         return false;
       }
 
-      var status = 'Not install';
+      var status = 'Not installed';
       const installedInTheme = section?.installed && section.installed.find((item: any) => item.theme_id == theme.id);
 
       if (installedInTheme) {
@@ -171,7 +171,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
       const contentUpdate = content.filter((item: any) => item !== "");
       if (contentUpdate.length) {
         setBannerAlert({
-          'title': 'You should update section to laster version!',
+          'title': 'You should update this section to the latest version!',
           'tone': 'info',
           'content': contentUpdate
         });

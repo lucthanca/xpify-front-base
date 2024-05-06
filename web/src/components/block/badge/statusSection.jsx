@@ -41,7 +41,7 @@ function BadgeStatusSection({item}) {
       const updated = item.installed.find(data => data.product_version == item.version);
       if (updated) {
         return <Badge tone='success' size="small" progress='complete'>
-          <Tooltip content="Installed laster version">
+          <Tooltip content="Installed latest version">
             <Text>Installed</Text>
           </Tooltip>
         </Badge>;

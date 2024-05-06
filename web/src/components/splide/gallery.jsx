@@ -8,17 +8,16 @@ export default function GallerySlider({gallery}) {
     <Splide
       options={{
         perPage: 1,
-        gap: 50,
-        arrows: gallery.length > 1 ? true : false,
-        rewind: true,
-        autoplay: true,
-        interval: 3000
+        gap: '0.5rem',
+        arrows: false,
+        type: gallery.length > 1 ? "loop" : "slide",
+        pagination: true
       }}
     >
       {
         gallery.map(slide => (
           <SplideSlide className='splide-gallery-li' key={ slide.src }>
-            <img loading='lazy' src={ slide.src } alt={ slide.alt ?? '' }/>
+            <img loading='lazy' src={ slide.src } />
           </SplideSlide>
         ))
       }
