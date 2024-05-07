@@ -212,7 +212,7 @@ const FILTER_FIELDS_MAPPING: { [key: string]: string } = {
   [PRICE_FILTER_KEY]: 'price',
 };
 
-export const useSectionListing = () => {
+export const useSectionListing = (onQueryCompleted: any) => {
   const [filterParts, setFilterParts] = useState({});
   const [searchFilter, setSearchFilter] = useState('');
   const [stateSections, setSections] = useState<SectionData[]>([]);
@@ -267,6 +267,9 @@ export const useSectionListing = () => {
     },
     onCompleted: (data) => {
       setSections(data?.[QUERY_SECTION_COLLECTION_KEY]?.items || []);
+      if (onQueryCompleted) {
+        onQueryCompleted(data?.[QUERY_SECTION_COLLECTION_KEY]);
+      }
     },
     skip: !hasFilter,
   });

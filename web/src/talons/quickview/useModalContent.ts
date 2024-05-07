@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { onINP } from 'web-vitals';
 import { useSectionListContext } from '~/context';
 import type { SectionListContext } from '~/talons/quickview/useQuickViewSlider';
 import { useApolloClient } from '@apollo/client';
@@ -10,9 +9,9 @@ type SectionQueryData = {
   [key: string]: SectionData;
 }
 
-export const useModalContent = (keys: string[]) => {
+export const useModalContent = (keys: string[], onIndexChange: any) => {
   const client = useApolloClient();
-  const [{ activeSection, modal }, { setActiveSection }] = useSectionListContext() as unknown as SectionListContext;
+  const [{ activeSection }, { setActiveSection }] = useSectionListContext() as unknown as SectionListContext;
   const startIndex = keys.indexOf(activeSection?.url_key ?? '');
   const [movedIndex, setMovedIndex] = useState(startIndex);
   const sliderOpts = {
@@ -33,6 +32,12 @@ export const useModalContent = (keys: string[]) => {
       setActiveSection(activeSection[SECTION_V2_QUERY_KEY]);
     }
   }, []);
+
+  useEffect(() => {
+    if (onIndexChange) {
+      onIndexChange({ index: movedIndex, key: activeSection?.url_key });
+    }
+  }, [movedIndex]);
 
   return {
     sliderOpts,
