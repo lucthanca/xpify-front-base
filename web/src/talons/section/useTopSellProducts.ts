@@ -1,16 +1,11 @@
 import { useQuery } from '@apollo/client';
 import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
-import { SectionData } from '~/talons/section/useSection';
 import { useMemo } from 'react';
-
-export interface CollectionQueryData {
-  [key: string]: {
-    items: SectionData[];
-  };
-}
+import type { GraphQlQueryResponse, Section } from '~/@types';
+import { isEmpty } from '~/utils/isEmpty';
 
 export const useTopSellProducts = () => {
-  const { data, loading, error } = useQuery<CollectionQueryData>(SECTIONS_QUERY, {
+  const { data, loading, error } = useQuery<GraphQlQueryResponse<Section>>(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       sort: { column: 'entity_id', order: 'desc' },
@@ -18,8 +13,10 @@ export const useTopSellProducts = () => {
       currentPage: 1
     }
   });
-  const products: SectionData[] | null | undefined = useMemo(() => {
-    return data?.getSections?.items;
+  const products: Section[] | [] = useMemo(() => {
+    if (data === undefined) return [];
+    if (isEmpty(data.getSections)) return [];
+    return data.getSections.items ?? []; // use ?? to prevent items null or undefined
   }, [data]);
   const loadingWithoutData = useMemo(() => loading && products === undefined, [loading, products]);
   return {
