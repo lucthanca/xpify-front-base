@@ -7,12 +7,12 @@ import PropTypes from 'prop-types';
 import { useModalContent } from '~/talons/quickview/useModalContent';
 
 const ModalContent = props => {
-  const { keys, onClose } = props;
+  const { keys, onClose, onIndexChange } = props;
   const {
     sliderOpts,
     handleSliderMoved,
     movedIndex,
-  } = useModalContent(keys);
+  } = useModalContent(keys, onIndexChange);
 
   return (
     <Splide className='splide-modal-section' options={sliderOpts} onMoved={handleSliderMoved}>
@@ -31,18 +31,19 @@ const ModalContent = props => {
 };
 
 const QuickViewModalSlider = props => {
-  const { keys } = props;
+  const { keys, onIndexChange } = props;
   const { activeSection, show, onCloseQuickViewModal } = useQuickViewSlider();
 
   return (
     <Modal size='large' open={show} onClose={onCloseQuickViewModal} title={activeSection?.name ?? 'Loading...'} noScroll>
-      <ModalContent keys={keys} onClose={onCloseQuickViewModal} />
+      <ModalContent keys={keys} onClose={onCloseQuickViewModal} onIndexChange={onIndexChange}/>
     </Modal>
   );
 };
 
 QuickViewModalSlider.propTypes = {
   keys: PropTypes.array,
+  onSlideMoved: PropTypes.func,
 };
 
 export default memo(QuickViewModalSlider);
