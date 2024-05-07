@@ -1,7 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
-import { QUERY_SECTION_COLLECTION_KEY } from '~/queries/section-builder/product.gql';
-import type { ExtractItemsCallback } from '~/talons/carousel/useCarousel';
-import type { OperationVariables } from '@apollo/client/core/types';
+import { useMemo, useState } from 'react';
 import type { Options } from '@splidejs/react-splide';
 
 type RelatedProductsTalonProps = {

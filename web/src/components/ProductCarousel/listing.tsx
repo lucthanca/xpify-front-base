@@ -4,7 +4,6 @@ import { Splide, SplideSlide, Options } from '@splidejs/react-splide';
 import { SectionListProvider } from '~/context';
 import ProductCard from '~/components/block/product/card';
 import QuickViewSlider from '~/components/QuickViewSectionModal/slider';
-import type { ExtractItemsCallback } from '~/talons/carousel/useCarousel';
 import type { DocumentNode } from '@apollo/client';
 import type { OperationVariables } from '@apollo/client/core/types';
 import './style.scss';
@@ -22,14 +21,13 @@ type CarouselProps = {
   queryKey: string;
   slideOptions: Options;
   queryVariables?: OperationVariables;
-  extractItems?: ExtractItemsCallback;
   skeleton?: React.ReactNode;
   extractKeys?: (items: SectionData[]) => string[];
 };
 
 const Carousel: React.FC<CarouselProps> = (props) => {
-  const { extractKeys, title, subTitle, skeleton, query, queryKey, slideOptions, extractItems, queryVariables } = props;
-  const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractItems, extractKeys);
+  const { extractKeys, title, subTitle, skeleton, query, queryKey, slideOptions, queryVariables } = props;
+  const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractKeys);
   const options = useMemo(() => {
     slideOptions.arrows = items && items.length > 2;
 
