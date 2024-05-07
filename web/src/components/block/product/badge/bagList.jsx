@@ -9,7 +9,7 @@ const BadgeItem = props => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const handleClick = useCallback(() => {
-    searchParams.set(searchKey, item.name)
+    searchParams.set(searchKey, item.name);
     const nav = {
       pathname: isSimpleSection ? '/sections' : '/groups',
       search: `?${createSearchParams({ ...Object.fromEntries(searchParams.entries()) })}`,
@@ -28,13 +28,13 @@ const BadgeItem = props => {
 };
 
 const BadgeList = (props) => {
-  const { items, itemContentRenderer, onClick, searchKey, title } = props;
+  const { items, isSimpleSection, itemContentRenderer, onClick, searchKey, title } = props;
   return (
     <InlineStack blockAlign='center' gap='200'>
       <Text as="span" variant="bodySm">{title}:</Text>
       <InlineStack gap='100' blockAlign='start'>
         {items.map(item => (
-          <BadgeItem key={item.id} item={item} renderBadgeItem={itemContentRenderer} onClick={onClick} searchKey={searchKey} isSimpleSection={!item?.child_ids?.length} />
+          <BadgeItem key={item.id} item={item} renderBadgeItem={itemContentRenderer} onClick={onClick} searchKey={searchKey} isSimpleSection={isSimpleSection} />
         ))}
       </InlineStack>
     </InlineStack>

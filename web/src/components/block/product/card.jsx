@@ -118,10 +118,10 @@ function ProductCard({item}) {
                 <Text variant="bodySm">Version: {item.version}</Text>
               }
               {item?.categoriesV2?.length > 0 && (
-                <Badges items={item.categoriesV2} searchKey={'category'} title={'Categories'} />
+                <Badges items={item.categoriesV2} isSimpleSection={!item?.child_ids?.length} searchKey={'category'} title={'Categories'} />
               )}
               {item?.tags?.length > 0 &&
-                <Badges items={item.tags} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} />
+                <Badges items={item.tags} isSimpleSection={!item?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} />
               }
             </BlockStack>
 

@@ -81,10 +81,10 @@ const LazyQuickViewContent = props => {
                   Version: {section.version}
                 </Text>
                 {section?.categoriesV2?.length > 0 && (
-                  <Badges items={section.categoriesV2} searchKey={'category'} title={'Categories'} onClick={onClose} />
+                  <Badges items={section.categoriesV2} isSimpleSection={!section?.child_ids?.length} searchKey={'category'} title={'Categories'} onClick={onClose} />
                 )}
                 {section?.tags?.length > 0 &&
-                  <Badges items={section.tags} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={onClose} />
+                  <Badges items={section.tags} isSimpleSection={!section?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={onClose} />
                 }
 
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />

@@ -86,3 +86,12 @@ button.splide__arrow {
 .splide__pagination > li > button.splide__pagination__page {
   background-color: #ffffff;
 }
+
+.popover-header button {
+  padding: var(--p-space-100);
+}
+
+.popover-header button .Polaris-Text--root {
+  font-size: var(--p-text-heading-lg-font-size);
+  font-weight: var(--p-font-weight-bold);
+}
