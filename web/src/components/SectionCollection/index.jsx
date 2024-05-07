@@ -1,14 +1,14 @@
 import { memo, useState } from 'react';
 import { BlockStack, Box, Card, Layout, Page, SkeletonDisplayText, Text } from '@shopify/polaris';
 import Search from '~/components/block/input/search';
-import SkeletonProduct from '~/components/block/product/skeleton';
-import ProductList from '~/components/block/product/list';
+// import SkeletonProduct from '~/components/block/product/skeleton';
+// import ProductList from '~/components/block/product/list';
 import Paginate from '~/components/block/paginate/default';
 import { useSectionCollection } from '~/talons/section/useSectionCollection';
 import BestSeller from '~/components/BestSellers';
 import CategoryCollection from '~/components/SectionCollection/categoryCollection';
-import { ComplexSectionCollectionProvider } from '~/context';
-import SectionListing from '~/components/SectionCollection/sectionListing';
+import { ComplexSectionCollectionProvider, ListingProvider } from '~/context';
+import SectionListing from '~/components/SectionCollection/listingV2';
 
 const SectionCollection = props => {
   const {
@@ -108,4 +108,16 @@ const SectionCollectionV2 = props => {
   );
 };
 
-export default memo(SectionCollectionV2);
+const SectionCollectionV3 = () => {
+  return (
+    <ListingProvider>
+      <Layout.Section>
+        <Card padding='0'>
+          <SectionListing />
+        </Card>
+      </Layout.Section>
+    </ListingProvider>
+  );
+};
+
+export default memo(SectionCollectionV3);
