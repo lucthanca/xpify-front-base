@@ -32,7 +32,7 @@ function ModalInstallSection({section, fullWith = true}) {
           <BannerDefault bannerAlert={talonManageProps.bannerAlert} setBannerAlert={talonManageProps.setBannerAlert} />
         </Card>
       }
-      <Text variant='bodyMd' fontWeight='bold'>Choose theme for installation:</Text>
+      <Text variant='headingMd' as='h2'>Choose theme for installation:</Text>
 
       <InlineGrid columns={fullWith ? 1 : {sm: 1, md: ['twoThirds', 'oneThird']}} gap={200} alignItems='center'>
         {talonManageProps.options.length

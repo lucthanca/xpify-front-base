@@ -30,6 +30,7 @@ interface BannerAlert {
   tone?: string;
   content?: any;
   urlSuccessEditTheme?: string;
+  isSimple?: boolean
 }
 
 type UseManageProps = {
@@ -105,11 +106,6 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     return '#';
   }, [myShop, selected]);
 
-  useMemo(() => {
-    if (themes && themes.length) {
-      setSelected(themes[0]['id'] ?? "");
-    }
-  }, [themes]);
   const options = useMemo(() => {
     if (!themes?.length
       || !section?.url_key
@@ -152,6 +148,11 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
 
     return result.filter((item: any) => item?.value);
   }, [section, themes, childSections]);
+  useMemo(() => {
+    if (themes && themes.length && options.length) {
+      setSelected(themes[0]['id'] ?? "");
+    }
+  }, [themes, options]);
   const installed = useMemo(() => {
     setBannerAlert(undefined);
     if (!section?.installed) {
@@ -218,6 +219,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
       if (updateSuccess.length) {
         setBannerAlert({
           'urlSuccessEditTheme': urlEditTheme,
+          'isSimple': false,
           'tone': 'success'
         });
       } else {

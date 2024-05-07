@@ -4,6 +4,7 @@ import { BlockStack, Box, Card, InlineStack, Layout, Page, Text } from '@shopify
 import { useBackPage } from '~/hooks/section-builder/redirect';
 import ProductList from '~/components/block/product/list';
 import ModalInstallSection from '~/components/block/product/manage';
+import GallerySlider from '~/components/splide/gallery';
 import SkeletonProduct from '~/components/block/product/skeleton';
 import CardUSP from '~/components/block/card/usp';
 import BannerWarningNotPurchase from '~/components/block/banner/warningPurchase';
@@ -16,6 +17,7 @@ import VideoGuideInstall from '~/components/block/card/videoInstall';
 import CollapsibleCard from "~/components/block/collapsible/card";
 import Badges from '~/components/block/product/badge/bagList.jsx';
 import Footer from "~/components/block/footer";
+import ChildSections from './childSections';
 
 const GroupSectionDetails = props => {
   const handleBackPage = useBackPage();
@@ -72,20 +74,6 @@ const GroupSectionDetails = props => {
           <Layout.Section>
             <Box>
               <BlockStack gap='400'>
-                <Card title='Information'>
-                  <Text variant="headingMd" as="h2">General information</Text>
-                  <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
-                    <BlockStack gap={200}>
-                      {groupSection?.categoriesV2?.length > 0 && (
-                        <Badges items={groupSection.categoriesV2} searchKey={'category'} title={'Categories'} onClick={() => {}} />
-                      )}
-                      {groupSection?.tags?.length > 0 &&
-                        <Badges items={groupSection.tags} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={() => {}} />
-                      }
-                    </BlockStack>
-                  </Box>
-                </Card>
-
                 {
                   (!groupSection.actions?.install) &&
                   <BannerWarningNotPurchase
@@ -106,6 +94,20 @@ const GroupSectionDetails = props => {
                   />
                 }
 
+                <Card title='Information'>
+                  <Text variant="headingMd" as="h2">General information</Text>
+                  <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
+                    <BlockStack gap={200}>
+                      {groupSection?.categoriesV2?.length > 0 && (
+                        <Badges items={groupSection.categoriesV2} isSimpleSection={!groupSection?.child_ids?.length} searchKey={'category'} title={'Categories'} onClick={() => {}} />
+                      )}
+                      {groupSection?.tags?.length > 0 &&
+                        <Badges items={groupSection.tags} isSimpleSection={!groupSection?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={() => {}} />
+                      }
+                    </BlockStack>
+                  </Box>
+                </Card>
+
                 {groupSection.actions?.install &&
                   <Box>
                     <ModalInstallSection section={groupSection} fullWith={false} />
@@ -118,21 +120,21 @@ const GroupSectionDetails = props => {
                   </Box>
                 )}
 
-                <Box>
-                  <BlockStack gap='200'>
-                    {childSections.length > 0 ? (
-                      <ProductList items={childSections} columns={{sm: 1, md: 2}} />
-                    ) : (
-                      <SkeletonProduct total={2} columns={{ sm: 1, md: 2 }} />
-                    )}
-                  </BlockStack>
-                </Box>
-
                 {groupSection.description && (
                   <Box>
                     <CollapsibleCard title={"Description"} content={groupSection.description} />
                   </Box>
                 )}
+
+                <Card title='Gallery' padding='0'>
+                  <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee]'>
+                    <GallerySlider gallery={groupSection?.images || []} />
+                  </div>
+                </Card>
+
+                <Box>
+                  <ChildSections childIds={groupSection.child_ids} />
+                </Box>
 
                 <Box>
                   <VideoGuideInstall />

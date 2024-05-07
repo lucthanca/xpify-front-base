@@ -15,7 +15,10 @@ function BannerDefault({bannerAlert, setBannerAlert, noDismiss }) {
   return (
     bannerAlert &&
     <Banner {...bannerAlert} onDismiss={noDismiss ? undefined : handleDismiss}>
-      {bannerAlert?.urlSuccessEditTheme && <div>Section installed successfully. Go to <Link url={bannerAlert.urlSuccessEditTheme}>theme editor</Link> to use this section.</div>}
+      {
+        bannerAlert?.urlSuccessEditTheme &&
+        <div>{bannerAlert.isSimple ? 'Section' : 'Group'} installed successfully. Go to <Link url={bannerAlert.urlSuccessEditTheme}>theme editor</Link> to use this {bannerAlert.isSimple ? 'section' : 'group'}.</div>
+      }
       {
         bannerAlert.content &&
         <BlockStack gap={200}>

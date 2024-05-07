@@ -9,7 +9,7 @@ import Footer from '~/components/block/footer';
 
 const SectionsPage = props => {
   return (
-    <Page fullWidth>
+    <Page title="Sections" fullWidth>
       <Layout>
         <SectionCollection {...props} />
       </Layout>

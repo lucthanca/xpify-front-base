@@ -31,7 +31,9 @@ const Carousel: React.FC<CarouselProps> = (props) => {
   const { extractKeys, title, subTitle, skeleton, query, queryKey, slideOptions, extractItems, queryVariables } = props;
   const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractItems, extractKeys);
   const options = useMemo(() => {
-    slideOptions.arrows = items && items.length > 2;
+    const column = window.innerWidth < 425 ? 1 : 2;
+    slideOptions.arrows = items && items.length > column;
+    slideOptions.type = items && items.length > column ? "loop" : "slide";
 
     return slideOptions;
   }, [items]);

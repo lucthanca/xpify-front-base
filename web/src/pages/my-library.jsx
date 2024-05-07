@@ -7,8 +7,8 @@ import Footer from '~/components/block/footer';
 
 const defaultSelected = 'simple';
 const options = [
-  {value: 'simple', label: 'Simple Sections'},
-  {value: 'group', label: 'Group Sections'}
+  {value: 'simple', label: 'Sections'},
+  {value: 'group', label: 'Groups'}
 ];
 
 function MyLibrary() {
@@ -44,24 +44,26 @@ function MyLibrary() {
   }, [selected]);
 
   return (
-    <Page fullWidth>
+    <Page
+      title='My library:'
+      titleMetadata={
+        <div className='popover-header'>
+          <Popover
+            active={popoverActive}
+            activator={activator}
+            onClose={togglePopoverActive}
+          >
+            <OptionList
+              onChange={setSelected}
+              options={options}
+              selected={selected}
+            />
+          </Popover>
+        </div>
+      }
+      fullWidth
+    >
       <Layout>
-        <Layout.Section>
-          <Box>
-            <Popover
-              active={popoverActive}
-              activator={activator}
-              onClose={togglePopoverActive}
-            >
-              <OptionList
-                onChange={setSelected}
-                options={options}
-                selected={selected}
-              />
-            </Popover>
-          </Box>
-        </Layout.Section>
-
         {pageActive}
       </Layout>
       <Footer />

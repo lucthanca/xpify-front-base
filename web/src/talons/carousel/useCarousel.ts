@@ -26,6 +26,9 @@ export const useCarousel = (query: DocumentNode, dataKey: string, queryVariables
     if (extractItems) {
       return extractItems(data);
     }
+    if (data?.[dataKey]?.items) {
+      return data?.[dataKey].items;
+    }
     return data?.[dataKey] || [];
   }, [data, extractItems]);
   const keys = useMemo(() => {
