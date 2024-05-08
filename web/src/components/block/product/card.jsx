@@ -68,12 +68,8 @@ const InstallButton = props => {
   );
 };
 
-function ProductCard({item}) {
+function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) / 4), (min-width: 768px) calc((100vw - 2rem) / 2), 100vw"}) {
   console.log('re-render-productCard');
-  // const handleInstall = useCallback((item) => {
-  //   setIsShowPopupInstall && setIsShowPopupInstall(prev => !prev);
-  //   setSection && setSection(item);
-  // }, []);
 
   const handleRedirectProductPage = useRedirectSectionPage();
   const handleRedirectGroupPage = useRedirectGroupPage();
@@ -94,9 +90,11 @@ function ProductCard({item}) {
       <Card padding='0' background="bg-surface-secondary" className='h-full'>
         <div className='cursor-pointer aspect-video' onClick={() => handleRedirect(item)}>
           <img
-            src={item.thumbnail}
+            className="object-cover w-full h-full"
             loading="lazy"
-            className='object-cover w-full h-full'
+            src={ item?.images[0]?.src }
+            srcSet={ item?.images[0]?.srcset }
+            sizes={imgSizes}
           />
         </div>
 

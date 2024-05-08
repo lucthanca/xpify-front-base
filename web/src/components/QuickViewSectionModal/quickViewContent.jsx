@@ -58,7 +58,7 @@ const LazyQuickViewContent = props => {
             <BlockStack gap={400}>
               <Card title='Gallery' padding='0'>
                 <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee] sticky'>
-                  <GallerySlider gallery={section.images} />
+                  <GallerySlider gallery={section.images} imgSizes="(min-width: 768px) calc((90vw - 1rem) * 2/3), 100vw" />
                 </div>
               </Card>
             </BlockStack>
