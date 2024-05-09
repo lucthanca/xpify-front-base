@@ -11,7 +11,7 @@ import { useQuery } from '@apollo/client';
 import { PRICING_PLANS_QUERY, SORT_OPTIONS_QUERY, SORT_OPTIONS_QUERY_KEY } from '~/queries/section-builder/other.gql';
 import { CATEGORIES_QUERY, CATEGORIES_QUERY_KEY } from '~/queries/section-builder/category.gql';
 import { useTags } from '~/hooks/useTags';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, createSearchParams } from 'react-router-dom';
 
 export const TAG_FILTER_KEY = 'tag';
 export const PLAN_FILTER_KEY = 'plan';
@@ -28,13 +28,26 @@ function buildFilterKey (key) {
 const useSearch = props => {
   const { onFilterChange, onSortChange } = props;
   const [searchParams, setSearchParams] = useSearchParams();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(() => {
+    const urlSearch = searchParams.get('search') || '';
+    if (urlSearch.trim().length > 0) {
+      if (onFilterChange) onFilterChange(QUERY_SEARCH_KEY, urlSearch);
+    }
+    return urlSearch;
+  });
   const searchSection = useCallback(async (value) => {
     if (onFilterChange) onFilterChange(QUERY_SEARCH_KEY, value);
   }, []);
   const ref = useRef(searchSection);
   const lazyCallback = useMemo(() => {
     const func = (value) => {
+      const currentUrlParams = new URLSearchParams(window.location.search);
+      if (!value.trim().length && Boolean(currentUrlParams.has('search'))) {
+        currentUrlParams.delete('search');
+        setSearchParams(currentUrlParams);
+      }
+      currentUrlParams.set('search', value);
+      setSearchParams(currentUrlParams);
       ref.current?.(value);
     }
     return debounce(func, 500);
@@ -76,6 +89,13 @@ const useSearch = props => {
   const [categoryFilter, setCategoryFilter] = useState(() => {
     return searchParams.has('category') ? [''] : [];
   });
+  const { data: categories } = useQuery(CATEGORIES_QUERY, { fetchPolicy: "cache-and-network" });
+  const categoriesOptions = useMemo(() => {
+    return categories?.[CATEGORIES_QUERY_KEY]?.items ? categories[CATEGORIES_QUERY_KEY].items.map((item) => ({
+      value: item.id,
+      label: item.name
+    })) : [];
+  }, [categories]);
   const handleCategoryFilterParams = useCallback((value) => {
     // use window.location.search because searchParams is not updated yet
     const currentUrlParams = new URLSearchParams(window.location.search);
@@ -83,8 +103,14 @@ const useSearch = props => {
       currentUrlParams.delete('category');
       setSearchParams(currentUrlParams);
       setShouldPinCategoryFilter(false);
+      return;
     }
-  }, [])
+    // get category name from categoryOptions following the value
+    const categoryNames = value.map((val) => categoriesOptions.find(item => item.value === val)?.label);
+
+    currentUrlParams.set('category', categoryNames.join(','));
+    setSearchParams(currentUrlParams);
+  }, [categoriesOptions])
   const handleCategoryFilterChange = useCallback((value) => {
     handleCategoryFilterParams(value);
     if (onFilterChange) onFilterChange(CATEGORY_FILTER_KEY, value);
@@ -97,9 +123,7 @@ const useSearch = props => {
   }, [onFilterChange]);
 
   const [tagFilter, setTagFilter] = useState(() => {
-    return searchParams.has('tags')
-    ? [''] // Trigger tag filter
-    : [];
+    return searchParams.has('tags') ? [''] : [];
   });
   /**
    * To determine if has search tags in URL -> pin the tag filter
@@ -107,6 +131,7 @@ const useSearch = props => {
   const [shouldPinTagFilter, setShouldPinTagFilter] = useState(() => {
       return searchParams.has('tags');
     });
+  const { tagOptions } = useTags();
   const handleTagFilterParams = useCallback((value) => {
     // use window.location.search because searchParams is not updated yet
     const currentUrlParams = new URLSearchParams(window.location.search);
@@ -115,7 +140,15 @@ const useSearch = props => {
       setSearchParams(currentUrlParams);
       setShouldPinTagFilter(false);
     }
-  }, []);
+    // okay let get tag name from tag tagOptions following the value
+    const tagNames = value.map((val) => tagOptions.find(item => item.value === val)?.label);
+    console.log({ tagNames });
+    currentUrlParams.set('tags', tagNames.join(','));
+    setSearchParams(currentUrlParams);
+
+    // currentUrlParams.set('tags', value.join(','));
+    // setSearchParams(currentUrlParams);
+  }, [tagOptions]);
   const handleTagFilterChange = useCallback((value) => {
     handleTagFilterParams(value);
     if (onFilterChange) onFilterChange(TAG_FILTER_KEY, value);
@@ -142,9 +175,7 @@ const useSearch = props => {
   useEffect(() => {
     if (onSortChange) onSortChange(sortSelected);
   }, [sortSelected]);
-  const { tagOptions } = useTags();
   const { data: pricingPlans } = useQuery(PRICING_PLANS_QUERY, { fetchPolicy: "cache-and-network" });
-  const { data: categories } = useQuery(CATEGORIES_QUERY, { fetchPolicy: "cache-and-network" });
   const { data: sortOptionsdt } = useQuery(SORT_OPTIONS_QUERY, { fetchPolicy: "cache-and-network" });
   const pricingPlanOptions = useMemo(() => {
     return pricingPlans?.pricingPlans ? pricingPlans.pricingPlans.map((item) => ({
@@ -152,12 +183,7 @@ const useSearch = props => {
       label: item.name
     })) : [];
   }, [pricingPlans]);
-  const categoriesOptions = useMemo(() => {
-    return categories?.[CATEGORIES_QUERY_KEY]?.items ? categories[CATEGORIES_QUERY_KEY].items.map((item) => ({
-      value: item.id,
-      label: item.name
-    })) : [];
-  }, [categories]);
+
   const sortOptions = useMemo(() => {
     // const baseOptions = location.pathname === '/my-library' ? [] : [{
     //   label: 'None',
@@ -279,6 +305,7 @@ export default function Search({
     shouldPinTagFilter,
     shouldPinCategoryFilter,
   } = useSearch({ onFilterChange, onSortChange });
+  console.log({ search });
 
   const [selected, setSelected] = useState(0);
   const {mode, setMode} = useSetIndexFiltersMode(IndexFiltersMode.Filtering);

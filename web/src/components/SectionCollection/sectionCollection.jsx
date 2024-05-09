@@ -1,5 +1,4 @@
 import ProductList from '~/components/block/product/list';
-import Pagination from '~/components/Pagination/pagination';
 import { memo } from 'react';
 import Skeleton from '~/components/block/product/skeleton';
 
@@ -11,7 +10,6 @@ const SectionCollection = props => {
   return (
     <>
       <ProductList items={items ?? []} columns={{sm: 1, md: 2, lg: 4}} />
-      {/* <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} /> */}
     </>
   );
 };

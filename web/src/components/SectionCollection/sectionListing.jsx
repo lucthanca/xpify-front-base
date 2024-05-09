@@ -21,6 +21,7 @@ const SectionListing = props => {
     loading,
     loadingWithoutData,
   } = talonProps;
+  console.log({ sections });
   return (
     <>
       <Box padding={400}>
@@ -29,7 +30,7 @@ const SectionListing = props => {
           <Search shouldPinTagFilter={shouldPinTagFilter} onFilterChange={handleFilterChange} onSortChange={handleSortChange} />
           <BlockStack gap='400'>
             {hasFilter && (<SectionCollection loading={loadingWithoutData} items={sections} onPageChange={handlePageChange} currentPage={pageInfo?.current_page} totalPages={pageInfo?.total_pages} />)}
-            {(!hasFilter && !disableCategory && loadingWithoutData) && <CategoryCollection />}
+            {/*{(!hasFilter && !disableCategory && loadingWithoutData) && <CategoryCollection />}*/}
           </BlockStack>
         </BlockStack>
       </Box>
