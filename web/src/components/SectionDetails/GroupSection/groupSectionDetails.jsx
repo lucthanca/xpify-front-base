@@ -94,19 +94,22 @@ const GroupSectionDetails = props => {
                   />
                 }
 
-                <Card title='Information'>
-                  <Text variant="headingMd" as="h2">General information</Text>
-                  <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
-                    <BlockStack gap={200}>
-                      {groupSection?.categoriesV2?.length > 0 && (
-                        <Badges items={groupSection.categoriesV2} isSimpleSection={!groupSection?.child_ids?.length} searchKey={'category'} title={'Categories'} onClick={() => {}} />
-                      )}
-                      {groupSection?.tags?.length > 0 &&
-                        <Badges items={groupSection.tags} isSimpleSection={!groupSection?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={() => {}} />
-                      }
-                    </BlockStack>
-                  </Box>
-                </Card>
+                {(groupSection?.categoriesV2?.length || groupSection?.tags?.length)
+                  ? <Card title='Information'>
+                    <Text variant="headingMd" as="h2">General information</Text>
+                    <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
+                      <BlockStack gap={200}>
+                        {groupSection?.categoriesV2?.length > 0 && (
+                          <Badges items={groupSection.categoriesV2} isSimpleSection={!groupSection?.child_ids?.length} searchKey={'category'} title={'Categories'} onClick={() => {}} />
+                        )}
+                        {groupSection?.tags?.length > 0 &&
+                          <Badges items={groupSection.tags} isSimpleSection={!groupSection?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={() => {}} />
+                        }
+                      </BlockStack>
+                    </Box>
+                  </Card>
+                  : <></>
+                }
 
                 {groupSection.actions?.install &&
                   <Box>
@@ -146,21 +149,11 @@ const GroupSectionDetails = props => {
 
                 <RelatedProducts section={groupSection} />
 
-                {childSections.length > 0 &&
+                {
+                  childSections.length > 0 &&
+                  childSections.find(item => item.release_note) &&
                   <Box>
-                    <CollapsibleCard title={"Release Note"} childSections={childSections} />
-                    {/* <BlockStack gap='400'>
-                      <Card title="Release Note">
-                      <Text variant="headingMd" as='h2'>Release Note</Text>
-                      {childSections.map(item => (
-                        item.release_note &&
-                        <Box padding="200" key={item.id}>
-                          <Text variant="headingSm" as='h3'>{item.name}:</Text>
-                          <div dangerouslySetInnerHTML={{__html: item.release_note}}></div>
-                        </Box>
-                      ))}
-                      </Card>
-                    </BlockStack> */}
+                    <CollapsibleCard title={"Release Note"} childSections={childSections} isOpen={true} />
                   </Box>
                 }
               </BlockStack>

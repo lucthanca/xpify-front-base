@@ -64,7 +64,7 @@ function ModalInstallSection({section, fullWith = true}) {
             <Button
               onClick={talonManageProps.handleUpdate}
               variant='primary'
-              disabled={!section?.actions?.install || !talonManageProps.options.length}
+              disabled={!talonManageProps.options.length || !section?.actions?.install}
               loading={talonManageProps.dataUpdateLoading}
               fullWidth
             >

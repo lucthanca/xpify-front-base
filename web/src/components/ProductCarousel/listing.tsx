@@ -31,7 +31,9 @@ const Carousel: React.FC<CarouselProps> = (props) => {
   const options = useMemo(() => {
     const column = window.innerWidth < 425 ? 1 : 2;
     slideOptions.arrows = items && items.length > column;
-    slideOptions.type = items && items.length > column ? "loop" : "slide";
+    if (items && items.length <= column) {
+      slideOptions.type = "slide";
+    }
 
     return slideOptions;
   }, [items]);
@@ -55,6 +57,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
                     <ProductCard
                       key={item.id}
                       item={item}
+                      imgSizes="(min-width: 1024px) calc((var(--pg-layout-width-primary-max) + var(--pg-layout-width-secondary-max) + var(--pg-layout-width-inner-spacing-base)) / 2), (min-width: 450px) 50vw, 100vw"
                     />
                   </div>
                 </SplideSlide>

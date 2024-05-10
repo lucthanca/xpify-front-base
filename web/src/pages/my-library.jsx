@@ -34,7 +34,7 @@ function MyLibrary() {
       pathname: '/my-library',
       search: `?${createSearchParams({ ...Object.fromEntries(searchParams.entries()) })}`,
     };
-    navigate(nav, { replace: true });
+    navigate(nav, { replace: false });
 
     setPopoverActive(false);
   }, [selected]);

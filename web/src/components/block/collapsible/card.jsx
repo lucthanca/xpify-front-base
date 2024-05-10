@@ -13,8 +13,8 @@ import {
   CircleChevronDownIcon
 } from '@shopify/polaris-icons';
 
-function CollapsibleCard({title, content, childSections}) {
-  const [open, setOpen] = useState(false);
+function CollapsibleCard({title, content, childSections, isOpen = false}) {
+  const [open, setOpen] = useState(isOpen);
 
   const handleToggle = useCallback(() => setOpen((open) => !open), []);
 

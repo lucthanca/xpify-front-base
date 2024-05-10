@@ -60,7 +60,7 @@ function HomePage() {
 
               <Box>
                 <BlockStack gap={400}>
-                  <InlineGrid gap="400" columns={2}>
+                  <InlineGrid gap="400" columns={{ xs: 1, sm: 2 }}>
                     <NavCard
                       title='Sections'
                       content='Select your missing parts to complete your store!'

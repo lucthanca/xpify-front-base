@@ -105,7 +105,7 @@ export const useSectionCollection = () => {
         };
       }
     }
-  }, []);
+  }, [location.pathname]);
 
   const { data: sectionsData } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
@@ -252,7 +252,7 @@ export const useSectionListing = (onQueryCompleted: any) => {
     return !isEmpty(filterParts) || !!searchFilter || !isSortNone;
   }, [filterParts, searchFilter, isSortNone]);
 
-  const { data: sectionsData, loading } = useQuery(SECTIONS_QUERY, {
+  const { data: sectionsData, loading, refetch: refetchSections } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       search: searchFilter,
@@ -319,6 +319,7 @@ export const useSectionListing = (onQueryCompleted: any) => {
   return {
     handleFilterChange,
     sections,
+    refetchSections,
     hasFilter,
     handleSortChange,
     pageInfo,
