@@ -18,5 +18,5 @@ location /graphql {
     proxy_busy_buffers_size             256k;
     fastcgi_buffer_size                 32k;
     fastcgi_buffers                     4 32k;
-    proxy_set_header X-Xpify-App-Token	'bearer app_token';
+    proxy_set_header X-Xpify-App-Token	'app_token';
 }

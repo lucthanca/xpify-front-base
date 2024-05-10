@@ -261,7 +261,7 @@ export const useSectionListing = (onQueryCompleted: any) => {
         type_id: information.sectionType,
         owned: information.isOwned
       },
-      sort: !isSortNone ? (([column, order]) => ({ column, order }))(sort[0].split(' ')) : {},
+      sort: (([column, order]) => ({ column, order }))(sort[0].split(' ')),
       pageSize: 12,
       currentPage: currentPage
     },
@@ -271,7 +271,7 @@ export const useSectionListing = (onQueryCompleted: any) => {
         onQueryCompleted(data?.[QUERY_SECTION_COLLECTION_KEY]);
       }
     },
-    skip: !hasFilter,
+    // skip: !hasFilter,
   });
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);

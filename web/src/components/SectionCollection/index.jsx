@@ -8,6 +8,7 @@ import { useSectionCollection } from '~/talons/section/useSectionCollection';
 import BestSeller from '~/components/BestSellers';
 import CategoryCollection from '~/components/SectionCollection/categoryCollection';
 import { ComplexSectionCollectionProvider, ListingProvider } from '~/context';
+import SectionListingV2 from '~/components/SectionCollection/listingV2';
 import SectionListing from '~/components/SectionCollection/sectionListing';
 
 const SectionCollection = props => {
@@ -113,7 +114,7 @@ const SectionCollectionV3 = () => {
     <ListingProvider>
       <Layout.Section>
         <Card padding='0'>
-          <SectionListing />
+          <SectionListingV2 />
         </Card>
       </Layout.Section>
     </ListingProvider>

@@ -22,6 +22,7 @@ const SectionListing = props => {
     loading,
     loadingWithoutData,
   } = talonProps;
+  console.log({ sections });
   return (
     <>
       <Box padding={400}>

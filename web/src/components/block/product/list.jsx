@@ -9,10 +9,10 @@ import InstallModal from '~/components/block/product/installModal';
 function ProductList({ items, refetch, columns }) {
   console.log('re-render-productList');
 
-  const keys = useMemo(() => {
-    if (!items.length) return [];
-    return items.map(item => item.url_key);
-  }, [items]);
+  // const keys = useMemo(() => {
+  //   if (!items.length) return [];
+  //   return items.map(item => item.url_key);
+  // }, [items]);
   if (!items.length) {
     return <EmptySections heading={'No result'} content={'Try changing the filters or search term.'} />;
   }
@@ -23,8 +23,7 @@ function ProductList({ items, refetch, columns }) {
         {items.map(item => (
           <ProductCard key={item.id} item={item} />
         ))}
-
-        <QuickViewSlider keys={keys} refetch={refetch} />
+        <QuickViewSlider keys={keys} refetch={refetch} type={'normal'} />
         <InstallModal refetch={refetch} />
       </InlineGrid>
     </SectionListProvider>

@@ -31,7 +31,7 @@ const ModalContent = props => {
 };
 
 const QuickViewModalSlider = props => {
-  const { keys, onIndexChange, refetch = () => {} } = props;
+  const { keys, onIndexChange, type = 'slider', refetch = () => {} } = props;
   const { activeSection, show, onCloseQuickViewModal } = useQuickViewSlider();
   const handleClose = useCallback(() => {
     onCloseQuickViewModal();
@@ -40,6 +40,15 @@ const QuickViewModalSlider = props => {
       refetch();
     }
   }, []);
+
+  if (type === 'normal') {
+    const shouldLoad = !!activeSection?.url_key;
+    return (
+      <Modal size='large' open={show} onClose={onCloseQuickViewModal} title={activeSection?.name ?? 'Loading...'} noScroll>
+        <SliderItem url_key={activeSection && activeSection.url_key} shouldLoad={shouldLoad} onClose={onCloseQuickViewModal} />
+      </Modal>
+    );
+  }
 
   return (
     <Modal size='large' open={show} onClose={handleClose} title={activeSection?.name ?? 'Loading...'} noScroll>

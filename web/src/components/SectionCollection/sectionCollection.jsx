@@ -1,5 +1,4 @@
 import ProductList from '~/components/block/product/list';
-import Pagination from '~/components/Pagination/pagination';
 import { memo } from 'react';
 import Skeleton from '~/components/block/product/skeleton';
 
