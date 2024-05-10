@@ -31,7 +31,9 @@ const Carousel: React.FC<CarouselProps> = (props) => {
   const options = useMemo(() => {
     const column = window.innerWidth < 425 ? 1 : 2;
     slideOptions.arrows = items && items.length > column;
-    slideOptions.type = items && items.length > column ? "loop" : "slide";
+    if (items && items.length <= column) {
+      slideOptions.type = "slide";
+    }
 
     return slideOptions;
   }, [items]);

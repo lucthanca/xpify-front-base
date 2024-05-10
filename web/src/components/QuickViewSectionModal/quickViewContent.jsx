@@ -51,10 +51,10 @@ const LazyQuickViewContent = props => {
     );
   }
   return (
-    <Scrollable className='quickViewModal__scrollable__content px-2 pl-4 pb-4'>
+    <Scrollable className='quickViewModal__scrollable__content px-2 pl-4 pb-4 py-4'>
       <InlineGrid columns={{ sm: 1, md: ['twoThirds', 'oneThird'] }} gap='400'>
-        <div className='h-full py-4'>
-          <div className='sticky top-4'>
+        <div className='h-full'>
+          <div className='sticky top-0'>
             <BlockStack gap={400}>
               <Card title='Gallery' padding='0'>
                 <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee] sticky'>
@@ -64,7 +64,7 @@ const LazyQuickViewContent = props => {
             </BlockStack>
           </div>
         </div>
-        <div className='py-4'>
+        <div>
           <BlockStack gap='400'>
             <Card title='Infomation'>
               <BlockStack gap='200'>

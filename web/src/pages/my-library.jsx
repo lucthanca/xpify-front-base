@@ -26,7 +26,7 @@ function MyLibrary() {
       pathname: '/my-library',
       search: `?${createSearchParams({type: selected})}`,
     };
-    navigate(nav, { replace: true });
+    navigate(nav, { replace: false });
 
     if (selected == defaultSelected) {
       setPageActive(<SectionCollection />);

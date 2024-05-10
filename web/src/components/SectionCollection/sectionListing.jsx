@@ -13,6 +13,7 @@ const SectionListing = props => {
   const {
     handleFilterChange,
     sections,
+    refetchSections,
     hasFilter,
     shouldPinTagFilter,
     handleSortChange,
@@ -28,7 +29,7 @@ const SectionListing = props => {
         <BlockStack gap='400'>
           <Search shouldPinTagFilter={shouldPinTagFilter} onFilterChange={handleFilterChange} onSortChange={handleSortChange} />
           <BlockStack gap='400'>
-            {hasFilter && (<SectionCollection loading={loadingWithoutData} items={sections} onPageChange={handlePageChange} currentPage={pageInfo?.current_page} totalPages={pageInfo?.total_pages} />)}
+            {hasFilter && (<SectionCollection loading={loadingWithoutData} items={sections} refetch={refetchSections} onPageChange={handlePageChange} currentPage={pageInfo?.current_page} totalPages={pageInfo?.total_pages} />)}
             {(!hasFilter && !disableCategory && loadingWithoutData) && <CategoryCollection />}
           </BlockStack>
         </BlockStack>

@@ -8,7 +8,7 @@ import { useSectionCollection } from '~/talons/section/useSectionCollection';
 import BestSeller from '~/components/BestSellers';
 import CategoryCollection from '~/components/SectionCollection/categoryCollection';
 import { ComplexSectionCollectionProvider, ListingProvider } from '~/context';
-import SectionListing from '~/components/SectionCollection/listingV2';
+import SectionListing from '~/components/SectionCollection/sectionListing';
 
 const SectionCollection = props => {
   const {
@@ -120,4 +120,4 @@ const SectionCollectionV3 = () => {
   );
 };
 
-export default memo(SectionCollectionV3);
+export default memo(SectionCollectionV2);

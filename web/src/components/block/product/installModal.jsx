@@ -7,13 +7,17 @@ import { useCallback, useState } from 'react';
 import { useManage } from '~/talons/section/useManage';
 import ThemeList from './themeList';
 
-const useInstallModal = () => {
+const useInstallModal = (refetch) => {
   const [{ activeSection, modal }, { setActiveSection, setModalLoading, setModal }] = useSectionListContext();
   const show = !!activeSection && modal === 'install';
   const handleCloseModal = useCallback(() => {
     setModalLoading(false);
     setActiveSection(null);
     setModal(null);
+    // Reload item sau khi uninstall khỏi toàn bộ theme và sau khi đóng popup
+    if (location.pathname === '/my-library') {
+      refetch();
+    }
   }, []);
   return {
     show,
@@ -23,10 +27,11 @@ const useInstallModal = () => {
 };
 
 const InstallModal = props => {
-  const talonProps = useInstallModal();
+  const { refetch = () => {} } = props;
+  const talonProps = useInstallModal(refetch);
   const { show, handleCloseModal, activeSection } = talonProps;
   const sectionTalonProps = useSection({ key: activeSection?.url_key });
-  const { section } = sectionTalonProps;
+  const { section, loadingWithoutData } = sectionTalonProps;
   const talonManageProps = useManage({ section: section });
   const [isShowConfirm, setIsShowConfirm] = useState(false);
   const [confirmAction, setConfirmAction] = useState(() => {});
@@ -45,8 +50,8 @@ const InstallModal = props => {
       onClose={handleCloseModal}
       title={`Install "${activeSection?.name ?? 'section'}" to theme`}
       primaryAction={{
-        content: talonManageProps.installed ? 'Reinstall to theme' : 'Install to theme',
-        disabled: !section?.actions?.install || !talonManageProps.options.length,
+        content: (!loadingWithoutData && talonManageProps.installed) ? 'Reinstall to theme' : 'Install to theme',
+        disabled: loadingWithoutData || !talonManageProps.options.length || !section?.actions?.install,
         loading: talonManageProps.dataUpdateLoading,
         onAction: talonManageProps.handleUpdate
       }}
@@ -54,7 +59,7 @@ const InstallModal = props => {
         {
           destructive: true,
           content: 'Delete from theme',
-          disabled: section?.installed ? !talonManageProps.installed : true,
+          disabled: loadingWithoutData || (section?.installed ? !talonManageProps.installed : true),
           loading: talonManageProps.dataDeleteLoading,
           onAction: confirmDelete
         },
