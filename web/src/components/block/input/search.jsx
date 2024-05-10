@@ -449,6 +449,7 @@ export default function Search({
       mode={mode}
       setMode={setMode}
       isFlushWhenSticky={true}
+      autoFocusSearchField={false}
     />
   );
 }
