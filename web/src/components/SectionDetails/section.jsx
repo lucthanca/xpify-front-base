@@ -106,7 +106,7 @@ const SectionFullpageDetails = props => {
 
               {(section.version || section?.categoriesV2?.length || section?.tags?.length)
                 ? <Card title='Information'>
-                  <Text variant="headingMd" as="h2">General information</Text>
+                  <Text variant="headingMd" as="h2">General Information</Text>
                   <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
                     <BlockStack gap={200}>
                       <Text variant='bodySm' as='p'>
@@ -156,13 +156,20 @@ const SectionFullpageDetails = props => {
                 <DocInstall />
               </Box>
 
-              <RelatedProducts section={section} />
-
               {section.release_note && (
-                <Box>
-                  <CollapsibleCard title={"Release Note"} content={section.release_note} isOpen={true} />
-                </Box>
+                <Card title='Release Note'>
+                  <Text variant="headingMd" as="h2">Release Note</Text>
+                  <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
+                    <Box paddingInline={200}>
+                      <Text as="div" variant="bodyMd">
+                        <div dangerouslySetInnerHTML={{__html: section.release_note}}></div>
+                      </Text>
+                    </Box>
+                  </Box>
+                </Card>
               )}
+
+              <RelatedProducts section={section} />
             </BlockStack>
           </Layout.Section>
         </Layout>
