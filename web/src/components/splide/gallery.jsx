@@ -3,7 +3,7 @@ import {
   SplideSlide
 } from '@splidejs/react-splide';
 
-export default function GallerySlider({gallery}) {
+export default function GallerySlider({gallery, imgSizes = '(min-width: 950px) 950px, 100vw'}) {
   return (
     <Splide
       options={{
@@ -17,7 +17,12 @@ export default function GallerySlider({gallery}) {
       {
         gallery.map(slide => (
           <SplideSlide className='splide-gallery-li' key={ slide.src }>
-            <img loading='lazy' src={ slide.src } />
+            <img
+              loading='lazy'
+              src={ slide.src }
+              srcSet={ slide.srcset }
+              sizes={imgSizes}
+            />
           </SplideSlide>
         ))
       }
