@@ -104,22 +104,25 @@ const SectionFullpageDetails = props => {
                 />
               }
 
-              <Card title='Information'>
-                <Text variant="headingMd" as="h2">General information</Text>
-                <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
-                  <BlockStack gap={200}>
-                    <Text variant='bodySm' as='p'>
-                      Version: {section.version}
-                    </Text>
-                    {section?.categoriesV2?.length > 0 && (
-                      <Badges items={section.categoriesV2} isSimpleSection={!section?.child_ids?.length} searchKey={'category'} title={'Categories'} onClick={() => {}} />
-                    )}
-                    {section?.tags?.length > 0 &&
-                      <Badges items={section.tags} isSimpleSection={!section?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={() => {}} />
-                    }
-                  </BlockStack>
-                </Box>
-              </Card>
+              {(section.version || section?.categoriesV2?.length || section?.tags?.length)
+                ? <Card title='Information'>
+                  <Text variant="headingMd" as="h2">General information</Text>
+                  <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
+                    <BlockStack gap={200}>
+                      <Text variant='bodySm' as='p'>
+                        Version: {section.version}
+                      </Text>
+                      {section?.categoriesV2?.length > 0 && (
+                        <Badges items={section.categoriesV2} isSimpleSection={!section?.child_ids?.length} searchKey={'category'} title={'Categories'} onClick={() => {}} />
+                      )}
+                      {section?.tags?.length > 0 &&
+                        <Badges items={section.tags} isSimpleSection={!section?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={() => {}} />
+                      }
+                    </BlockStack>
+                  </Box>
+                </Card>
+                : <></>
+              }
 
               {section.actions?.install && 
                 <Box>
@@ -157,7 +160,7 @@ const SectionFullpageDetails = props => {
 
               {section.release_note && (
                 <Box>
-                  <CollapsibleCard title={"Release Note"} content={section.release_note} />
+                  <CollapsibleCard title={"Release Note"} content={section.release_note} isOpen={true} />
                 </Box>
               )}
             </BlockStack>

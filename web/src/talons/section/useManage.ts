@@ -88,10 +88,6 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
       } else {
         return '';
       }
-    } else {
-      if (parent?.child_ids) {
-        return {message: `Add ${item.name} v${item.version}`};
-      }
     }
     return '';
   }, []);
@@ -149,10 +145,10 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     return result.filter((item: any) => item?.value);
   }, [section, themes, childSections]);
   useMemo(() => {
-    if (themes && themes.length && options.length) {
+    if (themes && themes.length && section?.entity_id) {
       setSelected(themes[0]['id'] ?? "");
     }
-  }, [themes, options]);
+  }, [themes, section?.entity_id]);
   const installed = useMemo(() => {
     setBannerAlert(undefined);
     if (!section?.installed) {
@@ -171,8 +167,20 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
       content = content.filter((item: any) => item !== undefined);
       const contentUpdate = content.filter((item: any) => item !== "");
       if (contentUpdate.length) {
+        let title = "";
+        if (childSections.length) {
+          if (contentUpdate.length > 1) {
+            title = "You should reinstall this group to update these sections to the latest version";
+          } else {
+            title = "You should reinstall this group to update this section to the latest version";
+          }
+          
+        } else {
+          title = "You should reinstall this section to the latest version";
+        }
+
         setBannerAlert({
-          'title': 'You should update this section to the latest version!',
+          'title': title,
           'tone': 'info',
           'content': contentUpdate
         });
@@ -193,7 +201,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         key: section?.url_key
       }
     });
-  }, [selected]);
+  }, [selected, section?.entity_id]);
   const handleDelete = useCallback(async () => {
     await deleteAction({
       variables: {
@@ -206,7 +214,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     } else {
       toast.show('Deleted fail', { isError: true });
     }
-  }, [selected]);
+  }, [selected, section?.entity_id]);
 
   const currentThemeSelected = useMemo(() => {
     return themes.find((item: any) => item.id == selected);
@@ -219,7 +227,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
       if (updateSuccess.length) {
         setBannerAlert({
           'urlSuccessEditTheme': urlEditTheme,
-          'isSimple': false,
+          'isSimple': !section?.child_ids?.length,
           'tone': 'success'
         });
       } else {

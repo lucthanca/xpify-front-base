@@ -11,7 +11,6 @@ const CommonSectionField = gql`
     short_description
     description
     demo_link
-    thumbnail
     images { src srcset }
     type_id
     categoriesV2 {
