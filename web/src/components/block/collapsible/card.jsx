@@ -45,13 +45,6 @@ function CollapsibleCard({title, content, childSections, isOpen = false}) {
                 </Text>
               </Box>
             }
-            {childSections && childSections.map(item => (
-              item.release_note &&
-              <Box padding="200" key={item.id}>
-                <Text variant="headingSm" as='h3'>{item.name}:</Text>
-                <div dangerouslySetInnerHTML={{__html: item.release_note}}></div>
-              </Box>
-            ))}
           </Collapsible>
         </Box>
       </InlineStack>

@@ -96,7 +96,7 @@ const GroupSectionDetails = props => {
 
                 {(groupSection?.categoriesV2?.length || groupSection?.tags?.length)
                   ? <Card title='Information'>
-                    <Text variant="headingMd" as="h2">General information</Text>
+                    <Text variant="headingMd" as="h2">General Information</Text>
                     <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
                       <BlockStack gap={200}>
                         {groupSection?.categoriesV2?.length > 0 && (
@@ -147,15 +147,28 @@ const GroupSectionDetails = props => {
                   <DocInstall />
                 </Box>
 
-                <RelatedProducts section={groupSection} />
-
                 {
                   childSections.length > 0 &&
-                  childSections.find(item => item.release_note) &&
-                  <Box>
-                    <CollapsibleCard title={"Release Note"} childSections={childSections} isOpen={true} />
-                  </Box>
+                  childSections.some(item => item.release_note) &&
+                  <Card title='Release Note'>
+                    <Text variant="headingMd" as="h2">Release Note</Text>
+                    <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
+                      {childSections && childSections.map(item => (
+                        item.release_note &&
+                        <Box key={item.id}>
+                          <Text variant="headingSm" as='h3'>{item.name}:</Text>
+                          <Box paddingInline={200}>
+                            <Text as="div" variant="bodyMd">
+                              <div dangerouslySetInnerHTML={{__html: item.release_note}}></div>
+                            </Text>
+                          </Box>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Card>
                 }
+
+                <RelatedProducts section={groupSection} />
               </BlockStack>
             </Box>
           </Layout.Section>
