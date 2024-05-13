@@ -218,10 +218,12 @@ export const useSectionListing = (onQueryCompleted: any) => {
   const [stateSections, setSections] = useState<SectionData[]>([]);
   const [sort, setSort] = useState([SORT_OPTION_NONE]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [information] = useState(() => {
+  const [searchParams] = useSearchParams();
+  const information = useMemo(() => {
     const currentPath = location.pathname;
     if (currentPath === '/my-library') {
-      if (location.search === '?type=group') {
+      const urlSearch = searchParams.get('type') || '';
+      if (urlSearch === 'group') {
         return {
           sectionType: productType.group,
           isOwned: true
@@ -245,7 +247,7 @@ export const useSectionListing = (onQueryCompleted: any) => {
         };
       }
     }
-  });
+  }, [searchParams]);
   const isSortNone = useMemo(() => !sort || sort[0] === SORT_OPTION_NONE, [sort]);
 
   const hasFilter = useMemo(() => {

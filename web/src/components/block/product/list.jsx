@@ -23,7 +23,7 @@ function ProductList({ items, refetch, columns }) {
         {items.map(item => (
           <ProductCard key={item.id} item={item} />
         ))}
-        <QuickViewSlider keys={keys} refetch={refetch} type={'normal'} />
+        <QuickViewSlider refetch={refetch} type={'normal'} />
         <InstallModal refetch={refetch} />
       </InlineGrid>
     </SectionListProvider>

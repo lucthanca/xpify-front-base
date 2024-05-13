@@ -40,7 +40,7 @@ function MyLibrary() {
   }, [selected]);
 
   const pageActive = useMemo(() => {
-    if (selected === 'simple') {
+    if (selected == 'simple') {
       return <SectionCollection />;
     } else {
       return <GroupCollection />;
