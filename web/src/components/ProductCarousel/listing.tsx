@@ -4,7 +4,6 @@ import { Splide, SplideSlide, Options } from '@splidejs/react-splide';
 import { SectionListProvider } from '~/context';
 import ProductCard from '~/components/block/product/card';
 import QuickViewSlider from '~/components/QuickViewSectionModal/slider';
-import type { ExtractItemsCallback } from '~/talons/carousel/useCarousel';
 import type { DocumentNode } from '@apollo/client';
 import type { OperationVariables } from '@apollo/client/core/types';
 import './style.scss';
@@ -22,16 +21,17 @@ type CarouselProps = {
   queryKey: string;
   slideOptions: Options;
   queryVariables?: OperationVariables;
-  extractItems?: ExtractItemsCallback;
   skeleton?: React.ReactNode;
   extractKeys?: (items: SectionData[]) => string[];
 };
 
 const Carousel: React.FC<CarouselProps> = (props) => {
-  const { extractKeys, title, subTitle, skeleton, query, queryKey, slideOptions, extractItems, queryVariables } = props;
-  const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractItems, extractKeys);
+  const { extractKeys, title, subTitle, skeleton, query, queryKey, slideOptions, queryVariables } = props;
+  const { items, loadingWithoutData, loading, keys } = useCarousel(query, queryKey, queryVariables, extractKeys);
   const options = useMemo(() => {
-    slideOptions.arrows = items && items.length > 2;
+    const column = window.innerWidth < 425 ? 1 : 2;
+    slideOptions.arrows = items && items.length > column;
+    slideOptions.type = items && items.length <= column ? "slide" : "loop";
 
     return slideOptions;
   }, [items]);
@@ -55,6 +55,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
                     <ProductCard
                       key={item.id}
                       item={item}
+                      imgSizes="(min-width: 1024px) calc((var(--pg-layout-width-primary-max) + var(--pg-layout-width-secondary-max) + var(--pg-layout-width-inner-spacing-base)) / 2), (min-width: 450px) 50vw, 100vw"
                     />
                   </div>
                 </SplideSlide>

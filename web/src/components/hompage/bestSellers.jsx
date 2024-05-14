@@ -13,9 +13,9 @@ const BestSellersHomepage = () => {
         425: { perPage: 1 },
         768: { perPage: 2 }
       },
-      // autoplay: true,
-      // interval: 3000,
-      // rewind: true
+      autoplay: true,
+      interval: 3000,
+      rewind: true
     };
   });
   return (

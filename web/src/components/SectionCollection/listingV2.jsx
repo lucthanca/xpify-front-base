@@ -20,7 +20,7 @@ const ListingV2 = () => {
           <CollectionV3 />
         </BlockStack>
 
-        <QuickViewSlider keys={keys} onIndexChange={handleSlideMove} />
+        <QuickViewSlider keys={keys} onIndexChange={handleSlideMove} type='normal' />
       </Box>
 
       <Pagination onPageChange={setDisplayPage} currentPage={displayPage} totalPages={pageInfo?.total_pages} />

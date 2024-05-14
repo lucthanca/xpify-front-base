@@ -18,7 +18,7 @@ export function AppBridgeProvider({ children }) {
   const history = useMemo(
     () => ({
       replace: (path) => {
-        navigate(path, { replace: true });
+        navigate(path, { replace: false });
       },
     }),
     [navigate]

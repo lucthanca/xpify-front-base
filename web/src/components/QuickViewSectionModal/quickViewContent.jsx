@@ -51,20 +51,20 @@ const LazyQuickViewContent = props => {
     );
   }
   return (
-    <Scrollable className='quickViewModal__scrollable__content px-2 pl-4 pb-4'>
+    <Scrollable className='quickViewModal__scrollable__content px-2 pl-4 pb-4 py-4'>
       <InlineGrid columns={{ sm: 1, md: ['twoThirds', 'oneThird'] }} gap='400'>
-        <div className='h-full py-4'>
-          <div className='sticky top-4'>
+        <div className='h-full'>
+          <div className='sticky top-0'>
             <BlockStack gap={400}>
               <Card title='Gallery' padding='0'>
                 <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee] sticky'>
-                  <GallerySlider gallery={section.images} />
+                  <GallerySlider gallery={section.images} imgSizes="(min-width: 768px) calc((90vw - 1rem) * 2/3), 100vw" />
                 </div>
               </Card>
             </BlockStack>
           </div>
         </div>
-        <div className='py-4'>
+        <div>
           <BlockStack gap='400'>
             <Card title='Infomation'>
               <BlockStack gap='200'>
@@ -81,10 +81,10 @@ const LazyQuickViewContent = props => {
                   Version: {section.version}
                 </Text>
                 {section?.categoriesV2?.length > 0 && (
-                  <Badges items={section.categoriesV2} searchKey={'category'} title={'Categories'} onClick={onClose} />
+                  <Badges items={section.categoriesV2} isSimpleSection={!section?.child_ids?.length} searchKey={'category'} title={'Categories'} onClick={onClose} />
                 )}
                 {section?.tags?.length > 0 &&
-                  <Badges items={section.tags} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={onClose} />
+                  <Badges items={section.tags} isSimpleSection={!section?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={onClose} />
                 }
 
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />

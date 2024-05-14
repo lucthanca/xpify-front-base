@@ -69,6 +69,14 @@ export default defineConfig(async ({ mode }) => {
     },
     build: {
       minify: 'terser',
+      terserOptions: {
+        compress: {
+          warnings: false,
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log'],
+        },
+      },
     },
     optimizeDeps: {
       force: true,
@@ -79,6 +87,8 @@ export default defineConfig(async ({ mode }) => {
       hmr: hmrConfig,
       headers: {
         'cache-control': 'no-cache, no-store, must-revalidate',
+        'Content-Security-Policy': "frame-ancestors 'self' https: admin.shopify.com;",
+        'X-Frame-Options': 'allow-from https://admin.shopify.com',
       },
       proxy: {
         '^/api(/|(\\?.*)?$)': proxyOptions,

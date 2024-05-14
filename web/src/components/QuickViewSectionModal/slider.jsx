@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import SliderItem from '~/components/QuickViewSectionModal/sliderItem';
 import { Modal } from '@shopify/polaris';
@@ -31,12 +31,28 @@ const ModalContent = props => {
 };
 
 const QuickViewModalSlider = props => {
-  const { keys, onIndexChange } = props;
+  const { keys, onIndexChange, type = 'slider', refetch = () => {} } = props;
   const { activeSection, show, onCloseQuickViewModal } = useQuickViewSlider();
+  const handleClose = useCallback(() => {
+    onCloseQuickViewModal();
+    // Reload item sau khi uninstall khỏi toàn bộ theme và sau khi đóng popup
+    if (location.pathname === '/my-library') {
+      refetch();
+    }
+  }, []);
+
+  if (type === 'normal') {
+    const shouldLoad = !!activeSection?.url_key;
+    return (
+      <Modal size='large' open={show} onClose={handleClose} title={activeSection?.name ?? 'Loading...'} noScroll>
+        <SliderItem url_key={activeSection && activeSection.url_key} shouldLoad={shouldLoad} onClose={handleClose} />
+      </Modal>
+    );
+  }
 
   return (
-    <Modal size='large' open={show} onClose={onCloseQuickViewModal} title={activeSection?.name ?? 'Loading...'} noScroll>
-      <ModalContent keys={keys} onClose={onCloseQuickViewModal} onIndexChange={onIndexChange}/>
+    <Modal size='large' open={show} onClose={handleClose} title={activeSection?.name ?? 'Loading...'} noScroll>
+      <ModalContent keys={keys} onClose={handleClose} onIndexChange={onIndexChange}/>
     </Modal>
   );
 };
@@ -44,6 +60,7 @@ const QuickViewModalSlider = props => {
 QuickViewModalSlider.propTypes = {
   keys: PropTypes.array,
   onSlideMoved: PropTypes.func,
+  refetch: PropTypes.func,
 };
 
 export default memo(QuickViewModalSlider);

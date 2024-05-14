@@ -105,7 +105,7 @@ export const useSectionCollection = () => {
         };
       }
     }
-  }, []);
+  }, [location.pathname]);
 
   const { data: sectionsData } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
@@ -218,10 +218,12 @@ export const useSectionListing = (onQueryCompleted: any) => {
   const [stateSections, setSections] = useState<SectionData[]>([]);
   const [sort, setSort] = useState([SORT_OPTION_NONE]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [information] = useState(() => {
+  const [searchParams] = useSearchParams();
+  const information = useMemo(() => {
     const currentPath = location.pathname;
     if (currentPath === '/my-library') {
-      if (location.search === '?type=group') {
+      const urlSearch = searchParams.get('type') || '';
+      if (urlSearch === 'group') {
         return {
           sectionType: productType.group,
           isOwned: true
@@ -245,14 +247,14 @@ export const useSectionListing = (onQueryCompleted: any) => {
         };
       }
     }
-  });
+  }, [searchParams]);
   const isSortNone = useMemo(() => !sort || sort[0] === SORT_OPTION_NONE, [sort]);
 
   const hasFilter = useMemo(() => {
     return !isEmpty(filterParts) || !!searchFilter || !isSortNone;
   }, [filterParts, searchFilter, isSortNone]);
 
-  const { data: sectionsData, loading } = useQuery(SECTIONS_QUERY, {
+  const { data: sectionsData, loading, refetch: refetchSections } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       search: searchFilter,
@@ -261,7 +263,7 @@ export const useSectionListing = (onQueryCompleted: any) => {
         type_id: information.sectionType,
         owned: information.isOwned
       },
-      sort: !isSortNone ? (([column, order]) => ({ column, order }))(sort[0].split(' ')) : {},
+      sort: (([column, order]) => ({ column, order }))(sort[0].split(' ')),
       pageSize: 12,
       currentPage: currentPage
     },
@@ -271,7 +273,7 @@ export const useSectionListing = (onQueryCompleted: any) => {
         onQueryCompleted(data?.[QUERY_SECTION_COLLECTION_KEY]);
       }
     },
-    skip: !hasFilter,
+    // skip: !hasFilter,
   });
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
@@ -319,6 +321,7 @@ export const useSectionListing = (onQueryCompleted: any) => {
   return {
     handleFilterChange,
     sections,
+    refetchSections,
     hasFilter,
     handleSortChange,
     pageInfo,

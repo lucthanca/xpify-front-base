@@ -60,7 +60,7 @@ function HomePage() {
 
               <Box>
                 <BlockStack gap={400}>
-                  <InlineGrid gap="400" columns={2}>
+                  <InlineGrid gap="400" columns={{ xs: 1, sm: 2 }}>
                     <NavCard
                       title='Sections'
                       content='Select your missing parts to complete your store!'
@@ -77,9 +77,9 @@ function HomePage() {
                       actions={<Button onClick={handleRedirectMyLibraryPage}>My Library</Button>}
                     />
                     <NavCard
-                      title='Help Center'
+                      title='Support'
                       content='Need a helping hand? Check our FAQs or chat directly with our support agents for quick and friendly support.'
-                      actions={<Button onClick={openChat}>Help Center</Button>}
+                      actions={<Button onClick={openChat}>Open live chat</Button>}
                     />
                   </InlineGrid>
                 </BlockStack>

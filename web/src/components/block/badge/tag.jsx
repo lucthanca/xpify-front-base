@@ -10,7 +10,7 @@ const BadgeTag = React.memo(({tag, isSimpleSection, afterClick}) => {
       pathname: isSimpleSection ? '/sections' : '/groups',
       search: `?${createSearchParams({tags: tag.name})}`,
     };
-    navigate(nav, { replace: true });
+    navigate(nav, { replace: false });
     afterClick();
   }, [tag]);
   return (

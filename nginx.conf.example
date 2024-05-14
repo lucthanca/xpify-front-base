@@ -1,3 +1,8 @@
+
+# allow csp for admin.shopify.com
+location / {
+    add_header Content-Security-Policy "frame-ancestors https: admin.shopify.com";
+}
 location /graphql {
     proxy_pass http://example.com:8080;
     proxy_set_header Host               $http_host;

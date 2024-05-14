@@ -5,7 +5,7 @@ import Footer from '~/components/block/footer';
 
 function GroupsPage() {
   return (
-    <Page fullWidth>
+    <Page title="Section groups" fullWidth>
       <Layout>
         <GroupCollection />
       </Layout>

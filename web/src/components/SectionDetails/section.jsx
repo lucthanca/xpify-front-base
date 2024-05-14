@@ -79,23 +79,6 @@ const SectionFullpageDetails = props => {
         <Layout>
           <Layout.Section>
             <BlockStack gap='400'>
-              <Card title='Information'>
-                <Text variant="headingMd" as="h2">General information</Text>
-                <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
-                  <BlockStack gap={200}>
-                    <Text variant='bodySm' as='p'>
-                      Version: {section.version}
-                    </Text>
-                    {section?.categoriesV2?.length > 0 && (
-                      <Badges items={section.categoriesV2} searchKey={'category'} title={'Categories'} onClick={() => {}} />
-                    )}
-                    {section?.tags?.length > 0 &&
-                      <Badges items={section.tags} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={() => {}} />
-                    }
-                  </BlockStack>
-                </Box>
-              </Card>
-
               {
                 (!section.actions?.install) &&
                 <BannerWarningNotPurchase
@@ -119,6 +102,26 @@ const SectionFullpageDetails = props => {
                     }
                   }
                 />
+              }
+
+              {(section.version || section?.categoriesV2?.length || section?.tags?.length)
+                ? <Card title='Information'>
+                  <Text variant="headingMd" as="h2">General Information</Text>
+                  <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
+                    <BlockStack gap={200}>
+                      <Text variant='bodySm' as='p'>
+                        Version: {section.version}
+                      </Text>
+                      {section?.categoriesV2?.length > 0 && (
+                        <Badges items={section.categoriesV2} isSimpleSection={!section?.child_ids?.length} searchKey={'category'} title={'Categories'} onClick={() => {}} />
+                      )}
+                      {section?.tags?.length > 0 &&
+                        <Badges items={section.tags} isSimpleSection={!section?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} onClick={() => {}} />
+                      }
+                    </BlockStack>
+                  </Box>
+                </Card>
+                : <></>
               }
 
               {section.actions?.install && 
@@ -153,13 +156,20 @@ const SectionFullpageDetails = props => {
                 <DocInstall />
               </Box>
 
-              <RelatedProducts section={section} />
-
               {section.release_note && (
-                <Box>
-                  <CollapsibleCard title={"Release Note"} content={section.release_note} />
-                </Box>
+                <Card title='Release Note'>
+                  <Text variant="headingMd" as="h2">Release Note</Text>
+                  <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
+                    <Box paddingInline={200}>
+                      <Text as="div" variant="bodyMd">
+                        <div dangerouslySetInnerHTML={{__html: section.release_note}}></div>
+                      </Text>
+                    </Box>
+                  </Box>
+                </Card>
               )}
+
+              <RelatedProducts section={section} />
             </BlockStack>
           </Layout.Section>
         </Layout>
