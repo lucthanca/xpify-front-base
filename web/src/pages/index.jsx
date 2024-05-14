@@ -90,7 +90,7 @@ function HomePage() {
             </BlockStack>
           </Layout.Section>
         </Layout>
-        <Footer />
+        <Footer hasCaughtUp={true} />
       </Page>
     </>
   )

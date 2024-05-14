@@ -124,7 +124,7 @@ const SectionFullpageDetails = props => {
                 : <></>
               }
 
-              {section.actions?.install && 
+              {section.actions?.install &&
                 <Box>
                   <ModalInstallSection section={section} fullWith={false} />
                 </Box>
@@ -155,26 +155,18 @@ const SectionFullpageDetails = props => {
               <Box>
                 <DocInstall />
               </Box>
+              <RelatedProducts section={section} />
 
               {section.release_note && (
-                <Card title='Release Note'>
-                  <Text variant="headingMd" as="h2">Release Note</Text>
-                  <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
-                    <Box paddingInline={200}>
-                      <Text as="div" variant="bodyMd">
-                        <div dangerouslySetInnerHTML={{__html: section.release_note}}></div>
-                      </Text>
-                    </Box>
-                  </Box>
-                </Card>
+                <Box>
+                  <CollapsibleCard title='Release Note' content={section.release_note} isOpen={true}/>
+                </Box>
               )}
-
-              <RelatedProducts section={section} />
             </BlockStack>
           </Layout.Section>
         </Layout>
 
-        <Footer />
+        <Footer hasCaughtUp={true} />
       </Page>
     </>
   );

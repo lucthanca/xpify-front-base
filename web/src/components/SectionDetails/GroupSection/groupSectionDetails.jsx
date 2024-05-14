@@ -147,34 +147,34 @@ const GroupSectionDetails = props => {
                   <DocInstall />
                 </Box>
 
+                <RelatedProducts section={groupSection} />
+
                 {
                   childSections.length > 0 &&
-                  childSections.some(item => item.release_note) &&
-                  <Card title='Release Note'>
-                    <Text variant="headingMd" as="h2">Release Note</Text>
-                    <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
-                      {childSections && childSections.map(item => (
-                        item.release_note &&
-                        <Box key={item.id}>
-                          <Text variant="headingSm" as='h3'>{item.name}:</Text>
-                          <Box paddingInline={200}>
-                            <Text as="div" variant="bodyMd">
-                              <div dangerouslySetInnerHTML={{__html: item.release_note}}></div>
-                            </Text>
+                  childSections.some(item => item.release_note) && (
+                    <CollapsibleCard title='Release Note' content={
+                      <Box paddingInlineStart={200} paddingBlockStart="200" as='div'>
+                        {childSections.map(item => (
+                          item.release_note &&
+                          <Box key={item.id}>
+                            <Text variant="headingSm" as='h3'>{item.name}:</Text>
+                            <Box paddingInline={200}>
+                              <Text as="div" variant="bodyMd">
+                                <div dangerouslySetInnerHTML={{__html: item.release_note}}></div>
+                              </Text>
+                            </Box>
                           </Box>
-                        </Box>
-                      ))}
-                    </Box>
-                  </Card>
+                        ))}
+                      </Box>
+                    } isOpen={true} isJsx={true}/>
+                  )
                 }
-
-                <RelatedProducts section={groupSection} />
               </BlockStack>
             </Box>
           </Layout.Section>
         </Layout>
 
-        <Footer />
+        <Footer hasCaughtUp={true} />
       </Page>
     </>
   );

@@ -1,4 +1,4 @@
-import { useState, useCallback, memo } from 'react';
+import { useState, useCallback, memo, useMemo } from 'react';
 import {
   Card,
   Text,
@@ -13,10 +13,16 @@ import {
   CircleChevronDownIcon
 } from '@shopify/polaris-icons';
 
-function CollapsibleCard({title, content, childSections, isOpen = false}) {
+function CollapsibleCard({title, content: propContent, childSections, isOpen = false, isJsx = false}) {
   const [open, setOpen] = useState(isOpen);
 
   const handleToggle = useCallback(() => setOpen((open) => !open), []);
+  const content = useMemo(() => {
+    if (!isJsx) return (
+      <div dangerouslySetInnerHTML={{__html: propContent}}></div>
+    );
+    return propContent;
+  }, [isJsx, propContent]);
 
   return (
     <Card>
@@ -41,7 +47,7 @@ function CollapsibleCard({title, content, childSections, isOpen = false}) {
             {content &&
               <Box paddingInline={200}>
                 <Text as="div" variant="bodyMd">
-                  <div dangerouslySetInnerHTML={{__html: content}}></div>
+                  {content}
                 </Text>
               </Box>
             }
