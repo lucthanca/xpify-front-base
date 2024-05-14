@@ -58,6 +58,9 @@ const useSearch = props => {
   }, [lazyCallback]);
   const handleSearchFilterRemove = useCallback(() => {
     if (onFilterChange) onFilterChange(QUERY_SEARCH_KEY, undefined);
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    currentUrlParams.delete('search');
+    setSearchParams(currentUrlParams);
     setSearch(undefined);
   }, [onFilterChange]);
 
@@ -139,10 +142,10 @@ const useSearch = props => {
       currentUrlParams.delete('tags');
       setSearchParams(currentUrlParams);
       setShouldPinTagFilter(false);
+      return;
     }
     // okay let get tag name from tag tagOptions following the value
     const tagNames = value.map((val) => tagOptions.find(item => item.value === val)?.label);
-    console.log({ tagNames });
     currentUrlParams.set('tags', tagNames.join(','));
     setSearchParams(currentUrlParams);
 
@@ -166,14 +169,30 @@ const useSearch = props => {
     // if (location.pathname === '/my-library') {
     //   output = ['main_table.name asc'];
     // }
-    let output = ['main_table.name asc'];
-    return output;
+    const sortParam = searchParams.get('sort') || '';
+    const dirParam = searchParams.get('dir') || '';
+    if (sortParam && dirParam) {
+      return [`main_table.${sortParam} ${dirParam}`];
+    }
+    return ['main_table.name asc'];
+    // return output;
   });
   const handleSortChange = useCallback((value) => {
     setSortSelected(value);
   }, [onSortChange]);
   useEffect(() => {
     if (onSortChange) onSortChange(sortSelected);
+    if (sortSelected?.[0]) {
+      const sort = sortSelected[0];
+      const [field, dir] = sort.split(' ');
+      // the field should extract from the field with pattern like main_table.field
+      const fieldParts = field.split('.');
+      const fieldExtracted = fieldParts[fieldParts.length - 1];
+      const currentUrlParams = new URLSearchParams(window.location.search);
+      currentUrlParams.set('sort', fieldExtracted);
+      currentUrlParams.set('dir', dir);
+      setSearchParams(currentUrlParams);
+    }
   }, [sortSelected]);
   const { data: pricingPlans } = useQuery(PRICING_PLANS_QUERY, { fetchPolicy: "cache-and-network" });
   const { data: sortOptionsdt } = useQuery(SORT_OPTIONS_QUERY, { fetchPolicy: "cache-and-network" });
