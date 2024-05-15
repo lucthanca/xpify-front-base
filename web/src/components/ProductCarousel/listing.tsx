@@ -62,7 +62,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
               )
             })}
           </Splide>
-          <QuickViewSlider keys={keys} />
+          <QuickViewSlider type='normal' />
           <InstallModal />
         </SectionListProvider>
       </BlockStack>

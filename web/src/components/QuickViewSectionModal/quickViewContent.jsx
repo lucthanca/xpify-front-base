@@ -129,7 +129,7 @@ const LazyQuickViewContent = props => {
 
             <Card>
               <BlockStack gap='200'>
-                <Text variant="headingMd" as="h2">How to add section your theme</Text>
+                <Text variant="headingMd" as="h2">How to add sections your theme</Text>
                 <BlockStack gap='100'>
                   <Text as='span'>1. Click on "Install to theme" button.</Text>
                   <Text as='span'>2. Go to theme editor. Navigate to the places you want to add sections.</Text>
