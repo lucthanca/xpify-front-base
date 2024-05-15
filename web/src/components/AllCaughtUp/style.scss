@@ -1,0 +1,13 @@
+.AllCaughtUp {
+    &__root {
+        --end-of-feed-marker-half-of-text-height: calc(var(--p-space-050) + var(--p-space-200));
+        --end-of-feed-marker-divider-height: var(--p-space-025);
+        box-sizing: content-box;
+        padding: 0;
+        margin: 0 auto;
+        padding-block-start: var(--end-of-feed-marker-half-of-text-height);
+    }
+    &__text {
+        margin-block-start: calc((var(--end-of-feed-marker-half-of-text-height) + var(--end-of-feed-marker-divider-height))* -1);
+    }
+}

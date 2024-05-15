@@ -1,5 +1,5 @@
 import { Box, Button, InlineGrid, InlineStack, Layout, OptionList, Page, Popover, Text } from '@shopify/polaris';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import SectionCollection from '~/components/SectionCollection';
 import GroupCollection from '~/components/GroupCollection';
 import { useNavigate, createSearchParams, useSearchParams } from 'react-router-dom';
@@ -12,10 +12,11 @@ const options = [
 ];
 
 function MyLibrary() {
+  const initialized = useRef(false);
   const [popoverActive, setPopoverActive] = useState(false);
   const [pageActivea, setPageActive] = useState(undefined);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const togglePopoverActive = useCallback(() => {
     setPopoverActive((popoverActive) => !popoverActive);
   }, []);
@@ -26,18 +27,32 @@ function MyLibrary() {
     }
     return [defaultSelected];
   });
-  console.log({ selected });
+  const handleChangeViewType = useCallback((type) => {
+    if (!type?.[0]) return;
+    setSelected(type);
+
+    searchParams.set('type', type[0]);
+    setSearchParams(searchParams);
+  }, [searchParams])
 
   useEffect(() => {
-    searchParams.set('type', selected);
-    const nav = {
-      pathname: '/my-library',
-      search: `?${createSearchParams({ ...Object.fromEntries(searchParams.entries()) })}`,
-    };
-    navigate(nav, { replace: false });
-
     setPopoverActive(false);
   }, [selected]);
+
+  useEffect(() => {
+    if (!initialized.current) {
+      initialized.current = true;
+      return;
+    }
+    const type = searchParams.get('type');
+    if (!type && selected?.[0] !== undefined) {
+      setSelected([defaultSelected]);
+      return;
+    }
+    if (type != selected[0]) {
+      setSelected([type]);
+    }
+  }, [searchParams]);
 
   const pageActive = useMemo(() => {
     if (selected == 'simple') {
@@ -64,7 +79,7 @@ function MyLibrary() {
             onClose={togglePopoverActive}
           >
             <OptionList
-              onChange={setSelected}
+              onChange={handleChangeViewType}
               options={options}
               selected={selected}
             />
