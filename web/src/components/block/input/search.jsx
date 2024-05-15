@@ -99,12 +99,12 @@ const useSearch = props => {
       label: item.name
     })) : [];
   }, [categories]);
-  const handleCategoryFilterParams = useCallback((value) => {
+  const handleCategoryFilterParams = useCallback((value, replace = false) => {
     // use window.location.search because searchParams is not updated yet
     const currentUrlParams = new URLSearchParams(window.location.search);
     if (!value?.length && Boolean(currentUrlParams.has('category'))) {
       currentUrlParams.delete('category');
-      setSearchParams(currentUrlParams);
+      setSearchParams(currentUrlParams, { replace });
       setShouldPinCategoryFilter(false);
       return;
     }
@@ -112,10 +112,10 @@ const useSearch = props => {
     const categoryNames = value.map((val) => categoriesOptions.find(item => item.value === val)?.label);
 
     currentUrlParams.set('category', categoryNames.join(','));
-    setSearchParams(currentUrlParams);
+    setSearchParams(currentUrlParams, { replace });
   }, [categoriesOptions])
-  const handleCategoryFilterChange = useCallback((value) => {
-    handleCategoryFilterParams(value);
+  const handleCategoryFilterChange = useCallback((value, replace = false) => {
+    handleCategoryFilterParams(value, replace);
     if (onFilterChange) onFilterChange(CATEGORY_FILTER_KEY, value);
     setCategoryFilter(value);
   }, [onFilterChange]);
@@ -135,25 +135,26 @@ const useSearch = props => {
       return searchParams.has('tags');
     });
   const { tagOptions } = useTags();
-  const handleTagFilterParams = useCallback((value) => {
+  const handleTagFilterParams = useCallback((value, replace = false) => {
+    console.log('runnnnnnn handleTagFilterParams');
     // use window.location.search because searchParams is not updated yet
     const currentUrlParams = new URLSearchParams(window.location.search);
     if (!value?.length && Boolean(currentUrlParams.has('tags'))) {
       currentUrlParams.delete('tags');
-      setSearchParams(currentUrlParams);
+      setSearchParams(currentUrlParams, { replace });
       setShouldPinTagFilter(false);
       return;
     }
     // okay let get tag name from tag tagOptions following the value
     const tagNames = value.map((val) => tagOptions.find(item => item.value === val)?.label);
     currentUrlParams.set('tags', tagNames.join(','));
-    setSearchParams(currentUrlParams);
+    setSearchParams(currentUrlParams, { replace });
 
     // currentUrlParams.set('tags', value.join(','));
     // setSearchParams(currentUrlParams);
   }, [tagOptions]);
-  const handleTagFilterChange = useCallback((value) => {
-    handleTagFilterParams(value);
+  const handleTagFilterChange = useCallback((value, replace = false) => {
+    handleTagFilterParams(value, replace);
     if (onFilterChange) onFilterChange(TAG_FILTER_KEY, value);
     setTagFilter(value);
   }, [onFilterChange, handleTagFilterParams]);
@@ -179,20 +180,20 @@ const useSearch = props => {
   });
   const handleSortChange = useCallback((value) => {
     setSortSelected(value);
+
+    if (!value?.[0]) return;
+    const sort = value[0];
+    const [field, dir] = sort.split(' ');
+    // the field should extract from the field with pattern like main_table.field
+    const fieldParts = field.split('.');
+    const fieldExtracted = fieldParts[fieldParts.length - 1];
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    currentUrlParams.set('sort', fieldExtracted);
+    currentUrlParams.set('dir', dir);
+    setSearchParams(currentUrlParams);
   }, [onSortChange]);
   useEffect(() => {
     if (onSortChange) onSortChange(sortSelected);
-    if (sortSelected?.[0]) {
-      const sort = sortSelected[0];
-      const [field, dir] = sort.split(' ');
-      // the field should extract from the field with pattern like main_table.field
-      const fieldParts = field.split('.');
-      const fieldExtracted = fieldParts[fieldParts.length - 1];
-      const currentUrlParams = new URLSearchParams(window.location.search);
-      currentUrlParams.set('sort', fieldExtracted);
-      currentUrlParams.set('dir', dir);
-      setSearchParams(currentUrlParams);
-    }
   }, [sortSelected]);
   const { data: pricingPlans } = useQuery(PRICING_PLANS_QUERY, { fetchPolicy: "cache-and-network" });
   const { data: sortOptionsdt } = useQuery(SORT_OPTIONS_QUERY, { fetchPolicy: "cache-and-network" });
@@ -258,7 +259,7 @@ const useSearch = props => {
       if (searchTags.includes(item.label?.toLowerCase())) return item.value;
       return undefined;
     }).filter((item) => item !== undefined);
-    handleTagFilterChange(tagIdsMapping);
+    handleTagFilterChange(tagIdsMapping, true);
     setShouldPinTagFilter(true);
   }, [searchTags, tagOptions]);
 
@@ -268,7 +269,7 @@ const useSearch = props => {
       if (searchCategories.includes(item.label?.toLowerCase())) return item.value;
       return undefined;
     }).filter((item) => item !== undefined);
-    handleCategoryFilterChange(categoryIdsMapping);
+    handleCategoryFilterChange(categoryIdsMapping, true);
     setShouldPinCategoryFilter(true);
   }, [searchCategories, categoriesOptions]);
 

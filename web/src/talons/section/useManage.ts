@@ -138,7 +138,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
 
       return ({
         value: theme.id,
-        label: `${theme.name}(${titleRoleTheme[theme.role] ?? theme.role}) - ${status}`
+        label: `${theme.name} (${titleRoleTheme[theme.role] ?? theme.role}) - ${status}`
       });
     });
 
@@ -174,7 +174,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
           } else {
             title = "You should reinstall this group to update this section to the latest version";
           }
-          
+
         } else {
           title = "You should reinstall this section to the latest version";
         }

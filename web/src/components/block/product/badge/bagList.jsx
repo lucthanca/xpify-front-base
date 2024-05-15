@@ -15,8 +15,9 @@ const BadgeItem = props => {
       search: `?${createSearchParams({ ...Object.fromEntries(searchParams.entries()) })}`,
     };
     onClick && onClick(item);
-    navigate(nav, { replace: false });
-  }, [onClick, searchKey, searchParams, item]);
+
+    navigate(nav);
+  }, [onClick, searchKey, searchParams, item, navigate]);
   const badgeRender = useCallback(() => {
     if (!renderBadgeItem) return item.name;
     return renderBadgeItem && renderBadgeItem(item);
