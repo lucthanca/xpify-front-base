@@ -12,7 +12,6 @@ import {
 } from '@shopify/polaris';
 import { ViewIcon, PlusCircleIcon, PaymentFilledIcon, ExternalIcon } from '@shopify/polaris-icons';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import BadgeTag from '~/components/block/badge/tag';
 import Badges from '~/components/block/product/badge/bagList';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
 import { usePurchase } from '~/hooks/section-builder/purchase';

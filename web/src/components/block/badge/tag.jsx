@@ -6,11 +6,13 @@ import React from 'react';
 const BadgeTag = React.memo(({tag, isSimpleSection, afterClick}) => {
   const navigate = useNavigate();
   const handleTagClick = useCallback(() => {
+    // ${createSearchParams({tags: tag.name})}
     const nav = {
       pathname: isSimpleSection ? '/sections' : '/groups',
-      search: `?${createSearchParams({tags: tag.name})}`,
+      search: `?tags=${tag.name}`,
     };
-    navigate(nav, { replace: false });
+    console.log('Redirect TAG');
+    navigate(nav);
     afterClick();
   }, [tag]);
   return (
