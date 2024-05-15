@@ -61,6 +61,7 @@ QuickViewModalSlider.propTypes = {
   keys: PropTypes.array,
   onSlideMoved: PropTypes.func,
   refetch: PropTypes.func,
+  type: PropTypes.string,
 };
 
 export default memo(QuickViewModalSlider);
