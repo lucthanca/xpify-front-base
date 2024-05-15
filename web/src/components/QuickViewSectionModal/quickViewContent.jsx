@@ -128,8 +128,20 @@ const LazyQuickViewContent = props => {
             )}
 
             <Card>
-              <iframe width="100%" className='aspect-video' src="https://www.youtube.com/embed/vn9LHDsK3V8?si=Shj5GFPlR-0BWJUz" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen={true}></iframe>
+              <BlockStack gap='200'>
+                <Text variant="headingMd" as="h2">How to add section your theme</Text>
+                <BlockStack gap='100'>
+                  <Text as='span'>1. Click on "Install to theme" button.</Text>
+                  <Text as='span'>2. Go to theme editor. Navigate to the places you want to add sections.</Text>
+                  <Text as='span'>3. Click "Add section" and look for "OT" in the search box.</Text>
+                </BlockStack>
+              </BlockStack>
             </Card>
+
+
+            {/*<Card>*/}
+            {/*  <iframe width="100%" className='aspect-video' src="https://www.youtube.com/embed/vn9LHDsK3V8?si=Shj5GFPlR-0BWJUz" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen={true}></iframe>*/}
+            {/*</Card>*/}
           </BlockStack>
         </div>
       </InlineGrid>
