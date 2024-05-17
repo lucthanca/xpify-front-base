@@ -55,7 +55,7 @@ function ModalInstallSection({section, fullWith = true}) {
               onClick={confirmDelete}
               variant='primary'
               tone="critical"
-              disabled={section?.installed ? !talonManageProps.installed : true}
+              disabled={section?.installed ? talonManageProps?.section?.child_ids?.length || !talonManageProps.installed : true}
               loading={talonManageProps.dataDeleteLoading}
               fullWidth
             >

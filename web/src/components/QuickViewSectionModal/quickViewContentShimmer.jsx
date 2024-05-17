@@ -5,8 +5,8 @@ import { PricingPlanSkeleton } from '~/components/QuickViewSectionModal';
 export default memo(({ title }) => {
   return (
     <InlineGrid columns={{ sm: 1, md: ['twoThirds', 'oneThird'] }} gap='400'>
-      <div className='h-full py-4'>
-        <div className='sticky top-4'>
+      <div className='h-full'>
+        <div className='sticky'>
           <BlockStack gap={400}>
             <Card title='Gallery' padding='0'>
               <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee] sticky'>
@@ -16,7 +16,7 @@ export default memo(({ title }) => {
           </BlockStack>
         </div>
       </div>
-      <div className='py-4'>
+      <div>
         <BlockStack gap='400'>
           <Card title='Infomation'>
             <BlockStack gap='400'>

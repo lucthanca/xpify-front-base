@@ -17,7 +17,7 @@ const SliderItem = props => {
 
   if (!shouldLoad || delay)
     return (
-      <Scrollable className='px-2 pl-4 pb-4 max-h-[calc(100vh-9rem)]'>
+      <Scrollable className='p-4 max-h-[calc(100vh-9rem)]'>
         <Skeleton title={props.url_key} />
       </Scrollable>
     );
