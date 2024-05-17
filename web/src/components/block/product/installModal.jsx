@@ -59,7 +59,7 @@ const InstallModal = props => {
         {
           destructive: true,
           content: 'Delete from theme',
-          disabled: loadingWithoutData || (section?.installed ? !talonManageProps.installed : true),
+          disabled: loadingWithoutData || (section?.installed ? talonManageProps?.section?.child_ids?.length || !talonManageProps.installed : true),
           loading: talonManageProps.dataDeleteLoading,
           onAction: confirmDelete
         },
