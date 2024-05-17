@@ -51,7 +51,7 @@ const LazyQuickViewContent = props => {
     );
   }
   return (
-    <Scrollable className='quickViewModal__scrollable__content px-2 pl-4 pb-4 py-4'>
+    <Scrollable className='quickViewModal__scrollable__content p-4'>
       <InlineGrid columns={{ sm: 1, md: ['twoThirds', 'oneThird'] }} gap='400'>
         <div className='h-full'>
           <div className='sticky top-0'>

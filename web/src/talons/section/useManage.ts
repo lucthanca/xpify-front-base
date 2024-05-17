@@ -84,11 +84,16 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     const installVersion = item?.installed && item.installed.find((item: any) => item.theme_id == currentTheme)?.product_version;
     if (installVersion) {
       if (installVersion != item.version) {
-        return {message: `Update ${item.name} v${installVersion} to v${item.version}`};
+        return {message: `Update ${item.name} from v${installVersion} to v${item.version}`};
       } else {
         return '';
       }
+    } else {
+      if (parent?.child_ids) {
+        return {message: `Install ${item.name}`};
+      }
     }
+
     return '';
   }, []);
 
@@ -170,13 +175,12 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         let title = "";
         if (childSections.length) {
           if (contentUpdate.length > 1) {
-            title = "You should reinstall this group to update these sections to the latest version";
+            title = "Re-install group to update these sections:";
           } else {
-            title = "You should reinstall this group to update this section to the latest version";
+            title = "Re-install group to update this section:";
           }
-
         } else {
-          title = "You should reinstall this section to the latest version";
+          title = "Re-install this section to update it to the latest version";
         }
 
         setBannerAlert({
