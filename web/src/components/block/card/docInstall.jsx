@@ -20,7 +20,10 @@ function DocInstall() {
                 <Text>You can add to themes as many of sections as you want, provided that they are included in your pricing plan. Please use the "Install to theme" button.</Text>
               </List.Item>
               <List.Item>
-                <Text>If you are on a free plan, you can still access a lot of free sections in our collections. </Text>
+                <Text>After a section or a group is installed to theme, they will appear in your Library.</Text>
+              </List.Item>
+              <List.Item>
+                <Text>You can only delete individual but not groups of sections from theme.</Text>
               </List.Item>
             </List>
 
