@@ -34,7 +34,7 @@ function ModalInstallSection({section, fullWith = true}) {
       }
       <Text variant='headingMd' as='h2'>Choose theme for installation:</Text>
 
-      <InlineGrid columns={fullWith ? 1 : {sm: 1, md: ['twoThirds', 'oneThird']}} gap={200} alignItems='center'>
+      <div className={fullWith ? 'grid gap-2' : (!talonManageProps?.section?.child_ids?.length ? 'grid-template-section-simple' : 'grid-template-section-group')}>
         {talonManageProps.options.length
         ? <div>
           <Select
@@ -50,17 +50,20 @@ function ModalInstallSection({section, fullWith = true}) {
         }
 
         <div>
-          <InlineGrid columns={2} gap={200}>
+          <InlineGrid columns={!talonManageProps?.section?.child_ids?.length ? 2 : 1} gap={200}>
+            {!talonManageProps?.section?.child_ids?.length &&
             <Button
               onClick={confirmDelete}
               variant='primary'
               tone="critical"
-              disabled={section?.installed ? talonManageProps?.section?.child_ids?.length || !talonManageProps.installed : true}
+              disabled={section?.installed ? !talonManageProps.installed : true}
               loading={talonManageProps.dataDeleteLoading}
               fullWidth
             >
               Delete from theme
             </Button>
+            }
+
             <Button
               onClick={talonManageProps.handleUpdate}
               variant='primary'
@@ -74,7 +77,7 @@ function ModalInstallSection({section, fullWith = true}) {
 
           <ModalConfirm section={section} theme={talonManageProps.currentThemeSelected} isOpen={isShowConfirm} setIsOpen={setIsShowConfirm} onConfirm={confirmAction} />
         </div>
-      </InlineGrid>
+      </div>
     </BlockStack>
   );
 }

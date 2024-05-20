@@ -1,5 +1,5 @@
 /* Custom Style Polaris */
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 768px) {
   .Polaris-Modal-Dialog__Modal.Polaris-Modal-Dialog--sizeLarge {
     max-width: 90% !important;
   }
@@ -94,4 +94,24 @@ button.splide__arrow {
 .popover-header button .Polaris-Text--root {
   font-size: var(--p-text-heading-lg-font-size);
   font-weight: var(--p-font-weight-bold);
+}
+
+.grid-template-section-simple {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+}
+
+.grid-template-section-group {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 3fr 0.5fr;
+  align-items: center;
+}
+
+@media only screen and (max-width: 768px) {
+  .grid-template-section-simple, .grid-template-section-group {
+    grid-template-columns: 1fr;
+  }
 }
