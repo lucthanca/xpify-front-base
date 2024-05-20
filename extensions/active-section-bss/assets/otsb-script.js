@@ -198,9 +198,9 @@ requestAnimationFrame(() => {
 
                           if (hotspot) {
                               if (current) {
-                                  current.classList.remove('active-hotspot');
+                                  current.classList.remove('otsb-active-hotspot');
                               }
-                              hotspot.classList.add('active-hotspot');
+                              hotspot.classList.add('otsb-active-hotspot');
                               current = hotspot;
                           }
                       });
