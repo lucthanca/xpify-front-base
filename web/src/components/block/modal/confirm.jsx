@@ -1,4 +1,4 @@
-import {useState, useCallback, memo, useEffect, useMemo} from 'react';
+import { useState, useCallback, memo, useEffect, useMemo, useRef } from 'react';
 import {
   BlockStack,
   Modal,
@@ -7,6 +7,7 @@ import {
 
 function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
   const [loadingPrimary, setLoadingPrimary] = useState(false);
+  const cfModalRef = useRef();
 
   const handleConfirm = async () => {
     setLoadingPrimary(true);
@@ -20,15 +21,16 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
   }, []);
 
   useEffect(() => { // Overlay modal section
-    const splideModal = document.querySelector('.splide-modal-section');
-    if (splideModal) {
-      const parentEle = splideModal.closest('.Polaris-Modal-Dialog__Container')
-      if (parentEle) {
-        if (isOpen) {
-          parentEle.classList.add('z-index10');
-        } else {
-          parentEle.classList.remove('z-index10');
-        }
+    if (cfModalRef.current) {
+      const diagContainer = cfModalRef.current.closest('.Polaris-Modal-Dialog__Container');
+
+      if (diagContainer) {
+        diagContainer.style.zIndex = `calc(var(--p-z-index-11) + 1)`;
+        const divParent = diagContainer.parentElement;
+        if (!divParent) return;
+        const backdrop = divParent.nextElementSibling;
+        if (!backdrop) return;
+        backdrop.style.zIndex = `calc(var(--p-z-index-10) + 1)`;
       }
     }
   }, [isOpen]);
@@ -37,9 +39,9 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
     return section?.child_ids ? 'group' : 'section';
   }, [section]);
 
+  if (!section?.name || !theme?.name) return null;
   return (
-    section?.name && theme?.name
-    ? <Modal
+    <Modal
       open={isOpen}
       onClose={handleCloseModal}
       title={`Delete ${type}`}
@@ -55,20 +57,21 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
           onAction: () => handleCloseModal()
         },
       ]}
-      >
-      <Modal.Section>
-        <BlockStack gap='400'>
-          <BlockStack gap='100'>
-          <Text>Do you really want to delete {type} {section.name} from theme {theme.name}?</Text>
-          <Text>If you want to use {section.name} on {theme.name} again, you will have to reinstall section to theme.</Text>
+    >
+      <div className='Xpify__ConfirmModal__content' ref={cfModalRef}>
+        <Modal.Section>
+          <BlockStack gap='400'>
+            <BlockStack gap='100'>
+              <Text>Do you really want to delete {type} {section.name} from theme {theme.name}?</Text>
+              <Text>If you want to use {section.name} on {theme.name} again, you will have to reinstall section to theme.</Text>
+            </BlockStack>
+            <Text tone='subdued'>
+              Note: This action won't affect other themes.
+            </Text>
           </BlockStack>
-          <Text tone='subdued'>
-            Note: This action won't affect other themes.
-          </Text>
-        </BlockStack>
-      </Modal.Section>
+        </Modal.Section>
+      </div>
     </Modal>
-    : <></>
   );
 }
 
