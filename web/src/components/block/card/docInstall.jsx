@@ -5,7 +5,7 @@ function DocInstall() {
   return (
     <Card title='Doc'>
         <Box>
-          <Text variant="headingMd" as="h2">How to add sections your theme</Text>
+          <Text variant="headingMd" as="h2">How to add sections to your theme</Text>
           <Box padding="200">
             <Text fontWeight='bold'>1. Find sections:</Text>
             <List gap='100'>

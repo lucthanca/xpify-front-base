@@ -65,16 +65,16 @@ const SectionFullpageDetails = props => {
         //   loading: purchaseLoading || sectionLoading,
         //   onAction: section.actions?.purchase && handlePurchase
         // }}
-        secondaryActions={[
-          {
-            content: 'View demo store',
-            icon: ViewIcon,
-            url: section?.demo_link,
-            disabled: !section?.demo_link || sectionLoading,
-            helpText: !section?.demo_link ? 'This product has no demo yet.' : '',
-            onAction: () => {}
-          }
-        ]}
+        // secondaryActions={[
+        //   {
+        //     content: 'View demo store',
+        //     icon: ViewIcon,
+        //     url: section?.demo_link,
+        //     disabled: !section?.demo_link || sectionLoading,
+        //     helpText: !section?.demo_link ? 'This product has no demo yet.' : '',
+        //     onAction: () => {}
+        //   }
+        // ]}
       >
         <Layout>
           <Layout.Section>
