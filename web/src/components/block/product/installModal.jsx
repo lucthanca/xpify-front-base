@@ -55,15 +55,18 @@ const InstallModal = props => {
         loading: talonManageProps.dataUpdateLoading,
         onAction: talonManageProps.handleUpdate
       }}
-      secondaryActions={[
-        {
-          destructive: true,
-          content: 'Delete from theme',
-          disabled: loadingWithoutData || (section?.installed ? talonManageProps?.section?.child_ids?.length || !talonManageProps.installed : true),
-          loading: talonManageProps.dataDeleteLoading,
-          onAction: confirmDelete
-        },
-      ]}
+      secondaryActions={!talonManageProps?.section?.child_ids?.length
+        ? [
+          {
+            destructive: true,
+            content: 'Delete from theme',
+            disabled: loadingWithoutData || (section?.installed ? !talonManageProps.installed : true),
+            loading: talonManageProps.dataDeleteLoading,
+            onAction: confirmDelete
+          },
+        ]
+        : []
+      }
     >
       <Modal.Section>
         <BlockStack gap='200'>
