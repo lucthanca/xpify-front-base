@@ -60,15 +60,15 @@ const GroupSectionDetails = props => {
         //   loading: sectionLoading || purchaseLoading,
         //   onAction: (!sectionLoading && !purchaseLoading) && handlePurchase,
         // }}
-        secondaryActions={[
-          {
-            content: 'View demo store',
-            icon: ViewIcon,
-            url: groupSection?.demo_link,
-            disabled: !groupSection?.demo_link,
-            helpText: !groupSection?.demo_link ? 'This product has no demo yet.' : ''
-          }
-        ]}
+        // secondaryActions={[
+        //   {
+        //     content: 'View demo store',
+        //     icon: ViewIcon,
+        //     url: groupSection?.demo_link,
+        //     disabled: !groupSection?.demo_link,
+        //     helpText: !groupSection?.demo_link ? 'This product has no demo yet.' : ''
+        //   }
+        // ]}
       >
         <Layout>
           <Layout.Section>

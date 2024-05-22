@@ -74,7 +74,7 @@ function HomePage() {
                     <NavCard
                       title='My Library'
                       content='All your added sections in one place, ready to tailor your store.'
-                      actions={<Button onClick={handleRedirectMyLibraryPage}>My Library</Button>}
+                      actions={<Button onClick={handleRedirectMyLibraryPage}>Open My Library</Button>}
                     />
                     <NavCard
                       title='Support'
