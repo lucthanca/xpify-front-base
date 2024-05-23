@@ -34,7 +34,7 @@ function ModalInstallSection({section, fullWith = true}) {
       }
       <Text variant='headingMd' as='h2'>Choose theme for installation:</Text>
 
-      <div className={fullWith ? 'grid gap-2' : (!talonManageProps?.section?.child_ids?.length ? 'grid-template-section-simple' : 'grid-template-section-group')}>
+      <div className={fullWith ? 'grid gap-2' : (talonManageProps?.section?.type_id == '1' ? 'grid-template-section-simple' : 'grid-template-section-group')}>
         {talonManageProps.options.length
         ? <div>
           <Select
@@ -50,8 +50,8 @@ function ModalInstallSection({section, fullWith = true}) {
         }
 
         <div>
-          <InlineGrid columns={!talonManageProps?.section?.child_ids?.length ? 2 : 1} gap={200}>
-            {!talonManageProps?.section?.child_ids?.length &&
+          <InlineGrid columns={talonManageProps?.section?.type_id == '1' ? 2 : 1} gap={200}>
+            {talonManageProps?.section?.type_id == '1' &&
             <Button
               onClick={confirmDelete}
               variant='primary'

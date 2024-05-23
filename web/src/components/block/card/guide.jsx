@@ -91,7 +91,7 @@ function GuideCard() {
                 'id': 'step_1',
                 'title': 'Enable the app embed in theme editor',
                 'content': <Button variant='primary' url={urlEmbedApp} target="_blank">Go to themes</Button>,
-                'demo': <Image source="https://sections.puco.io/images/general/enable-app.gif" />
+                'demo': <Image source="https://api.omnithemes.com/media/section_builder/guide/guide_enable_app_embed.gif" />
               }}
               setProgress={setProgress}
               openChild={openChild}
@@ -110,7 +110,6 @@ function GuideCard() {
                     <Button onClick={handleRedirectGroupsPage}>Browse Groups</Button>
                   </InlineStack>
                 </BlockStack>,
-                'demo': <iframe width="100%" className='aspect-video' src="https://www.youtube.com/embed/vn9LHDsK3V8?si=Shj5GFPlR-0BWJUz" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
               }}
               setProgress={setProgress}
               openChild={openChild}
@@ -121,7 +120,7 @@ function GuideCard() {
                 'id': 'step_3',
                 'title': 'Customize themes with the added sections',
                 'content': <Button variant='primary' url={urlEditTheme} target="_blank">Go to theme editor</Button>,
-                'demo': <Image source="https://sections.puco.io/images/general/enable-app.gif" />
+                'demo': <Image source="https://api.omnithemes.com/media/section_builder/guide/guide_add_section.gif?1" />
               }}
               setProgress={setProgress}
               openChild={openChild}

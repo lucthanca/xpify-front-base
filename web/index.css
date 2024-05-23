@@ -18,3 +18,11 @@
     height: stretch;
   }
 }
+
+ol,
+ul,
+menu {
+  list-style: revert;
+  margin: revert;
+  padding: revert;
+}

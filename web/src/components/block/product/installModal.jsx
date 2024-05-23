@@ -55,7 +55,8 @@ const InstallModal = props => {
         loading: talonManageProps.dataUpdateLoading,
         onAction: talonManageProps.handleUpdate
       }}
-      secondaryActions={!talonManageProps?.section?.child_ids?.length
+      secondaryActions={
+        activeSection?.type_id == '1' // Simple section
         ? [
           {
             destructive: true,
