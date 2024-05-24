@@ -1,7 +1,10 @@
-
+root /path/to/built/folder;
+index index.html;
 # allow csp for admin.shopify.com
 location / {
     add_header Content-Security-Policy "frame-ancestors https: admin.shopify.com";
+
+    try_files $uri $uri/ /index.html;
 }
 location /graphql {
     proxy_pass http://example.com:8080;
