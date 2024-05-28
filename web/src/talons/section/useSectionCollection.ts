@@ -217,8 +217,8 @@ export const useSectionListing = (onQueryCompleted: any) => {
   const [searchFilter, setSearchFilter] = useState('');
   const [stateSections, setSections] = useState<SectionData[]>([]);
   const [sort, setSort] = useState([SORT_OPTION_NONE]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchParams] = useSearchParams();
   const information = useMemo(() => {
     const currentPath = location.pathname;
     if (currentPath === '/my-library') {
@@ -275,7 +275,20 @@ export const useSectionListing = (onQueryCompleted: any) => {
     },
     // skip: !hasFilter,
   });
+
+  useEffect(() => {
+    const page = Number(searchParams.get('p'));
+    if (Number.isInteger(page) && page > 0) {
+      setCurrentPage(page);
+    } else {
+      setCurrentPage(1);
+    }
+  }, [searchParams]);
+
   const handlePageChange = useCallback((page: number) => {
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    currentUrlParams.set('p', String(page));
+    setSearchParams(currentUrlParams);
     setCurrentPage(page);
   }, []);
 

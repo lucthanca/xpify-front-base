@@ -4,7 +4,7 @@ import Skeleton from '~/components/block/product/skeleton';
 
 const SectionCollection = props => {
   const { items, refetch, loading } = props;
-  if (loading) {
+  if (loading && !items?.length) {
     return <Skeleton total={12} columns={{sm: 1, md: 2, lg: 4}}/>
   }
   return (

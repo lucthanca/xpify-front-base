@@ -9,6 +9,7 @@ const BadgeItem = props => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const handleClick = useCallback(() => {
+    searchParams.set('p', 1);
     searchParams.set(searchKey, item.name);
     const nav = {
       pathname: isSimpleSection ? '/sections' : '/groups',

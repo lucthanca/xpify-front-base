@@ -39,7 +39,7 @@ function Plans() {
       <Layout>
         <Layout.Section>
           <BlockStack gap='600'>
-            <Box>
+            {/* <Box>
               <Card>
                 <BlockStack gap="200">
                   <BlockStack inlineAlign="start" gap='200'>
@@ -54,7 +54,7 @@ function Plans() {
                   </BlockStack>
                 </BlockStack>
               </Card>
-            </Box>
+            </Box> */}
 
             <Box paddingBlockEnd='600'>
               <BlockStack gap='400'>

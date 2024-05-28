@@ -66,7 +66,7 @@
 }
 
 button.splide__arrow {
-  background-color: #ffffff;
+  background-color: #000000;
 }
 
 .splide-gallery-li {
@@ -84,7 +84,7 @@ button.splide__arrow {
 }
 
 .splide__pagination > li > button.splide__pagination__page {
-  background-color: #ffffff;
+  background-color: #000000;
 }
 
 .popover-header button {

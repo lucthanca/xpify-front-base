@@ -46,6 +46,7 @@ const useSearch = props => {
         currentUrlParams.delete('search');
         setSearchParams(currentUrlParams);
       }
+      if (Boolean(currentUrlParams.has('p'))) currentUrlParams.delete('p');
       currentUrlParams.set('search', value);
       setSearchParams(currentUrlParams);
       ref.current?.(value);
@@ -118,12 +119,23 @@ const useSearch = props => {
     handleCategoryFilterParams(value, replace);
     if (onFilterChange) onFilterChange(CATEGORY_FILTER_KEY, value);
     setCategoryFilter(value);
+
+    if (replace !== true) {
+      resetPageNumber();
+    }
   }, [onFilterChange]);
   const handleCategoryFilterRemove = useCallback(() => {
     handleCategoryFilterParams([]);
     if (onFilterChange) onFilterChange(CATEGORY_FILTER_KEY, []);
     setCategoryFilter([]);
+    resetPageNumber();
   }, [onFilterChange]);
+
+  const resetPageNumber = useCallback(() => {
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    currentUrlParams.delete('p');
+    setSearchParams(currentUrlParams);
+  }, []);
 
   const [tagFilter, setTagFilter] = useState(() => {
     return searchParams.has('tags') ? [''] : [];
@@ -157,11 +169,16 @@ const useSearch = props => {
     handleTagFilterParams(value, replace);
     if (onFilterChange) onFilterChange(TAG_FILTER_KEY, value);
     setTagFilter(value);
+
+    if (replace !== true) {
+      resetPageNumber();
+    }
   }, [onFilterChange, handleTagFilterParams]);
   const handleTagFilterRemove = useCallback(() => {
     handleTagFilterParams([]);
     if (onFilterChange) onFilterChange(TAG_FILTER_KEY, []);
     setTagFilter([]);
+    resetPageNumber();
   }, [onFilterChange, handleTagFilterParams]);
 
   const [sortSelected, setSortSelected] = useState(() => {
