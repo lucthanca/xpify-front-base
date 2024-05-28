@@ -3936,9 +3936,7 @@ h6,
 [role="button"],
 [type="button"],
 .otsb-button {
-  font-family: var(--font-button);
-  font-weight: var(--font-button-weight);
-  font-style: var(--font-button-style);
+  border-radius: var(--border-radius);
   position:relative;
   z-index:10;
   -webkit-user-select:none;
@@ -3952,27 +3950,18 @@ button{
   background: transparent
 }
 
-button.otsb-button-outline,
-.otsb-button.otsb-button-outline {
-  background: rgba(var(--background-secondary-button), 1);
-  color: rgb(var(--colors-secondary-button, 0, 0, 0)) !important;
-  box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button, 0, 0, 0), 1);
+button.otsb-button-outline, .otsb-button.otsb-button-outline {
+  background: rgba(var(--background-secondary-button),1);
+  color: rgb(var(--colors-secondary-button)) !important;
+  box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button),1);
   border: none;
   transition: 0.3s;
 }
 
-.otsb-button.otsb-button-outline:hover,
-button.otsb-button-outline:hover {
-  box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button, 0, 0, 0), 1);
-  background: rgba(var(--background-secondary-button), 1);
+.otsb-button.otsb-button-outline:hover, button.otsb-button-outline:hover {
+  box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button),1);
+  background: rgba(var(--background-secondary-button),1);
   transition: 0.3s;
-}
-
-.button-action,
-button.otsb-button-solid,
-.button.otsb-button-solid {
-  border: none;
-  background: var(--colors-button-mobile);
 }
 
 .header__inline-menu {
@@ -4367,25 +4356,9 @@ svg{
 
   button.otsb-button-outline,
   .otsb-button.otsb-button-outline {
-    color: rgb(var(--colors-secondary-button, 0, 0, 0));
-    box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button, 0, 0, 0), 0.5);
+    color: rgb(var(--colors-secondary-button));
+    box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button), 0.5);
     background: rgba(var(--background-secondary-button), 0.7);
-  }
-
-  .button-action,
-  button.otsb-button-solid,
-  .otsb-button.otsb-button-solid {
-    background: rgb(var(--colors-button-hover, 255, 102, 0));
-  }
-
-  button.otsb-none_border,
-  .otsb-button.otsb-none_border{
-    border-width:0px
-  }
-
-  button.none_transition::before,
-  .otsb-button.none_transition::before{
-    transition-property:none
   }
 }
 
@@ -4397,57 +4370,6 @@ svg{
 
   button.button-rounded-desktop {
     border-radius: var(--border-radius);
-  }
-}
-
-button.otsb-button-solid,
-.otsb-button.otsb-button-solid {
-  background-color: var(--colors-button-hover, rgb(255, 102, 0));
-}
-
-@media (min-width: 1024px) {
-  button.otsb-button-solid,
-  .otsb-button.otsb-button-solid {
-    border: none;
-    box-shadow: none;
-    color: rgb(var(--colors-button-text, 255, 255, 255));
-    background-color: rgb(var(--colors-button, 253, 142, 22));
-    overflow: hidden;
-    background-origin: border-box;
-  }
-
-  button.otsb-button-solid:hover,
-  .otsb-button.otsb-button-solid:hover {
-    transition-delay: 0.5s;
-    transition-property: background-color;
-    background-color: var(--colors-button-hover, rgb(255, 102, 0)) ;
-    color: rgb(var(--colors-button-text-hover));
-    background-origin: border-box;
-    border: none;
-  }
-
-  button.otsb-button-solid:before,
-  .otsb-button.otsb-button-solid:before {
-    content: "";
-    z-index: -1;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: var(--button-width, 102%);
-    height: var(--button-height, 500%);
-    background-color: var(--colors-button-hover, rgb(255, 102, 0));
-    backface-visibility: hidden;
-    will-change: transform;
-    transform: var(--button-transform, rotate3d(0, 0, 1, -10deg) translate3d(-130%, -10em, 0));
-    transform-origin: var(--button-transform-origin, 100% 0%);
-    transition: transform 0.5s ease;
-  }
-
-  button.otsb-button-solid:hover:before,
-  .otsb-button.otsb-button-solid:hover:before {
-    transform: rotate3d(0, 0, 1, 0) translateZ(0);
   }
 }
 
@@ -5510,6 +5432,14 @@ button.otsb-button-solid,
 
   .md\:h-full{
     height:100%
+  }
+
+  .md\:h-\[500px\]{
+    height:500px
+  }
+
+  .md\:h-\[600px\]{
+    height:600px
   }
 
   .md\:max-h-40{
