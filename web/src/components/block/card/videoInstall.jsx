@@ -13,7 +13,7 @@ function VideoGuideInstall() {
       description='Follow this quick guide to select your missing parts to complete your store by using our sections and groups.'
     >
       <VideoThumbnail
-        videoLength={62}
+        videoLength={155}
         thumbnailUrl="https://www.junglescout.com/wp-content/uploads/2021/05/blog_how-to-sell-on-shopify_feature-img.jpg"
         onClick={handleThumbnailClick}
       />

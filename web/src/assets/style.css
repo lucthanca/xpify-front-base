@@ -85,6 +85,11 @@ button.splide__arrow {
 
 .splide__pagination > li > button.splide__pagination__page {
   background-color: #000000;
+  opacity: 0.2;
+}
+
+.splide__pagination > li > button.splide__pagination__page.is-active {
+  opacity: 0.8;
 }
 
 .popover-header button {
