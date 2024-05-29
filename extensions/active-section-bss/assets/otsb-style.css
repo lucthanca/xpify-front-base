@@ -3866,7 +3866,7 @@ h5 *::selection,
 .h5 *::selection,
 h6 *::selection,
 .h6 *::selection {
-  background-color: rgba(var(--colors-heading), 0.2)
+  background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
 }
 
 h1::-moz-selection,
@@ -3900,7 +3900,7 @@ h5::selection,
 .h5::selection,
 h6::selection,
 .h6::selection {
-  background-color: rgba(var(--colors-heading), 0.2)
+  background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
 }
 
 h1,
@@ -5410,8 +5410,16 @@ svg{
     height:450px
   }
 
+  .md\:h-\[500px\]{
+    height:500px
+  }
+
   .md\:h-\[550px\]{
     height:550px
+  }
+
+  .md\:h-\[600px\]{
+    height:600px
   }
 
   .md\:h-\[650px\]{
@@ -5432,14 +5440,6 @@ svg{
 
   .md\:h-full{
     height:100%
-  }
-
-  .md\:h-\[500px\]{
-    height:500px
-  }
-
-  .md\:h-\[600px\]{
-    height:600px
   }
 
   .md\:max-h-40{
