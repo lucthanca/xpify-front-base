@@ -26,9 +26,9 @@ export const useRelatedProducts = (props: RelatedProductsTalonProps = {}): Relat
       425: { perPage: 1 },
       768: { perPage: 2 }
     },
-    type: "loop",
     autoplay: true,
-    interval: 3000
+    interval: 3000,
+    rewind: true
   }));
 
   return {

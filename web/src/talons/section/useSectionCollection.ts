@@ -204,7 +204,6 @@ export const useSectionCollection = () => {
   };
 };
 
-
 const FILTER_FIELDS_MAPPING: { [key: string]: string } = {
   [TAG_FILTER_KEY]: 'tag_id',
   [PLAN_FILTER_KEY]: 'plan_id',
@@ -212,13 +211,20 @@ const FILTER_FIELDS_MAPPING: { [key: string]: string } = {
   [PRICE_FILTER_KEY]: 'price',
 };
 
+const pageInfoDefault = {
+  total_pages: 1,
+  current_page: 1,
+  page_size: 12,
+};
+
 export const useSectionListing = (onQueryCompleted: any) => {
   const [filterParts, setFilterParts] = useState({});
   const [searchFilter, setSearchFilter] = useState('');
   const [stateSections, setSections] = useState<SectionData[]>([]);
+  const [statePageInfo, setStatePageInfo] = useState<PageInfo>(pageInfoDefault);
   const [sort, setSort] = useState([SORT_OPTION_NONE]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchParams] = useSearchParams();
   const information = useMemo(() => {
     const currentPath = location.pathname;
     if (currentPath === '/my-library') {
@@ -269,13 +275,27 @@ export const useSectionListing = (onQueryCompleted: any) => {
     },
     onCompleted: (data) => {
       setSections(data?.[QUERY_SECTION_COLLECTION_KEY]?.items || []);
+      setStatePageInfo(data?.[QUERY_SECTION_COLLECTION_KEY]?.page_info || pageInfoDefault);
       if (onQueryCompleted) {
         onQueryCompleted(data?.[QUERY_SECTION_COLLECTION_KEY]);
       }
     },
     // skip: !hasFilter,
   });
+
+  useEffect(() => {
+    const page = Number(searchParams.get('p'));
+    if (Number.isInteger(page) && page > 0) {
+      setCurrentPage(page);
+    } else {
+      setCurrentPage(1);
+    }
+  }, [searchParams]);
+
   const handlePageChange = useCallback((page: number) => {
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    currentUrlParams.set('p', String(page));
+    setSearchParams(currentUrlParams);
     setCurrentPage(page);
   }, []);
 
@@ -314,7 +334,7 @@ export const useSectionListing = (onQueryCompleted: any) => {
     return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items || stateSections || [];
   }, [sectionsData, stateSections]);
   const pageInfo = useMemo<PageInfo>(() => {
-    return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.page_info || {};
+    return sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.page_info || statePageInfo || {};
   }, [sectionsData, hasFilter]);
   const loadingWithoutData = loading && stateSections.length === 0 && sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items === null || sectionsData?.[QUERY_SECTION_COLLECTION_KEY]?.items === undefined;
 

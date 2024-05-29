@@ -13,7 +13,7 @@ function Skeleton({total, columns}) {
   for (let i = 1; i <= total; i++) {
     listSkeleton.push(
       <Card key={i} padding='0' background="bg-surface-secondary">
-        <div className='aspect-video bg-white'>
+        <div className='aspect-[16/9] bg-white'>
         </div>
         <Box padding="400">
           <BlockStack gap='400'>

@@ -87,7 +87,7 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
     item &&
     <>
       <Card padding='0' background="bg-surface-secondary" className='h-full'>
-        <div className='cursor-pointer aspect-video' onClick={() => handleRedirect(item)}>
+        <div className='cursor-pointer aspect-[16/9]' onClick={() => handleRedirect(item)}>
           <img
             className="object-cover w-full h-full"
             loading="lazy"

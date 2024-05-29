@@ -35,11 +35,11 @@ const Skeleton = () => {
               </BlockStack>
             </Card>
             <Card>
-              <div className='aspect-video'></div>
+              <div className='aspect-[16/9]'></div>
             </Card>
             <Card sectioned>
               <InlineGrid columns={{ sm: 1, md: ['oneThird', 'twoThirds'] }}>
-                <div className='aspect-video'></div>
+                <div className='aspect-[16/9]'></div>
                 <BlockStack gap={400}>
                   <SkeletonDisplayText size='small' />
                   <SkeletonBodyText lines={2} />

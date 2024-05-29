@@ -1,8 +1,5 @@
-import { useQuery } from "@apollo/client";
-import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { MY_SHOP } from "~/queries/section-builder/other.gql";
-import { THEMES_QUERY } from "~/queries/section-builder/theme.gql";
+import { useCallback, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const useRedirectSectionsPage = () => {
   const navigate = useNavigate();
@@ -15,8 +12,9 @@ export const useRedirectSectionsPage = () => {
 
 export const useRedirectSectionPage = (key) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const result = useCallback((key) => {
-    navigate(`/sections/${key}`);
+    navigate(`/sections/${key}`, { state: { from: location } });
     useScrollToTop();
   }, [])
   return result;
@@ -33,8 +31,9 @@ export const useRedirectGroupsPage = () => {
 
 export const useRedirectGroupPage = (key) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const result = useCallback((key) => {
-    navigate(`/groups/${key}`);
+    navigate(`/groups/${key}`, { state: { from: location } });
     useScrollToTop();
   }, [])
   return result;
@@ -51,8 +50,9 @@ export const useRedirectMyLibraryPage = () => {
 
 export const useRedirectPlansPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const result = useCallback(() => {
-    navigate(`/plans`);
+    navigate(`/plans`, { state: { from: location } });
     useScrollToTop();
   })
   return result;
@@ -69,9 +69,15 @@ export const useRedirectHelpCenterPage = () => {
 
 export const useBackPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const previousPath = useRef(location.state?.from?.pathname);
   const result = useCallback(() => {
-    navigate(-1);
-  })
+    if (previousPath.current === undefined) {
+      navigate('/');
+    } else {
+      navigate(-1);
+    }
+  }, [])
   return result;
 }
 

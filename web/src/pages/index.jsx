@@ -42,7 +42,7 @@ function HomePage() {
                 <Card>
                   <BlockStack gap={200}>
                   <Text as="p" variant="bodyMd">
-                    Hi {myShop?.myShop?.shop_owner}, welcome to your fresh batch of sections and templates to jazz up your Shopify theme!
+                    Hi {myShop?.myShop?.shop_owner}, welcome to our fresh batch of sections to jazz up your Shopify theme!
                   </Text>
                   <Text as="p" variant="bodyMd">
                     Once you've got these installed, just hop into the theme editor, and keep an eye out for 'OT' in the search box.
