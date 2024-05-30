@@ -14,7 +14,7 @@ function VideoGuideInstall() {
     >
       <VideoThumbnail
         videoLength={155}
-        thumbnailUrl="https://www.junglescout.com/wp-content/uploads/2021/05/blog_how-to-sell-on-shopify_feature-img.jpg"
+        thumbnailUrl="https://api.omnithemes.com/media/section_builder/image/welcome.jpg"
         onClick={handleThumbnailClick}
       />
     </MediaCard>
