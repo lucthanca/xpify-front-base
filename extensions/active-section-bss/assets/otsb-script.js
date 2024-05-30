@@ -505,6 +505,40 @@ requestAnimationFrame(() => {
           ).src = ``;
         } 
       }));
+      Alpine.data('xTruncateText', () => ({
+            truncateEl: "",
+            truncateInnerEl: "",
+            truncated: false,
+            truncatable: false,
+            load(truncateEl) {
+              const truncateRect = truncateEl.getBoundingClientRect();
+              truncateEl.style.setProperty("--truncate-height", `${truncateRect.height}px`);
+            },
+            setTruncate(element) {
+              if (element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth) {
+                this.truncated = true;
+                this.truncatable = true;
+              } else {
+                this.truncated = false;
+                this.truncatable = false;
+              }
+            },
+            open(el) {
+              const truncateEl = el.closest('.otsb-truncate-container').querySelector('.otsb-truncate-text');
+              if (truncateEl.classList.contains('otsb-truncate-expanded')) {
+                this.truncated = true;
+              } else {
+                const truncateInnerEl = truncateEl.querySelector('.otsb-truncate-inner');
+                truncateEl.classList.remove('otsb-truncate-line-clamped');
+                window.requestAnimationFrame(() => {
+                  const truncateInnerRect = truncateInnerEl.getBoundingClientRect();
+                  truncateEl.style.setProperty("--truncate-height-expanded", `${truncateInnerRect.height}px`);
+                  truncateEl.classList.add('otsb-truncate-expanded');
+                });
+                this.truncated = false;
+              }
+            }
+      }));
   })
 });
 
