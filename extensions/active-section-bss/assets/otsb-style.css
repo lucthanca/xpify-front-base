@@ -3847,11 +3847,11 @@ h5 *::-moz-selection,
 .h5 *::-moz-selection,
 h6 *::-moz-selection,
 .h6 *::-moz-selection {
-  background-color: rgba(var(--colors-heading), 0.2)
+  background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
 }
 
 h1 *::-moz-selection, .h1 *::-moz-selection, h2 *::-moz-selection, .otsb-h2 *::-moz-selection, h3 *::-moz-selection, .otsb-h3 *::-moz-selection, h4 *::-moz-selection, .h4 *::-moz-selection, h5 *::-moz-selection, .h5 *::-moz-selection, h6 *::-moz-selection, .h6 *::-moz-selection {
-  background-color: rgba(var(--colors-heading), 0.2)
+  background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
 }
 
 h1 *::selection,
@@ -3881,11 +3881,11 @@ h5::-moz-selection,
 .h5::-moz-selection,
 h6::-moz-selection,
 .h6::-moz-selection {
-  background-color: rgba(var(--colors-heading), 0.2)
+  background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
 }
 
 h1::-moz-selection, .h1::-moz-selection, h2::-moz-selection, .otsb-h2::-moz-selection, h3::-moz-selection, .otsb-h3::-moz-selection, h4::-moz-selection, .otsb-h4::-moz-selection, h5::-moz-selection, .h5::-moz-selection, h6::-moz-selection, .h6::-moz-selection {
-  background-color: rgba(var(--colors-heading), 0.2)
+  background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
 }
 
 h1::selection,
@@ -4206,11 +4206,11 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 ::-moz-selection {
-  background-color: rgba(var(--colors-text), 0.2);
+  background-color: rgba(var(--colors-text, 82, 81, 81), 0.2);
 }
 
 ::selection {
-  background-color: rgba(var(--colors-text), 0.2);
+  background-color: rgba(var(--colors-text, 82, 81, 81), 0.2);
 }
 
 .otsb-image-treatment-text::-moz-selection {
