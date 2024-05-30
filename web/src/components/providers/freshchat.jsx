@@ -3,7 +3,7 @@ function initFreshChat() {
   window.fcWidget.init({
     token: "63b4c80e-6420-42e4-ac23-0bb1c8f48f4d",
     host: "https://bsscommerce2.freshchat.com",
-    widgetUuid: "75de2c86-ca7e-49c0-9166-f8d24bfa1a01",
+    widgetUuid: "ec869ef3-eff5-41b3-95d6-4170208d40f0",
     open: false,
   });
 }

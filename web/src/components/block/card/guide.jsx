@@ -91,7 +91,7 @@ function GuideCard() {
                 'id': 'step_1',
                 'title': 'Enable the app embed in theme editor',
                 'content': <Button variant='primary' url={urlEmbedApp} target="_blank">Go to themes</Button>,
-                'demo': <Image source="https://api.omnithemes.com/media/section_builder/guide/guide_enable_app_embed.gif" />
+                'demo': <Image source="https://api.omnithemes.com/media/section_builder/image/guide_enable_app_embed.gif" />
               }}
               setProgress={setProgress}
               openChild={openChild}
@@ -120,7 +120,7 @@ function GuideCard() {
                 'id': 'step_3',
                 'title': 'Customize themes with the added sections',
                 'content': <Button variant='primary' url={urlEditTheme} target="_blank">Go to theme editor</Button>,
-                'demo': <Image source="https://api.omnithemes.com/media/section_builder/guide/guide_add_section.gif?1" />
+                'demo': <Image source="https://api.omnithemes.com/media/section_builder/image/guide_add_section.gif" />
               }}
               setProgress={setProgress}
               openChild={openChild}
