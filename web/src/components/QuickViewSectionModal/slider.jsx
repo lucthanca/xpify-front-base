@@ -31,13 +31,22 @@ const ModalContent = props => {
 };
 
 const QuickViewModalSlider = props => {
-  const { keys, onIndexChange, type = 'slider', refetch = () => {} } = props;
+  const { keys, onIndexChange, type = 'slider', refetch = () => {}, splide = undefined } = props;
   const { activeSection, show, onCloseQuickViewModal } = useQuickViewSlider();
+  
+  // Stop auto scroll if modal is active 
+  if (splide?.current?.splide && !!activeSection?.url_key) {
+    splide.current.splide.Components.Autoplay.pause();
+  }
+
   const handleClose = useCallback(() => {
     onCloseQuickViewModal();
     // Reload item sau khi uninstall khỏi toàn bộ theme và sau khi đóng popup
     if (location.pathname === '/my-library') {
       refetch();
+    }
+    if (splide?.current?.splide) {
+      splide.current.splide.Components.Autoplay.play();
     }
   }, []);
 
@@ -62,6 +71,7 @@ QuickViewModalSlider.propTypes = {
   onSlideMoved: PropTypes.func,
   refetch: PropTypes.func,
   type: PropTypes.string,
+  splide: PropTypes.object
 };
 
 export default memo(QuickViewModalSlider);

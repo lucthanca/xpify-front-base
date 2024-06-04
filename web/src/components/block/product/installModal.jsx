@@ -27,7 +27,7 @@ const useInstallModal = (refetch) => {
 };
 
 const InstallModal = props => {
-  const { refetch = () => {} } = props;
+  const { refetch = () => {}, splide = undefined } = props;
   const talonProps = useInstallModal(refetch);
   const { show, handleCloseModal, activeSection } = talonProps;
   const sectionTalonProps = useSection({ key: activeSection?.url_key });
@@ -37,17 +37,29 @@ const InstallModal = props => {
   const [confirmAction, setConfirmAction] = useState(() => {});
   const [currentThemeSelected, setCurrentThemeSelected] = useState(undefined);
 
+  // Stop auto scroll if modal is active 
+  if (splide?.current?.splide && !!activeSection?.url_key) {
+    splide.current.splide.Components.Autoplay.pause();
+  }
+
   const confirmDelete = useCallback(() => {
     setConfirmAction(() => talonManageProps.handleDelete);
     setIsShowConfirm(true);
     setCurrentThemeSelected(talonManageProps.currentThemeSelected);
   });
 
+  const handleClose = useCallback(() => {
+    handleCloseModal();
+    if (splide?.current?.splide) {
+      splide.current.splide.Components.Autoplay.play();
+    }
+  }, []);
+
   return (
     !isShowConfirm
     ? <Modal
       open={show}
-      onClose={handleCloseModal}
+      onClose={handleClose}
       title={`Install "${activeSection?.name ?? 'section'}" to theme`}
       primaryAction={{
         content: (!loadingWithoutData && talonManageProps.installed) ? 'Reinstall to theme' : 'Install to theme',
