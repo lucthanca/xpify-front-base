@@ -15,7 +15,8 @@ const BestSellersHomepage = () => {
       },
       autoplay: true,
       interval: 3000,
-      rewind: true
+      rewind: true,
+      rewindByDrag: true
     };
   });
   return (
