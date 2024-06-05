@@ -66,7 +66,7 @@ function CollapsibleButton({options, setProgress, openChild, setOpenChild}) {
               </InlineStack>
             </div>
 
-            <Box paddingBlockStart={200}>
+            <Box paddingBlockStart={200} minWidth='100%'>
               <Collapsible
                 open={openChild === options.id}
                 id="basic-collapsible"
@@ -82,7 +82,9 @@ function CollapsibleButton({options, setProgress, openChild, setOpenChild}) {
                     </BlockStack>
                     {options.demo &&
                       <Card padding={0} roundedAbove='xs'>
-                        {options.demo}
+                        <div className='aspect-[3/2]'>
+                          {options.demo}
+                        </div>
                       </Card>
                     }
                   </InlineGrid>

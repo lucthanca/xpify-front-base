@@ -32,7 +32,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
     const column = window.innerWidth < 425 ? 1 : 2;
     slideOptions.arrows = items && items.length > column;
     slideOptions.type = "slide";
-    // slideOptions.type = items && items.length <= column ? "slide" : "loop";
+    slideOptions.rewindByDrag = items && items.length <= column ? false : true;
 
     return slideOptions;
   }, [items]);

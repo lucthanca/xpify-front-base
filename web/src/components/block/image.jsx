@@ -9,20 +9,20 @@ function LazyLoadImage({className, src, srcSet, imgSizes}) {
 
   return (
     <>
-      {loadingImg &&
-        <div className='w-full h-full flex justify-center items-center'>
-          <Spinner accessibilityLabel="loading" size="large" />
-        </div>
-      }
       <img
         className={className}
-        style={{height: loadingImg ? '0' : '100%'}}
+        style={loadingImg ? {opacity: '0', position: 'absolute'} : {}}
         loading="lazy"
         src={src}
         srcSet={srcSet}
         sizes={imgSizes}
         onLoad={handleOnLoadImg}
       />
+      {loadingImg &&
+        <div className='w-full h-full flex justify-center items-center'>
+          <Spinner accessibilityLabel="loading" size="large" />
+        </div>
+      }
     </>
   );
 }
