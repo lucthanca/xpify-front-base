@@ -28,8 +28,7 @@ export const useRelatedProducts = (props: RelatedProductsTalonProps = {}): Relat
     },
     autoplay: true,
     interval: 3000,
-    rewind: true,
-    rewindByDrag: true
+    rewind: true
   }));
 
   return {
