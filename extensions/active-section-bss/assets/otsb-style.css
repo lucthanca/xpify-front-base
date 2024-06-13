@@ -1291,9 +1291,10 @@ video {
   }
 }
 
-.otsb-image-position-right .otsb-iwt-overlap{
-  z-index:10;
-  padding-top:0.75rem
+.otsb-image-position-right .otsb-iwt-overlap {
+  /*decrease z-10 to z-2 to prevent image overlap above content in other theme*/
+  z-index:2;
+  padding-top:0.75rem;
 }
 
 @media (min-width: 768px){
@@ -1303,9 +1304,10 @@ video {
   }
 }
 
-.otsb-image-position-left .otsb-iwt-overlap{
-  z-index:10;
-  padding-top:0.75rem
+.otsb-image-position-left .otsb-iwt-overlap {
+  /*decrease z-10 to z-2 to prevent image overlap above content in other theme*/
+  z-index:2;
+  padding-top:0.75rem;
 }
 
 @media (min-width: 768px){
@@ -3964,8 +3966,9 @@ h6,
 [type="button"],
 .otsb-button {
   border-radius: var(--border-radius);
+  /*decrease z-10 to z-2 to prevent button above content in other theme*/
   position:relative;
-  z-index:10;
+  z-index:2;
   -webkit-user-select:none;
      -moz-user-select:none;
           user-select:none;
