@@ -127,3 +127,7 @@ button.splide__arrow {
     grid-template-columns: 1fr;
   }
 }
+
+#crisp-chatbox {
+  z-index: 500;
+}
