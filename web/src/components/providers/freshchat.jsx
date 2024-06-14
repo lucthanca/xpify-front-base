@@ -1,30 +1,19 @@
 import { createContext, memo, useCallback, useContext, useEffect, useMemo } from 'react';
-function initFreshChat() {
-  window.fcWidget.init({
-    token: "63b4c80e-6420-42e4-ac23-0bb1c8f48f4d",
-    host: "https://bsscommerce2.freshchat.com",
-    widgetUuid: "ec869ef3-eff5-41b3-95d6-4170208d40f0",
-    open: false,
-  });
+function initialize(){
+  window.$crisp=[];
+  window.CRISP_WEBSITE_ID="5e366ec4-30b5-4074-abce-ef95ae74b337";
+  (function(){ var d=document; var s=d.createElement("script"); s.src="https://client.crisp.chat/l.js"; s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
 }
-function initialize(i,t){
-  console.log('RUN INIT Freshchat');
-  var e;i.getElementById(t)?initFreshChat():((e=i.createElement("script")).id=t,e.async=!0, e.src="https://bsscommerce2.freshchat.com/js/widget.js",e.onload=initFreshChat,i.head.appendChild(e))
-}
-function initiateCall(){initialize(document,"Freshchat-js-sdk")}
+function initiateCall(){initialize()}
 
 const FreshChatContext = createContext(undefined);
 
 const FreshChatProvider = props => {
   const open = useCallback(() => {
-    if (!window.fcWidget.isOpen()) {
-      window.fcWidget.open();
-    }
+    $crisp.push(['do', 'chat:open']);
   }, []);
   const close = useCallback(() => {
-    if (window.fcWidget.isOpen()) {
-      window.fcWidget.close();
-    }
+    $crisp.push(['do', 'chat:hide']); 
   }, []);
 
   const api = useMemo(() => {
