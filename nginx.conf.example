@@ -6,7 +6,7 @@ location / {
 
     try_files $uri $uri/ /index.html;
 }
-location /graphql {
+location ~ ^/(graphql|admin|rest|static|media|api|otsb) {
     proxy_pass http://example.com:8080;
     proxy_set_header Host               $http_host;
     proxy_set_header X-Forwarded-Host   $http_host;
