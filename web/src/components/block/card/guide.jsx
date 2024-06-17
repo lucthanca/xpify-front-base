@@ -52,7 +52,7 @@ function GuideCard() {
 
   return (
     <Card padding={0}>
-      <Box padding={400}>
+      <Box padding={400} paddingBlockEnd={200}>
         <BlockStack gap={200}>
           <InlineGrid columns="1fr auto">
             <Text variant="headingMd" as="h2">Setup guide</Text>
@@ -64,7 +64,7 @@ function GuideCard() {
           </InlineGrid>
           <Text variant="bodyMd">Use this guide to start customizing your Shopify theme with fresh sections and quickly enhance your store's UI/UX.</Text>
 
-          <InlineStack>
+          {/* <InlineStack>
             <div className={progress >= totalStep ? `step-complete` : `step-complete step-complete-padding-left`}>
               {
                 progress >= totalStep
@@ -75,7 +75,7 @@ function GuideCard() {
                 : <Text variant="bodyMd">{progress} / {totalStep} completed</Text>
               }
             </div>
-          </InlineStack>
+          </InlineStack> */}
         </BlockStack>
       </Box>
       <Box paddingInline={200} paddingBlockEnd={200} borderRadius={200}>
@@ -89,7 +89,7 @@ function GuideCard() {
             <CollapsibleGuide
               options={{
                 'id': 'step_1',
-                'title': 'Enable the app embed in theme editor',
+                'title': 'Step 1: Enable the app embed in theme editor',
                 'content': <Button variant='primary' url={urlEmbedApp} target="_blank">Go to themes</Button>,
                 'demo': <Image source="https://api.omnithemes.com/media/section_builder/image/guide_enable_app_embed.gif" />
               }}
@@ -100,7 +100,7 @@ function GuideCard() {
             <CollapsibleGuide
               options={{
                 'id': 'step_2',
-                'title': 'Install sections to theme',
+                'title': 'Step 2: Install sections to theme',
                 'content': <BlockStack gap={200}><List gap="100">
                     <List.Item>Find sections</List.Item>
                     <List.Item>Add sections to themes</List.Item>
@@ -118,7 +118,7 @@ function GuideCard() {
             <CollapsibleGuide
               options={{
                 'id': 'step_3',
-                'title': 'Customize themes with the added sections',
+                'title': 'Step 3: Customize themes with the added sections',
                 'content': <Button variant='primary' url={urlEditTheme} target="_blank">Go to theme editor</Button>,
                 'demo': <Image source="https://api.omnithemes.com/media/section_builder/image/guide_add_section.gif" />
               }}
