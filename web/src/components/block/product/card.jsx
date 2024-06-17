@@ -10,13 +10,14 @@ import {
   Text,
   Tooltip
 } from '@shopify/polaris';
-import { ViewIcon, PlusCircleIcon, PaymentFilledIcon, ExternalIcon } from '@shopify/polaris-icons';
+import { ViewIcon, PlusCircleIcon, PaymentFilledIcon, ExternalIcon, ShareIcon } from '@shopify/polaris-icons';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import Badges from '~/components/block/product/badge/bagList';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
 import { usePurchase } from '~/hooks/section-builder/purchase';
 import { useRedirectGroupPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 import { useSectionListContext } from '~/context';
+import TrySectionButton from '~/components/block/product/demolinkbtn';
 
 const productType = {
   'simple': 1,
@@ -124,16 +125,7 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
 
             <InlineStack gap='200'>
               {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="View section" />)}
-              {
-                item?.demo_link &&
-                <Tooltip content="View demo store">
-                  <Button
-                    icon={<Icon source={ExternalIcon} tone="base" />}
-                    size="large"
-                    url={item.demo_link}
-                  />
-                </Tooltip>
-              }
+              {parseInt(item.type_id) === parseInt(productType.simple) && <TrySectionButton id={item.id} />}
               {item.actions?.install && <InstallButton item={item} />}
               {
                 item.actions?.purchase &&
@@ -146,6 +138,8 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
                   />
                 </Tooltip>
               }
+
+
             </InlineStack>
           </BlockStack>
         </Box>
