@@ -195,3 +195,10 @@ export const LATEST_RELEASE_QUERY = gql`
   }
   ${commonSectionFragment}
 `;
+
+export const TRY_SECTION_MUTATION_KEY = 'trySection';
+export const TRY_SECTION_MUTATION = gql`
+    mutation TrySection($id: ID!) {
+      ${TRY_SECTION_MUTATION_KEY}(section_id: $id)
+    }
+`;
