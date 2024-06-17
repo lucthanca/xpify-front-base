@@ -639,7 +639,7 @@ video {
   --tw-contain-size: ;
   --tw-contain-layout: ;
   --tw-contain-paint: ;
-  --tw-contain-style: 
+  --tw-contain-style:
 }
 
 ::backdrop{
@@ -693,7 +693,7 @@ video {
   --tw-contain-size: ;
   --tw-contain-layout: ;
   --tw-contain-paint: ;
-  --tw-contain-style: 
+  --tw-contain-style:
 }
 
 .\!container{
@@ -1399,6 +1399,10 @@ video {
   width: -moz-fit-content;
   width: fit-content;
   background-color: rgba(var(--background-color));
+}
+
+.otsb-image-with-text .otsb-button {
+    z-index: 1;
 }
 
 .otsb-contact-align-right{
