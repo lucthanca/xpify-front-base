@@ -11,7 +11,7 @@ import { Spinner } from '@shopify/polaris';
 export const ShopifyLoadingFull = () => {
   return (
     <div className='grid grid-rows-1 justify-center h-fill-available items-center'>
-      {/*<Loading />*/}
+      <Loading />
       {/*<Spinner accessibilityLabel={'Loading'} />*/}
     </div>
   );
