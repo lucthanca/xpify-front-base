@@ -19,6 +19,11 @@ import { BestSeller, LatestRelease } from '~/components/hompage';
 import Footer from '~/components/block/footer';
 import { Loading } from '@shopify/app-bridge-react';
 import { useFreshChat } from '~/components/providers/freshchat';
+import {onLCP, onFID, onCLS} from 'web-vitals';
+onCLS(console.log);
+onFID(console.log);
+onLCP(console.log);
+
 
 function HomePage() {
   const { data: myShop, loading: myShopLoading } = useQuery(MY_SHOP, {

@@ -17,14 +17,23 @@
         document.getElementsByTagName('head')[0].append(script);
       }
     </script>
-
+    <link rel="stylesheet" href="index.css">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/splidejs/4.1.4/css/splide.min.css"
     >
   </head>
   <body>
+    <img id="preloading-img" src='https://api.omnithemes.com/media/whatsapp/omnithemes-1.png' alt='omnithemes-loading' />
+    <div class="circle" id="preloading-circle"></div>
     <div id="app"><!--index.jsx injects App.jsx here--></div>
     <script type="module" src="/index.jsx"></script>
+    <script>
+      function hideImage() {
+          document.getElementById('preloading-img').style.display = 'none';
+          document.getElementById('preloading-circle').style.display = 'none';
+      }
+      setTimeout(hideImage, 1000);
+    </script>
   </body>
 </html>

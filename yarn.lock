@@ -1130,30 +1130,30 @@
   resolved "https://registry.npmjs.org/@shopify/polaris-icons/-/polaris-icons-8.0.0.tgz"
   integrity sha512-NyO/gkBvJfLiIDHywTFRQpwrA+wHHb9xk3uiApArBBB3zluWK1Gos+6zldfXPRZzHSzk2gB6IP2dQDJ2zJmIcg==
 
-"@shopify/polaris-icons@^8.6.0":
-  version "8.6.0"
-  resolved "https://registry.npmjs.org/@shopify/polaris-icons/-/polaris-icons-8.6.0.tgz"
-  integrity sha512-IKvVwvRxguAObrPFVMs79e8+sg813jPBt/+8IyOxNcvUbzC2L3qXcvm7d4bKeQgP6I3IeuwF1FSdwI4lNAPYjQ==
+"@shopify/polaris-icons@^8.11.1":
+  version "8.11.1"
+  resolved "https://registry.npmjs.org/@shopify/polaris-icons/-/polaris-icons-8.11.1.tgz"
+  integrity sha512-2HLzvJWMejKIwS5P2bs7k5CAjBKwPnD/iy9ncPzcgqRjmFInBXLtUXFQhPWDw6JwXzb1ZjNQK/ssTctcfz87Sw==
 
 "@shopify/polaris-tokens@^6.14.0":
   version "6.14.0"
   resolved "https://registry.npmjs.org/@shopify/polaris-tokens/-/polaris-tokens-6.14.0.tgz"
   integrity sha512-eMa9X0QzOB3o/4O1ATcPKpc4NPqm57lpaqiRkRu8XRkKzwH+kL9J6vI8YNnDbePfndMNAA9MRp0HR1XqaPxCMg==
 
-"@shopify/polaris-tokens@^8.5.0", "@shopify/polaris-tokens@^8.8.0":
-  version "8.8.0"
-  resolved "https://registry.npmjs.org/@shopify/polaris-tokens/-/polaris-tokens-8.8.0.tgz"
-  integrity sha512-Ml0sR+hu/uZJVDZjF2+2qgogCrXSvQ8TOwkrRNUuzhDG58f99FHnyuQ1kprUFyDt0DSEZJ0Jf4pzrBnkI0UgVg==
+"@shopify/polaris-tokens@^8.10.0", "@shopify/polaris-tokens@^8.5.0":
+  version "8.10.0"
+  resolved "https://registry.npmjs.org/@shopify/polaris-tokens/-/polaris-tokens-8.10.0.tgz"
+  integrity sha512-y4PDtRbFKGHwA6Lu7a3L4N9SDP6gZv4tw6u0viumtcXcbF0T2j1xPmyuJZNc9c7vmhNSARCg27NGQFpPgxuaEg==
   dependencies:
     deepmerge "^4.3.1"
 
-"@shopify/polaris@^12.19.2":
-  version "12.19.2"
-  resolved "https://registry.npmjs.org/@shopify/polaris/-/polaris-12.19.2.tgz"
-  integrity sha512-mh94tXIjOD1T+KtAWVqepTN2qnh6YKTtF/HAVXySanlPjtlY5rraChdxAqNbnigsdlCZ6tOpssdEctA2GJkvLw==
+"@shopify/polaris@^12.19.2", "@shopify/polaris@^12.27.0":
+  version "12.27.0"
+  resolved "https://registry.npmjs.org/@shopify/polaris/-/polaris-12.27.0.tgz"
+  integrity sha512-Y8yus6iEjcfW2ZtEJtlqxbWeDJqTX3S/MOLH4GWRvU5gFYJQhlaHaETs0+OimbhEpO95mXbY8qB+KnIJaVBHwA==
   dependencies:
-    "@shopify/polaris-icons" "^8.6.0"
-    "@shopify/polaris-tokens" "^8.8.0"
+    "@shopify/polaris-icons" "^8.11.1"
+    "@shopify/polaris-tokens" "^8.10.0"
     "@types/react" "*"
     "@types/react-dom" "*"
     "@types/react-transition-group" "^4.4.2"
@@ -1343,7 +1343,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@>=18.0.0":
+"@types/react@*", "@types/react@^18.0.0", "@types/react@>=18.0.0":
   version "18.2.48"
   resolved "https://registry.npmjs.org/@types/react/-/react-18.2.48.tgz"
   integrity sha512-qboRCl6Ie70DQQG9hhNREz81jqC1cs9EVNcjQ1AU+jH6NFfSAhVVbrrY/+nSF+Bsk4AOwm9Qa61InvMCyV+H3w==
@@ -1422,7 +1422,7 @@
   version "1.0.0"
   resolved "file:@xpify/buildpack"
 
-"@xpify/src@file:/var/www/xpify-section-builder/web":
+"@xpify/src@file:/var/public/section-builder/shopify-section-builder-react/web":
   version "1.0.0"
   resolved "file:web"
   dependencies:
@@ -1448,6 +1448,7 @@
     react-i18next "^13.0.0"
     react-router-dom "^6.3.0"
     vite "^4.5.2"
+    web-vitals "^3.5.2"
 
 "@yarnpkg/lockfile@^1.1.0":
   version "1.1.0"
@@ -5899,7 +5900,7 @@ react-is@^16.13.1, react-is@^16.7.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-reconciler@^0.29.0:
+react-reconciler@^0.29.0, react-reconciler@0.29.0:
   version "0.29.0"
   resolved "https://registry.npmjs.org/react-reconciler/-/react-reconciler-0.29.0.tgz"
   integrity sha512-wa0fGj7Zht1EYMRhKWwoo1H9GApxYLBuhoAuXN0TlltESAjDssB+Apf0T/DngVqaMyPypDmabL37vw/2aRM98Q==
@@ -7266,10 +7267,20 @@ web-streams-polyfill@^3.0.3:
   resolved "https://registry.npmjs.org/web-streams-polyfill/-/web-streams-polyfill-3.3.2.tgz"
   integrity sha512-3pRGuxRF5gpuZc0W+EpwQRmCD7gRqcDOMt688KmdlDAgAyaB1XlN0zq2njfDNm44XVdIouE7pZ6GzbdyH47uIQ==
 
-web-vitals@^3.0.1, web-vitals@^3.5.2:
+web-vitals@^3.0.1:
   version "3.5.2"
   resolved "https://registry.npmjs.org/web-vitals/-/web-vitals-3.5.2.tgz"
   integrity sha512-c0rhqNcHXRkY/ogGDJQxZ9Im9D19hDihbzSQJrsioex+KnFgmMzBiy57Z1EjkhX/+OjyBpclDCzz2ITtjokFmg==
+
+web-vitals@^3.5.2:
+  version "3.5.2"
+  resolved "https://registry.npmjs.org/web-vitals/-/web-vitals-3.5.2.tgz"
+  integrity sha512-c0rhqNcHXRkY/ogGDJQxZ9Im9D19hDihbzSQJrsioex+KnFgmMzBiy57Z1EjkhX/+OjyBpclDCzz2ITtjokFmg==
+
+web-vitals@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/web-vitals/-/web-vitals-4.1.1.tgz"
+  integrity sha512-wW3cdBZ56Rc5Az8p1Pw6g1zHU7X8HPLigQjD5Z0ef3EG9SPo4iO7RxsiU87aH3xaaEw0if6Ven2s+zlNGiXYqw==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
