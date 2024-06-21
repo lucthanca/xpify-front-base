@@ -2,9 +2,18 @@ window.OTSB = {
   sliderScript: 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js',
   loadedScript: [],
 };
+const xParseJSON = (jsonString) => {
+  jsonString = String.raw`${jsonString}`;
+  jsonString = jsonString.replaceAll("\\","\\\\").replaceAll('\\"', '\"');
+
+  return JSON.parse(jsonString);
+}
 
 requestAnimationFrame(() => {
   document.addEventListener('alpine:init', () => {
+    Alpine.store('xPopup', {
+      open: false,
+    });
       Alpine.store('xScrollPromotion', {
           load(el) {
               let scroll = el.getElementsByClassName('el_animate');
