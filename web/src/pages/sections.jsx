@@ -13,7 +13,6 @@ const SectionsPage = props => {
       <Layout>
         <SectionCollection {...props} />
       </Layout>
-      <Footer />
     </Page>
   );
 }

@@ -16,7 +16,8 @@ const Nav = () => {
   };
   useEffect(() => {
     app.subscribe(Redirect.Action.APP, function(redirectData) {
-      scrollToTop();
+      //scrollToTop();
+      window.scrollTo(0, 0);
     });
   }, []);
   return <NavigationMenu navigationLinks={links} matcher={matcher} />;

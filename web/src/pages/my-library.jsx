@@ -91,7 +91,6 @@ function MyLibrary() {
       <Layout>
         {pageActive}
       </Layout>
-      <Footer />
     </Page>
   );
 }

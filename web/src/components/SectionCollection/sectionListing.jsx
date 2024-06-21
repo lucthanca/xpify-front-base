@@ -25,14 +25,18 @@ const SectionListing = props => {
   console.log({ sections });
   return (
     <>
-      <Box padding={400}>
+      <Box>
         {loading && hasFilter && <Loading />}
-        <BlockStack gap='400'>
-          <Search shouldPinTagFilter={shouldPinTagFilter} onFilterChange={handleFilterChange} onSortChange={handleSortChange} />
-          <BlockStack gap='400'>
-            <SectionCollection loading={loadingWithoutData} items={sections} refetch={refetchSections} onPageChange={handlePageChange} currentPage={pageInfo?.current_page} totalPages={pageInfo?.total_pages} />
-            {/* {(!hasFilter && !disableCategory && loadingWithoutData) && <CategoryCollection />} */}
-          </BlockStack>
+        <BlockStack>
+          <Box>
+            <Search shouldPinTagFilter={shouldPinTagFilter} onFilterChange={handleFilterChange} onSortChange={handleSortChange} />
+          </Box>
+          <Box padding={400}>
+            <BlockStack gap='400'>
+              <SectionCollection loading={loadingWithoutData} items={sections} refetch={refetchSections} onPageChange={handlePageChange} currentPage={pageInfo?.current_page} totalPages={pageInfo?.total_pages} />
+              {/* {(!hasFilter && !disableCategory && loadingWithoutData) && <CategoryCollection />} */}
+            </BlockStack>
+          </Box>
         </BlockStack>
       </Box>
 
