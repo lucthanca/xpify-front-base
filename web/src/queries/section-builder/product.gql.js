@@ -158,6 +158,7 @@ export const commonSectionFragment = gql`
   fragment CommonSectionFragment on SectionInterface {
     ...CommonSectionField
     ... on Section { plan_id src version release_note }
+    ... on GroupSection { child_ids }
     categoriesV2 { id name }
   }
   ${CommonSectionField}

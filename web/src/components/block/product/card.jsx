@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   Icon,
-  InlineGrid,
   InlineStack,
   Text,
   Tooltip
@@ -18,6 +17,7 @@ import { usePurchase } from '~/hooks/section-builder/purchase';
 import { useRedirectGroupPage, useRedirectSectionPage } from '~/hooks/section-builder/redirect';
 import { useSectionListContext } from '~/context';
 import TrySectionButton from '~/components/block/product/demolinkbtn';
+import LazyLoadImage from '~/components/block/image';
 
 const productType = {
   'simple': 1,
@@ -69,8 +69,6 @@ const InstallButton = props => {
 };
 
 function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) / 4), (min-width: 768px) calc((100vw - 2rem) / 2), 100vw"}) {
-  console.log('re-render-productCard');
-
   const handleRedirectProductPage = useRedirectSectionPage();
   const handleRedirectGroupPage = useRedirectGroupPage();
   const handleRedirect = useCallback((product) => {
@@ -89,13 +87,7 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
     <>
       <Card padding='0' background="bg-surface-secondary" className='h-full'>
         <div className='cursor-pointer aspect-[16/9]' onClick={() => handleRedirect(item)}>
-          <img
-            className="object-cover w-full h-full"
-            loading="lazy"
-            src={ item?.images[0]?.src }
-            srcSet={ item?.images[0]?.srcset }
-            sizes={imgSizes}
-          />
+          <LazyLoadImage className={"object-cover w-full h-full"} src={ item?.images[0]?.src } srcSet={ item?.images[0]?.srcset } imgSizes={imgSizes} />
         </div>
 
         <Box padding={400}>

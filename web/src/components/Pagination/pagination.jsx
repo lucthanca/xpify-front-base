@@ -43,6 +43,10 @@ const Pagination = props => {
               hasNext={hasNext}
               label={`Page ${currentPage} of ${totalPages}`}
               hasPrevious={hasPrev}
+              previousKeys={[74]}
+              previousTooltip="Previous (J)"
+              nextKeys={[75]}
+              nextTooltip="Next (K)"
             />
           </InlineStack>
         </Box>

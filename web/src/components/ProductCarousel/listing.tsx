@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useEffect, useMemo, useRef } from 'react';
 import { useCarousel } from '~/talons/carousel/useCarousel';
 import { Splide, SplideSlide, Options } from '@splidejs/react-splide';
 import { SectionListProvider } from '~/context';
@@ -32,10 +32,12 @@ const Carousel: React.FC<CarouselProps> = (props) => {
     const column = window.innerWidth < 425 ? 1 : 2;
     slideOptions.arrows = items && items.length > column;
     slideOptions.type = "slide";
-    // slideOptions.type = items && items.length <= column ? "slide" : "loop";
+    slideOptions.rewindByDrag = items && items.length <= column ? false : true;
 
     return slideOptions;
   }, [items]);
+
+  const splideRef = useRef(null);
 
   if (loadingWithoutData && skeleton) {
     return <>{skeleton}</>;
@@ -48,7 +50,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
         <TitleBlock title={title} subTitle={subTitle} />
 
         <SectionListProvider>
-          <Splide options={options}>
+          <Splide ref={splideRef} options={options}>
             {items.map((item) => {
               return (
                 <SplideSlide key={item.id}>
@@ -63,8 +65,8 @@ const Carousel: React.FC<CarouselProps> = (props) => {
               )
             })}
           </Splide>
-          <QuickViewSlider type='normal' />
-          <InstallModal />
+          <QuickViewSlider type='normal' splide={splideRef} />
+          <InstallModal splide={splideRef} />
         </SectionListProvider>
       </BlockStack>
     </Box>

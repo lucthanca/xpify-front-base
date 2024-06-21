@@ -9,7 +9,6 @@ function GroupsPage() {
       <Layout>
         <GroupCollection />
       </Layout>
-      <Footer />
     </Page>
   );
 }

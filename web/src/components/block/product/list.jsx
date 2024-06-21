@@ -19,7 +19,7 @@ function ProductList({ items, refetch, columns }) {
 
   return (
     <SectionListProvider>
-      <InlineGrid columns={columns} gap='600'>
+      <InlineGrid columns={columns} gap='400'>
         {items.map(item => (
           <ProductCard key={item.id} item={item} />
         ))}

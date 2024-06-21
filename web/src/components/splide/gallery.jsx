@@ -2,6 +2,7 @@ import {
   Splide,
   SplideSlide
 } from '@splidejs/react-splide';
+import LazyLoadImage from '~/components/block/image';
 
 export default function GallerySlider({gallery, imgSizes = '(min-width: 950px) 950px, 100vw'}) {
   return (
@@ -17,12 +18,9 @@ export default function GallerySlider({gallery, imgSizes = '(min-width: 950px) 9
       {
         gallery.map(slide => (
           <SplideSlide className='splide-gallery-li' key={ slide.src }>
-            <img
-              loading='lazy'
-              src={ slide.src }
-              srcSet={ slide.srcset }
-              sizes={imgSizes}
-            />
+            <div className='w-full'>
+              <LazyLoadImage src={ slide.src } srcSet={slide.srcset} imgSizes={imgSizes} />
+            </div>
           </SplideSlide>
         ))
       }
