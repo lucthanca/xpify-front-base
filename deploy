@@ -1,0 +1,34 @@
+#!/bin/bash
+
+SHOPIFY_CLI_PARTNERS_TOKEN=
+XPIFY_APP_TOKEN=
+SHOPIFY_API_KEY=
+XPIFY_BACKEND_URL=
+
+# Define color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Check for the --skip-build-frontend argument
+SKIP_BUILD=false
+for arg in "$@"; do
+  if [ "$arg" == "--skip-build-frontend" ]; then
+    SKIP_BUILD=true
+    break
+  fi
+done
+# Run the deploy command
+echo -e "${YELLOW}Đang deploy...${NC}"
+SHOPIFY_CLI_PARTNERS_TOKEN=$SHOPIFY_CLI_PARTNERS_TOKEN npm run deploy
+
+# If --skip-build-frontend is not provided, run the build commands
+if [ "$SKIP_BUILD" = false ]; then
+  echo -e "${YELLOW}Đang build frontend...${NC}"
+  cd web || { echo -e "${RED}Không truy cập được vào thư mục 'web', kiểm tra lại.${NC}"; exit 1; }
+  git pull origin develop
+  XPIFY_APP_TOKEN=$XPIFY_APP_TOKEN SHOPIFY_API_KEY=$SHOPIFY_API_KEY XPIFY_BACKEND_URL=$XPIFY_BACKEND_URL npm run build
+fi
+
+echo -e "${GREEN}Đã deploy xong!${NC}"
