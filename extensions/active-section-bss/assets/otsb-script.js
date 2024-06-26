@@ -2,7 +2,7 @@ window.OTSB = {
   sliderScript: 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js',
   loadedScript: [],
 };
-const xParseJSON = (jsonString) => {
+const xParseJSONOTSB = (jsonString) => {
   jsonString = String.raw`${jsonString}`;
   jsonString = jsonString.replaceAll("\\","\\\\").replaceAll('\\"', '\"');
 
@@ -27,7 +27,7 @@ requestAnimationFrame(() => {
           fire(eventName, el, data) {
               if (Shopify.designMode) return;
 
-              const formatedData = data ? data : xParseJSON(el.getAttribute('x-customer-event-data'));
+              const formatedData = data ? data : xParseJSONOTSB(el.getAttribute('x-customer-event-data'));
               Shopify.analytics.publish(eventName, formatedData);
           }
       });
@@ -369,7 +369,7 @@ requestAnimationFrame(() => {
             } else {
               src = `https://player.vimeo.com/video/${id}?muted=1&autoplay=1&playsinline=1&api=1&controls=${controls}`;
             }
-      
+
             if (controls == 0) {
               pointerEvent = " pointer-events-none";
             }
@@ -378,11 +378,11 @@ requestAnimationFrame(() => {
               videoContainer.innerHTML = `<iframe data-video-loop="${loop}" class="otsb-iframe-video absolute w-full h-full otsb-video top-1/2 -translate-y-1/2 ${ pointerEvent }"
                 frameborder="0" host="${host}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen playsinline
                 src="${src}" title="${title}"></iframe>`;
-      
+
               videoContainer.querySelector('.otsb-iframe-video').addEventListener("load", () => {
                 setTimeout(() => {
                   this.play(videoContainer);
-      
+
                   if (host == 'youtube') {
                     this.ytIframeId++;
                     videoContainer.querySelector('.otsb-iframe-video').contentWindow.postMessage(JSON.stringify({
@@ -400,7 +400,7 @@ requestAnimationFrame(() => {
                 }, 100);
               });
             });
-      
+
             this.externalListen();
           },
           renderVimeoFacade(el, id, options) {
@@ -413,7 +413,7 @@ requestAnimationFrame(() => {
                     <img src="${response.thumbnail_url}" loading="lazy" class="w-full h-full object-cover" alt="${options.alt}" width="${response.width}" height="${response.height}"/>
                   </picture>
                 `;
-                
+
                 requestAnimationFrame(() => {
                   el.innerHTML = html;
                 });
@@ -423,15 +423,15 @@ requestAnimationFrame(() => {
             if (!this.externalListened) {
               window.addEventListener('message', (event) => {
                 var iframes = document.getElementsByTagName('IFRAME');
-      
+
                 for (let i = 0, iframe, win, message; i < iframes.length; i++) {
                   iframe = iframes[i];
-      
+
                   if (iframe.getAttribute('data-video-loop') !== 'true') continue;
-      
+
                   // Cross-browser way to get iframe's window object
                   win = iframe.contentWindow || iframe.contentDocument.defaultView;
-      
+
                   if (win === event.source) {
                     if (event.origin == 'https://www.youtube.com') {
                       message = JSON.parse(event.data);
@@ -439,7 +439,7 @@ requestAnimationFrame(() => {
                         this.play(iframe.parentNode);
                       }
                     }
-      
+
                     if (event.origin == 'https://player.vimeo.com') {
                       message = JSON.parse(event.data);
                       if (message.event == "finish") {
@@ -449,7 +449,7 @@ requestAnimationFrame(() => {
                   }
                 }
               });
-      
+
               this.externalListened = true;
             }
           },
@@ -462,7 +462,7 @@ requestAnimationFrame(() => {
               "method": cmd,
               "value": "true"
             };
-      
+
             iframe.contentWindow.postMessage(JSON.stringify(command), '*');
           },
         });
@@ -512,7 +512,7 @@ requestAnimationFrame(() => {
           this.$el.querySelector(
             "iframe"
           ).src = ``;
-        } 
+        }
       }));
       Alpine.data('xTruncateText', () => ({
             truncateEl: "",
