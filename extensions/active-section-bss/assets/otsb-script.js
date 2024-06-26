@@ -237,7 +237,7 @@ requestAnimationFrame(() => {
               };
 
               if (!window.OTSB.loadedScript.includes('slider')) {
-                  deferScriptLoad('slider', window.OTSB.sliderScript, initSlider, true);
+                  deferScriptLoadOtsb('slider', window.OTSB.sliderScript, initSlider, true);
               } else if (window.Splide) {
                   initSlider();
               } else {
@@ -551,7 +551,7 @@ requestAnimationFrame(() => {
   })
 });
 
-const deferScriptLoad = (name, src, onload, requestVisualChange = false) => {
+const deferScriptLoadOtsb = (name, src, onload, requestVisualChange = false) => {
   window.OTSB.loadedScript.push(name);
 
   ((events) => {
