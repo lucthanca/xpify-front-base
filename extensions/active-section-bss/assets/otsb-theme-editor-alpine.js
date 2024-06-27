@@ -156,14 +156,14 @@ if (!window.otsb_designMode.loadedScripts.includes('otsb-map')) {
           })
 
           if(eventDetail && eventDetail.blockID && eventDetail.sectionID) {
-            this.eventDetail = xParseJSON(document.getElementById('x-data-event-' + eventDetail.blockID).getAttribute('x-event-data'));
+            this.eventDetail = xParseJSONOTSB(document.getElementById('x-data-event-' + eventDetail.blockID).getAttribute('x-event-data'));
             let element = document.getElementById('EventDescription-' + this.eventDetail.sectionID);
             element.innerHTML = this.eventDetail.description;
             element.innerHTML = element.textContent;
           }
         },
         load(el, blockID) {
-          this.eventDetail = xParseJSON(el.closest('#x-data-event-' + blockID).getAttribute('x-event-data'));
+          this.eventDetail = xParseJSONOTSB(el.closest('#x-data-event-' + blockID).getAttribute('x-event-data'));
           let element = document.getElementById('EventDescription-' + this.eventDetail.sectionID);
           this.sectionID = this.eventDetail.sectionID;
           element.innerHTML = this.eventDetail.description;
