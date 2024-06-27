@@ -87,7 +87,7 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
     <>
       <Card padding='0' background="bg-surface-secondary" className='h-full'>
         <div className='cursor-pointer aspect-[16/9]' onClick={() => handleRedirect(item)}>
-          <LazyLoadImage className={"object-cover w-full h-full"} src={ item?.images[0]?.src } srcSet={ item?.images[0]?.srcset } imgSizes={imgSizes} />
+          <LazyLoadImage className={"object-cover w-full max-h-full"} src={ item?.images[0]?.src } srcSet={ item?.images[0]?.srcset } imgSizes={imgSizes} />
         </div>
 
         <Box padding={400}>
