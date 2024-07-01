@@ -10,7 +10,7 @@ const CommonSectionField = gql`
     price
     short_description
     description
-    demo_link
+    status
     images { src srcset }
     type_id
     categoriesV2 {
@@ -63,7 +63,7 @@ export const SECTIONS_QUERY = gql`
           child_ids
         }
         ... on Section {
-          version release_note src plan_id
+          version release_note plan_id
         }
       }
       page_info {
@@ -80,7 +80,7 @@ export const SECTION_QUERY = gql`
     getSection(key: $key) {
       __typename
       ...CommonSectionField
-      ... on Section { plan_id src version release_note ...PricingPlanFragment }
+      ... on Section { plan_id version release_note ...PricingPlanFragment }
       ... on GroupSection { child_ids }
       categories
     }
@@ -96,7 +96,7 @@ export const RELATED_SECTIONS_QUERY = gql`
         child_ids
       }
       ... on Section {
-        version release_note src plan_id
+        version release_note plan_id
       }
     }
   }
@@ -157,7 +157,7 @@ export const SECTIONS_INSTALLED_QUERY = gql`
 export const commonSectionFragment = gql`
   fragment CommonSectionFragment on SectionInterface {
     ...CommonSectionField
-    ... on Section { plan_id src version release_note }
+    ... on Section { plan_id version release_note }
     ... on GroupSection { child_ids }
     categoriesV2 { id name }
   }

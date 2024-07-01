@@ -90,7 +90,11 @@ const LazyQuickViewContent = props => {
 
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
 
-                {section.actions?.install && <ModalInstallSection section={section} refectQuery={SECTION_V2_QUERY} />}
+
+                {section.actions?.install 
+                && !(section?.status === 'coming_soon')
+                && <ModalInstallSection section={section} refectQuery={SECTION_V2_QUERY} />
+                }
 
                 {section.actions ? (
                   <>
@@ -105,9 +109,6 @@ const LazyQuickViewContent = props => {
                         Purchase by ${section.price}
                       </Button>
                     )}
-                    {/* <Button size='medium' fullWidth url={section.demo_link} disabled={!Boolean(section.demo_link)}>
-                      <Text>View demo store</Text>
-                    </Button> */}
                   </>
                 ) : (
                   <SkeletonDisplayText maxWidth='true'></SkeletonDisplayText>
