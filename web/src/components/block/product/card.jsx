@@ -118,7 +118,7 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
             <InlineStack gap='200'>
               {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="View section" />)}
               {parseInt(item.type_id) === parseInt(productType.simple) && <TrySectionButton id={item.id} />}
-              {item.actions?.install && !(item?.status === 'coming_soon') && <InstallButton item={item} />}
+              {item.actions?.install && !(item?.special_status === 'coming_soon') && <InstallButton item={item} />}
               {
                 item.actions?.purchase &&
                 <Tooltip content="Purchase now">

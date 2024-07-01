@@ -115,7 +115,7 @@ const SectionFullpageDetails = props => {
               }
 
               {section.actions?.install 
-              && !(section?.status === 'coming_soon')
+              && !(section?.special_status === 'coming_soon')
               &&
                 <Box>
                   <ModalInstallSection section={section} fullWith={false} />

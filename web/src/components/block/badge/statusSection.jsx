@@ -6,7 +6,7 @@ import {
 
 function BadgeStatusSection({item}) {
 	const owned = useMemo(() => {
-    if (item?.status === 'coming_soon') {
+    if (item?.special_status === 'coming_soon') {
 			return <Badge tone='attention' size="small">
         <Text>Coming soon</Text>
       </Badge>

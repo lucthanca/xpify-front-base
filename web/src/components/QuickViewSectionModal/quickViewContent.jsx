@@ -92,7 +92,7 @@ const LazyQuickViewContent = props => {
 
 
                 {section.actions?.install 
-                && !(section?.status === 'coming_soon')
+                && !(section?.special_status === 'coming_soon')
                 && <ModalInstallSection section={section} refectQuery={SECTION_V2_QUERY} />
                 }
 

@@ -10,7 +10,7 @@ const CommonSectionField = gql`
     price
     short_description
     description
-    status
+    special_status
     images { src srcset }
     type_id
     categoriesV2 {
