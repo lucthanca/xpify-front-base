@@ -29,6 +29,7 @@ const CommonSectionField = gql`
       theme_id
       product_version
     }
+    is_in_wishlist
   }
 `;
 const PricingPlanFragment = gql`
@@ -202,4 +203,22 @@ export const TRY_SECTION_MUTATION = gql`
     mutation TrySection($id: ID!) {
       ${TRY_SECTION_MUTATION_KEY}(section_id: $id)
     }
+`;
+
+/* Wishlist */
+export const UPDATE_WISHLIST_MUTATION = gql`
+  mutation Update($key: String!) {
+    addWishlist(key: $key) {
+      id
+      is_in_wishlist
+    }
+  }
+`;
+export const DELETE_WISHLIST_MUTATION = gql`
+  mutation Delete($key: String!) {
+    deleteWishlist(key: $key) {
+      id
+      is_in_wishlist
+    }
+  }
 `;

@@ -18,6 +18,7 @@ import { useRedirectGroupPage, useRedirectSectionPage } from '~/hooks/section-bu
 import { useSectionListContext } from '~/context';
 import TrySectionButton from '~/components/block/product/demolinkbtn';
 import LazyLoadImage from '~/components/block/image';
+import { useWishlist } from '~/hooks/section-builder/wishlist';
 
 const productType = {
   'simple': 1,
@@ -82,6 +83,8 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
   const { handlePurchase, purchaseLoading} = usePurchase();
   const tagBadgeItemRender = useCallback((item) => `${item.name}`, []);
 
+  const { handleUpdate:addWishlist, dataUpdateLoading:addWishlistLoading, handleDelete:deleteWishlist, dataDeleteLoading:deleteWishlistLoading } = useWishlist(item);
+
   return (
     item &&
     <>
@@ -129,6 +132,26 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
                     onClick={() => handlePurchase(item)}
                   />
                 </Tooltip>
+              }
+              {!item?.is_in_wishlist
+              ? <Tooltip content="Like">
+                <Button
+                  loading={addWishlistLoading}
+                  icon={<Icon source={HeartIcon} tone="base" />}
+                  size="large"
+                  onClick={() => addWishlist()}
+                />
+              </Tooltip>
+              : <Tooltip content="Unlike">
+                <Button
+                  loading={deleteWishlistLoading}
+                  icon={<Icon source={HeartIcon} tone="base" />}
+                  size="large"
+                  onClick={() => deleteWishlist()}
+                  tone='critical'
+                  variant='primary'
+                />
+              </Tooltip>
               }
             </InlineStack>
           </BlockStack>

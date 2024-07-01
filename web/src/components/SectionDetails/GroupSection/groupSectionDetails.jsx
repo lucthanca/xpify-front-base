@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react';
-import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
+import { PaymentIcon, HeartIcon } from '@shopify/polaris-icons';
 import { BlockStack, Box, Card, InlineStack, Layout, Page, Text } from '@shopify/polaris';
 import { useBackPage } from '~/hooks/section-builder/redirect';
 import ProductList from '~/components/block/product/list';
@@ -18,6 +18,7 @@ import CollapsibleCard from "~/components/block/collapsible/card";
 import Badges from '~/components/block/product/badge/bagList.jsx';
 import Footer from "~/components/block/footer";
 import ChildSections from './childSections';
+import { useWishlist } from '~/hooks/section-builder/wishlist';
 
 const GroupSectionDetails = props => {
   const handleBackPage = useBackPage();
@@ -30,6 +31,7 @@ const GroupSectionDetails = props => {
     handlePurchase,
     groupSectionError,
   } = props;
+  const { handleUpdate:addWishlist, dataUpdateLoading:addWishlistLoading, handleDelete:deleteWishlist, dataDeleteLoading:deleteWishlistLoading } = useWishlist(groupSection);
 
   if (groupSectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity'
     || !groupSection?.child_ids
@@ -54,12 +56,14 @@ const GroupSectionDetails = props => {
         }
         subtitle={groupSection.version}
         compactTitle
-        // primaryAction={{
-        //   content: !groupSection?.actions?.purchase ? 'Owned' : 'Purchase',
-        //   disabled: sectionLoading || purchaseLoading || !groupSection?.actions?.purchase,
-        //   loading: sectionLoading || purchaseLoading,
-        //   onAction: (!sectionLoading && !purchaseLoading) && handlePurchase,
-        // }}
+        primaryAction={{
+          icon: HeartIcon,
+          destructive: !!groupSection?.is_in_wishlist,
+          loading: !groupSection?.is_in_wishlist ? addWishlistLoading : deleteWishlistLoading,
+          onAction: () => {!groupSection?.is_in_wishlist ? addWishlist() : deleteWishlist()},
+          primary: !!groupSection?.is_in_wishlist,
+          helpText: !groupSection?.is_in_wishlist ? 'Like' : 'Unlike',
+        }}
       >
         <Layout>
           <Layout.Section>
@@ -103,7 +107,7 @@ const GroupSectionDetails = props => {
                 }
 
                 {groupSection.actions?.install
-                && !(section?.special_status === 'coming_soon')
+                && !(groupSection?.special_status === 'coming_soon')
                 &&
                   <Box>
                     <ModalInstallSection section={groupSection} fullWith={false} />
