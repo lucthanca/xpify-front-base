@@ -45,7 +45,7 @@ export interface SectionInterface {
   version: string;
   is_enable: boolean;
   plan_id: string;
-  demo_link: string;
+  status: string;
   images: SectionImage[];
   url_key: string;
   categories: string[] | null;

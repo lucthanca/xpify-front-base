@@ -8,7 +8,7 @@ import {
   Page,
   Text,
 } from '@shopify/polaris';
-import { PaymentIcon, ViewIcon } from '@shopify/polaris-icons';
+import { PaymentIcon, ViewIcon, HeartIcon } from '@shopify/polaris-icons';
 import { useBackPage, useRedirectPlansPage } from '~/hooks/section-builder/redirect';
 import Badges from '~/components/block/product/badge/bagList.jsx';
 import CardUSP from '~/components/block/card/usp';
@@ -23,6 +23,7 @@ import DocInstall from '~/components/block/card/docInstall';
 import VideoGuideInstall from '~/components/block/card/videoInstall';
 import Footer from "~/components/block/footer";
 import CollapsibleCard from "~/components/block/collapsible/card";
+import { useWishlist } from '~/hooks/section-builder/wishlist';
 
 const SectionFullpageDetails = props => {
   const {
@@ -35,6 +36,7 @@ const SectionFullpageDetails = props => {
   const tagBadgeItemRender = useCallback((item) => `${item.name}`, []);
   const handleBackPage = useBackPage();
   const handleRedirectPlansPage = useRedirectPlansPage();
+  const { handleUpdate:addWishlist, dataUpdateLoading:addWishlistLoading, handleDelete:deleteWishlist, dataDeleteLoading:deleteWishlistLoading } = useWishlist(section);
 
   if (sectionError?.graphQLErrors?.[0]?.extensions?.category === 'graphql-no-such-entity'
     || !section?.name
@@ -59,22 +61,14 @@ const SectionFullpageDetails = props => {
         }
         //subtitle={"version " + section.version}
         compactTitle
-        // primaryAction={{ // Skip vì all section đang Free
-        //   content: !section.actions?.purchase ? 'Owned' : 'Purchase',
-        //   disabled: !section.actions?.purchase,
-        //   loading: purchaseLoading || sectionLoading,
-        //   onAction: section.actions?.purchase && handlePurchase
-        // }}
-        // secondaryActions={[
-        //   {
-        //     content: 'View demo store',
-        //     icon: ViewIcon,
-        //     url: section?.demo_link,
-        //     disabled: !section?.demo_link || sectionLoading,
-        //     helpText: !section?.demo_link ? 'This product has no demo yet.' : '',
-        //     onAction: () => {}
-        //   }
-        // ]}
+        primaryAction={{
+          icon: HeartIcon,
+          destructive: !!section?.is_in_wishlist,
+          loading: !section?.is_in_wishlist ? addWishlistLoading : deleteWishlistLoading,
+          onAction: () => {!section?.is_in_wishlist ? addWishlist() : deleteWishlist()},
+          primary: !!section?.is_in_wishlist,
+          helpText: !section?.is_in_wishlist ? 'Like' : 'Unlike',
+        }}
       >
         <Layout>
           <Layout.Section>
@@ -124,7 +118,9 @@ const SectionFullpageDetails = props => {
                 : <></>
               }
 
-              {section.actions?.install &&
+              {section.actions?.install 
+              && !(section?.special_status === 'coming_soon')
+              &&
                 <Box>
                   <ModalInstallSection section={section} fullWith={false} />
                 </Box>

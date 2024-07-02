@@ -93,9 +93,6 @@ const QuickViewModal = ({ url_key, show, onClose }) => {
                           Purchase
                         </Button>
                       )}
-                      <Button size='large' fullWidth url={section.demo_link} disabled={!Boolean(section.demo_link)}>
-                        <Tooltip>View demo store</Tooltip>
-                      </Button>
                     </>
                   ) : (
                     <SkeletonDisplayText maxWidth='true'></SkeletonDisplayText>

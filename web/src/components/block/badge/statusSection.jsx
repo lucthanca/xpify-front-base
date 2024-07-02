@@ -6,6 +6,12 @@ import {
 
 function BadgeStatusSection({item}) {
 	const owned = useMemo(() => {
+    if (item?.special_status === 'coming_soon') {
+			return <Badge tone='attention' size="small">
+        <Text>Coming soon</Text>
+      </Badge>
+		}
+
     if (item.price <= 0) {
 			return <Badge tone='info' size="small">
         <Text>Free</Text>
@@ -14,17 +20,13 @@ function BadgeStatusSection({item}) {
 
 		if (!item.actions?.purchase && item.price > 0) {
 			return <Badge tone='success' size="small">
-         <Tooltip content="Owned">
-          <Text>Purchased</Text>
-        </Tooltip>
+        <Text>Purchased</Text>
       </Badge>
 		}
 
     return (
       <Badge tone='critical' size="small" icon={LockIcon}>
-        <Tooltip content="Pay to use">
-          <Text>Lock</Text>
-        </Tooltip>
+        <Text>Lock</Text>
       </Badge>
     );
   }, [item]);
