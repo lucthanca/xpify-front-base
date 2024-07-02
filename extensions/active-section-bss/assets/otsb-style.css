@@ -701,6 +701,10 @@ video {
         height:3px;
         width:0px;
     }
+.video-hero iframe {
+    width: 100%;
+		height: 300%;
+  }
 .pointer-events-none{pointer-events:none}
 .pointer-events-auto{pointer-events:auto}
 .visible{visibility:visible}
@@ -711,6 +715,7 @@ video {
 .sticky{position:sticky}
 .inset-0{inset:0px}
 .bottom-0{bottom:0px}
+.bottom-5{bottom:1.25rem}
 .bottom-6{bottom:1.5rem}
 .left-0{left:0px}
 .left-1{left:0.25rem}
@@ -853,6 +858,7 @@ video {
 .max-h-0{max-height:0px}
 .max-h-36{max-height:9rem}
 .max-h-\[calc\(85vh-96px\)\]{max-height:calc(85vh - 96px)}
+.max-h-full{max-height:100%}
 .min-h-\[100\%\]{min-height:100%}
 .min-h-\[1px\]{min-height:1px}
 .min-h-\[200px\]{min-height:200px}
@@ -879,6 +885,7 @@ video {
 .w-\[16px\]{width:16px}
 .w-\[17px\]{width:17px}
 .w-\[var\(--base-font-size\)\]{width:var(--base-font-size)}
+.w-fit{width:-moz-fit-content;width:fit-content}
 .w-full{width:100%}
 .w-max{width:-moz-max-content;width:max-content}
 .w-px{width:1px}
@@ -988,9 +995,10 @@ video {
 .border-t{border-top-width:1px}
 .border-solid{border-style:solid}
 .border-dashed{border-style:dashed}
+.border-\[rgba\(var\(--color-link\)\)\]{border-color:rgba(var(--color-link))}
+.border-\[rgba\(var\(--color-link\)\2c 1\)\]{border-color:rgba(var(--color-link),1)}
 .border-\[rgba\(var\(--colors-heading\)\)\]{border-color:rgba(var(--colors-heading))}
 .border-\[rgba\(var\(--colors-text\)\)\]{border-color:rgba(var(--colors-text))}
-.border-\[rgba\(var\(--colors-text-link\)\)\]{border-color:rgba(var(--colors-text-link))}
 .bg-\[\#C9C9C9\]{--tw-bg-opacity:1;background-color:rgb(201 201 201 / var(--tw-bg-opacity))}
 .bg-\[\#acacac\]{--tw-bg-opacity:1;background-color:rgb(172 172 172 / var(--tw-bg-opacity))}
 .bg-\[\#c9c9c9\]{--tw-bg-opacity:1;background-color:rgb(201 201 201 / var(--tw-bg-opacity))}
@@ -2412,11 +2420,14 @@ svg{fill:currentColor}
 @media (min-width: 768px){
 .md\:absolute{position:absolute}
 .md\:bottom-0{bottom:0px}
+.md\:bottom-5{bottom:1.25rem}
 .md\:left-0{left:0px}
 .md\:left-3{left:0.75rem}
 .md\:left-4{left:1rem}
+.md\:left-5{left:1.25rem}
 .md\:right-3{right:0.75rem}
 .md\:right-4{right:1rem}
+.md\:right-5{right:1.25rem}
 .md\:right-8{right:2rem}
 .md\:right-\[8\%\]{right:8%}
 .md\:top-0{top:0px}
@@ -2456,6 +2467,7 @@ svg{fill:currentColor}
 .md\:h-10{height:2.5rem}
 .md\:h-16{height:4rem}
 .md\:h-24{height:6rem}
+.md\:h-40{height:10rem}
 .md\:h-7{height:1.75rem}
 .md\:h-\[450px\]{height:450px}
 .md\:h-\[500px\]{height:500px}
@@ -2479,6 +2491,7 @@ svg{fill:currentColor}
 .md\:w-20{width:5rem}
 .md\:w-24{width:6rem}
 .md\:w-3\/4{width:75%}
+.md\:w-40{width:10rem}
 .md\:w-7{width:1.75rem}
 .md\:w-auto{width:auto}
 .md\:w-full{width:100%}
@@ -2632,6 +2645,10 @@ svg{fill:currentColor}
 .md\:pt-\[8px\]{padding-top:8px}
 .md\:pt-\[92px\]{padding-top:92px}
 .md\:pt-\[96px\]{padding-top:96px}
+.md\:text-left{text-align:left}
+.md\:text-center{text-align:center}
+.md\:text-right{text-align:right}
+.md\:font-medium{font-weight:500}
 .md\:shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}
 .dark .md\:otsb-dark\:pb-2{padding-bottom:0.5rem}
 .promotion.md\:promotion\:relative{position:relative}
