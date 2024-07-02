@@ -4,14 +4,73 @@ if (!window.otsb_designMode) {
 if (!window.otsb_designMode.loadedScripts) {
   window.otsb_designMode.loadedScripts = [];
 }
-if (!window.otsb_designMode.loadedScripts.includes('otsb-event-calendar')) {
-  window.otsb_designMode.loadedScripts.push('otsb-event-calendar');
+if (!window.otsb_designMode.loadedScripts.includes('otsb-map')) {
+  window.otsb_designMode.loadedScripts.push('otsb-map');
 
   requestAnimationFrame(() => {
     document.addEventListener("alpine:init", () => {
-      Alpine.data("xMap", (data) => ({
+      Alpine.data('xMapContent', ({ content_position, is_full_width }) => ({
+        init () {
+          is_full_width && this.refreshPosition();
+        },
+        refreshPosition (screen_md) {
+          const invalid = document.documentElement.clientWidth < screen_md;
+          if (content_position === 'top-left' || invalid) {
+            this.$el.style.width = '100%';
+            return;
+          }
+
+          const rect = this.$el.parentNode.getBoundingClientRect();
+          let right = rect.right;
+          let space = document.documentElement.clientWidth - right;
+          if (content_position === 'left') {
+            left = rect.left;
+            space = left;
+            this.$el.style.left = `-${space}px`;
+          }
+          
+          let width = '100%';
+          if (space > 0) {
+            width = `calc(100% + ${space}px)`;
+          }
+          this.$el.style.width = width;
+          this.$el.style.display = 'block';
+        }
+      }))
+      Alpine.data("xMap", (addressTxt, data) => ({
+        init () {
+          const { is_full_width } = data || {};
+          is_full_width && this.refreshPosition();
+        },
+        refreshPosition (screen_md) {
+          const invalid = document.documentElement.clientWidth < screen_md;
+          const { content_position } = data || {};
+          if (content_position === 'top-left' || invalid) {
+            this.$el.style.width = '100%';
+            this.$el.classList.add('bg-[#c9c9c9]');
+            return;
+          }
+          // get right offset of this.$el
+          const rect = this.$el.parentNode.getBoundingClientRect();
+          let right = rect.right;
+            // get space from right to window right
+          let space = document.documentElement.clientWidth - right;
+          if (content_position === 'right') {
+            left = rect.left;
+            space = left;
+            this.$el.style.left = `-${space}px`;
+          }
+          
+          let width = '100%';
+          if (space > 0) {
+            width = `calc(100% + ${space}px)`;
+          }
+          // set width for this.$el
+          this.$el.style.width = width;
+          this.$el.classList.add('bg-[#c9c9c9]');
+        },
         load() {
-          this.$el.querySelector("iframe").src = `https://maps.google.com/maps?q=${data}&t=m&z=17&ie=UTF8&output=embed&iwloc=near`;
+          this.$el.querySelector("iframe").src = `https://maps.google.com/maps?q=${addressTxt}&t=m&z=17&ie=UTF8&output=embed&iwloc=near`;
         },
         loadMap(location) {
           this.$el.querySelector("iframe").src = `https://maps.google.com/maps?q=${location}&t=m&z=17&ie=UTF8&output=embed&iwloc=near`;
@@ -23,8 +82,8 @@ if (!window.otsb_designMode.loadedScripts.includes('otsb-event-calendar')) {
     });
   });
 }
-if (!window.otsb_designMode.loadedScripts.includes('otsb-map')) {
-  window.otsb_designMode.loadedScripts.push('otsb-map');
+if (!window.otsb_designMode.loadedScripts.includes('otsb-event-calendar')) {
+  window.otsb_designMode.loadedScripts.push('otsb-event-calendar');
   requestAnimationFrame(() => {
     document.addEventListener('alpine:init', () => {
       Alpine.data('xEventCalendar', (event) => ({
@@ -168,7 +227,6 @@ if (!window.otsb_designMode.loadedScripts.includes('otsb-map')) {
           this.sectionID = this.eventDetail.sectionID;
           element.innerHTML = this.eventDetail.description;
           element.innerHTML = element.textContent;
-          console.log(this.eventDetail);
           this.showEventCalendarDetail();
         },
         showEventCalendarDetail() {
