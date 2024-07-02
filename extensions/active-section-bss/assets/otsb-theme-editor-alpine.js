@@ -4,27 +4,9 @@ if (!window.otsb_designMode) {
 if (!window.otsb_designMode.loadedScripts) {
   window.otsb_designMode.loadedScripts = [];
 }
+
 if (!window.otsb_designMode.loadedScripts.includes('otsb-event-calendar')) {
   window.otsb_designMode.loadedScripts.push('otsb-event-calendar');
-
-  requestAnimationFrame(() => {
-    document.addEventListener("alpine:init", () => {
-      Alpine.data("xMap", (data) => ({
-        load() {
-          this.$el.querySelector("iframe").src = `https://maps.google.com/maps?q=${data}&t=m&z=17&ie=UTF8&output=embed&iwloc=near`;
-        },
-        loadMap(location) {
-          this.$el.querySelector("iframe").src = `https://maps.google.com/maps?q=${location}&t=m&z=17&ie=UTF8&output=embed&iwloc=near`;
-        },
-        removeMap() {
-          this.$el.querySelector("iframe").src = ``;
-        }
-      }));
-    });
-  });
-}
-if (!window.otsb_designMode.loadedScripts.includes('otsb-map')) {
-  window.otsb_designMode.loadedScripts.push('otsb-map');
   requestAnimationFrame(() => {
     document.addEventListener('alpine:init', () => {
       Alpine.data('xEventCalendar', (event) => ({
@@ -168,7 +150,6 @@ if (!window.otsb_designMode.loadedScripts.includes('otsb-map')) {
           this.sectionID = this.eventDetail.sectionID;
           element.innerHTML = this.eventDetail.description;
           element.innerHTML = element.textContent;
-          console.log(this.eventDetail);
           this.showEventCalendarDetail();
         },
         showEventCalendarDetail() {

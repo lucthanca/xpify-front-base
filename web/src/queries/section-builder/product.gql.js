@@ -10,7 +10,7 @@ const CommonSectionField = gql`
     price
     short_description
     description
-    demo_link
+    special_status
     images { src srcset }
     type_id
     categoriesV2 {
@@ -29,6 +29,7 @@ const CommonSectionField = gql`
       theme_id
       product_version
     }
+    is_in_wishlist
   }
 `;
 const PricingPlanFragment = gql`
@@ -63,7 +64,7 @@ export const SECTIONS_QUERY = gql`
           child_ids
         }
         ... on Section {
-          version release_note src plan_id
+          version release_note plan_id
         }
       }
       page_info {
@@ -80,7 +81,7 @@ export const SECTION_QUERY = gql`
     getSection(key: $key) {
       __typename
       ...CommonSectionField
-      ... on Section { plan_id src version release_note ...PricingPlanFragment }
+      ... on Section { plan_id version release_note ...PricingPlanFragment }
       ... on GroupSection { child_ids }
       categories
     }
@@ -96,7 +97,7 @@ export const RELATED_SECTIONS_QUERY = gql`
         child_ids
       }
       ... on Section {
-        version release_note src plan_id
+        version release_note plan_id
       }
     }
   }
@@ -157,7 +158,7 @@ export const SECTIONS_INSTALLED_QUERY = gql`
 export const commonSectionFragment = gql`
   fragment CommonSectionFragment on SectionInterface {
     ...CommonSectionField
-    ... on Section { plan_id src version release_note }
+    ... on Section { plan_id version release_note }
     ... on GroupSection { child_ids }
     categoriesV2 { id name }
   }
@@ -202,4 +203,22 @@ export const TRY_SECTION_MUTATION = gql`
     mutation TrySection($id: ID!) {
       ${TRY_SECTION_MUTATION_KEY}(section_id: $id)
     }
+`;
+
+/* Wishlist */
+export const UPDATE_WISHLIST_MUTATION = gql`
+  mutation Update($key: String!) {
+    addWishlist(key: $key) {
+      id
+      is_in_wishlist
+    }
+  }
+`;
+export const DELETE_WISHLIST_MUTATION = gql`
+  mutation Delete($key: String!) {
+    deleteWishlist(key: $key) {
+      id
+      is_in_wishlist
+    }
+  }
 `;

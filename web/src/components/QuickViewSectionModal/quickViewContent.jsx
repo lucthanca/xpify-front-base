@@ -10,6 +10,7 @@ import {
   Scrollable,
   SkeletonDisplayText,
   Text,
+  Tooltip,
 } from '@shopify/polaris';
 import GallerySlider from '~/components/splide/gallery';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
@@ -17,13 +18,14 @@ import BannerDefault from '~/components/block/banner/alert';
 import CardUSP from '~/components/block/card/usp';
 import ModalInstallSection from '~/components/block/product/manage';
 import { SECTION_V2_QUERY } from '~/queries/section-builder/product.gql';
-import { PaymentIcon } from '@shopify/polaris-icons';
+import { PaymentIcon, HeartIcon } from '@shopify/polaris-icons';
 import { PricingPlanSkeleton } from '~/components/QuickViewSectionModal';
 import QuickViewContentSkeleton from '~/components/QuickViewSectionModal/quickViewContentShimmer';
 const PricingPlan = lazy(() => import('~/components/QuickViewSectionModal/pricingPlan'));
 import './style.scss';
 import BannerAlert from '~/components/block/banner/alert';
 import Badges from '~/components/block/product/badge/bagList.jsx';
+import { useWishlist } from '~/hooks/section-builder/wishlist';
 
 const LazyQuickViewContent = props => {
   const { url_key, onClose } = props;
@@ -39,6 +41,7 @@ const LazyQuickViewContent = props => {
     purchaseLoading,
     loading: loadingInBackground,
   } = talonProps;
+  const { handleUpdate:addWishlist, dataUpdateLoading:addWishlistLoading, handleDelete:deleteWishlist, dataDeleteLoading:deleteWishlistLoading } = useWishlist(section);
   const tagBadgeItemRender = useCallback((item) => `${item.name}`, []);
 
   if (loadingWithoutData) return <QuickViewContentSkeleton title={url_key} />;
@@ -69,13 +72,37 @@ const LazyQuickViewContent = props => {
           <BlockStack gap='400'>
             <Card title='Infomation'>
               <BlockStack gap='200'>
-                <InlineStack gap='200'>
-                  <div className='cursor-pointer' onClick={navigateToSectionPage}>
-                    <Text variant='headingMd' as='h2'>
-                      {section.name}
-                    </Text>
+                <InlineStack align='space-between' gap={200}>
+                  <div>
+                    <InlineStack gap='200'>
+                      <div className='cursor-pointer' onClick={navigateToSectionPage}>
+                        <Text variant='headingMd' as='h2'>
+                          {section.name}
+                        </Text>
+                      </div>
+                      <BadgeStatusSection item={section} />
+                    </InlineStack>
                   </div>
-                  <BadgeStatusSection item={section} />
+                  {!section?.is_in_wishlist
+                  ? <Tooltip content="Like">
+                    <Button
+                      loading={addWishlistLoading}
+                      icon={<Icon source={HeartIcon} tone="base" />}
+                      size="medium"
+                      onClick={() => addWishlist()}
+                    />
+                  </Tooltip>
+                  : <Tooltip content="Unlike">
+                    <Button
+                      loading={deleteWishlistLoading}
+                      icon={<Icon source={HeartIcon} tone="base" />}
+                      size="medium"
+                      onClick={() => deleteWishlist()}
+                      tone='critical'
+                      variant='primary'
+                    />
+                  </Tooltip>
+                  }
                 </InlineStack>
 
                 <Text variant='bodySm' as='p'>
@@ -90,7 +117,11 @@ const LazyQuickViewContent = props => {
 
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
 
-                {section.actions?.install && <ModalInstallSection section={section} refectQuery={SECTION_V2_QUERY} />}
+
+                {section.actions?.install 
+                && !(section?.special_status === 'coming_soon')
+                && <ModalInstallSection section={section} refectQuery={SECTION_V2_QUERY} />
+                }
 
                 {section.actions ? (
                   <>
@@ -105,9 +136,6 @@ const LazyQuickViewContent = props => {
                         Purchase by ${section.price}
                       </Button>
                     )}
-                    {/* <Button size='medium' fullWidth url={section.demo_link} disabled={!Boolean(section.demo_link)}>
-                      <Text>View demo store</Text>
-                    </Button> */}
                   </>
                 ) : (
                   <SkeletonDisplayText maxWidth='true'></SkeletonDisplayText>
