@@ -1,9 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { useToast } from '@shopify/app-bridge-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { usePurchase } from '~/hooks/section-builder/purchase';
-import { useRedirectSectionPage } from '~/hooks/section-builder/redirect';
-import { useSection, UseSectionTalon } from '~/hooks/useSection';
 import { DELETE_ASSET_MUTATION, UPDATE_ASSET_MUTATION } from '~/queries/section-builder/asset.gql';
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
 import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
@@ -50,13 +47,15 @@ type UseManageTalon = {
   options: object,
   selected: string,
   handleSelectChange: any,
-  currentThemeSelected: ThemeData
+  currentThemeSelected: ThemeData,
+  executeSection: string
 };
 
 export const useManage = (props: UseManageProps): UseManageTalon => {
   const { section, typeSelect } = props;
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState<BannerAlert | undefined>(undefined);
+  const [executeSection, setExecuteSection] = useState<string>('');
   const toast = useToast();
 
   const { data:themesData } = useQuery(THEMES_QUERY, {
@@ -198,15 +197,22 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   const [updateAction, { data:dataUpdate, loading:dataUpdateLoading, error:dataUpdateError }] = useMutation(UPDATE_ASSET_MUTATION, {});
   const [deleteAction, { data:dataDelete, loading:dataDeleteLoading, error:dataDeleteError }] = useMutation(DELETE_ASSET_MUTATION, {});
 
-  const handleUpdate = useCallback(() => {
-    updateAction({
+  const handleUpdate = useCallback(async () => {
+    setExecuteSection(section?.url_key);
+    await updateAction({
       variables: {
         theme_id: selected,
         key: section?.url_key
       }
     });
+    if (!dataUpdateError) {
+      toast.show('Installed successfully');
+    } else {
+      toast.show('Installed fail', { isError: true });
+    }
   }, [selected, section?.entity_id]);
   const handleDelete = useCallback(async () => {
+    setExecuteSection(section?.url_key);
     await deleteAction({
       variables: {
         theme_id: selected,
@@ -264,6 +270,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     options,
     selected,
     handleSelectChange,
-    currentThemeSelected
+    currentThemeSelected,
+    executeSection
   };
 };

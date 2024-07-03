@@ -64,7 +64,7 @@ const InstallModal = props => {
       primaryAction={{
         content: (!loadingWithoutData && talonManageProps.installed) ? 'Reinstall to theme' : 'Install to theme',
         disabled: loadingWithoutData || !talonManageProps.options.length || !section?.actions?.install,
-        loading: talonManageProps.dataUpdateLoading,
+        loading: talonManageProps?.executeSection === activeSection?.url_key ? talonManageProps.dataUpdateLoading : false,
         onAction: talonManageProps.handleUpdate
       }}
       secondaryActions={
@@ -74,7 +74,7 @@ const InstallModal = props => {
             destructive: true,
             content: 'Delete from theme',
             disabled: loadingWithoutData || (section?.installed ? !talonManageProps.installed : true),
-            loading: talonManageProps.dataDeleteLoading,
+            loading: talonManageProps?.executeSection === activeSection?.url_key ? talonManageProps.dataDeleteLoading : false,
             onAction: confirmDelete
           },
         ]
@@ -83,7 +83,9 @@ const InstallModal = props => {
     >
       <Modal.Section>
         <BlockStack gap='200'>
-          {section?.url_key === activeSection?.url_key && <BannerDefault bannerAlert={talonManageProps.bannerAlert} setBannerAlert={talonManageProps.setBannerAlert} />}
+          {section?.url_key === activeSection?.url_key
+          && activeSection?.url_key === talonManageProps?.executeSection
+          && <BannerDefault bannerAlert={talonManageProps.bannerAlert} setBannerAlert={talonManageProps.setBannerAlert} />}
           <ThemeList options={section?.url_key === activeSection?.url_key ? talonManageProps.options : {}} selected={talonManageProps.selected} handleSelectChange={talonManageProps.handleSelectChange} />
         </BlockStack>
       </Modal.Section>
