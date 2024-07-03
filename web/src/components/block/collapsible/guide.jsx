@@ -44,40 +44,7 @@ function CollapsibleButton({options, setProgress, openChild, setOpenChild}) {
   return (
     <div className='bss-setup-guide cursor-pointer' onClick={() => setOpenChild(options.id)}>
       <Box background={openChild === options.id ? 'bg-surface-active' : ''} padding={200} borderRadius='200'>
-      <InlineStack>
-            <div className='title-collapsible'>
-              <InlineStack gap={200}>
-                <Text as="p" variant="bodyMd" fontWeight={openChild === options.id ? 'bold' : ''}>
-                  {options.title}
-                </Text>
-              </InlineStack>
-            </div>
-
-            <Box paddingBlockStart={200}>
-              <Collapsible
-                open={openChild === options.id}
-                id="basic-collapsible"
-                transition={{duration: '200ms'}}
-                expandOnPrint
-              >
-                <BlockStack gap={200}>
-                  <InlineGrid gap={200} columns={options.demo ? {sm: 1, md: 2} : 1}>
-                    <BlockStack gap={200} inlineAlign="start">
-                      <Text as="div" variant="bodyMd" tone='subdued'>
-                        {options.content}
-                      </Text>
-                    </BlockStack>
-                    {options.demo &&
-                      <Card padding={0} roundedAbove='xs'>
-                        {options.demo}
-                      </Card>
-                    }
-                  </InlineGrid>
-                </BlockStack>
-              </Collapsible>
-            </Box>
-          </InlineStack>
-        {/* <div className='grid-guide'>
+        <div className='grid-guide'>
           <Tooltip content={isDone ? 'Mark as not done' : 'Mark as done'}>
             <Button
               onClick={() => {handleClick(options.id)}}
@@ -125,7 +92,7 @@ function CollapsibleButton({options, setProgress, openChild, setOpenChild}) {
               </Collapsible>
             </Box>
           </InlineStack>
-        </div> */}
+        </div>
       </Box>
     </div>
   );
