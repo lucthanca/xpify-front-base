@@ -56,6 +56,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState<BannerAlert | undefined>(undefined);
   const [executeSection, setExecuteSection] = useState<string>('');
+  const [urlEditTheme, setUrlEditTheme] = useState<string>('#');
   const toast = useToast();
 
   const { data:themesData } = useQuery(THEMES_QUERY, {
@@ -99,12 +100,6 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   const { data: myShop } = useQuery(MY_SHOP, {
     fetchPolicy: "cache-and-network",
   });
-  const urlEditTheme = useMemo(() => {
-    if (myShop?.myShop?.domain && selected) {
-      return 'https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor';
-    }
-    return '#';
-  }, [myShop, selected]);
 
   const options = useMemo(() => {
     if (!themes?.length
@@ -199,6 +194,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
 
   const handleUpdate = useCallback(async () => {
     setExecuteSection(section?.url_key);
+    setUrlEditTheme('https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor');
     await updateAction({
       variables: {
         theme_id: selected,
@@ -231,7 +227,9 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   }, [selected]);
 
   useEffect(() => {
-    if (dataUpdate && dataUpdate.updateAsset) {
+    if (dataUpdate && dataUpdate.updateAsset
+      && section?.url_key === executeSection
+    ) {
       const updateSuccess = dataUpdate.updateAsset;
 
       if (updateSuccess.length) {
