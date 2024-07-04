@@ -201,11 +201,6 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         key: section?.url_key
       }
     });
-    if (!dataUpdateError) {
-      toast.show('Installed successfully');
-    } else {
-      toast.show('Installed fail', { isError: true });
-    }
   }, [selected, section?.entity_id]);
   const handleDelete = useCallback(async () => {
     setExecuteSection(section?.url_key);
@@ -215,11 +210,6 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         key: section?.url_key
       }
     });
-    if (!dataDeleteError) {
-      toast.show('Deleted successfully');
-    } else {
-      toast.show('Deleted fail', { isError: true });
-    }
   }, [selected, section?.entity_id]);
 
   const currentThemeSelected = useMemo(() => {
@@ -227,22 +217,24 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   }, [selected]);
 
   useEffect(() => {
-    if (dataUpdate && dataUpdate.updateAsset
-      && section?.url_key === executeSection
-    ) {
-      const updateSuccess = dataUpdate.updateAsset;
-
-      if (updateSuccess.length) {
-        setBannerAlert({
-          'urlSuccessEditTheme': urlEditTheme,
-          'isSimple': !section?.child_ids?.length,
-          'tone': 'success'
-        });
+    if (dataUpdate && dataUpdate.updateAsset) {
+      if (dataUpdate.updateAsset?.length) {
+        if (section?.url_key === executeSection) {
+          setBannerAlert({
+            'urlSuccessEditTheme': urlEditTheme,
+            'isSimple': !section?.child_ids?.length,
+            'tone': 'success'
+          });
+        }
+        toast.show('Installed successfully');
       } else {
-        setBannerAlert({
-          'title': `Error. Try later`,
-          'tone': 'critical'
-        });
+        if (section?.url_key === executeSection) {
+          setBannerAlert({
+            'title': `Error. Try later`,
+            'tone': 'critical'
+          });
+        }
+        toast.show('Installed fail', { isError: true });
       }
     }
   }, [dataUpdate]);
@@ -253,8 +245,23 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         'tone': 'critical',
         'content': dataUpdateError.graphQLErrors ?? []
       });
+      toast.show('Installed fail', { isError: true });
     }
   }, [dataUpdateError]);
+  useEffect(() => {
+    if (dataDelete && dataDelete.deleteAsset) {
+      if (dataDelete.deleteAsset?.length) {
+        toast.show('Deleted successfully');
+      } else {
+        toast.show('Deleted fail', { isError: true });
+      }
+    }
+  }, [dataDelete]);
+  useEffect(() => {
+    if (dataDeleteError) {
+      toast.show('Deleted fail', { isError: true });
+    }
+  }, [dataDeleteError]);
 
   return {
     section,
