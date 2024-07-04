@@ -17,7 +17,7 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
   }
 
   const handleCloseModal = useCallback(() => {
-    setIsOpen(prev => !prev);
+    setIsOpen(false);
   }, []);
 
   useEffect(() => { // Overlay modal section
