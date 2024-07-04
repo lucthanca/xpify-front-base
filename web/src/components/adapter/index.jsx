@@ -12,7 +12,7 @@ export const ShopifyLoadingFull = () => {
   return (
     <div className='grid grid-rows-1 justify-center h-fill-available items-center'>
       <Loading />
-      {/*<Spinner accessibilityLabel={'Loading'} />*/}
+      <Spinner accessibilityLabel={'Loading'} />
     </div>
   );
 };
