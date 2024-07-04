@@ -1938,16 +1938,6 @@ svg{fill:currentColor}
     color: rgb(var(--colors-text-link, 255, 102, 0));
   }
 
-  .otsb-rte a:hover,
-  .button-link:hover {
-    background-size: 0 0.1em, 100% 0.1em;
-    background-position: 100% 100%, 0% 100%;
-  }
-
-  .otsb-hover-text-link:hover {
-    color: rgb(var(--colors-text-link, 253, 142, 22));
-  }
-
   button.otsb-button-outline,
   .otsb-button.otsb-button-outline {
     color: rgb(var(--colors-secondary-button));
@@ -2045,6 +2035,17 @@ h1 *::-moz-selection, h1 *::selection, h1::-moz-selection, h1::selection, h2 *::
 .otsb__root h1 *::-moz-selection, .otsb__root h1 *::selection, .otsb__root h1::-moz-selection, .otsb__root h1::selection, .otsb__root h2 *::-moz-selection, .otsb__root h2 *::selection, .otsb__root h2::-moz-selection, .otsb__root h2::selection, .otsb__root h3 *::-moz-selection, .otsb__root h3 *::selection, .otsb__root h3::-moz-selection, .otsb__root h3::selection, .otsb__root h4 *::-moz-selection, .otsb__root h4 *::selection, .otsb__root h4::-moz-selection, .otsb__root h4::selection, .otsb__root h5 *::-moz-selection, .otsb__root h5 *::selection, .otsb__root h5::-moz-selection, .otsb__root h5::selection, .otsb__root h6 *::-moz-selection, .otsb__root h6 *::selection, .otsb__root h6::-moz-selection, .otsb__root h6::selection, .otsb__root .h1 *::-moz-selection, .otsb__root .h1 *::selection, .otsb__root .h1::-moz-selection, .otsb__root .h1::selection, .otsb__root .otsb-h2 *::-moz-selection, .otsb__root .otsb-h2 *::selection, .otsb__root .otsb-h2::-moz-selection, .otsb__root .otsb-h2::selection, .otsb__root .otsb-h3 *::-moz-selection, .otsb__root .otsb-h3 *::selection, .otsb__root .otsb-h3::-moz-selection, .otsb__root .otsb-h3::selection, .otsb__root .otsb-h4 *::-moz-selection, .otsb__root .otsb-h4 *::selection, .otsb__root .otsb-h4::-moz-selection, .otsb__root .otsb-h4::selection, .otsb__root .h5 *::-moz-selection, .otsb__root .h5 *::selection, .otsb__root .h5::-moz-selection, .otsb__root .h5::selection, .otsb__root .h6 *::-moz-selection, .otsb__root .h6 *::selection, .otsb__root .h6::-moz-selection, .otsb__root .h6::selection, .otsb__root .otsb-title *::-moz-selection, .otsb__root .otsb-title *::selection, .otsb__root .otsb-title::-moz-selection, .otsb__root .otsb-title::selection {
       background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
     }
+.otsb-rte a:hover,
+.button-link:hover {
+  background-size: 0 0.1em, 100% 0.1em;
+  background-position: 100% 100%, 0% 100%;
+}
+.otsb-hover-text-link:hover {
+    color: rgb(var(--colors-text-link, 253, 142, 22));
+  }
+.otsb-hover-text-link.otsb-title:hover {
+    color: rgb(var(--colors-heading, 253, 142, 22));
+  }
 /* @import url(components/common.scss); */
 .otsb-btn {
   direction: var(--otsb-direction, ltr);
