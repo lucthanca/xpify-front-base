@@ -123,7 +123,7 @@ export const useSectionCollection = () => {
         owned: information?.isOwned ?? false
       },
       sort: sortSelected ? (([column, order]) => ({ column, order }))(sortSelected[0].split(' ')) : {},
-      pageSize: 12,
+      pageSize: 120,
       currentPage: currentPage
     }
   });
@@ -214,7 +214,7 @@ const FILTER_FIELDS_MAPPING: { [key: string]: string } = {
 const pageInfoDefault = {
   total_pages: 1,
   current_page: 1,
-  page_size: 12,
+  page_size: 120,
 };
 
 export const useSectionListing = (onQueryCompleted: any) => {
@@ -270,7 +270,7 @@ export const useSectionListing = (onQueryCompleted: any) => {
         owned: information.isOwned
       },
       sort: (([column, order]) => ({ column, order }))(sort[0].split(' ')),
-      pageSize: 12,
+      pageSize: 120,
       currentPage: currentPage
     },
     onCompleted: (data) => {
