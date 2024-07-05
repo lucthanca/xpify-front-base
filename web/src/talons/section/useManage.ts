@@ -56,6 +56,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState<BannerAlert | undefined>(undefined);
   const [executeSection, setExecuteSection] = useState<string>('');
+  const [urlEditTheme, setUrlEditTheme] = useState<string>('#');
   const toast = useToast();
 
   const { data:themesData } = useQuery(THEMES_QUERY, {
@@ -99,12 +100,6 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   const { data: myShop } = useQuery(MY_SHOP, {
     fetchPolicy: "cache-and-network",
   });
-  const urlEditTheme = useMemo(() => {
-    if (myShop?.myShop?.domain && selected) {
-      return 'https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor';
-    }
-    return '#';
-  }, [myShop, selected]);
 
   const options = useMemo(() => {
     if (!themes?.length
@@ -199,17 +194,13 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
 
   const handleUpdate = useCallback(async () => {
     setExecuteSection(section?.url_key);
+    setUrlEditTheme('https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor');
     await updateAction({
       variables: {
         theme_id: selected,
         key: section?.url_key
       }
     });
-    if (!dataUpdateError) {
-      toast.show('Installed successfully');
-    } else {
-      toast.show('Installed fail', { isError: true });
-    }
   }, [selected, section?.entity_id]);
   const handleDelete = useCallback(async () => {
     setExecuteSection(section?.url_key);
@@ -219,11 +210,6 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         key: section?.url_key
       }
     });
-    if (!dataDeleteError) {
-      toast.show('Deleted successfully');
-    } else {
-      toast.show('Deleted fail', { isError: true });
-    }
   }, [selected, section?.entity_id]);
 
   const currentThemeSelected = useMemo(() => {
@@ -232,19 +218,23 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
 
   useEffect(() => {
     if (dataUpdate && dataUpdate.updateAsset) {
-      const updateSuccess = dataUpdate.updateAsset;
-
-      if (updateSuccess.length) {
-        setBannerAlert({
-          'urlSuccessEditTheme': urlEditTheme,
-          'isSimple': !section?.child_ids?.length,
-          'tone': 'success'
-        });
+      if (dataUpdate.updateAsset?.length) {
+        if (section?.url_key === executeSection) {
+          setBannerAlert({
+            'urlSuccessEditTheme': urlEditTheme,
+            'isSimple': !section?.child_ids?.length,
+            'tone': 'success'
+          });
+        }
+        toast.show('Installed successfully');
       } else {
-        setBannerAlert({
-          'title': `Error. Try later`,
-          'tone': 'critical'
-        });
+        if (section?.url_key === executeSection) {
+          setBannerAlert({
+            'title': `Error. Try later`,
+            'tone': 'critical'
+          });
+        }
+        toast.show('Installed fail', { isError: true });
       }
     }
   }, [dataUpdate]);
@@ -255,8 +245,23 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         'tone': 'critical',
         'content': dataUpdateError.graphQLErrors ?? []
       });
+      toast.show('Installed fail', { isError: true });
     }
   }, [dataUpdateError]);
+  useEffect(() => {
+    if (dataDelete && dataDelete.deleteAsset) {
+      if (dataDelete.deleteAsset?.length) {
+        toast.show('Deleted successfully');
+      } else {
+        toast.show('Deleted fail', { isError: true });
+      }
+    }
+  }, [dataDelete]);
+  useEffect(() => {
+    if (dataDeleteError) {
+      toast.show('Deleted fail', { isError: true });
+    }
+  }, [dataDeleteError]);
 
   return {
     section,

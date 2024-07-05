@@ -9,7 +9,6 @@ export default function GallerySlider({gallery, imgSizes = '(min-width: 950px) 9
     <Splide
       options={{
         perPage: 1,
-        gap: '0.5rem',
         arrows: false,
         type: gallery.length > 1 ? "loop" : "slide",
         pagination: true
