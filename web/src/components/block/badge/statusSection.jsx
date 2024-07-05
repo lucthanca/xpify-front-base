@@ -52,7 +52,19 @@ function BadgeStatusSection({item}) {
     }
   }, [item]);
 
-  return <>{owned} {shouldUpdate}</>;
+  const isConnected = useMemo(() => {
+    if (item.url_key === 'instagram-feeds' && item?.installed && item.installed.length) {
+      if (item.actions?.connected) {
+        return <Badge tone='success' size="small" progress='complete'>
+          <Text>Connected</Text>
+        </Badge>
+      }
+      return <Badge tone='warning' size="small">
+        <Text>Unconnected</Text>
+      </Badge>
+    }
+  }, [item]);
+  return <>{owned} {shouldUpdate} {isConnected}</>;
 }
 
 export default memo(BadgeStatusSection);

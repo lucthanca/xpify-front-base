@@ -9,7 +9,7 @@ import {
   Text,
   Tooltip
 } from '@shopify/polaris';
-import { ViewIcon, PlusCircleIcon, PaymentFilledIcon, HeartIcon } from '@shopify/polaris-icons';
+import {ViewIcon, PlusCircleIcon, PaymentFilledIcon, HeartIcon, ConnectIcon} from '@shopify/polaris-icons';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import Badges from '~/components/block/product/badge/bagList';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
@@ -18,6 +18,7 @@ import { useRedirectGroupPage, useRedirectSectionPage } from '~/hooks/section-bu
 import { useSectionListContext } from '~/context';
 import TrySectionButton from '~/components/block/product/demolinkbtn';
 import LazyLoadImage from '~/components/block/image';
+import ConnectPopup from '~/components/block/modal/connectInstagram';
 import { useWishlist } from '~/hooks/section-builder/wishlist';
 
 const productType = {
@@ -70,6 +71,8 @@ const InstallButton = props => {
 };
 
 function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) / 4), (min-width: 768px) calc((100vw - 2rem) / 2), 100vw"}) {
+  const [showConnect, setShowConnect] = useState(false);
+  const toggleModal = useCallback(() => setShowConnect((showConnect) => !showConnect), []);
   const handleRedirectProductPage = useRedirectSectionPage();
   const handleRedirectGroupPage = useRedirectGroupPage();
   const handleRedirect = useCallback((product) => {
@@ -122,6 +125,14 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
               {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="View section" />)}
               {parseInt(item.type_id) === parseInt(productType.simple) && <TrySectionButton id={item.id} />}
               {item.actions?.install && !(item?.special_status === 'coming_soon') && <InstallButton item={item} />}
+              {item?.url_key === 'instagram-feeds' && <Tooltip content={item?.actions?.connected ? 'Disconnect' : 'Connect'}>
+                <Button
+                  loading={purchaseLoading}
+                  icon={<Icon source={ConnectIcon} tone="base" />}
+                  size="large"
+                  onClick={toggleModal}
+                />
+              </Tooltip>}
               {
                 item.actions?.purchase &&
                 <Tooltip content="Purchase now">
@@ -153,6 +164,7 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
                 />
               </Tooltip>
               }
+              { showConnect && (<ConnectPopup active={showConnect} toggleModal={toggleModal} connected={item?.actions?.connected}/>)}
             </InlineStack>
           </BlockStack>
         </Box>
