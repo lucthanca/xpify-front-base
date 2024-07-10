@@ -5,7 +5,7 @@ if (!window.otsb_designMode.loadedScripts) {
   window.otsb_designMode.loadedScripts = [];
 }
 if (!window.otsb_designMode.loadedScripts.includes('otsb-flashsales.js')) {
-  windows.otsb_designMode.loadedScripts.push('otsb-flashsales.js');
+  window.otsb_designMode.loadedScripts.push('otsb-flashsales.js');
   requestAnimationFrame(() => {
     document.addEventListener('alpine:init', () => {
       Alpine.store('xHelper', {
