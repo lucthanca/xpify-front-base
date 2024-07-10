@@ -33,106 +33,141 @@ requestAnimationFrame(() => {
       });
 
       Alpine.store('xHelper', {
-          countdown(configs, callback) {
-              let endDate = new Date(
-                  configs.end_year,
-                  configs.end_month - 1,
-                  configs.end_day,
-                  configs.end_hour,
-                  configs.end_minute
-              );
-              const endTime = endDate.getTime() + (-1 * configs.timezone * 60 - endDate.getTimezoneOffset()) * 60 * 1000;
-
-              let startTime;
-              if (configs.start_year) {
-                  let startDate = new Date(
-                      configs.start_year,
-                      configs.start_month - 1,
-                      configs.start_day,
-                      configs.start_hour,
-                      configs.start_minute
-                  );
-                  startTime = startDate.getTime() + (-1 * configs.timezone * 60 - startDate.getTimezoneOffset()) * 60 * 1000;
-              } else {
-                  startTime = new Date().getTime();
-              }
-
-              let x = setInterval(function() {
-                  let now = new Date().getTime();
-                  let distance = endTime - now;
-
-                  if (distance < 0 || startTime > now) {
-                      callback(false, 0, 0, 0, 0);
-                      clearInterval(x);
-                  } else {
-                      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                      minutes = minutes < 10 ? "0" + minutes : minutes;
-                      seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                      callback(true, seconds, minutes, hours, days);
-                  }
-              }, 1000);
-          },
-          canShow(configs) {
-              let endDate = new Date(
-                  configs.end_year,
-                  configs.end_month - 1,
-                  configs.end_day,
-                  configs.end_hour,
-                  configs.end_minute
-              );
-              const endTime = endDate.getTime() + (-1 * configs.timezone * 60 - endDate.getTimezoneOffset()) * 60 * 1000;
-
-              let startTime;
-              if (configs.start_year) {
-                  let startDate = new Date(
-                      configs.start_year,
-                      configs.start_month - 1,
-                      configs.start_day,
-                      configs.start_hour,
-                      configs.start_minute
-                  );
-                  startTime = startDate.getTime() + (-1 * configs.timezone * 60 - startDate.getTimezoneOffset()) * 60 * 1000;
-              } else {
-                  startTime = new Date().getTime();
-              }
-              let now = new Date().getTime();
-              let distance = endTime - now;
-              if (distance < 0 || startTime > now) {
-                  return false;
-              }
-              return true;
-          },
-          handleTime(configs) {
-              let endDate = new Date(
-                  configs.end_year,
-                  configs.end_month - 1,
-                  configs.end_day,
-                  configs.end_hour,
-                  configs.end_minute
-              );
-              const endTime = endDate.getTime() + (-1 * configs.timezone * 60 - endDate.getTimezoneOffset()) * 60 * 1000;
-
-              let startTime;
-              if (configs.start_year) {
-                  let startDate = new Date(
-                      configs.start_year,
-                      configs.start_month - 1,
-                      configs.start_day,
-                      configs.start_hour,
-                      configs.start_minute
-                  );
-                  startTime = startDate.getTime() + (-1 * configs.timezone * 60 - startDate.getTimezoneOffset()) * 60 * 1000;
-              } else {
-                  startTime = new Date().getTime();
-              }
-              let now = new Date().getTime();
-              let distance = endTime - now;
-              return { "startTime": startTime, "endTime": endTime, "now": now, "distance": distance};
+        /**
+         * Calculates the countdown distance and adjusts the end time if necessary.
+         * @param {Object} configs - The configuration object.
+         * @param {Date} initialEndTime - The initial end time.
+         * @param {Date} endTime - The current end time.
+         * @param {Date} currentDateTime - The current date and time.
+         * @returns {Array} An array containing the countdown distance and the adjusted end time.
+        */
+        calculateCountdownDistance(configs, initialEndTime, endTime, deadline) {
+          const now = deadline;
+          let distance = endTime - now;
+          if (distance < 0 && configs.next_timer > 0) {
+            if (configs.loop_next_timer === true) {
+              const cycleTime = (configs.next_timer + 1) * 1000;
+              const timeElapsedSinceInitialEnd = now - initialEndTime;
+              const cyclesElapsed = Math.floor(timeElapsedSinceInitialEnd / cycleTime);
+              endTime = initialEndTime + (cyclesElapsed + 1) * cycleTime;
+              distance = endTime - now;
+            } else {
+              endTime = initialEndTime + configs.next_timer * 1000;
+              distance = endTime - now;
+            }
           }
+          return [distance, endTime];
+        },
+        countdown(configs, callback) {
+          const calculateAdjustedTime = function (date, tz) {
+            return date.getTime() + (-1 * tz * 60 - date.getTimezoneOffset()) * 60 * 1000;
+          }
+          let endDate = new Date(
+            configs.end_year,
+            configs.end_month - 1,
+            configs.end_day,
+            configs.end_hour,
+            configs.end_minute
+          );
+          const initialEndTime = calculateAdjustedTime(endDate, configs.timezone);
+          let endTime = initialEndTime;
+
+          let startTime;
+          if (configs.start_year) {
+            let startDate = new Date(
+              configs.start_year,
+              configs.start_month - 1,
+              configs.start_day,
+              configs.start_hour,
+              configs.start_minute
+            );
+            startTime = calculateAdjustedTime(startDate, configs.timezone);
+          } else {
+            startTime = new Date().getTime();
+          }
+          let last = 0;
+          let that = this;
+          function updateCountdown () {
+            const now = new Date().getTime();
+            let distance = -1;
+            [distance, endTime] = that.calculateCountdownDistance(configs, initialEndTime, endTime, now);
+            if (distance < 0 || startTime > now) {
+              callback(false, 0, 0, 0, 0);
+              return;
+            }
+            if (!last || now - last >= 1000) {  
+              const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+              const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+              const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+              callback(true, seconds.toString().padStart(2, '0'), minutes.toString().padStart(2, '0'), hours, days);
+              last = now;
+            }
+            requestAnimationFrame(updateCountdown);
+          }
+          requestAnimationFrame(updateCountdown);
+        },
+        canShow(configs) {
+          let endDate = new Date(
+            configs.end_year,
+            configs.end_month - 1,
+            configs.end_day,
+            configs.end_hour,
+            configs.end_minute
+          );
+          const initialEndTime = endDate.getTime() + (-1 * configs.timezone * 60 - endDate.getTimezoneOffset()) * 60 * 1000;
+          let endTime = initialEndTime;
+
+          let startTime;
+          if (configs.start_year) {
+            let startDate = new Date(
+              configs.start_year,
+              configs.start_month - 1,
+              configs.start_day,
+              configs.start_hour,
+              configs.start_minute
+            );
+            startTime = startDate.getTime() + (-1 * configs.timezone * 60 - startDate.getTimezoneOffset()) * 60 * 1000;
+          } else {
+            startTime = new Date().getTime();
+          }
+          const now = new Date().getTime();
+          let distance = -1;
+          [distance, endTime] = this.calculateCountdownDistance(configs, initialEndTime, endTime, now);
+          if (distance < 0 || startTime > now) {
+            return false;
+          }
+          return true;
+        },
+        handleTime(configs) {
+          let endDate = new Date(
+            configs.end_year,
+            configs.end_month - 1,
+            configs.end_day,
+            configs.end_hour,
+            configs.end_minute
+          );
+          const initialEndTime = endDate.getTime() + (-1 * configs.timezone * 60 - endDate.getTimezoneOffset()) * 60 * 1000;
+          let endTime = initialEndTime;
+
+          let startTime;
+          if (configs.start_year) {
+            let startDate = new Date(
+              configs.start_year,
+              configs.start_month - 1,
+              configs.start_day,
+              configs.start_hour,
+              configs.start_minute
+            );
+            startTime = startDate.getTime() + (-1 * configs.timezone * 60 - startDate.getTimezoneOffset()) * 60 * 1000;
+          } else {
+            startTime = new Date().getTime();
+          }
+          const now = new Date().getTime();
+          let distance = -1;
+          [distance, endTime] = this.calculateCountdownDistance(configs, initialEndTime, endTime, now);
+          return { "startTime": startTime, "endTime": endTime, "now": now, "distance": distance};
+        }
       });
 
       Alpine.store('xSplide', {
@@ -237,7 +272,7 @@ requestAnimationFrame(() => {
               };
 
               if (!window.OTSB.loadedScript.includes('slider')) {
-                  deferScriptLoadOtsb('slider', window.OTSB.sliderScript, initSlider, true);
+                  deferScriptLoad('slider', window.OTSB.sliderScript, initSlider, true);
               } else if (window.Splide) {
                   initSlider();
               } else {
@@ -551,7 +586,7 @@ requestAnimationFrame(() => {
   })
 });
 
-const deferScriptLoadOtsb = (name, src, onload, requestVisualChange = false) => {
+const deferScriptLoad = (name, src, onload, requestVisualChange = false) => {
   window.OTSB.loadedScript.push(name);
 
   ((events) => {
