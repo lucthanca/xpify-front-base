@@ -2,15 +2,103 @@ window.OTSB = {
   sliderScript: 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js',
   loadedScript: [],
 };
-const xParseJSONOTSB = (jsonString) => {
-  jsonString = String.raw`${jsonString}`;
-  jsonString = jsonString.replaceAll("\\","\\\\").replaceAll('\\"', '\"');
+if (typeof window.xParseJSONOTSB !== 'function') {
+  window.xParseJSONOTSB = (jsonString) => {
+    jsonString = String.raw`${jsonString}`;
+    jsonString = jsonString.replaceAll("\\","\\\\").replaceAll('\\"', '\"');
 
-  return JSON.parse(jsonString);
+    return JSON.parse(jsonString);
+  }
 }
-
 requestAnimationFrame(() => {
   document.addEventListener('alpine:init', () => {
+    Alpine.store('otsb_xCartAnalytics', {
+      viewCart() {
+        fetch(
+          '/cart.js'
+        ).then(response => {
+          return response.text();
+        }).then(cart => {
+          cart = JSON.parse(cart);
+          if (cart.items.length > 0) {
+            Shopify.analytics.publish('view_cart', {'cart': cart});
+          }
+        });
+      }
+    });
+    Alpine.store('otsb_xModal', {
+      activeElement: "",
+      setActiveElement(element) {
+        this.activeElement = element;
+      },
+      focus(container, elementFocus) {
+        Alpine.store('otsb_xFocusElement').trapFocus(container, elementFocus);
+      },
+      removeFocus() {
+        const openedBy = document.getElementById(this.activeElement);
+        Alpine.store('otsb_xFocusElement').removeTrapFocus(openedBy);
+      }
+    });
+    Alpine.store('otsb_xFocusElement', {
+      focusableElements: ['button, [href], input, select, textarea, [tabindex]:not([tabindex^="-"])'],
+      listeners: {},
+      trapFocus(container, elementFocus) {
+        if ( window.innerWidth < 1025 ) return;
+
+        let c = document.getElementById(container);
+        let e = document.getElementById(elementFocus);
+        this.listeners = this.listeners || {};
+        const elements = Array.from(c.querySelectorAll(this.focusableElements));
+        var first = elements[0];
+        var last = elements[elements.length - 1];
+
+        this.removeTrapFocus();
+
+        this.listeners.focusin = (event)=>{
+          if (
+            event.target !== c &&
+            event.target !== last &&
+            event.target !== first
+          ){
+            return;
+          }
+          document.addEventListener('keydown', this.listeners.keydown);
+        };
+
+        this.listeners.focusout = () => {
+          document.removeEventListener('keydown', this.listeners.keydown);
+        }
+
+        this.listeners.keydown = (e) =>{
+          if (e.code.toUpperCase() !== 'TAB') return;
+
+          if (e.target === last && !e.shiftKey) {
+            e.preventDefault();
+            first.focus();
+          }
+
+          if ((e.target === first || e.target == c) && e.shiftKey) {
+            e.preventDefault();
+            last.focus();
+          }
+        }
+        document.addEventListener('focusout', this.listeners.focusout);
+        document.addEventListener('focusin', this.listeners.focusin);
+        e.focus();
+      },
+      removeTrapFocus(elementToFocus = null) {
+        if ( window.innerWidth < 1025 ) return;
+
+        document.removeEventListener('focusin', ()=>{
+          document.addEventListener('keydown', this.listeners.focusin);
+        });
+        document.removeEventListener('focusout', ()=>{
+          document.removeEventListener('keydown', this.listeners.focusout);
+        });
+        document.removeEventListener('keydown', this.listeners.keydown);
+        if (elementToFocus) elementToFocus.focus();
+      }
+    });
     Alpine.store('xPopup', {
       open: false,
     });
