@@ -1,5 +1,5 @@
 
-if (typeof window.xParseJSONOTSB !== 'function') {
+if (typeof window.xParseJSONOTSB != 'function') {
   window.xParseJSONOTSB = (jsonString) => {
     jsonString = String.raw`${jsonString}`;
     jsonString = jsonString.replaceAll("\\","\\\\").replaceAll('\\"', '\"');
@@ -10,8 +10,8 @@ if (typeof window.xParseJSONOTSB !== 'function') {
 if (!window.otsb) {
   window.otsb = {};
 }
-if (!window.otsb.loadedScripts) {
-  window.otsb.loadedScripts = [];
+if (!window.otsb.loadedScript) {
+  window.otsb.loadedScript = [];
 }
 if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
   window.otsb.loadedScript.push('otsb-popup.js');
@@ -273,8 +273,8 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
     })
   })
 }
-if (!window.otsb.loadedScripts.includes('otsb-flashsales.js')) {
-  window.otsb.loadedScripts.push('otsb-flashsales.js');
+if (!window.otsb.loadedScript.includes('otsb-flashsales.js')) {
+  window.otsb.loadedScript.push('otsb-flashsales.js');
   requestAnimationFrame(() => {
     document.addEventListener('alpine:init', () => {
       Alpine.store('xHelper', {
@@ -417,8 +417,8 @@ if (!window.otsb.loadedScripts.includes('otsb-flashsales.js')) {
     });
   });
 }
-if (!window.otsb.loadedScripts.includes('coupon-code.js')) {
-  window.otsb.loadedScripts.push('coupon-code.js');
+if (!window.otsb.loadedScript.includes('coupon-code.js')) {
+  window.otsb.loadedScript.push('coupon-code.js');
   
   requestAnimationFrame(() => {
     document.addEventListener("alpine:init", () => {
@@ -656,8 +656,8 @@ if (!window.otsb.loadedScripts.includes('coupon-code.js')) {
     });
   });
 }
-if (!window.otsb.loadedScripts.includes('otsb-event-calendar')) {
-  window.otsb.loadedScripts.push('otsb-event-calendar');
+if (!window.otsb.loadedScript.includes('otsb-event-calendar')) {
+  window.otsb.loadedScript.push('otsb-event-calendar');
   requestAnimationFrame(() => {
     document.addEventListener('alpine:init', () => {
       Alpine.data('xEventCalendar', (event) => ({
