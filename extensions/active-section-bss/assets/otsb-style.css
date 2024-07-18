@@ -2049,35 +2049,21 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .text-\[rgb\(var\(--colors-text\)\)\] {
   color: rgb(var(--colors-text));
 }
-.otsb__root h1, .otsb__root h2, .otsb__root h3, .otsb__root h4, .otsb__root h5, .otsb__root h6, .otsb__root .h1, .otsb__root .otsb-h2, .otsb__root .otsb-h3, .otsb__root .otsb-h4, .otsb__root .h5, .otsb__root .h6, .otsb__root .otsb-title{
-    text-transform: var(--heading-text-tranform);
-    font-family: var(--font-heading-family);
-    font-style: var(--font-heading-style);
-    font-weight: var(--font-heading-weight);
-    color: rgba(var(--colors-heading));
-    overflow-wrap:break-word;
-    line-height:1.25;}
-.otsb__root h1 *::-moz-selection, .otsb__root h1::-moz-selection, .otsb__root h2 *::-moz-selection, .otsb__root h2::-moz-selection, .otsb__root h3 *::-moz-selection, .otsb__root h3::-moz-selection, .otsb__root h4 *::-moz-selection, .otsb__root h4::-moz-selection, .otsb__root h5 *::-moz-selection, .otsb__root h5::-moz-selection, .otsb__root h6 *::-moz-selection, .otsb__root h6::-moz-selection, .otsb__root .h1 *::-moz-selection, .otsb__root .h1::-moz-selection, .otsb__root .otsb-h2 *::-moz-selection, .otsb__root .otsb-h2::-moz-selection, .otsb__root .otsb-h3 *::-moz-selection, .otsb__root .otsb-h3::-moz-selection, .otsb__root .otsb-h4 *::-moz-selection, .otsb__root .otsb-h4::-moz-selection, .otsb__root .h5 *::-moz-selection, .otsb__root .h5::-moz-selection, .otsb__root .h6 *::-moz-selection, .otsb__root .h6::-moz-selection, .otsb__root .otsb-title *::-moz-selection, .otsb__root .otsb-title::-moz-selection {
-      background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
-    }
-.otsb__root h1 *::-moz-selection, .otsb__root h1 *::selection, .otsb__root h1::-moz-selection, .otsb__root h1::selection, .otsb__root h2 *::-moz-selection, .otsb__root h2 *::selection, .otsb__root h2::-moz-selection, .otsb__root h2::selection, .otsb__root h3 *::-moz-selection, .otsb__root h3 *::selection, .otsb__root h3::-moz-selection, .otsb__root h3::selection, .otsb__root h4 *::-moz-selection, .otsb__root h4 *::selection, .otsb__root h4::-moz-selection, .otsb__root h4::selection, .otsb__root h5 *::-moz-selection, .otsb__root h5 *::selection, .otsb__root h5::-moz-selection, .otsb__root h5::selection, .otsb__root h6 *::-moz-selection, .otsb__root h6 *::selection, .otsb__root h6::-moz-selection, .otsb__root h6::selection, .otsb__root .h1 *::-moz-selection, .otsb__root .h1 *::selection, .otsb__root .h1::-moz-selection, .otsb__root .h1::selection, .otsb__root .otsb-h2 *::-moz-selection, .otsb__root .otsb-h2 *::selection, .otsb__root .otsb-h2::-moz-selection, .otsb__root .otsb-h2::selection, .otsb__root .otsb-h3 *::-moz-selection, .otsb__root .otsb-h3 *::selection, .otsb__root .otsb-h3::-moz-selection, .otsb__root .otsb-h3::selection, .otsb__root .otsb-h4 *::-moz-selection, .otsb__root .otsb-h4 *::selection, .otsb__root .otsb-h4::-moz-selection, .otsb__root .otsb-h4::selection, .otsb__root .h5 *::-moz-selection, .otsb__root .h5 *::selection, .otsb__root .h5::-moz-selection, .otsb__root .h5::selection, .otsb__root .h6 *::-moz-selection, .otsb__root .h6 *::selection, .otsb__root .h6::-moz-selection, .otsb__root .h6::selection, .otsb__root .otsb-title *::-moz-selection, .otsb__root .otsb-title *::selection, .otsb__root .otsb-title::-moz-selection, .otsb__root .otsb-title::selection {
-      background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
-    }
 .otsb__root h1, .otsb__root h2, .otsb__root h3, .otsb__root h4, .otsb__root h5, .otsb__root h6, .otsb__root .h1, .otsb__root .otsb-h2, .otsb__root .otsb-h3, .otsb__root .otsb-h4, .otsb__root .h5, .otsb__root .h6, .otsb__root .otsb-title {
-    text-transform: var(--heading-text-tranform);
-    font-family: var(--font-heading-family);
-    font-style: var(--font-heading-style);
-    font-weight: var(--font-heading-weight);
-    color: rgba(var(--colors-heading));
-    overflow-wrap:break-word;
-    line-height:1.25;
-  }
+  text-transform: var(--heading-text-tranform);
+  font-family: var(--font-heading-family);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  color: rgba(var(--colors-heading));
+  overflow-wrap:break-word;
+  line-height:1.25;
+}
 .otsb__root h1 *::-moz-selection, .otsb__root h1::-moz-selection, .otsb__root h2 *::-moz-selection, .otsb__root h2::-moz-selection, .otsb__root h3 *::-moz-selection, .otsb__root h3::-moz-selection, .otsb__root h4 *::-moz-selection, .otsb__root h4::-moz-selection, .otsb__root h5 *::-moz-selection, .otsb__root h5::-moz-selection, .otsb__root h6 *::-moz-selection, .otsb__root h6::-moz-selection, .otsb__root .h1 *::-moz-selection, .otsb__root .h1::-moz-selection, .otsb__root .otsb-h2 *::-moz-selection, .otsb__root .otsb-h2::-moz-selection, .otsb__root .otsb-h3 *::-moz-selection, .otsb__root .otsb-h3::-moz-selection, .otsb__root .otsb-h4 *::-moz-selection, .otsb__root .otsb-h4::-moz-selection, .otsb__root .h5 *::-moz-selection, .otsb__root .h5::-moz-selection, .otsb__root .h6 *::-moz-selection, .otsb__root .h6::-moz-selection, .otsb__root .otsb-title *::-moz-selection, .otsb__root .otsb-title::-moz-selection {
-      background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
-    }
+    background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
+  }
 .otsb__root h1 *::-moz-selection, .otsb__root h1 *::selection, .otsb__root h1::-moz-selection, .otsb__root h1::selection, .otsb__root h2 *::-moz-selection, .otsb__root h2 *::selection, .otsb__root h2::-moz-selection, .otsb__root h2::selection, .otsb__root h3 *::-moz-selection, .otsb__root h3 *::selection, .otsb__root h3::-moz-selection, .otsb__root h3::selection, .otsb__root h4 *::-moz-selection, .otsb__root h4 *::selection, .otsb__root h4::-moz-selection, .otsb__root h4::selection, .otsb__root h5 *::-moz-selection, .otsb__root h5 *::selection, .otsb__root h5::-moz-selection, .otsb__root h5::selection, .otsb__root h6 *::-moz-selection, .otsb__root h6 *::selection, .otsb__root h6::-moz-selection, .otsb__root h6::selection, .otsb__root .h1 *::-moz-selection, .otsb__root .h1 *::selection, .otsb__root .h1::-moz-selection, .otsb__root .h1::selection, .otsb__root .otsb-h2 *::-moz-selection, .otsb__root .otsb-h2 *::selection, .otsb__root .otsb-h2::-moz-selection, .otsb__root .otsb-h2::selection, .otsb__root .otsb-h3 *::-moz-selection, .otsb__root .otsb-h3 *::selection, .otsb__root .otsb-h3::-moz-selection, .otsb__root .otsb-h3::selection, .otsb__root .otsb-h4 *::-moz-selection, .otsb__root .otsb-h4 *::selection, .otsb__root .otsb-h4::-moz-selection, .otsb__root .otsb-h4::selection, .otsb__root .h5 *::-moz-selection, .otsb__root .h5 *::selection, .otsb__root .h5::-moz-selection, .otsb__root .h5::selection, .otsb__root .h6 *::-moz-selection, .otsb__root .h6 *::selection, .otsb__root .h6::-moz-selection, .otsb__root .h6::selection, .otsb__root .otsb-title *::-moz-selection, .otsb__root .otsb-title *::selection, .otsb__root .otsb-title::-moz-selection, .otsb__root .otsb-title::selection {
-      background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
-    }
+    background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
+  }
 .otsb__root .otsb-rte a:hover,
 .otsb__root .button-link:hover {
   background-size: 0 0.1em, 100% 0.1em;
@@ -2866,7 +2852,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .lg\:max-w-\[350px\]{max-width:350px}
 .otsb__root .lg\:max-w-\[45vw\]{max-width:45vw}
 .otsb__root .lg\:max-w-\[61\.25\%\]{max-width:61.25%}
-.otsb__root .lg\:flex-1{flex:1 1 0%}
 .otsb__root .lg\:grow{flex-grow:1}
 .otsb__root .lg\:grow-0{flex-grow:0}
 .otsb__root .lg\:-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
@@ -2900,7 +2885,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .lg\:gap-x-7{-moz-column-gap:1.75rem;column-gap:1.75rem}
 .otsb__root .lg\:gap-x-\[8\%\]{-moz-column-gap:8%;column-gap:8%}
 .otsb__root .lg\:gap-y-7{row-gap:1.75rem}
-.otsb__root .lg\:\!px-5{padding-left:1.25rem !important;padding-right:1.25rem !important}
 .otsb__root .lg\:px-14{padding-left:3.5rem;padding-right:3.5rem}
 .otsb__root .lg\:px-5{padding-left:1.25rem;padding-right:1.25rem}
 .otsb__root .lg\:px-8{padding-left:2rem;padding-right:2rem}

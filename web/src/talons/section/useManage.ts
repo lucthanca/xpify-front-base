@@ -43,7 +43,7 @@ type UseManageTalon = {
   dataUpdateLoading: boolean,
   dataDeleteLoading: boolean,
   bannerAlert: BannerAlert | undefined,
-  setBannerAlert: any,
+  setBannerAlert: (alert: BannerAlert | undefined) => void,
   options: object,
   selected: string,
   handleSelectChange: any,
@@ -54,11 +54,18 @@ type UseManageTalon = {
 export const useManage = (props: UseManageProps): UseManageTalon => {
   const { section, typeSelect } = props;
   const [selected, setSelected] = useState("");
-  const [bannerAlert, setBannerAlert] = useState<BannerAlert | undefined>(undefined);
+  const [bannerAlert, setStateBannerAlert] = useState<BannerAlert | undefined>(undefined);
   const [executeSection, setExecuteSection] = useState<string>('');
   const [urlEditTheme, setUrlEditTheme] = useState<string>('#');
   const toast = useToast();
 
+  const setBannerAlert = (alert: BannerAlert | undefined) => {
+    console.log('setBannerAlert');
+    // log trace
+    console.trace();
+    console.log(alert);
+    setStateBannerAlert(alert);
+  }
   const { data:themesData } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
     skip: Boolean(!section?.entity_id),
@@ -78,6 +85,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   const childSections = useMemo(() => groupChildSections?.getSections?.items || [], [groupChildSections]);
 
   const handleSelectChange = useCallback((value: any) => {
+    setBannerAlert(undefined);
     setSelected(typeSelect ? value : value[0]);
   }, []);
   const getUpdateMessage = useCallback((item: any, currentTheme: any, parent: any = null) => {
@@ -143,13 +151,12 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
 
     return result.filter((item: any) => item?.value);
   }, [section, themes, childSections]);
-  useMemo(() => {
+  useEffect(() => {
     if (themes && themes.length && section?.entity_id) {
       setSelected(themes[0]['id'] ?? "");
     }
   }, [themes, section?.entity_id]);
   const installed = useMemo(() => {
-    setBannerAlert(undefined);
     if (!section?.installed) {
       return false;
     }
