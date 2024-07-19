@@ -767,6 +767,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .z-20{z-index:20}
 .otsb__root .z-40{z-index:40}
 .otsb__root .z-50{z-index:50}
+.otsb__root .z-\[1\]{z-index:1}
 .otsb__root .z-\[45\]{z-index:45}
 .otsb__root .order-1{order:1}
 .otsb__root .order-2{order:2}
@@ -875,7 +876,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .h-\[700px\]{height:700px}
 .otsb__root .h-\[90vh\]{height:90vh}
 .otsb__root .h-\[94vh\]{height:94vh}
-.otsb__root .h-\[calc\(100\%-2rem\)\]{height:calc(100% - 2rem)}
 .otsb__root .h-\[var\(--base-font-size\)\]{height:var(--base-font-size)}
 .otsb__root .h-auto{height:auto}
 .otsb__root .h-fit{height:-moz-fit-content;height:fit-content}
@@ -1006,6 +1006,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .self-end{align-self:flex-end}
 .otsb__root .self-center{align-self:center}
 .otsb__root .overflow-hidden{overflow:hidden}
+.otsb__root .overflow-clip{overflow:clip}
 .otsb__root .overflow-y-auto{overflow-y:auto}
 .otsb__root .overflow-x-hidden{overflow-x:hidden}
 .otsb__root .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1252,6 +1253,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .leading-tight{line-height:1.25}
 .otsb__root .tracking-wider{letter-spacing:0.05em}
 .otsb__root .text-\[\#acacac\]{--tw-text-opacity:1;color:rgb(172 172 172 / var(--tw-text-opacity))}
+.otsb__root .text-\[--otsb-images-collection-title\]{color:var(--otsb-images-collection-title)}
 .otsb__root .text-\[rgb\(var\(--colors-text\)\)\]{color:rgb(var(--colors-text))}
 .otsb__root .text-\[rgba\(var\(--color-error\)\)\]{color:rgba(var(--color-error))}
 .otsb__root .text-\[rgba\(var\(--color-success\)\)\]{color:rgba(var(--color-success))}
@@ -2570,7 +2572,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .md\:h-\[600px\]{height:600px}
 .otsb__root .md\:h-\[650px\]{height:650px}
 .otsb__root .md\:h-\[750px\]{height:750px}
-.otsb__root .md\:h-\[calc\(100\%-5rem\)\]{height:calc(100% - 5rem)}
 .otsb__root .md\:h-auto{height:auto}
 .otsb__root .md\:h-full{height:100%}
 .otsb__root .md\:max-h-40{max-height:10rem}
