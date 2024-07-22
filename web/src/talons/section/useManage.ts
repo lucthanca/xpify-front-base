@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery, ApolloError } from '@apollo/client';
 import { useToast } from '@shopify/app-bridge-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DELETE_ASSET_MUTATION, UPDATE_ASSET_MUTATION } from '~/queries/section-builder/asset.gql';
@@ -54,18 +54,11 @@ type UseManageTalon = {
 export const useManage = (props: UseManageProps): UseManageTalon => {
   const { section, typeSelect } = props;
   const [selected, setSelected] = useState("");
-  const [bannerAlert, setStateBannerAlert] = useState<BannerAlert | undefined>(undefined);
+  const [bannerAlert, setBannerAlert] = useState<BannerAlert | undefined>(undefined);
   const [executeSection, setExecuteSection] = useState<string>('');
-  const [urlEditTheme, setUrlEditTheme] = useState<string>('#');
+  // const [urlEditTheme, setUrlEditTheme] = useState<string>('#');
   const toast = useToast();
 
-  const setBannerAlert = (alert: BannerAlert | undefined) => {
-    console.log('setBannerAlert');
-    // log trace
-    console.trace();
-    console.log(alert);
-    setStateBannerAlert(alert);
-  }
   const { data:themesData } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
     skip: Boolean(!section?.entity_id),
@@ -88,7 +81,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     setBannerAlert(undefined);
     setSelected(typeSelect ? value : value[0]);
   }, []);
-  const getUpdateMessage = useCallback((item: any, currentTheme: any, parent: any = null) => {
+  const getUpdateMessage = (item: any, currentTheme: any, parent: any = null) => {
     const installVersion = item?.installed && item.installed.find((item: any) => item.theme_id == currentTheme)?.product_version;
     if (installVersion) {
       if (installVersion != item.version) {
@@ -103,7 +96,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     }
 
     return '';
-  }, []);
+  };
 
   const { data: myShop } = useQuery(MY_SHOP, {
     fetchPolicy: "cache-and-network",
@@ -151,11 +144,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
 
     return result.filter((item: any) => item?.value);
   }, [section, themes, childSections]);
-  useEffect(() => {
-    if (themes && themes.length && section?.entity_id) {
-      setSelected(themes[0]['id'] ?? "");
-    }
-  }, [themes, section?.entity_id]);
+
   const installed = useMemo(() => {
     if (!section?.installed) {
       return false;
@@ -183,7 +172,6 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         } else {
           title = "Re-install this section to update it to the latest version";
         }
-
         setBannerAlert({
           'title': title,
           'tone': 'info',
@@ -191,32 +179,80 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         });
       }
 
-      return content.length ? true : false;
+      return !!content.length;
     }
     return false;
   }, [selected, options]);
 
-  const [updateAction, { data:dataUpdate, loading:dataUpdateLoading, error:dataUpdateError }] = useMutation(UPDATE_ASSET_MUTATION, {});
-  const [deleteAction, { data:dataDelete, loading:dataDeleteLoading, error:dataDeleteError }] = useMutation(DELETE_ASSET_MUTATION, {});
+  const [updateAction, { loading: dataUpdateLoading }] = useMutation(UPDATE_ASSET_MUTATION, {});
+  const [deleteAction, { loading: dataDeleteLoading }] = useMutation(DELETE_ASSET_MUTATION, {});
 
   const handleUpdate = useCallback(async () => {
+    setBannerAlert(undefined);
     setExecuteSection(section?.url_key);
-    setUrlEditTheme('https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor');
-    await updateAction({
-      variables: {
-        theme_id: selected,
-        key: section?.url_key
+    // setUrlEditTheme('https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor');
+    let alert: BannerAlert;
+    try {
+      await updateAction({
+        variables: {
+          theme_id: selected,
+          key: section?.url_key
+        }
+      });
+      alert = {
+        'urlSuccessEditTheme': 'https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor',
+        'isSimple': !section?.child_ids?.length,
+        'tone': 'success'
+      };
+      toast.show('Installed successfully');
+    } catch (e) {
+      if (e instanceof ApolloError) {
+        alert = {
+          'title': e.message,
+          'tone': 'critical',
+          'content': e.graphQLErrors ?? []
+        };
+      } else {
+        alert = {
+          'title': `Something went wrong. Try again later.`,
+          'tone': 'critical'
+        };
       }
-    });
+      toast.show('Installed failed', { isError: true });
+    }
+    Object.keys(alert).length > 0 && setBannerAlert(alert);
   }, [selected, section?.entity_id]);
   const handleDelete = useCallback(async () => {
-    setExecuteSection(section?.url_key);
-    await deleteAction({
-      variables: {
-        theme_id: selected,
-        key: section?.url_key
+    try {
+      setBannerAlert(undefined);
+      setExecuteSection(section?.url_key);
+      const result = await deleteAction({
+        variables: {
+          theme_id: selected,
+          key: section?.url_key
+        }
+      });
+      if (result.data?.deleteAsset?.length > 0) {
+        toast.show('Deleted successfully');
+        return;
       }
-    });
+      throw new Error('Can not delete this section by some reason');
+    } catch (e) {
+      let alert: BannerAlert;
+      if (e instanceof ApolloError) {
+        alert = {
+          'title': e.message,
+          'tone': 'critical',
+          'content': e.graphQLErrors ?? []
+        };
+      } else {
+        alert = {
+          'title': `Something went wrong. Try again later.`,
+          'tone': 'critical'
+        };
+      }
+      Object.keys(alert).length > 0 && setBannerAlert(alert);
+    }
   }, [selected, section?.entity_id]);
 
   const currentThemeSelected = useMemo(() => {
@@ -224,51 +260,10 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   }, [selected]);
 
   useEffect(() => {
-    if (dataUpdate && dataUpdate.updateAsset) {
-      if (dataUpdate.updateAsset?.length) {
-        if (section?.url_key === executeSection) {
-          setBannerAlert({
-            'urlSuccessEditTheme': urlEditTheme,
-            'isSimple': !section?.child_ids?.length,
-            'tone': 'success'
-          });
-        }
-        toast.show('Installed successfully');
-      } else {
-        if (section?.url_key === executeSection) {
-          setBannerAlert({
-            'title': `Error. Try later`,
-            'tone': 'critical'
-          });
-        }
-        toast.show('Installed fail', { isError: true });
-      }
+    if (themes && themes.length && section?.entity_id) {
+      setSelected(themes[0]['id'] ?? "");
     }
-  }, [dataUpdate]);
-  useEffect(() => {
-    if (dataUpdateError) {
-      setBannerAlert({
-        'title': dataUpdateError.message,
-        'tone': 'critical',
-        'content': dataUpdateError.graphQLErrors ?? []
-      });
-      toast.show('Installed fail', { isError: true });
-    }
-  }, [dataUpdateError]);
-  useEffect(() => {
-    if (dataDelete && dataDelete.deleteAsset) {
-      if (dataDelete.deleteAsset?.length) {
-        toast.show('Deleted successfully');
-      } else {
-        toast.show('Deleted fail', { isError: true });
-      }
-    }
-  }, [dataDelete]);
-  useEffect(() => {
-    if (dataDeleteError) {
-      toast.show('Deleted fail', { isError: true });
-    }
-  }, [dataDeleteError]);
+  }, [themes, section?.entity_id]);
 
   return {
     section,
