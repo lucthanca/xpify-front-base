@@ -377,32 +377,36 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
     background: none;
   }
 .otsb__root .otsb-page-width {
-    max-width: calc(var(--page-width) + 2.5rem);
-    margin-left:auto;
-    margin-right:auto;
-    padding-right:1.25rem;
-    padding-left:1.25rem;
+    max-width: var(--page-width);
+    padding: 0 1.5rem;
+    margin: 0 auto;
   }
+@media (min-width: 750px) {
+
+  .otsb__root .otsb-page-width {
+      padding: 0 5rem
+  }
+    }
 .otsb__root .otsb-full-width-mobile.otsb-page-width{padding-right:0px;padding-left:0px}
 @media (min-width: 768px){
-.otsb__root .otsb-full-width-mobile.otsb-page-width{padding-right:1.25rem;padding-left:1.25rem}}
+.otsb__root .otsb-full-width-mobile.otsb-page-width{padding-right:1.5rem;padding-left:1.5rem}}
 .otsb__root .otsb-full-width-mobile.otsb-full-width{padding-right:0px;padding-left:0px}
 @media (min-width: 768px){
-.otsb__root .otsb-full-width-mobile.otsb-full-width{padding-right:1.25rem;padding-left:1.25rem}}
+.otsb__root .otsb-full-width-mobile.otsb-full-width{padding-right:1.5rem;padding-left:1.5rem}}
 .otsb__root .otsb-carousel-mobile.page-width-mobile{padding-left:0px;padding-right:0px}
 @media (min-width: 768px){
-.otsb__root .otsb-carousel-mobile.page-width-mobile{padding-left:1.25rem;padding-right:1.25rem}}
+.otsb__root .otsb-carousel-mobile.page-width-mobile{padding-left:1.5rem;padding-right:1.5rem}}
 .otsb__root .otsb-carousel-mobile.otsb-full-width-mobile{padding-left:0px;padding-right:0px}
 @media (min-width: 768px){
-.otsb__root .otsb-carousel-mobile.otsb-full-width-mobile{padding-left:1.25rem;padding-right:1.25rem}
+.otsb__root .otsb-carousel-mobile.otsb-full-width-mobile{padding-left:1.5rem;padding-right:1.5rem}
 .otsb__root .otsb-carousel-tablet.otsb-page-width{padding-left:0px;padding-right:0px}}
 @media (min-width: 1024px){
-.otsb__root .otsb-carousel-tablet.otsb-page-width{padding-left:1.25rem;padding-right:1.25rem}}
-.otsb__root .otsb-full-width{padding-left:1.25rem;padding-right:1.25rem}
+.otsb__root .otsb-carousel-tablet.otsb-page-width{padding-left:1.5rem;padding-right:1.5rem}}
+.otsb__root .otsb-full-width{padding-left:1.5rem;padding-right:1.5rem}
 @media (min-width: 768px){
 .otsb__root .otsb-carousel-tablet.otsb-full-width{padding-left:0px;padding-right:0px}}
 @media (min-width: 1024px){
-.otsb__root .otsb-carousel-tablet.otsb-full-width{padding-left:1.25rem;padding-right:1.25rem}}
+.otsb__root .otsb-carousel-tablet.otsb-full-width{padding-left:1.5rem;padding-right:1.5rem}}
 .otsb__root .otsb-rtl {
     direction: rtl;
   }
