@@ -735,11 +735,13 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .sticky{position:sticky}
 .otsb__root .inset-0{inset:0px}
 .otsb__root .bottom-0{bottom:0px}
+.otsb__root .bottom-10{bottom:2.5rem}
 .otsb__root .bottom-5{bottom:1.25rem}
 .otsb__root .bottom-6{bottom:1.5rem}
 .otsb__root .left-0{left:0px}
 .otsb__root .left-1{left:0.25rem}
 .otsb__root .left-1\/2{left:50%}
+.otsb__root .left-10{left:2.5rem}
 .otsb__root .left-2{left:0.5rem}
 .otsb__root .left-4{left:1rem}
 .otsb__root .left-5{left:1.25rem}
@@ -1032,6 +1034,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .border-\[rgba\(var\(--colors-heading\)\)\]{border-color:rgba(var(--colors-heading))}
 .otsb__root .border-\[rgba\(var\(--colors-text\)\)\]{border-color:rgba(var(--colors-text))}
 .otsb__root .bg-\[\#C9C9C9\]{--tw-bg-opacity:1;background-color:rgb(201 201 201 / var(--tw-bg-opacity))}
+.otsb__root .bg-\[\#F2F2F2\]{--tw-bg-opacity:1;background-color:rgb(242 242 242 / var(--tw-bg-opacity))}
 .otsb__root .bg-\[\#acacac\]{--tw-bg-opacity:1;background-color:rgb(172 172 172 / var(--tw-bg-opacity))}
 .otsb__root .bg-\[\#c9c9c9\]{--tw-bg-opacity:1;background-color:rgb(201 201 201 / var(--tw-bg-opacity))}
 .otsb__root .bg-\[rgba\(var\(--background-color\)\)\]{background-color:rgba(var(--background-color))}
@@ -2831,7 +2834,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .lg\:h-\[450px\]{height:450px}
 .otsb__root .lg\:h-\[550px\]{height:550px}
 .otsb__root .lg\:h-\[calc\(100\%-10rem\)\]{height:calc(100% - 10rem)}
-.otsb__root .lg\:h-full{height:100%}
 .otsb__root .lg\:w-1\/2{width:50%}
 .otsb__root .lg\:w-1\/3{width:33.333333%}
 .otsb__root .lg\:w-1\/4{width:25%}
