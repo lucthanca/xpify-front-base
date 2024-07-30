@@ -2,7 +2,7 @@ window.OTSB = {
   sliderScript: 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js',
   loadedScript: [],
 };
-if (typeof window.xParseJSONOTSB !== 'function') {
+if (typeof window.xParseJSONOTSB != 'function') {
   window.xParseJSONOTSB = (jsonString) => {
     jsonString = String.raw`${jsonString}`;
     jsonString = jsonString.replaceAll("\\","\\\\").replaceAll('\\"', '\"');

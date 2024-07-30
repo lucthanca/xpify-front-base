@@ -739,13 +739,11 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .sticky{position:sticky}
 .otsb__root .inset-0{inset:0px}
 .otsb__root .bottom-0{bottom:0px}
-.otsb__root .bottom-10{bottom:2.5rem}
 .otsb__root .bottom-5{bottom:1.25rem}
 .otsb__root .bottom-6{bottom:1.5rem}
 .otsb__root .left-0{left:0px}
 .otsb__root .left-1{left:0.25rem}
 .otsb__root .left-1\/2{left:50%}
-.otsb__root .left-10{left:2.5rem}
 .otsb__root .left-2{left:0.5rem}
 .otsb__root .left-4{left:1rem}
 .otsb__root .left-5{left:1.25rem}
@@ -789,6 +787,8 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .float-left{float:left}
 .otsb__root .m-2{margin:0.5rem}
 .otsb__root .mx-auto{margin-left:auto;margin-right:auto}
+.otsb__root .my-2{margin-top:0.5rem;margin-bottom:0.5rem}
+.otsb__root .my-\[1\.5em\]{margin-top:1.5em;margin-bottom:1.5em}
 .otsb__root .\!mr-2{margin-right:0.5rem !important}
 .otsb__root .-ml-0{margin-left:-0px}
 .otsb__root .-ml-0\.5{margin-left:-0.125rem}
@@ -916,6 +916,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .w-\[120px\]{width:120px}
 .otsb__root .w-\[16px\]{width:16px}
 .otsb__root .w-\[17px\]{width:17px}
+.otsb__root .w-\[1em\]{width:1em}
 .otsb__root .w-\[var\(--base-font-size\)\]{width:var(--base-font-size)}
 .otsb__root .w-fit{width:-moz-fit-content;width:fit-content}
 .otsb__root .w-full{width:100%}
@@ -962,6 +963,9 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 0%{transform:translateX(0%)}
 100%{transform:translateX(-100%)}}
 .otsb__root .animate-\[scrollX\]{animation:scrollX}
+@keyframes spin{
+to{transform:rotate(360deg)}}
+.otsb__root .animate-spin{animation:spin 1s linear infinite}
 .otsb__root .cursor-grab{cursor:grab}
 .otsb__root .cursor-grabbing{cursor:grabbing}
 .otsb__root .cursor-not-allowed{cursor:not-allowed}
@@ -1005,6 +1009,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .gap-x-4{-moz-column-gap:1rem;column-gap:1rem}
 .otsb__root .gap-x-5{-moz-column-gap:1.25rem;column-gap:1.25rem}
 .otsb__root .gap-x-7{-moz-column-gap:1.75rem;column-gap:1.75rem}
+.otsb__root .gap-x-\[4px\]{-moz-column-gap:4px;column-gap:4px}
 .otsb__root .gap-y-2{row-gap:0.5rem}
 .otsb__root .gap-y-4{row-gap:1rem}
 .otsb__root .gap-y-7{row-gap:1.75rem}
@@ -1076,6 +1081,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .p-6{padding:1.5rem}
 .otsb__root .px-1{padding-left:0.25rem;padding-right:0.25rem}
 .otsb__root .px-1\.5{padding-left:0.375rem;padding-right:0.375rem}
+.otsb__root .px-4{padding-left:1rem;padding-right:1rem}
 .otsb__root .px-5{padding-left:1.25rem;padding-right:1.25rem}
 .otsb__root .px-6{padding-left:1.5rem;padding-right:1.5rem}
 .otsb__root .px-8{padding-left:2rem;padding-right:2rem}
@@ -2073,6 +2079,27 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root h1 *::-moz-selection, .otsb__root h1 *::selection, .otsb__root h1::-moz-selection, .otsb__root h1::selection, .otsb__root h2 *::-moz-selection, .otsb__root h2 *::selection, .otsb__root h2::-moz-selection, .otsb__root h2::selection, .otsb__root h3 *::-moz-selection, .otsb__root h3 *::selection, .otsb__root h3::-moz-selection, .otsb__root h3::selection, .otsb__root h4 *::-moz-selection, .otsb__root h4 *::selection, .otsb__root h4::-moz-selection, .otsb__root h4::selection, .otsb__root h5 *::-moz-selection, .otsb__root h5 *::selection, .otsb__root h5::-moz-selection, .otsb__root h5::selection, .otsb__root h6 *::-moz-selection, .otsb__root h6 *::selection, .otsb__root h6::-moz-selection, .otsb__root h6::selection, .otsb__root .h1 *::-moz-selection, .otsb__root .h1 *::selection, .otsb__root .h1::-moz-selection, .otsb__root .h1::selection, .otsb__root .otsb-h2 *::-moz-selection, .otsb__root .otsb-h2 *::selection, .otsb__root .otsb-h2::-moz-selection, .otsb__root .otsb-h2::selection, .otsb__root .otsb-h3 *::-moz-selection, .otsb__root .otsb-h3 *::selection, .otsb__root .otsb-h3::-moz-selection, .otsb__root .otsb-h3::selection, .otsb__root .otsb-h4 *::-moz-selection, .otsb__root .otsb-h4 *::selection, .otsb__root .otsb-h4::-moz-selection, .otsb__root .otsb-h4::selection, .otsb__root .h5 *::-moz-selection, .otsb__root .h5 *::selection, .otsb__root .h5::-moz-selection, .otsb__root .h5::selection, .otsb__root .h6 *::-moz-selection, .otsb__root .h6 *::selection, .otsb__root .h6::-moz-selection, .otsb__root .h6::selection, .otsb__root .otsb-title *::-moz-selection, .otsb__root .otsb-title *::selection, .otsb__root .otsb-title::-moz-selection, .otsb__root .otsb-title::selection {
     background-color: rgba(var(--colors-heading, 36, 36, 36), 0.2)
   }
+/* reset some style back to same with Dawn logic */
+.otsb__root.otsb-v2 h1, .otsb__root.otsb-v2 h2, .otsb__root.otsb-v2 h3, .otsb__root.otsb-v2 h4, .otsb__root.otsb-v2 h5, .otsb__root.otsb-v2 h6, .otsb__root.otsb-v2 .h1, .otsb__root.otsb-v2 .otsb-h2, .otsb__root.otsb-v2 .otsb-h3, .otsb__root.otsb-v2 .otsb-h4, .otsb__root.otsb-v2 .h5, .otsb__root.otsb-v2 .h6, .otsb__root.otsb-v2 .otsb-title {
+    line-height: calc(1 + .3/max(1,var(--font-heading-scale)));
+  }
+.otsb__root.otsb-v2 h1, .otsb__root.otsb-v2 .h1{font-size:calc(var(--font-heading-scale) * 3rem)}
+@media (min-width: 768px){
+.otsb__root.otsb-v2 h1, .otsb__root.otsb-v2 .h1{font-size:calc(var(--font-heading-scale) * 4rem)}}
+.otsb__root.otsb-v2 h2, .otsb__root.otsb-v2 .otsb-h2{font-size:calc(var(--font-heading-scale) * 2rem)}
+@media (min-width: 768px){
+.otsb__root.otsb-v2 h2, .otsb__root.otsb-v2 .otsb-h2{font-size:calc(var(--font-heading-scale) * 2.4rem)}}
+.otsb__root.otsb-v2 h3, .otsb__root.otsb-v2 .otsb-h3{font-size:calc(var(--font-heading-scale) * 1.7rem)}
+@media (min-width: 768px){
+.otsb__root.otsb-v2 h3, .otsb__root.otsb-v2 .otsb-h3{font-size:calc(var(--font-heading-scale) * 1.8rem)}}
+.otsb__root.otsb-v2 h4, .otsb__root.otsb-v2 .otsb-h4{font-size:calc(var(--font-heading-scale) * 1.5rem)}
+.otsb__root.otsb-v2 h5, .otsb__root.otsb-v2 .h5{font-size:calc(var(--font-heading-scale) * 1.2rem)}
+@media (min-width: 768px){
+.otsb__root.otsb-v2 h5, .otsb__root.otsb-v2 .h5{font-size:calc(var(--font-heading-scale) * 1.3rem)}}
+.otsb__root.otsb-v2 h6, .otsb__root.otsb-v2 .h6 {
+    font-size: 0.67em;
+    --font-heading-weight: bold;
+  }
 .otsb__root .otsb-rte a:hover,
 .otsb__root .button-link:hover {
   background-size: 0 0.1em, 100% 0.1em;
@@ -2645,6 +2672,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .md\:gap-x-8{-moz-column-gap:2rem;column-gap:2rem}
 .otsb__root .md\:gap-x-\[4\%\]{-moz-column-gap:4%;column-gap:4%}
 .otsb__root .md\:gap-y-0{row-gap:0px}
+.otsb__root .md\:overflow-hidden{overflow:hidden}
 .otsb__root .md\:rounded-\[10px\]{border-radius:10px}
 .otsb__root .md\:rounded-lg{border-radius:0.5rem}
 .otsb__root .md\:rounded-none{border-radius:0px}
@@ -2806,6 +2834,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .lg\:m-8{margin:2rem}
 .otsb__root .lg\:mx-auto{margin-left:auto;margin-right:auto}
 .otsb__root .lg\:my-12{margin-top:3rem;margin-bottom:3rem}
+.otsb__root .lg\:my-\[2em\]{margin-top:2em;margin-bottom:2em}
 .otsb__root .lg\:mb-0{margin-bottom:0px}
 .otsb__root .lg\:mb-10{margin-bottom:2.5rem}
 .otsb__root .lg\:mb-3{margin-bottom:0.75rem}
@@ -2893,9 +2922,11 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .lg\:gap-x-\[8\%\]{-moz-column-gap:8%;column-gap:8%}
 .otsb__root .lg\:gap-y-7{row-gap:1.75rem}
 .otsb__root .lg\:px-14{padding-left:3.5rem;padding-right:3.5rem}
+.otsb__root .lg\:px-20{padding-left:5rem;padding-right:5rem}
 .otsb__root .lg\:px-5{padding-left:1.25rem;padding-right:1.25rem}
 .otsb__root .lg\:px-8{padding-left:2rem;padding-right:2rem}
 .otsb__root .lg\:py-16{padding-top:4rem;padding-bottom:4rem}
+.otsb__root .lg\:py-24{padding-top:6rem;padding-bottom:6rem}
 .otsb__root .lg\:py-3{padding-top:0.75rem;padding-bottom:0.75rem}
 .otsb__root .lg\:py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}
 .otsb__root .lg\:py-\[22px\]{padding-top:22px;padding-bottom:22px}

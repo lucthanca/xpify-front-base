@@ -25,9 +25,11 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
         delayDays: data.delayDays ? data.delayDays : 0,
         t: '',
         copySuccess: false,
+        loading: false,
         init() {
           if (Shopify.designMode) {
             var _this = this;
+            _this.open();
             const handlePopupSelect = (event, isResize = null) => {
               if (event.detail && event.detail.sectionId.includes(data.sectionId) || isResize) {
                 if (window.Alpine) {
@@ -61,15 +63,31 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             });
 
             //reload popup and display overlay when change screen in shopify admin
-            if (data.name != 'popup-age-verification') {
-              window.addEventListener('resize', (event)=> {
-                handlePopupSelect(event, xParseJSONOTSB(localStorage.getItem(data.name + '-' + data.sectionId)));
-              })
-            }
+            // if (data.name != 'popup-age-verification') {
+            //   window.addEventListener('resize', (event)=> {
+            //     handlePopupSelect(event, xParseJSONOTSB(localStorage.getItem(data.name + '-' + data.sectionId)));
+            //   })
+            // }
           }
-          console.log({ show: this.show, newLetterMessage: this.$el.querySelector('.newsletter-message'), $el: this.$el });
   
-          if (this.$el.querySelector('.newsletter-message')) {
+          const _that = this;
+          if (!data.show_as_popup_normal && !Shopify.designMode) {
+            document.addEventListener('mouseleave', (event) => {
+              if (event.clientY <= 0) {
+                _that.open();
+              }
+            });
+          }
+          // listen on submit form#newsletter-data.sectionId
+          const formElement = this.$el.querySelector('form#newsletter-' + data.sectionId);
+          if (formElement && !Shopify.designMode) {
+            formElement.addEventListener('submit', (event) => {
+              _that.loading = true;
+            });
+          }
+          
+          const thankiuPageSelector = '.otsb-popup__thankiu-' + data.sectionId;
+          if (this.$el.querySelector(thankiuPageSelector)) {
             this.open();
             return;
           }
@@ -78,10 +96,11 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
           //optimize popup load js
           if (window.location.pathname === '/challenge') return;
 
-          const _this= this;
+          const _this = this;
           if (Shopify.designMode) {
             _this.open();
           } else {
+            if (!data.show_as_popup_normal) return;
             if (data.name == 'popup-promotion' && !this.handleSchedule() && data.showCountdown) return;
 
             // if (data.name == 'popup-promotion' && document.querySelector("#x-age-popup") && xParseJSONOTSB(localStorage.getItem('popup-age-verification')) == null) {
@@ -99,17 +118,21 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
           }
         },
         open() {
+          if (!data.show_as_popup_normal) {
+            this.show = true;
+            return;
+          }
           if (!Shopify.designMode && this.isExpireSave() && !this.show) return;
 
           var _this = this;
-          if (data.name == 'popup-age-verification') {
-            if (this.isExpireSave() && !Shopify.designMode && !data.show_popup) return;
+          // if (data.name == 'popup-age-verification') {
+          //   if (this.isExpireSave() && !Shopify.designMode && !data.show_popup) return;
 
-            requestAnimationFrame(() => {
-              document.body.classList.add("overflow-hidden");
-              Alpine.store('xPopup').open = true;
-            });
-          }
+          //   requestAnimationFrame(() => {
+          //     document.body.classList.add("overflow-hidden");
+          //     Alpine.store('xPopup').open = true;
+          //   });
+          // }
 
           //Show minimal when
           // 1. enable show minimal on desktop + default style = minimal + window width >= 768
@@ -145,14 +168,18 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
           }
         },
         close() {
-          if (data.name == 'popup-age-verification') {
-            requestAnimationFrame(() => {
-              document.body.classList.remove("overflow-hidden");
-              Alpine.store('xPopup').open = false;
-            });
-            document.dispatchEvent(new Event('close-age-verification'));
+          if (!data.show_as_popup_normal) {
+            this.show = false;
+            return;
           }
-        var _this = this;
+          // if (data.name == 'popup-age-verification') {
+          //   requestAnimationFrame(() => {
+          //     document.body.classList.remove("overflow-hidden");
+          //     Alpine.store('xPopup').open = false;
+          //   });
+          //   document.dispatchEvent(new Event('close-age-verification'));
+          // }
+          var _this = this;
           if (Shopify.designMode) {
             requestAnimationFrame(() => {
               setTimeout(() => {
@@ -272,6 +299,33 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
       }))
     })
   })
+}
+if (!window.otsb.loadedScript.includes('otsb-popup-intent.js')) {
+  window.otsb.loadedScript.push('otsb-popup-intent.js');
+  requestAnimationFrame(() => {
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('otsb_xPopupExitIntent', {
+        thankiu_page_active_blocks: {},
+      });
+      Alpine.data('otsb_popupIntent', (blockId, sectionId) => {
+        return {
+          init () {
+            document.addEventListener('shopify:block:select', (event) => {
+              const selectedBlockId = event.detail.blockId;
+              console.log(
+                Alpine.store('otsb_xPopupExitIntent')?.thankiu_page_active_blocks
+              )
+              if (!Alpine.store('otsb_xPopupExitIntent')?.thankiu_page_active_blocks?.[blockId]) {
+                Alpine.store('otsb_xPopupExitIntent').thankiu_page_active_blocks[blockId] = false;
+              }
+              Alpine.store('otsb_xPopupExitIntent').thankiu_page_active_blocks[blockId] = selectedBlockId === blockId;
+              console.log('Runnnn');
+            });
+          }
+        };
+      });
+    });
+  });
 }
 if (!window.otsb.loadedScript.includes('otsb-flashsales.js')) {
   window.otsb.loadedScript.push('otsb-flashsales.js');
