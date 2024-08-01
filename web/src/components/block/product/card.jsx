@@ -1,5 +1,4 @@
 import {
-  Badge,
   BlockStack,
   Box,
   Button,
@@ -88,63 +87,62 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
 
   const { handleUpdate:addWishlist, dataUpdateLoading:addWishlistLoading, handleDelete:deleteWishlist, dataDeleteLoading:deleteWishlistLoading } = useWishlist(item);
 
+  if (!item) return null;
   return (
-    item &&
-    <>
-      <Card padding='0' background="bg-surface-secondary" className='h-full'>
-        <div className='cursor-pointer aspect-[16/9]' onClick={() => handleRedirect(item)}>
-          <LazyLoadImage className={"object-cover w-full max-h-full"} src={ item?.images[0]?.src } srcSet={ item?.images[0]?.srcset } imgSizes={imgSizes} />
-        </div>
+    <Card padding='0' background="bg-surface-secondary" className="h-full">
+      <div className='cursor-pointer aspect-[16/9]' onClick={() => handleRedirect(item)}>
+        <LazyLoadImage className={"object-cover w-full max-h-full"} src={ item?.images[0]?.src } srcSet={ item?.images[0]?.srcset } imgSizes={imgSizes} />
+      </div>
 
-        <Box padding={400}>
+      <Box padding={400}>
+        <BlockStack gap={200}>
           <BlockStack gap={200}>
-            <BlockStack gap={200}>
-              <InlineStack align='space-between'>
-                <div className='cursor-pointer' onClick={() => handleRedirect(item)}>
-                  <Text variant="headingMd" as="h2">{item.name}</Text>
-                </div>
-                {item.price > 0 &&
-                  <Text variant="bodyLg" fontWeight='bold'>${item.price}</Text>
-                }
-              </InlineStack>
-              <InlineStack gap={200}>
-                <BadgeStatusSection item={item} />
-              </InlineStack>
-              {item.version &&
-                <Text variant="bodySm">Version: {item.version}</Text>
+            <InlineStack align='space-between'>
+              <div className='cursor-pointer' onClick={() => handleRedirect(item)}>
+                <Text variant="headingMd" as="h2">{item.name}</Text>
+              </div>
+              {item.price > 0 &&
+                <Text variant="bodyLg" fontWeight='bold'>${item.price}</Text>
               }
-              {item?.categoriesV2?.length > 0 && (
-                <Badges items={item.categoriesV2} isSimpleSection={!item?.child_ids?.length} searchKey={'category'} title={'Categories'} />
-              )}
-              {item?.tags?.length > 0 &&
-                <Badges items={item.tags} isSimpleSection={!item?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} />
-              }
-            </BlockStack>
+            </InlineStack>
+            <InlineStack gap={200}>
+              <BadgeStatusSection item={item} />
+            </InlineStack>
+            {item.version &&
+              <Text variant="bodySm">Version: {item.version}</Text>
+            }
+            {item?.categoriesV2?.length > 0 && (
+              <Badges items={item.categoriesV2} isSimpleSection={!item?.child_ids?.length} searchKey={'category'} title={'Categories'} />
+            )}
+            {item?.tags?.length > 0 &&
+              <Badges items={item.tags} isSimpleSection={!item?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} />
+            }
+          </BlockStack>
 
-            <InlineStack gap='200'>
-              {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="View section" />)}
-              {parseInt(item.type_id) === parseInt(productType.simple) && !(item?.special_status === 'coming_soon') && <TrySectionButton id={item.id} />}
-              {item.actions?.install && !(item?.special_status === 'coming_soon') && <InstallButton item={item} />}
-              {item?.url_key === 'instagram-feeds' && <Tooltip content={item?.actions?.connected ? 'Disconnect' : 'Connect'}>
+          <InlineStack gap='200'>
+            {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="View section" />)}
+            {parseInt(item.type_id) === parseInt(productType.simple) && !(item?.special_status === 'coming_soon') && <TrySectionButton id={item.id} />}
+            {item.actions?.install && !(item?.special_status === 'coming_soon') && <InstallButton item={item} />}
+            {item?.url_key === 'instagram-feeds' && <Tooltip content={item?.actions?.connected ? 'Disconnect' : 'Connect'}>
+              <Button
+                loading={purchaseLoading}
+                icon={<Icon source={ConnectIcon} tone="base" />}
+                size="large"
+                onClick={toggleModal}
+              />
+            </Tooltip>}
+            {
+              item.actions?.purchase &&
+              <Tooltip content="Purchase now">
                 <Button
                   loading={purchaseLoading}
-                  icon={<Icon source={ConnectIcon} tone="base" />}
+                  icon={<Icon source={PaymentFilledIcon} tone="base" />}
                   size="large"
-                  onClick={toggleModal}
+                  onClick={() => handlePurchase(item)}
                 />
-              </Tooltip>}
-              {
-                item.actions?.purchase &&
-                <Tooltip content="Purchase now">
-                  <Button
-                    loading={purchaseLoading}
-                    icon={<Icon source={PaymentFilledIcon} tone="base" />}
-                    size="large"
-                    onClick={() => handlePurchase(item)}
-                  />
-                </Tooltip>
-              }
-              {!item?.is_in_wishlist
+              </Tooltip>
+            }
+            {!item?.is_in_wishlist
               ? <Tooltip content="Like">
                 <Button
                   loading={addWishlistLoading}
@@ -163,13 +161,12 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
                   variant='primary'
                 />
               </Tooltip>
-              }
-              { showConnect && (<ConnectPopup active={showConnect} toggleModal={toggleModal} connected={item?.actions?.connected}/>)}
-            </InlineStack>
-          </BlockStack>
-        </Box>
-      </Card>
-    </>
+            }
+            { showConnect && (<ConnectPopup active={showConnect} toggleModal={toggleModal} connected={item?.actions?.connected}/>)}
+          </InlineStack>
+        </BlockStack>
+      </Box>
+    </Card>
   );
 }
 

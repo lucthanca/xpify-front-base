@@ -5,21 +5,13 @@ import { DELETE_ASSET_MUTATION, UPDATE_ASSET_MUTATION } from '~/queries/section-
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
 import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
 import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
+import { ShopifyTheme } from '~/@types';
 
 const titleRoleTheme = {
   'main': 'Live',
   'unpublished': 'Draft',
   'demo': 'Trial', // Không edit code được loại theme này
   'development': 'Dev',
-};
-
-export type ThemeData = {
-  id: string;
-  name: string;
-  role: 'main' | 'unpublished' | 'demo' | 'development';
-  previewable?: string;
-  processing?: string;
-  admin_graphql_api_id?: string;
 };
 
 interface BannerAlert {
@@ -47,7 +39,7 @@ type UseManageTalon = {
   options: object,
   selected: string,
   handleSelectChange: any,
-  currentThemeSelected: ThemeData,
+  currentThemeSelected: ShopifyTheme,
   executeSection: string
 };
 
@@ -110,7 +102,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
       return {};
     }
 
-    let result = themes.map((theme: ThemeData) => {
+    let result = themes.map((theme: ShopifyTheme) => {
       if (theme.role == 'demo') { // Demo theme không thể thêm section
         return false;
       }

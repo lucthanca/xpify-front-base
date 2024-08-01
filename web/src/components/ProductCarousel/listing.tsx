@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import InstallModal from '~/components/block/product/installModal';
 import { BlockStack, Box } from '@shopify/polaris';
 import TitleBlock from '~/components/block/title';
-import type { SectionData } from '~/talons/section/useSection';
+import type { Section } from '~/@types';
 
 
 type CarouselProps = {
@@ -22,7 +22,7 @@ type CarouselProps = {
   slideOptions: Options;
   queryVariables?: OperationVariables;
   skeleton?: React.ReactNode;
-  extractKeys?: (items: SectionData[]) => string[];
+  extractKeys?: (items: Section[]) => string[];
 };
 
 const Carousel: React.FC<CarouselProps> = (props) => {

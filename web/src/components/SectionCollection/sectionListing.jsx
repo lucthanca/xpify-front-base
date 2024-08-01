@@ -1,15 +1,20 @@
-import CategoryCollection from '~/components/SectionCollection/categoryCollection';
 import { BlockStack, Box } from '@shopify/polaris';
 import { useSectionListing } from '~/talons/section/useSectionCollection';
 import Search from '~/components/block/input/search';
 import { Loading } from '@shopify/app-bridge-react';
 import SectionCollection from '~/components/SectionCollection/sectionCollection';
-import Pagination from '~/components/Pagination/pagination';
+import Skeleton from '~/components/block/product/skeleton';
+import { createPortal } from 'react-dom';
+import Footer from '~/components/block/footer';
 
-const SectionListing = props => {
-  const { disableCategory } = props;
+const SectionFooter = ({ show }) => {
+  const footer = document.getElementById('xpify_sections_footer');
+  if (!footer || !show) return null;
+  return createPortal(<Footer hasCaughtUp={show} />, footer);
+}
 
-  const talonProps = useSectionListing();
+const SectionListing = ({ type, owned }) => {
+  const talonProps = useSectionListing(undefined, type, owned);
   const {
     handleFilterChange,
     sections,
@@ -17,12 +22,14 @@ const SectionListing = props => {
     hasFilter,
     shouldPinTagFilter,
     handleSortChange,
-    handlePageChange,
     pageInfo,
     loading,
     loadingWithoutData,
+    fetchNextPage,
   } = talonProps;
-  console.log({ sections });
+  const hasMore = pageInfo?.current_page < pageInfo?.total_pages;
+  const reachedEnd = Object.keys(pageInfo).length > 0 && pageInfo?.current_page === pageInfo?.total_pages;
+
   return (
     <>
       <Box>
@@ -33,14 +40,13 @@ const SectionListing = props => {
           </Box>
           <Box padding={400}>
             <BlockStack gap='400'>
-              <SectionCollection loading={loadingWithoutData} items={sections} refetch={refetchSections} onPageChange={handlePageChange} currentPage={pageInfo?.current_page} totalPages={pageInfo?.total_pages} />
-              {/* {(!hasFilter && !disableCategory && loadingWithoutData) && <CategoryCollection />} */}
+              <SectionCollection loading={loadingWithoutData} items={sections} refetch={refetchSections} fetchNextPage={fetchNextPage} />
+              {hasMore && <Skeleton total={4} columns={{sm: 1, md: 2, lg: 4}}/>}
             </BlockStack>
           </Box>
         </BlockStack>
       </Box>
-
-      <Pagination onPageChange={handlePageChange} currentPage={pageInfo?.current_page} totalPages={pageInfo?.total_pages} />
+      <SectionFooter show={reachedEnd} />
     </>
   );
 };

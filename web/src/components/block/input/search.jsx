@@ -342,7 +342,6 @@ export default function Search({
     shouldPinTagFilter,
     shouldPinCategoryFilter,
   } = useSearch({ onFilterChange, onSortChange });
-  console.log({ search });
 
   const [selected, setSelected] = useState(0);
   const {mode, setMode} = useSetIndexFiltersMode(IndexFiltersMode.Filtering);

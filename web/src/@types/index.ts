@@ -16,14 +16,14 @@ export interface PricingPlan {
   description: string;
   sort_order: number;
 }
-
+export type PageInfo = {
+  total_pages: number;
+  current_page: number;
+  page_size: number;
+}
 export type CollectionQueryData<T = any> = {
-  items: T[] | null,
-  page_info: {
-    total_pages: number;
-    current_page: number;
-    page_size: number;
-  };
+  items: T[] | null;
+  page_info: PageInfo;
 };
 
 export type GraphQlQueryResponse<T = any> = {
@@ -77,3 +77,16 @@ export type Section = SimpleSection | GroupSection;
 export type ComplexCollectionQueryResponse<T = any> = {
   [key: string]: CollectionQueryData<T> | T[];
 };
+
+export type ShopifyTheme = {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  role: 'main' | 'unpublished' | 'demo' | 'development';
+  theme_store_id?: string;
+  previewable: boolean;
+  processing: boolean;
+  admin_graphql_api_id: string;
+  errors?: string;
+}

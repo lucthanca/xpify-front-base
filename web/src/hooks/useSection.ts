@@ -1,12 +1,11 @@
 import { SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builder/product.gql';
 import { useQuery } from '@apollo/client';
 import type { ApolloError, DocumentNode } from '@apollo/client';
-import { SectionData } from '~/talons/section/useSection';
 import { useMemo, useState } from 'react';
-import type { ApolloQueryResult, OperationVariables } from '@apollo/client/core/types';
+import type { Section } from '~/@types';
 
 type QueryData = {
-  [key: string]: SectionData,
+  [key: string]: Section,
 }
 
 type UseSectionProps = {
@@ -16,7 +15,7 @@ type UseSectionProps = {
 };
 
 export type UseSectionTalon = {
-  section: SectionData | undefined,
+  section: Section | undefined,
   loadingWithoutData: boolean,
   loading: boolean,
   error: ApolloError | undefined,
@@ -28,7 +27,7 @@ export const useSection = (props: UseSectionProps): UseSectionTalon => {
     query = SECTION_V2_QUERY,
     queryKey = SECTION_V2_QUERY_KEY,
   } = props;
-  const [prevSection, setPrevSection] = useState<SectionData | undefined>(undefined);
+  const [prevSection, setPrevSection] = useState<Section | undefined>(undefined);
   const { data, loading, error } = useQuery<QueryData>(query, {
     fetchPolicy: 'cache-and-network',
     variables: { key },
@@ -40,7 +39,7 @@ export const useSection = (props: UseSectionProps): UseSectionTalon => {
     },
   });
 
-  const section: SectionData | undefined = useMemo(() => {
+  const section: Section | undefined = useMemo(() => {
     return data?.[queryKey] || prevSection;
   }, [data]);
 

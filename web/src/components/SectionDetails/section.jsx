@@ -118,7 +118,7 @@ const SectionFullpageDetails = props => {
                 : <></>
               }
 
-              {section.actions?.install 
+              {section.actions?.install
               && !(section?.special_status === 'coming_soon')
               &&
                 <Box>
