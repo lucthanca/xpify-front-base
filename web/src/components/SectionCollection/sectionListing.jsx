@@ -30,7 +30,6 @@ const SectionListing = ({ type, owned, pageSize }) => {
   const hasMore = pageInfo?.current_page < pageInfo?.total_pages;
   const reachedEnd = Object.keys(pageInfo).length > 0 && pageInfo?.current_page === pageInfo?.total_pages;
 
-  console.log({ loading });
   return (
     <>
       <Box>

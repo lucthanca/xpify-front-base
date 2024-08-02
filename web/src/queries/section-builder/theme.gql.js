@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export const THEMES_QUERY_KEY = `getThemes`;
 /* Theme in Store */
 export const THEMES_QUERY = gql`
-  query Get {
+  query GetStoreThemes {
     ${THEMES_QUERY_KEY} {
       id
       name

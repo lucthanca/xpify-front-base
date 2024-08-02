@@ -54,7 +54,7 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
       secondaryActions={[
         {
           content: 'Cancel',
-          onAction: () => handleCloseModal()
+          onAction: handleCloseModal,
         },
       ]}
     >

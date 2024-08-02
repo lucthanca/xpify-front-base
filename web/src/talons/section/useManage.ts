@@ -1,10 +1,13 @@
 import { useMutation, useQuery, ApolloError } from '@apollo/client';
 import { useToast } from '@shopify/app-bridge-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DELETE_ASSET_MUTATION, UPDATE_ASSET_MUTATION } from '~/queries/section-builder/asset.gql';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  UNINSTALL_SECTION_MUTATION,
+  UPDATE_ASSET_MUTATION,
+} from '~/queries/section-builder/asset.gql';
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
 import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
-import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
+import { THEMES_QUERY, THEMES_QUERY_KEY } from '~/queries/section-builder/theme.gql';
 import { ShopifyTheme } from '~/@types';
 
 const titleRoleTheme = {
@@ -39,23 +42,24 @@ type UseManageTalon = {
   options: object,
   selected: string,
   handleSelectChange: any,
-  currentThemeSelected: ShopifyTheme,
+  currentThemeSelected: ShopifyTheme | undefined,
   executeSection: string
 };
 
 export const useManage = (props: UseManageProps): UseManageTalon => {
   const { section, typeSelect } = props;
+  const interaction = useRef(false);
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState<BannerAlert | undefined>(undefined);
   const [executeSection, setExecuteSection] = useState<string>('');
   // const [urlEditTheme, setUrlEditTheme] = useState<string>('#');
   const toast = useToast();
 
-  const { data:themesData } = useQuery(THEMES_QUERY, {
+  const { data: themesData } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
     skip: Boolean(!section?.entity_id),
   });
-  const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
+  const themes = useMemo<ShopifyTheme[]>(() => themesData?.[THEMES_QUERY_KEY] || [], [themesData]);
   const { data: groupChildSections, loading: groupChildSectionsLoad } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
@@ -72,6 +76,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   const handleSelectChange = useCallback((value: any) => {
     setBannerAlert(undefined);
     setSelected(typeSelect ? value : value[0]);
+    interaction.current = true;
   }, []);
   const getUpdateMessage = (item: any, currentTheme: any, parent: any = null) => {
     const installVersion = item?.installed && item.installed.find((item: any) => item.theme_id == currentTheme)?.product_version;
@@ -177,7 +182,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   }, [selected, options]);
 
   const [updateAction, { loading: dataUpdateLoading }] = useMutation(UPDATE_ASSET_MUTATION, {});
-  const [deleteAction, { loading: dataDeleteLoading }] = useMutation(DELETE_ASSET_MUTATION, {});
+  const [deleteAction, { loading: dataDeleteLoading }] = useMutation(UNINSTALL_SECTION_MUTATION, {});
 
   const handleUpdate = useCallback(async () => {
     setBannerAlert(undefined);
@@ -222,7 +227,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         variables: {
           theme_id: selected,
           key: section?.url_key
-        }
+        },
       });
       if (result.data?.deleteAsset?.length > 0) {
         toast.show('Deleted successfully');
@@ -252,6 +257,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   }, [selected]);
 
   useEffect(() => {
+    if (interaction.current) return;
     if (themes && themes.length && section?.entity_id) {
       setSelected(themes[0]['id'] ?? "");
     }

@@ -13,7 +13,8 @@ const typePolicies = {
         // Cache theo search, filter và sort thôi, không cache pagesize và current page vì sẽ merge hết vào nhau
         keyArgs: ['search', 'filter', 'sort'],
         merge(existing = {}, incoming = {}, { variables, ...restArgs }) {
-          if (!existing.items) {
+          console.log({ variables, restArgs });
+          if (variables.pageSize === null || !existing.items) {
             return incoming;
           }
           if (incoming.page_info.page_size !== existing.page_info.page_size || incoming.page_info.total_pages !== existing.page_info.total_pages) {

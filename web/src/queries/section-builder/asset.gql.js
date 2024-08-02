@@ -20,8 +20,8 @@ export const UPDATE_ASSET_MUTATION = gql`
     }
   }
 `;
-export const DELETE_ASSET_MUTATION = gql`
-  mutation Delete($theme_id: String!, $key: String!) {
+export const UNINSTALL_SECTION_MUTATION = gql`
+  mutation UninstallSectionFromTheme($theme_id: String!, $key: String!) {
     deleteAsset(theme_id: $theme_id, key: $key) {
       id
       name

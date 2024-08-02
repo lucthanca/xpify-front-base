@@ -41,9 +41,11 @@ export const useSectionListing = ({ onQueryCompleted, type = SECTION_TYPE_SIMPLE
     return !isEmpty(filterParts) || !!searchFilter || !isSortNone;
   }, [filterParts, searchFilter, isSortNone]);
 
-  const { data, loading, refetch: refetchSections, fetchMore } = useQuery<CollectionQueryResponse<Section>>(SECTIONS_QUERY, {
+  const { data, loading, refetch: refetchSections, networkStatus, fetchMore } = useQuery<CollectionQueryResponse<Section>>(SECTIONS_QUERY, {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-only",
+    returnPartialData: true,
     variables: {
       search: searchFilter,
       filter: {
