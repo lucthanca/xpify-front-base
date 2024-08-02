@@ -12,8 +12,9 @@ import {
 // import BestSeller from '~/components/BestSellers';
 // import CategoryCollection from '~/components/SectionCollection/categoryCollection';
 // import SectionListingV2 from '~/components/SectionCollection/listingV2';
-import { ComplexSectionCollectionProvider, ListingProvider } from '~/context';
+// import { ComplexSectionCollectionProvider, ListingProvider } from '~/context';
 import SectionListing from '~/components/SectionCollection/sectionListing';
+import PropTypes from 'prop-types';
 
 // const SectionCollection = props => {
 //   const {
@@ -100,11 +101,11 @@ import SectionListing from '~/components/SectionCollection/sectionListing';
 //   );
 // };
 
-const SectionCollectionV2 = ({ type, owned }) => {
+const SectionCollectionV2 = ({ type, owned, pageSize = 4 }) => {
   return (
     <Layout.Section>
       <Card padding='0'>
-        <SectionListing type={type} owned={owned} />
+        <SectionListing type={type} owned={owned} pageSize={pageSize} />
       </Card>
     </Layout.Section>
   );
@@ -117,6 +118,14 @@ const SectionCollectionV2 = ({ type, owned }) => {
   //     </Layout.Section>
   //   </ComplexSectionCollectionProvider>
   // );
+};
+SectionCollectionV2.propTypes = {
+  type: PropTypes.number,
+  owned: PropTypes.bool,
+  pageSize: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf([null])
+  ]),
 };
 
 // const SectionCollectionV3 = () => {

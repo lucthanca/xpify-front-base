@@ -13,8 +13,8 @@ const SectionFooter = ({ show }) => {
   return createPortal(<Footer hasCaughtUp={show} />, footer);
 }
 
-const SectionListing = ({ type, owned }) => {
-  const talonProps = useSectionListing(undefined, type, owned);
+const SectionListing = ({ type, owned, pageSize }) => {
+  const talonProps = useSectionListing({ type, owned, pageSize });
   const {
     handleFilterChange,
     sections,
@@ -30,15 +30,16 @@ const SectionListing = ({ type, owned }) => {
   const hasMore = pageInfo?.current_page < pageInfo?.total_pages;
   const reachedEnd = Object.keys(pageInfo).length > 0 && pageInfo?.current_page === pageInfo?.total_pages;
 
+  console.log({ loading });
   return (
     <>
       <Box>
-        {loading && hasFilter && <Loading />}
+        {loading && <Loading />}
         <BlockStack>
           <Box>
             <Search shouldPinTagFilter={shouldPinTagFilter} onFilterChange={handleFilterChange} onSortChange={handleSortChange} />
           </Box>
-          <Box padding={400}>
+          <Box padding='400'>
             <BlockStack gap='400'>
               <SectionCollection loading={loadingWithoutData} items={sections} refetch={refetchSections} fetchNextPage={fetchNextPage} />
               {hasMore && <Skeleton total={4} columns={{sm: 1, md: 2, lg: 4}}/>}

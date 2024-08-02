@@ -82,7 +82,7 @@ function MyLibrary() {
       fullWidth
     >
       <Layout>
-        <SectionCollection type={TYPE_MAPPING[selected]} owned={true} />
+        <SectionCollection type={TYPE_MAPPING[selected]} owned={true} pageSize={null} />
       </Layout>
     </Page>
   );

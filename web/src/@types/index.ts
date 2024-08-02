@@ -77,6 +77,9 @@ export type Section = SimpleSection | GroupSection;
 export type ComplexCollectionQueryResponse<T = any> = {
   [key: string]: CollectionQueryData<T> | T[];
 };
+export type CollectionQueryResponse<T = any> = {
+  [key: string]: CollectionQueryData<T>;
+};
 
 export type ShopifyTheme = {
   id: string;

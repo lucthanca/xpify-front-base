@@ -93,7 +93,7 @@ const useSearch = props => {
   const [categoryFilter, setCategoryFilter] = useState(() => {
     return searchParams.has('category') ? [''] : [];
   });
-  const { data: categories } = useQuery(CATEGORIES_QUERY, { fetchPolicy: "cache-and-network" });
+  const { data: categories } = useQuery(CATEGORIES_QUERY, { fetchPolicy: "cache-first" });
   const categoriesOptions = useMemo(() => {
     return categories?.[CATEGORIES_QUERY_KEY]?.items ? categories[CATEGORIES_QUERY_KEY].items.map((item) => ({
       value: item.id,
@@ -212,8 +212,8 @@ const useSearch = props => {
   useEffect(() => {
     if (onSortChange) onSortChange(sortSelected);
   }, [sortSelected]);
-  const { data: pricingPlans } = useQuery(PRICING_PLANS_QUERY, { fetchPolicy: "cache-and-network" });
-  const { data: sortOptionsdt } = useQuery(SORT_OPTIONS_QUERY, { fetchPolicy: "cache-and-network" });
+  const { data: pricingPlans } = useQuery(PRICING_PLANS_QUERY, { fetchPolicy: "cache-first" });
+  const { data: sortOptionsdt } = useQuery(SORT_OPTIONS_QUERY, { fetchPolicy: "cache-first" });
   const pricingPlanOptions = useMemo(() => {
     return pricingPlans?.pricingPlans ? pricingPlans.pricingPlans.map((item) => ({
       value: item.id,

@@ -10,7 +10,8 @@ import {
   SORT_OPTION_NONE,
 } from '~/components/block/input/search';
 import { isEmpty } from '~/utils/isEmpty';
-import type { PageInfo, Section } from '~/@types';
+import type { PageInfo, Section, CollectionQueryResponse, CollectionQueryData } from '~/@types';
+import { SECTION_TYPE_SIMPLE } from '~/constants';
 
 const FILTER_FIELDS_MAPPING: { [key: string]: string } = {
   [TAG_FILTER_KEY]: 'tag_id',
@@ -19,17 +20,29 @@ const FILTER_FIELDS_MAPPING: { [key: string]: string } = {
   [PRICE_FILTER_KEY]: 'price',
 };
 
-export const useSectionListing = (onQueryCompleted: any, type: any, owned: boolean = false) => {
-  const [filterParts, setFilterParts] = useState({});
-  const [searchFilter, setSearchFilter] = useState('');
-  const [sort, setSort] = useState([SORT_OPTION_NONE]);
-  const isSortNone = useMemo(() => !sort || sort[0] === SORT_OPTION_NONE, [sort]);
+type SectionListingTalonProps = {
+  onQueryCompleted?: (data: CollectionQueryData<Section>) => void;
+  type?: number;
+  owned?: boolean;
+  pageSize?: number | undefined;
+};
 
-  const hasFilter = useMemo(() => {
+type FilterPart = {
+  [key: string]: string;
+}
+
+export const useSectionListing = ({ onQueryCompleted, type = SECTION_TYPE_SIMPLE, owned = false, pageSize }: SectionListingTalonProps) => {
+  const [filterParts, setFilterParts] = useState<FilterPart>({});
+  const [searchFilter, setSearchFilter] = useState<string>('');
+  const [sort, setSort] = useState<string[]>([SORT_OPTION_NONE]);
+  const isSortNone = useMemo<boolean>(() => !sort || sort[0] === SORT_OPTION_NONE, [sort]);
+
+  const hasFilter = useMemo<boolean>(() => {
     return !isEmpty(filterParts) || !!searchFilter || !isSortNone;
   }, [filterParts, searchFilter, isSortNone]);
 
-  const { data, loading, refetch: refetchSections, fetchMore } = useQuery(SECTIONS_QUERY, {
+  const { data, loading, refetch: refetchSections, fetchMore } = useQuery<CollectionQueryResponse<Section>>(SECTIONS_QUERY, {
+    notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
     variables: {
       search: searchFilter,
@@ -39,7 +52,7 @@ export const useSectionListing = (onQueryCompleted: any, type: any, owned: boole
         owned,
       },
       sort: (([column, order]) => ({ column, order }))(sort[0].split(' ')),
-      pageSize: 8,
+      pageSize,
       currentPage: 1
     },
     onCompleted: (data) => {
@@ -66,7 +79,7 @@ export const useSectionListing = (onQueryCompleted: any, type: any, owned: boole
           return prevState;
         }
       }
-      const newState: {[key: string]: string} = {
+      const newState: FilterPart = {
         ...prevState,
         [FILTER_FIELDS_MAPPING[type]]: tValue,
       };
@@ -82,20 +95,25 @@ export const useSectionListing = (onQueryCompleted: any, type: any, owned: boole
   const handleSortChange = useCallback((value: any) => {
     setSort(value);
   }, []);
-  const sections: Section[] = useMemo(() => {
+  const sections = useMemo<Section[]>(() => {
     return data?.[QUERY_SECTION_COLLECTION_KEY]?.items || [];
   }, [data]);
 
   const lastPageInfo = useMemo<PageInfo>(() => {
-    return data?.[QUERY_SECTION_COLLECTION_KEY]?.page_info || {};
+    return data?.[QUERY_SECTION_COLLECTION_KEY]?.page_info || {
+      current_page: 1,
+      total_pages: 1,
+      page_size: pageSize || 1,
+    };
   }, [data]);
   const loadingWithoutData = loading && !data;
   const fetchNextPage = useCallback(() => {
+    if (!Object.keys(lastPageInfo).length) return;
     if (lastPageInfo.current_page < lastPageInfo.total_pages) {
       fetchMore({
         variables: {
           currentPage: lastPageInfo.current_page + 1,
-        }
+        },
       });
     }
   }, [lastPageInfo]);

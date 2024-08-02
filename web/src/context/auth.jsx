@@ -23,9 +23,12 @@ const AuthProvider = ({ children }) => {
   const redirectQuery = useMemo(() => {
     return data?.ensureShopifyAppInstalled?.redirectQuery;
   }, [data]);
+  const dataVersion = useMemo(() => {
+    return data?.ensureShopifyAppInstalled?.data_version;
+  }, [data]);
   const state = useMemo(() => {
-    return { data, hasInstalled, loading, redirectQuery, error };
-  }, [data, hasInstalled, loading, redirectQuery, error]);
+    return { data, hasInstalled, loading, redirectQuery, error, dataVersion };
+  }, [data, hasInstalled, loading, redirectQuery, error, dataVersion]);
   const contextValue = useMemo(() => {
     return [state];
   }, [state]);
