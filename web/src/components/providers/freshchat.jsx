@@ -13,7 +13,7 @@ const FreshChatProvider = props => {
     $crisp.push(['do', 'chat:open']);
   }, []);
   const close = useCallback(() => {
-    $crisp.push(['do', 'chat:hide']); 
+    $crisp.push(['do', 'chat:hide']);
   }, []);
 
   const api = useMemo(() => {
@@ -29,7 +29,9 @@ const FreshChatProvider = props => {
     </FreshChatContext.Provider>
   );
 }
-
+/**
+ * @returns {{ open: () => void, close: () => void }}
+ */
 export const useFreshChat = () => useContext(FreshChatContext);
 
 export default FreshChatProvider;

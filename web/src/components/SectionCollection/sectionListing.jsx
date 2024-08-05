@@ -5,12 +5,12 @@ import { Loading } from '@shopify/app-bridge-react';
 import SectionCollection from '~/components/SectionCollection/sectionCollection';
 import Skeleton from '~/components/block/product/skeleton';
 import { createPortal } from 'react-dom';
-import Footer from '~/components/block/footer';
+import RequestSection from '~/components/RequestSection';
 
 const SectionFooter = ({ show }) => {
   const footer = document.getElementById('xpify_sections_footer');
   if (!footer || !show) return null;
-  return createPortal(<Footer hasCaughtUp={show} />, footer);
+  return createPortal(<RequestSection />, footer);
 }
 
 const SectionListing = ({ type, owned, pageSize }) => {
