@@ -476,11 +476,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
     margin-block-start: 1em;
     margin-block-end: 0.5em;
   }
-@media screen and (max-width: 1024px) {
-        .otsb__root .splide__arrow {
-            display: none;
-        }
-    }
 .otsb__root .otsb-heading-right{display:flex;flex-direction:row-reverse;flex-wrap:wrap}
 .otsb__root .otsb-heading-right .otsb-section-header,
     .otsb__root .otsb-heading-right h2{text-align:end}
