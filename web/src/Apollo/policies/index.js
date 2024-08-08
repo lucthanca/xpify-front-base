@@ -5,11 +5,12 @@
  * https://www.apollographql.com/docs/react/caching/cache-configuration/#typepolicy-fields
  * https://www.apollographql.com/docs/react/caching/cache-field-behavior/
  */
+import { QUERY_SECTION_COLLECTION_KEY } from '~/queries/section-builder/product.gql';
 
 const typePolicies = {
   Query: {
     fields: {
-      getSections: {
+      [QUERY_SECTION_COLLECTION_KEY]: {
         // Cache theo search, filter và sort thôi, không cache pagesize và current page vì sẽ merge hết vào nhau
         keyArgs: ['search', 'filter', 'sort'],
         merge(existing = {}, incoming = {}, { variables, ...restArgs }) {

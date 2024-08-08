@@ -6,6 +6,7 @@ import { httpLink, httpLinkWithoutAuthFetch } from '~/Apollo/links/httpLink';
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { checkForReauthorizationLink } from '~/Apollo/links/checkForReauthorizationLink';
 import { authNotRequiredLink } from '~/Apollo/links/noAuthLink';
+import DataCacheLink from '~/Apollo/links/dataCacheLink';
 // import { xAppLink } from '~/Apollo/links/xAppLink';
 
 export const useLinks = (uri) => {
@@ -18,6 +19,7 @@ export const useLinks = (uri) => {
       // xAppLink(), // không cần gắn app id vào header request nữa, thay vào đó khi dev thì dùng vite server proxy, build thì dùng nginx reverse proxy
       gqlCacheLink(),
       authNotRequiredLink(),
+      DataCacheLink(),
       split(
         (operation) => operation.getContext().noAuth === undefined || operation.getContext().noAuth === false,
         httpLink(uri, app),

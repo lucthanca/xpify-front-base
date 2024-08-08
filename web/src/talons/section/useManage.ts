@@ -6,7 +6,7 @@ import {
   UPDATE_ASSET_MUTATION,
 } from '~/queries/section-builder/asset.gql';
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
-import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
+import { SECTIONS_QUERY, QUERY_SECTION_COLLECTION_KEY } from '~/queries/section-builder/product.gql';
 import { THEMES_QUERY, THEMES_QUERY_KEY } from '~/queries/section-builder/theme.gql';
 import { ShopifyTheme } from '~/@types';
 
@@ -71,7 +71,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     },
     skip: !Array.isArray(section?.child_ids) || section?.child_ids?.length === 0,
   });
-  const childSections = useMemo(() => groupChildSections?.getSections?.items || [], [groupChildSections]);
+  const childSections = useMemo(() => groupChildSections?.[QUERY_SECTION_COLLECTION_KEY]?.items || [], [groupChildSections]);
 
   const handleSelectChange = useCallback((value: any) => {
     setBannerAlert(undefined);
