@@ -15,7 +15,7 @@ if (!window.otsb.loadedScript) {
 }
 if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
   window.otsb.loadedScript.push('otsb-popup.js');
-  
+
   requestAnimationFrame(() => {
     document.addEventListener('alpine:init', () => {
       Alpine.data('otsb_xPopups', (data) => ({
@@ -57,7 +57,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             document.addEventListener('shopify:section:select', (event) => {
               handlePopupSelect(event);
             });
-  
+
             document.addEventListener('shopify:block:select', (event) => {
               handlePopupSelect(event);
             });
@@ -69,7 +69,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             //   })
             // }
           }
-  
+
           const _that = this;
           if (!data.show_as_popup_normal && !Shopify.designMode) {
             document.addEventListener('mouseleave', (event) => {
@@ -85,7 +85,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
               _that.loading = true;
             });
           }
-          
+
           const thankiuPageSelector = '.otsb-popup__thankiu-' + data.sectionId;
           if (this.$el.querySelector(thankiuPageSelector)) {
             this.open();
@@ -137,7 +137,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
           //Show minimal when
           // 1. enable show minimal on desktop + default style = minimal + window width >= 768
           // 2. enable show minimal on mobile + default style mobile = minimal + window width < 768
-          if ((data.showMinimal && data.default_style == "minimal" && window.innerWidth >= 768) 
+          if ((data.showMinimal && data.default_style == "minimal" && window.innerWidth >= 768)
             || (data.showMinimalMobile && data.default_style_mobile == "minimal" && window.innerWidth < 768)) {
             _this.showMinimal = true;
             _this.show = false;
@@ -219,7 +219,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             section: data.sectionId,
             expires: Date.now() + this.delayDays * 24 * 60 * 60 * 1000
           }
-          
+
           localStorage.setItem(data.sectionId, JSON.stringify(item))
           //remove storage data, the full popup will be displayed when the site applies the reappear rule.
           localStorage.removeItem('current-' + data.sectionId);
@@ -296,7 +296,269 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             updatedArray = localStorageArray.filter(item => item != data.name + '-' + data.sectionId);
           localStorage.setItem('promotion-popup', JSON.stringify(updatedArray));
         },
-      }))
+      }));
+        Alpine.data('otsb_xPopupsSpin', (data) => ({
+            init() {
+                const jsonString = data.data_wheel.replace(/'/g, '"');
+
+// Parse the JSON string
+                const item = JSON.parse(jsonString);
+                document.addEventListener("shopify:block:load", function () {
+                    creatSvg();
+                });
+                creatSvg();
+                if (localStorage.getItem('result-' + data.sectionId)) {
+                    var result = JSON.parse(localStorage.getItem('result-' + data.sectionId));
+                    showSuccess(result.picked)
+                }
+
+                function showSuccess(picked) {
+                    var wheel = document.getElementById("otsb-wheel-" + data.sectionId),
+                        success = document.getElementById("otsb-wheel-success-" + data.sectionId),
+                        heading = document.getElementById("otsb-success-heading-" + data.sectionId),
+                        subheading = document.getElementById("otsb-success-subheading-" + data.sectionId),
+                        code = document.getElementById("otsb-success-code-" + data.sectionId);
+                    heading.append(item[picked].heading);
+                    subheading.append(item[picked].subheading);
+                    if (item[picked].code !== '') {
+                        code.append(item[picked].code);
+                    } else {
+                        code.classList.add('hidden');
+                        document.getElementsByClassName("otsb-code-" + data.sectionId)[0].classList.add('hidden');
+                    }
+
+                    // Add active class to next content
+                    changeButtonClose()
+                    success.classList.add('active');
+                    wheel.classList.remove('previous');
+                    wheel.classList.add("hidden");
+                    success.classList.remove("hidden");
+                    success.classList.add("visible");
+                }
+
+                function changeButtonClose() {
+                    var wheel = document.getElementById('PromotionPopupClose-' + data.sectionId),
+                        success = document.getElementById('PromotionPopupClose-Success-' + data.sectionId);
+                    wheel.classList.add('hidden');
+                    success.classList.remove('hidden');
+                }
+
+                function creatSvg() {
+                    var padding = {top: 20, right: 40, bottom: 0, left: 0},
+                        w = 300 - padding.left - padding.right,
+                        h = 300 - padding.top - padding.bottom,
+                        r = Math.min(w, h) / 2,
+                        rotation = 0,
+                        oldrotation = 0,
+                        picked = 100000,
+                        oldpick = [];
+
+
+                    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                    svg.setAttribute("width", 270);
+                    svg.setAttribute("height", h + padding.top + padding.bottom);
+                    document.getElementById('chart').appendChild(svg);
+
+                    var container = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    container.setAttribute("class", "chartholder");
+                    container.setAttribute("transform", "translate(" + (w / 2 + padding.left + 5) + "," + (h / 2 + padding.top) + ")");
+                    svg.appendChild(container);
+
+                    var vis = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    container.appendChild(vis);
+
+                    var pie = function (item) {
+                        var pieData = [];
+                        var sum = item.reduce(function (a, b) {
+                            return a + 1;
+                        }, 0);
+                        var startAngle = 0;
+                        item.forEach(function (d) {
+                            var angle = (1 / sum) * Math.PI * 2;
+                            pieData.push({
+                                item: d,
+                                value: 1,
+                                startAngle: startAngle,
+                                endAngle: startAngle + angle
+                            });
+                            startAngle += angle;
+                        });
+                        return pieData;
+                    };
+
+                    var arc = function (d) {
+                        var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                        var x1 = r * Math.cos(d.startAngle - Math.PI / 2);
+                        var y1 = r * Math.sin(d.startAngle - Math.PI / 2);
+                        var x2 = r * Math.cos(d.endAngle - Math.PI / 2);
+                        var y2 = r * Math.sin(d.endAngle - Math.PI / 2);
+                        var d = "M0,0L" + x1 + "," + y1 + "A" + r + "," + r + " 0 " + ((d.endAngle - d.startAngle > Math.PI) ? 1 : 0) + ",1 " + x2 + "," + y2 + "Z";
+                        path.setAttribute("d", d);
+                        return path;
+                    };
+
+                    var arcs = pie(item).map(function (d) {
+                        var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                        g.setAttribute("class", "slice");
+
+                        var path = arc(d);
+                        path.setAttribute("fill", d.item.color);
+                        g.appendChild(path);
+
+                        var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        var angle = (d.startAngle + d.endAngle) / 2;
+                        var x = (r - 10) * Math.cos(angle - Math.PI / 2);
+                        var y = (r - 10) * Math.sin(angle - Math.PI / 2);
+                        text.setAttribute("transform", "translate(" + x + "," + y + ") rotate(" + (angle * 180 / Math.PI - 90) + ")");
+                        text.setAttribute("text-anchor", "end");
+                        text.textContent = d.item.label;
+                        g.appendChild(text);
+
+                        return g;
+                    });
+
+                    arcs.forEach(function (g) {
+                        vis.appendChild(g);
+                    });
+                    var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    circle.setAttribute("cx", 0);
+                    circle.setAttribute("cy", 0);
+                    circle.setAttribute("r", 20);
+                    circle.style.fill = "white";
+                    circle.style.cursor = "pointer";
+                    container.appendChild(circle);
+
+                    var borderCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    borderCircle.setAttribute("cx", 0);
+                    borderCircle.setAttribute("cy", 0);
+                    borderCircle.setAttribute("r", r);
+                    borderCircle.setAttribute("fill", "none");
+                    borderCircle.setAttribute("stroke", "black");
+
+                    var buttonSpin = document.getElementById("submit-spin-" + data.sectionId) ?? container;
+                    var submit = document.getElementById("submit-button-" + data.sectionId);
+                    var closeButton = document.getElementById("PromotionPopupClose-Success-" + data.sectionId);
+                    const form = document.getElementById('newsletter-' + data.sectionId);
+
+                    buttonSpin.addEventListener("click", spin);
+
+                    closeButton.addEventListener("click", resetModal);
+
+                    function validate() {
+                        submit.click();
+                    }
+
+                    function resetModal() {
+                        localStorage.removeItem('result-' + data.sectionId)
+                    }
+
+                    function spin() {
+                        const inputEmail = document.getElementById("Email--" + data.sectionId).value;
+                        const error = false;
+                        const format = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]/;
+
+                        if (!inputEmail || !format.test(inputEmail)) {
+                            validate();
+                            return;
+                        }
+
+                        buttonSpin.removeEventListener("click", spin);
+
+                        if (oldpick.length == item.length) {
+                            container.removeEventListener("click", spin);
+                            return;
+                        }
+
+                        var ps = 360 / item.length;
+                        var pieslice = Math.round(1440 / item.length);
+                        var rng = Math.floor((Math.random() * 1440) + 3600);
+
+                        rotation = (Math.round(rng / ps) * ps);
+
+                        picked = Math.round(item.length - (rotation % 360) / ps);
+                        picked = picked >= item.length ? (picked % item.length) : picked;
+
+                        if (oldpick.indexOf(picked) !== -1) {
+                            spin();
+                            return;
+                        } else {
+                            oldpick.push(picked);
+                        }
+
+                        rotation += Math.round(ps / 2) - 35;
+                        animateRotation();
+
+                        function animateRotation() {
+                            var start = oldrotation % 360;
+                            var end = rotation;
+                            var duration = 3000;
+                            var startTime = null;
+
+                            function easeOutCubic(t) {
+                                return (--t) * t * t + 1;
+                            }
+
+                            function animate(time) {
+                                if (!startTime) startTime = time;
+                                var progress = time - startTime;
+                                var t = Math.min(progress / duration, 1);
+                                var easedT = easeOutCubic(t);
+                                var current = start + (end - start) * easedT;
+                                vis.setAttribute("transform", "rotate(" + current + ")");
+                                if (t < 1) {
+                                    requestAnimationFrame(animate);
+                                } else {
+                                    oldrotation = rotation;
+                                    buttonSpin.addEventListener("click", spin);
+                                    setTimeout(function () {
+                                        // ajaxFormInit(form);
+                                        if (!isExpireSave()) {
+                                            setExpire()
+                                        }
+                                        setResult(picked)
+                                        submit.click();
+                                    }, 1000);  // Gọi hàm showSuccess sau khi vòng quay hoàn tất
+                                }
+                            }
+
+                            requestAnimationFrame(animate);
+                        }
+
+                        function setResult(picked) {
+                            const item = {
+                                section: data.sectionId,
+                                picked: picked
+                            }
+                            localStorage.setItem('result-' + data.sectionId, JSON.stringify(item))
+                        }
+
+                        function setExpire() {
+                            const item = {
+                                section: data.sectionId,
+                                expires: Date.now() + data.delayDays * 24 * 60 * 60 * 1000
+                            }
+
+                            localStorage.setItem(data.sectionId, JSON.stringify(item))
+                            //remove storage data, the full popup will be displayed when the site applies the reappear rule.
+                            localStorage.removeItem('current-' + data.sectionId);
+                        }
+
+                        function isExpireSave() {
+                            const item = xParseJSONOTSB(localStorage.getItem(data.sectionId));
+                            if (item == null) return false;
+
+                            if (Date.now() > item.expires) {
+                                localStorage.removeItem(data.sectionId);
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    }
+                }
+
+            }
+        }))
     })
   })
 }
@@ -394,7 +656,7 @@ if (!window.otsb.loadedScript.includes('otsb-flashsales.js')) {
               callback(false, 0, 0, 0, 0);
               return;
             }
-            if (!last || now - last >= 1000) {  
+            if (!last || now - last >= 1000) {
               const days = Math.floor(distance / (1000 * 60 * 60 * 24));
               const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
               const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -473,7 +735,7 @@ if (!window.otsb.loadedScript.includes('otsb-flashsales.js')) {
 }
 if (!window.otsb.loadedScript.includes('coupon-code.js')) {
   window.otsb.loadedScript.push('coupon-code.js');
-  
+
   requestAnimationFrame(() => {
     document.addEventListener("alpine:init", () => {
       Alpine.data("otsb_xCounponCodeList", (sectionId) => ({
@@ -496,7 +758,7 @@ if (!window.otsb.loadedScript.includes('coupon-code.js')) {
           })
         }
       }));
-      
+
       Alpine.data("otsb_xCounponCode", () => ({
         coppySuccess: false,
         loading: false,
@@ -569,7 +831,7 @@ if (!window.otsb.loadedScript.includes('coupon-code.js')) {
                       this.errorMessage = true;
                       elementError.classList.remove('hidden', 'opacity-0');
                       elementError.classList.add('block', 'opacity-100');
-  
+
                       setTimeout(function() {
                         elementError.classList.remove('block', 'opacity-100');
                         elementError.classList.add('hidden', 'opacity-0');
@@ -627,7 +889,7 @@ if (!window.otsb.loadedScript.includes('coupon-code.js')) {
         handleCouponSelect(shopUrl) {
           var _this = this;
           const promoCodeDetail = JSON.parse(JSON.stringify(this.promoCodeDetail));
-  
+
           document.addEventListener('shopify:section:select', function(event) {
             if (event.target.classList.contains('section-promo-code') == false) {
               if (window.Alpine) {
@@ -892,7 +1154,7 @@ function otsbXmapRefreshMapPosition(selector, screen_md, content_position, isCon
     space = left;
     targetEl.style.left = `-${space}px`;
   }
-  
+
   let width = '100%';
   if (space > 0) {
     width = `calc(100% + ${space}px)`;
