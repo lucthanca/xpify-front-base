@@ -183,7 +183,7 @@ requestAnimationFrame(() => {
               callback(false, 0, 0, 0, 0);
               return;
             }
-            if (!last || now - last >= 1000) {  
+            if (!last || now - last >= 1000) {
               const days = Math.floor(distance / (1000 * 60 * 60 * 24));
               const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
               const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -360,7 +360,7 @@ requestAnimationFrame(() => {
               };
 
               if (!window.OTSB.loadedScript.includes('slider')) {
-                  deferScriptLoad('slider', window.OTSB.sliderScript, initSlider, true);
+                  deferScriptLoadOTSB('slider', window.OTSB.sliderScript, initSlider, true);
               } else if (window.Splide) {
                   initSlider();
               } else {
@@ -674,7 +674,7 @@ requestAnimationFrame(() => {
   })
 });
 
-const deferScriptLoad = (name, src, onload, requestVisualChange = false) => {
+const deferScriptLoadOTSB = (name, src, onload, requestVisualChange = false) => {
   window.OTSB.loadedScript.push(name);
 
   ((events) => {
