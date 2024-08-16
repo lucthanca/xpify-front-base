@@ -29,11 +29,11 @@ const InstallModal = props => {
   const { show, handleCloseModal, activeSection } = talonProps;
   const sectionTalonProps = useSection({ key: activeSection?.url_key });
   const { section, loadingWithoutData } = sectionTalonProps;
-  const talonManageProps = useManage({ section: section });
+  const talonManageProps = useManage({ section });
   const {
     dataUpdateLoading,
     dataDeleteLoading,
-    handleDelete: uninstallSectionFromTheme,
+    handleUninstall: uninstallSectionFromTheme,
     currentThemeSelected: selectedTheme,
     installed,
     step,
@@ -42,8 +42,10 @@ const InstallModal = props => {
     updateNotes,
     primaryActionContent,
     primaryActionHandle,
+    options: themeOptions
   } = talonManageProps;
   const [isShowConfirm, setIsShowConfirm] = useState(false);
+  const onActionLoading = dataUpdateLoading || dataDeleteLoading;
   // const [confirmAction, setConfirmAction] = useState(() => {});
   // const [currentThemeSelected, setCurrentThemeSelected] = useState(undefined);
 
@@ -59,6 +61,8 @@ const InstallModal = props => {
   // };
 
   const handleClose = () => {
+    // restrict close modal when action is loading
+    if (onActionLoading) return;
     setBannerAlert(undefined);
     handleCloseModal();
     if (splide?.current?.splide) {
@@ -93,7 +97,7 @@ const InstallModal = props => {
           [{
             destructive: true,
             content: 'Uninstall',
-            disabled: dataDeleteLoading || dataUpdateLoading || loadingWithoutData || (section?.installed ? !talonManageProps.installed : true),
+            disabled: dataDeleteLoading || dataUpdateLoading || loadingWithoutData || !installed,
             loading: talonManageProps?.executeSection === activeSection?.url_key ? talonManageProps.dataDeleteLoading : false,
             onAction: () => setIsShowConfirm(true),
           }]
@@ -106,7 +110,7 @@ const InstallModal = props => {
           && activeSection?.url_key === talonManageProps?.executeSection
           && <BannerDefault bannerAlert={talonManageProps.bannerAlert} setBannerAlert={talonManageProps.setBannerAlert} />}
           {updateNotes && <BannerDefault bannerAlert={updateNotes} noDismiss={true} />}
-          <ThemeList options={section?.url_key === activeSection?.url_key ? talonManageProps.options : {}} selected={talonManageProps.selected} handleSelectChange={talonManageProps.handleSelectChange} />
+          <ThemeList options={section?.url_key === activeSection?.url_key ? themeOptions : {}} selected={talonManageProps.selected} handleSelectChange={talonManageProps.handleSelectChange} />
         </BlockStack>
       </Modal.Section>
     </Modal>

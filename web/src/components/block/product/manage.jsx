@@ -1,4 +1,4 @@
-import { useCallback, memo, useState, useMemo } from 'react';
+import { useCallback, memo, useState, useEffect } from 'react';
 import {
   InlineGrid,
   BlockStack,
@@ -11,13 +11,15 @@ import {
 } from '@shopify/polaris';
 import ModalConfirm from '~/components/block/modal/confirm';
 import BannerDefault from '~/components/block/banner/alert';
-import { STEP_COMPLETE, useManage } from '~/talons/section/useManage';
+import { useManage } from '~/talons/section/useManage';
 import { SECTION_TYPE_SIMPLE } from '~/constants/index.js';
+import { useSectionListContext } from '~/context/index.js';
 
 function ModalInstallSection({section, fullWith = true}) {
   const talonManageProps = useManage({ section: section, typeSelect: true });
   const [isShowConfirm, setIsShowConfirm] = useState(false);
   const [confirmAction, setConfirmAction] = useState(() => {});
+  const ctxListing = useSectionListContext();
 
   const {
     updateNotes,
@@ -25,14 +27,29 @@ function ModalInstallSection({section, fullWith = true}) {
     dataUpdateLoading,
     primaryActionContent,
     primaryActionHandle,
+    handleUninstall,
+    selected,
   } = talonManageProps;
   const isLoading = dataDeleteLoading || dataUpdateLoading;
   const confirmDelete = useCallback(() => {
-    setConfirmAction(() => talonManageProps.handleDelete);
+    if (typeof ctxListing?.[1]?.lockModal === 'function') {
+      ctxListing[1].lockModal();
+    }
+    setConfirmAction(() => handleUninstall);
     setIsShowConfirm(true);
-  }, [talonManageProps.selected]);
+  }, [selected]);
 
   const isSimpleSection = parseInt(section?.type_id) === SECTION_TYPE_SIMPLE;
+  useEffect(() => {
+    const shouldLockModal = dataDeleteLoading || dataUpdateLoading;
+    if (typeof ctxListing?.[1]?.lockModal === 'function') {
+      if (shouldLockModal) {
+        ctxListing[1].lockModal();
+      } else {
+        ctxListing[1].releaseModal();
+      }
+    }
+  }, [dataDeleteLoading, dataUpdateLoading]);
 
   return (
     <BlockStack gap='200'>

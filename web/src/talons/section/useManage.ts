@@ -4,9 +4,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   UNINSTALL_SECTION_MUTATION,
   UPDATE_ASSET_MUTATION,
+  UNINSTALL_SECTION_MUTATION_KEY,
 } from '~/queries/section-builder/asset.gql';
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
-import { SECTIONS_QUERY, QUERY_SECTION_COLLECTION_KEY } from '~/queries/section-builder/product.gql';
+import {
+  SECTIONS_QUERY,
+  QUERY_SECTION_COLLECTION_KEY,
+} from '~/queries/section-builder/product.gql';
 import { THEMES_QUERY, THEMES_QUERY_KEY } from '~/queries/section-builder/theme.gql';
 import type { ShopifyTheme, Section, Install } from '~/@types';
 import { SECTION_TYPE_SIMPLE } from '~/constants';
@@ -38,7 +42,7 @@ type UseManageTalon = {
   section: any,
   installed: boolean,
   handleUpdate: () => void,
-  handleDelete: () => void,
+  handleUninstall: () => void,
   dataUpdateLoading: boolean,
   dataDeleteLoading: boolean,
   bannerAlert: BannerAlert | undefined,
@@ -69,7 +73,8 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   // const [urlEditTheme, setUrlEditTheme] = useState<string>('#');
   const toast = useToast();
   const [step, setStep] = useState(STEP_INIT);
-
+  const [updateAction, { loading: dataUpdateLoading }] = useMutation(UPDATE_ASSET_MUTATION, {});
+  const [deleteAction, { loading: dataDeleteLoading }] = useMutation(UNINSTALL_SECTION_MUTATION, {});
   const { data: themesData } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
     skip: Boolean(!section?.entity_id),
@@ -88,8 +93,11 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     skip: !Array.isArray(childIds) || childIds.length === 0,
   });
   const childSections = useMemo(() => groupChildSections?.[QUERY_SECTION_COLLECTION_KEY]?.items || [], [groupChildSections]);
-
+  const onActionLoading = dataUpdateLoading || dataDeleteLoading;
   const handleSelectChange = useCallback((value: any) => {
+    // restrict select change when on action loading
+    if (onActionLoading) return;
+    setStep(STEP_INIT);
     setBannerAlert(undefined);
     setSelected(typeSelect ? value : value[0]);
     interaction.current = true;
@@ -156,7 +164,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
 
       return {
         value: theme.id,
-        label: `${theme.name} (${titleRoleTheme[theme.role] ?? theme.role}) - ${status}`
+        label: `${theme.name} (${titleRoleTheme[theme.role] ?? theme.role}) - ${status}`,
       };
     }).filter((item): item is SelectOption => item !== null);
   }, [section, themes, childSections, childIds]);
@@ -211,9 +219,6 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     return null;
   }, [section, childSections, groupChildrenLoading, installed]);
 
-  const [updateAction, { loading: dataUpdateLoading }] = useMutation(UPDATE_ASSET_MUTATION, {});
-  const [deleteAction, { loading: dataDeleteLoading }] = useMutation(UNINSTALL_SECTION_MUTATION, {});
-
   const getThemeEditUrl= useCallback(() => {
     if (!myShop?.myShop?.domain) return undefined;
     return 'https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor'
@@ -229,7 +234,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         variables: {
           theme_id: selected,
           key: section?.url_key
-        }
+        },
       });
       setStep(STEP_COMPLETE);
       const themeEditorUrl = getThemeEditUrl();
@@ -262,8 +267,8 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
       toast.show('Installed failed', { isError: true });
     }
     Object.keys(alert).length > 0 && setBannerAlert(alert);
-  }, [selected, section?.entity_id]);
-  const handleDelete = useCallback(async () => {
+  }, [selected, section?.url_key]);
+  const handleUninstall = useCallback(async () => {
     try {
       setBannerAlert(undefined);
       setExecuteSection(section?.url_key);
@@ -274,8 +279,8 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         },
       });
       setStep(STEP_COMPLETE);
-      if (result.data?.deleteAsset?.length > 0) {
-        toast.show('Deleted successfully');
+      if (result.data?.[UNINSTALL_SECTION_MUTATION_KEY]?.length > 0) {
+        toast.show('Section was uninstalled!');
         return;
       }
       throw new Error('Can not delete this section by some reason');
@@ -288,6 +293,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
           'content': e.graphQLErrors ?? []
         };
       } else {
+        console.log(e);
         alert = {
           'title': `Something went wrong. Try again later.`,
           'tone': 'critical'
@@ -295,7 +301,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
       }
       Object.keys(alert).length > 0 && setBannerAlert(alert);
     }
-  }, [selected, section?.entity_id]);
+  }, [selected, section?.url_key]);
 
   const currentThemeSelected = useMemo(() => {
     return themes.find((item: any) => item.id == selected);
@@ -317,7 +323,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   }, [step, installed]);
 
   const primaryActionHandle = () => {
-    if (step === STEP_COMPLETE) {
+    if (step === STEP_COMPLETE && installed) {
       window.open(getThemeEditUrl(), '_blank');
       return;
     }
@@ -328,7 +334,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     section,
     installed,
     handleUpdate,
-    handleDelete,
+    handleUninstall,
     dataUpdateLoading,
     dataDeleteLoading,
     bannerAlert,
