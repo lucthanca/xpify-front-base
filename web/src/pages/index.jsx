@@ -39,7 +39,7 @@ function HomePage() {
   return (
     <>
       {myShopLoading && <Loading />}
-      <Page title="Welcome to Omni Themes Section Builder!">
+      <Page title="Welcome to Omni Themes: Theme Sections!">
         <Layout>
           <Layout.Section>
             <BlockStack gap={600}>

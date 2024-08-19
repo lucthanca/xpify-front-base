@@ -9,6 +9,7 @@ const SectionListProvider = ({ children }) => {
    */
   const [activeSection, setStateActiveSection] = useState(null);
   const [modalLoading, setModalLoading] = useState(false);
+  const [canCloseModal, setCanCloseModal] = useState(true);
   const setActiveSection = useCallback((section) => {
     if (!!section) setModalLoading(true);
     setStateActiveSection(section);
@@ -17,11 +18,14 @@ const SectionListProvider = ({ children }) => {
     activeSection,
     modalLoading,
     modal,
-  }), [modal, activeSection, modalLoading]);
+    canCloseModal,
+  }), [modal, activeSection, modalLoading, canCloseModal]);
   const api = useMemo(() => ({
     setActiveSection,
     setModalLoading,
     setModal,
+    lockModal: () => setCanCloseModal(false),
+    releaseModal: () => setCanCloseModal(true),
   }), [setActiveSection]);
   const value = useMemo(() => [state, api], [state, api]);
   return (

@@ -52,6 +52,7 @@ export interface SectionInterface {
   categoriesV2: Category[] | null;
   tags: string[] | null;
   installed: Install[];
+  type_id: string;
 }
 export type SectionActions = {
   install: boolean;
@@ -63,7 +64,6 @@ export type Install = {
   product_version: string
 };
 export type SimpleSection = SectionInterface & {
-  type_id: '1';
   actions: SectionActions;
   pricing_plan: PricingPlan | null;
   version: String;
@@ -71,7 +71,6 @@ export type SimpleSection = SectionInterface & {
   src: String
 };
 export type GroupSection = SectionInterface & {
-  type_id: '2';
   child_ids: string[];
 }
 export type Section = SimpleSection | GroupSection;
