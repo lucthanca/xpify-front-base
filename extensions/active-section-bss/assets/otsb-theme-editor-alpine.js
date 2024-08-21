@@ -572,6 +572,68 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
                     }
 
                 }
+            }));
+            Alpine.data('otsb_xPopupsSpinSuccess', (data) => ({
+                init() {
+                    const jsonString = data.data_wheel.replace(/'/g, '"');
+
+// Parse the JSON string
+                    const item = JSON.parse(jsonString);
+                    const wheel = document.getElementById("otsb-wheel-" + data.sectionId),
+                        success = document.getElementById("otsb-wheel-success-" + data.sectionId),
+                        heading = document.getElementById("otsb-success-heading-" + data.sectionId),
+                        subheading = document.getElementById("otsb-success-subheading-" + data.sectionId),
+                        code = document.getElementById("otsb-success-code-" + data.sectionId);
+                    document.addEventListener('shopify:block:select', (event) => {
+                        console.log('run: otsb_xPopupsSpinSuccess')
+                        const selectedBlockId = event.detail.blockId;
+                        if (data.block_id === selectedBlockId) {
+                            showSuccess(2);
+                        }
+                    })
+                    document.addEventListener('shopify:block:deselect', (event) => {
+                        console.log('run: otsb_xPopupsSpinSuccess')
+                        const selectedBlockId = event.detail.blockId;
+                        if (data.block_id === selectedBlockId) {
+                            showSpin();
+                        }
+                    })
+
+                    function showSuccess(picked) {
+                        if (heading.innerHTML.trim() === "") {
+                            heading.append(item[picked].heading);
+                            subheading.append(item[picked].subheading);
+                            if (item[picked].code !== '') {
+                                code.append(item[picked].code);
+                            } else {
+                                code.classList.add('hidden');
+                                document.getElementsByClassName("otsb-code-" + data.sectionId)[0].classList.add('hidden');
+                            }
+                        }
+
+                        // Add active class to next content
+                        // changeButtonClose()
+                        success.classList.add('active');
+                        wheel.classList.remove('previous');
+                        wheel.classList.add("hidden");
+                        success.classList.remove("hidden");
+                        success.classList.add("visible");
+                    }
+                    function showSpin() {
+                        wheel.classList.add('active');
+                        success.classList.remove('previous');
+                        success.classList.add("hidden");
+                        wheel.classList.remove("hidden");
+                        wheel.classList.add("visible");
+                    }
+
+                    function changeButtonClose() {
+                        var wheel = document.getElementById('PromotionPopupClose-' + data.sectionId),
+                            success = document.getElementById('PromotionPopupClose-Success-' + data.sectionId);
+                        wheel.classList.add('hidden');
+                        success.classList.remove('hidden');
+                    }
+                }
             }))
         })
     })
