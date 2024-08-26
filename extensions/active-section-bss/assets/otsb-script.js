@@ -1,4 +1,4 @@
-window.OTSB = {
+window.otsb = {
   sliderScript: 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js',
   loadedScript: [],
 };
@@ -359,8 +359,8 @@ requestAnimationFrame(() => {
                   splide.mount();
               };
 
-              if (!window.OTSB.loadedScript.includes('slider')) {
-                  deferScriptLoadOTSB('slider', window.OTSB.sliderScript, initSlider, true);
+              if (!window.otsb.loadedScript.includes('slider')) {
+                  deferScriptLoadOTSB('slider', window.otsb.sliderScript, initSlider, true);
               } else if (window.Splide) {
                   initSlider();
               } else {
@@ -676,7 +676,7 @@ requestAnimationFrame(() => {
 
 if (typeof window.deferScriptLoadOTSB != 'function') {
 window.deferScriptLoadOTSB = (name, src, onload, requestVisualChange = false) => {
-  window.OTSB.loadedScript.push(name);
+  window.otsb.loadedScript.push(name);
 
   ((events) => {
       const loadScript = () => {

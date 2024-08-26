@@ -961,6 +961,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .flex-auto{flex:1 1 auto}
 .otsb__root .flex-shrink-0{flex-shrink:0}
 .otsb__root .shrink-0{flex-shrink:0}
+.otsb__root .flex-grow{flex-grow:1}
 .otsb__root .grow{flex-grow:1}
 .otsb__root .-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .-translate-x-\[4px\]{--tw-translate-x:-4px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
@@ -2569,6 +2570,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .promotion--has-image.promotion--has-image\:w-\[54\%\]{width:54%}
 @media (min-width: 768px){
 .otsb__root .md\:absolute{position:absolute}
+.otsb__root .md\:relative{position:relative}
 .otsb__root .md\:bottom-0{bottom:0px}
 .otsb__root .md\:bottom-5{bottom:1.25rem}
 .otsb__root .md\:left-0{left:0px}
@@ -2948,6 +2950,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .lg\:py-24{padding-top:6rem;padding-bottom:6rem}
 .otsb__root .lg\:py-3{padding-top:0.75rem;padding-bottom:0.75rem}
 .otsb__root .lg\:py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}
+.otsb__root .lg\:py-40{padding-top:10rem;padding-bottom:10rem}
 .otsb__root .lg\:py-\[22px\]{padding-top:22px;padding-bottom:22px}
 .otsb__root .lg\:pb-0{padding-bottom:0px}
 .otsb__root .lg\:pb-0\.5{padding-bottom:0.125rem}
