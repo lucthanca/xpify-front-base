@@ -7,7 +7,7 @@ function RequestSection() {
   const { open: openChat } = useFreshChat();
   const textContent = (
     <p>
-      Request a section? please email at <a href='mailto:support@omnitheme.com' target="_blank" className='text-blue-400 hover:underline'>support@omnitheme.com</a> - or - <span className='cursor-pointer text-blue-400 hover:underline' onClick={openChat}>chat with us</span>
+      Request a section? please email at <a href='mailto:support@omnithemes.com' target="_blank" className='text-blue-400 hover:underline'>support@omnithemes.com</a> - or - <span className='cursor-pointer text-blue-400 hover:underline' onClick={openChat}>chat with us</span>
     </p>
   );
   return (
