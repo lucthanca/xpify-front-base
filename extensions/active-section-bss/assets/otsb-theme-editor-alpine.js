@@ -1722,3 +1722,41 @@ function otsbXmapRefreshMapPosition(
     }
   }
 }
+
+function otsbXmapRefreshMapPosition(selector, screen_md, content_position, isContent = true) {
+  const targetEl = document.querySelector(selector);
+  if (!targetEl) {
+    console.error('OT: Map initialized failed.');
+    return;
+  }
+  const invalid = document.documentElement.clientWidth < screen_md;
+  if (content_position === 'top-left' || invalid) {
+    targetEl.style.width = '100%';
+    if (isContent) targetEl.style.display = 'none';
+    return;
+  }
+
+  const rect = targetEl.parentNode.getBoundingClientRect();
+  let right = rect.right;
+  let space = document.documentElement.clientWidth - right;
+  const compare_position = isContent ? 'left' : 'right';
+  if (content_position === compare_position) {
+    left = rect.left;
+    space = left;
+    targetEl.style.left = `-${space}px`;
+  }
+  
+  let width = '100%';
+  if (space > 0) {
+    width = `calc(100% + ${space}px)`;
+  }
+  targetEl.style.width = width;
+
+  if (isContent) {
+    if (space > 0) {
+      targetEl.style.display = 'block';
+    } else {
+      targetEl.style.display = 'none'
+    };
+  }
+}
