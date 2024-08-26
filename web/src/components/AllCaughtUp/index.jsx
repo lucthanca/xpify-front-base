@@ -2,8 +2,9 @@ import React from 'react';
 import { Box, Divider, InlineStack, Icon, Text } from '@shopify/polaris';
 import { CheckCircleIcon } from '@shopify/polaris-icons';
 import './style.scss';
+import PropTypes from 'prop-types';
 
-const AllCaughtUp = () => {
+const AllCaughtUp = ({ text }) => {
   return (
     <div className='AllCaughtUp__root'>
       <Divider borderColor='border-tertiary' />
@@ -14,7 +15,7 @@ const AllCaughtUp = () => {
               <Box>
                 <Icon source={CheckCircleIcon} tone='subdued' />
               </Box>
-              <Text as='h2' variant='headingSm' tone='subdued' alignment='center'>All caught up</Text>
+              <Text as='h2' variant='headingSm' tone='subdued' alignment='center'>{text || 'All caught up'}</Text>
             </InlineStack>
           </Box>
         </InlineStack>
@@ -22,5 +23,10 @@ const AllCaughtUp = () => {
     </div>
   );
 };
+AllCaughtUp.propTypes = {
+  text: PropTypes.oneOfType(
+    [PropTypes.string, PropTypes.node]
+  ),
+}
 
 export default React.memo(AllCaughtUp);

@@ -5,16 +5,18 @@ import {
   Layout
 } from "@shopify/polaris";
 import SectionCollection from '~/components/SectionCollection';
-import Footer from '~/components/block/footer';
+import { SECTION_TYPE_SIMPLE } from '~/constants';
 
 const SectionsPage = props => {
   return (
-    <Page title="Sections" fullWidth subtitle='Select your missing parts to complete your store!'>
-      <Layout>
-        <SectionCollection {...props} />
-      </Layout>
+    <Page title='Sections' fullWidth subtitle='Select your missing parts to complete your store!'>
+      <div id='xpify_sections_footer'>
+        <Layout>
+          <SectionCollection type={SECTION_TYPE_SIMPLE} {...props} />
+        </Layout>
+      </div>
     </Page>
   );
-}
+};
 
 export default memo(SectionsPage);

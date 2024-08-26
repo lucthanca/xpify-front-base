@@ -2,9 +2,9 @@ import { useParams } from 'react-router-dom';
 import { useSectionPurchase } from '~/hooks/useSectionPurchase';
 import { useCallback, useMemo } from 'react';
 import { ApolloError, useQuery } from '@apollo/client';
-import { SECTION_QUERY, SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builder/product.gql';
-import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
-import type { ApolloQueryResult } from '@apollo/client/core/types';
+import { SECTION_V2_QUERY, SECTION_V2_QUERY_KEY } from '~/queries/section-builder/product.gql';
+import { THEMES_QUERY, THEMES_QUERY_KEY } from '~/queries/section-builder/theme.gql';
+import { type Section, ShopifyTheme } from '~/@types';
 
 type SectionImage = {
   src: string;
@@ -62,24 +62,13 @@ export type SectionData = SectionDataInterface & {
   release_note: String;
   src: String
 };
-export type GroupSection = SectionDataInterface & {
-  child_ids: string[];
-}
-export type ThemeData = {
-  id: string;
-  name: string;
-  role: string;
-  previewable: string;
-  processing: string;
-  admin_graphql_api_id: string;
-};
 
 export type SectionTalon = {
   handlePurchase: () => Promise<void>;
   purchaseLoading: boolean;
   sectionLoading: boolean;
-  themes: ThemeData[] | [];
-  section: SectionData | {};
+  themes: ShopifyTheme[] | null;
+  section: Section | {};
   sectionError: ApolloError | undefined;
   loadingWithoutData: boolean;
 };
@@ -88,7 +77,7 @@ export const useSection = (): SectionTalon => {
   const { key } = useParams();
   const { purchaseSection, loading: purchaseLoading, error: purchaseError } = useSectionPurchase();
 
-  const { data:loadedSection, loading: sectionLoading, error: sectionError } = useQuery(SECTION_V2_QUERY, {
+  const { data: loadedSection, loading: sectionLoading, error: sectionError } = useQuery(SECTION_V2_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       key: key
@@ -97,18 +86,12 @@ export const useSection = (): SectionTalon => {
   const section = useMemo(() => {
     return loadedSection?.[SECTION_V2_QUERY_KEY];
   }, [loadedSection]);
-  // const { data: loadedSection, loading: sectionLoading, error: sectionError } = useQuery(SECTION_QUERY, {
-  //   fetchPolicy: "cache-and-network",
-  //   variables: { key }
-  // });
-  // const section = useMemo(() => {
-  //   return loadedSection?.getSection || {};
-  // }, [loadedSection]);
-  const { data:themesData, loading:themesL, error:themesE } = useQuery(THEMES_QUERY, {
+
+  const { data: themesData } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
     skip: Boolean(!section?.entity_id),
   });
-  const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
+  const themes = useMemo<ShopifyTheme[]>(() => themesData?.[THEMES_QUERY_KEY] || [], [themesData]);
   const handlePurchase = useCallback(async () => {
     if (!section.entity_id) return;
     await purchaseSection(section);

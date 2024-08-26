@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GROUP_SECTION_QUERY, SECTIONS_QUERY, SECTION_V2_QUERY } from '~/queries/section-builder/product.gql';
+import { SECTIONS_QUERY, SECTION_V2_QUERY, QUERY_SECTION_COLLECTION_KEY } from '~/queries/section-builder/product.gql';
 import { useParams } from 'react-router-dom';
 import { useSectionPurchase } from '~/hooks';
 import { useCallback, useMemo } from 'react';
@@ -23,7 +23,7 @@ export const useGroupSection = () => {
     },
     skip: !Array.isArray(groupSection?.child_ids) || groupSection?.child_ids?.length === 0,
   });
-  const childSections = useMemo(() => groupChildSections?.getSections?.items || [], [groupChildSections]);
+  const childSections = useMemo(() => groupChildSections?.[QUERY_SECTION_COLLECTION_KEY]?.items || [], [groupChildSections]);
   const handlePurchase = useCallback(async () => {
     if (!groupSection.entity_id) return;
     await purchaseSection(groupSection);

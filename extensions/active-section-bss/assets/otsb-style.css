@@ -427,6 +427,21 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .otsb-p-break-words {
     word-break: break-word;
   }
+.otsb__root .otsb-page-width-v2 {
+    max-width: var(--page-width);
+    padding: 0 1.5rem;
+    margin: 0 auto;
+  }
+@media (min-width: 750px) {
+  .otsb__root .otsb-page-width-v2 {
+      padding: 0 5rem
+  }
+    }
+@media (min-width: 768px){
+.otsb__root .otsb-page-width-v2.otsb-full-width-desk-v2{max-width:none}}
+@media (max-width: 749px) {
+    .otsb__root .otsb-page-width-v2.otsb-full-width-v2{padding-left:0px;padding-right:0px}
+      }
 .otsb__root .otsb-rte::after{clear:both;content:var(--tw-content);display:block}
 .otsb__root .otsb-rte p{margin-top:0.5rem;line-height:1.5}
 .otsb__root .otsb-rte p:last-child{margin-bottom:0.5rem}
@@ -447,7 +462,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .otsb-rte li:last-child{margin-bottom:0px}
 .otsb__root .otsb-rte blockquote > *{margin-left:-0.5rem;margin-top:0px;margin-right:-0.5rem;margin-bottom:0px}
 .otsb__root .otsb-rte a{position:relative;margin-top:0.5rem;margin-bottom:0.5rem;text-decoration-thickness:1px;
-  color: rgba(var(--colors-text-link))}
+    color: rgba(var(--colors-text-link))}
 .otsb__root .otsb-rte ul{margin-top:1rem;margin-bottom:1rem;list-style-position:inside;list-style-type:disc;padding-left:1.25rem}
 .otsb__root .pl0-ul.otsb-rte ul{padding-left:0px}
 .otsb__root .otsb-rte ol{margin-top:1rem;margin-bottom:1rem;list-style-position:inside;list-style-type:decimal;padding-left:1.25rem}
@@ -461,11 +476,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
     margin-block-start: 1em;
     margin-block-end: 0.5em;
   }
-@media screen and (max-width: 1024px) {
-        .otsb__root .splide__arrow {
-            display: none;
-        }
-    }
 .otsb__root .otsb-heading-right{display:flex;flex-direction:row-reverse;flex-wrap:wrap}
 .otsb__root .otsb-heading-right .otsb-section-header,
     .otsb__root .otsb-heading-right h2{text-align:end}
@@ -739,13 +749,11 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .sticky{position:sticky}
 .otsb__root .inset-0{inset:0px}
 .otsb__root .bottom-0{bottom:0px}
-.otsb__root .bottom-10{bottom:2.5rem}
 .otsb__root .bottom-5{bottom:1.25rem}
 .otsb__root .bottom-6{bottom:1.5rem}
 .otsb__root .left-0{left:0px}
 .otsb__root .left-1{left:0.25rem}
 .otsb__root .left-1\/2{left:50%}
-.otsb__root .left-10{left:2.5rem}
 .otsb__root .left-2{left:0.5rem}
 .otsb__root .left-4{left:1rem}
 .otsb__root .left-5{left:1.25rem}
@@ -788,7 +796,11 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .float-right{float:right}
 .otsb__root .float-left{float:left}
 .otsb__root .m-2{margin:0.5rem}
+.otsb__root .m-auto{margin:auto}
+.otsb__root .mx-1{margin-left:0.25rem;margin-right:0.25rem}
 .otsb__root .mx-auto{margin-left:auto;margin-right:auto}
+.otsb__root .my-2{margin-top:0.5rem;margin-bottom:0.5rem}
+.otsb__root .my-\[1\.5em\]{margin-top:1.5em;margin-bottom:1.5em}
 .otsb__root .\!mr-2{margin-right:0.5rem !important}
 .otsb__root .-ml-0{margin-left:-0px}
 .otsb__root .-ml-0\.5{margin-left:-0.125rem}
@@ -814,6 +826,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .ml-1\.5{margin-left:0.375rem}
 .otsb__root .ml-2{margin-left:0.5rem}
 .otsb__root .ml-2\.5{margin-left:0.625rem}
+.otsb__root .ml-3{margin-left:0.75rem}
 .otsb__root .ml-5{margin-left:1.25rem}
 .otsb__root .ml-7{margin-left:1.75rem}
 .otsb__root .ml-auto{margin-left:auto}
@@ -854,6 +867,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .aspect-square{aspect-ratio:1 / 1}
 .otsb__root .\!h-\[calc\(100\%-2rem\)\]{height:calc(100% - 2rem) !important}
 .otsb__root .h-0{height:0px}
+.otsb__root .h-10{height:2.5rem}
 .otsb__root .h-11{height:2.75rem}
 .otsb__root .h-128{height:32rem}
 .otsb__root .h-14{height:3.5rem}
@@ -900,6 +914,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .min-h-\[60px\]{min-height:60px}
 .otsb__root .\!w-\[16px\]{width:16px !important}
 .otsb__root .w-1\/2{width:50%}
+.otsb__root .w-10{width:2.5rem}
 .otsb__root .w-11{width:2.75rem}
 .otsb__root .w-11\/12{width:91.666667%}
 .otsb__root .w-14{width:3.5rem}
@@ -916,6 +931,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .w-\[120px\]{width:120px}
 .otsb__root .w-\[16px\]{width:16px}
 .otsb__root .w-\[17px\]{width:17px}
+.otsb__root .w-\[1em\]{width:1em}
 .otsb__root .w-\[var\(--base-font-size\)\]{width:var(--base-font-size)}
 .otsb__root .w-fit{width:-moz-fit-content;width:fit-content}
 .otsb__root .w-full{width:100%}
@@ -936,7 +952,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .max-w-\[80\%\]{max-width:80%}
 .otsb__root .max-w-\[800px\]{max-width:800px}
 .otsb__root .max-w-\[86px\]{max-width:86px}
-.otsb__root .max-w-\[95vw\]{max-width:95vw}
+.otsb__root .max-w-\[93\%\]{max-width:93%}
 .otsb__root .max-w-\[calc\(100\%-48px\)\]{max-width:calc(100% - 48px)}
 .otsb__root .max-w-full{max-width:100%}
 .otsb__root .max-w-xl{max-width:36rem}
@@ -945,6 +961,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .flex-auto{flex:1 1 auto}
 .otsb__root .flex-shrink-0{flex-shrink:0}
 .otsb__root .shrink-0{flex-shrink:0}
+.otsb__root .flex-grow{flex-grow:1}
 .otsb__root .grow{flex-grow:1}
 .otsb__root .-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .-translate-x-\[4px\]{--tw-translate-x:-4px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
@@ -962,6 +979,9 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 0%{transform:translateX(0%)}
 100%{transform:translateX(-100%)}}
 .otsb__root .animate-\[scrollX\]{animation:scrollX}
+@keyframes spin{
+to{transform:rotate(360deg)}}
+.otsb__root .animate-spin{animation:spin 1s linear infinite}
 .otsb__root .cursor-grab{cursor:grab}
 .otsb__root .cursor-grabbing{cursor:grabbing}
 .otsb__root .cursor-not-allowed{cursor:not-allowed}
@@ -1005,6 +1025,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .gap-x-4{-moz-column-gap:1rem;column-gap:1rem}
 .otsb__root .gap-x-5{-moz-column-gap:1.25rem;column-gap:1.25rem}
 .otsb__root .gap-x-7{-moz-column-gap:1.75rem;column-gap:1.75rem}
+.otsb__root .gap-x-\[4px\]{-moz-column-gap:4px;column-gap:4px}
 .otsb__root .gap-y-2{row-gap:0.5rem}
 .otsb__root .gap-y-4{row-gap:1rem}
 .otsb__root .gap-y-7{row-gap:1.75rem}
@@ -1037,6 +1058,8 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .border-\[rgba\(var\(--color-link\)\)\]{border-color:rgba(var(--color-link))}
 .otsb__root .border-\[rgba\(var\(--colors-heading\)\)\]{border-color:rgba(var(--colors-heading))}
 .otsb__root .border-\[rgba\(var\(--colors-text\)\)\]{border-color:rgba(var(--colors-text))}
+.otsb__root .border-transparent{border-color:transparent}
+.otsb__root .bg-\[\#00000099\]{background-color:#00000099}
 .otsb__root .bg-\[\#C9C9C9\]{--tw-bg-opacity:1;background-color:rgb(201 201 201 / var(--tw-bg-opacity))}
 .otsb__root .bg-\[\#F2F2F2\]{--tw-bg-opacity:1;background-color:rgb(242 242 242 / var(--tw-bg-opacity))}
 .otsb__root .bg-\[\#acacac\]{--tw-bg-opacity:1;background-color:rgb(172 172 172 / var(--tw-bg-opacity))}
@@ -1244,11 +1267,11 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .align-top{vertical-align:top}
 .otsb__root .align-middle{vertical-align:middle}
 .otsb__root .align-bottom{vertical-align:bottom}
+.otsb__root .text-\[0\.75em\]\/normal{font-size:0.75em;line-height:1.5}
 .otsb__root .text-\[80\%\]{font-size:80%}
 .otsb__root .text-sm{font-size:0.875rem;line-height:1.25rem}
 .otsb__root .text-xs{font-size:0.75rem;line-height:1rem}
 .otsb__root .font-bold{font-weight:700}
-.otsb__root .font-light{font-weight:300}
 .otsb__root .font-medium{font-weight:500}
 .otsb__root .font-semibold{font-weight:600}
 .otsb__root .uppercase{text-transform:uppercase}
@@ -1259,6 +1282,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .leading-normal{line-height:1.5}
 .otsb__root .leading-tight{line-height:1.25}
 .otsb__root .tracking-wider{letter-spacing:0.05em}
+.otsb__root .text-\[\#999\]{--tw-text-opacity:1;color:rgb(153 153 153 / var(--tw-text-opacity))}
 .otsb__root .text-\[\#acacac\]{--tw-text-opacity:1;color:rgb(172 172 172 / var(--tw-text-opacity))}
 .otsb__root .text-\[--otsb-images-collection-title\]{color:var(--otsb-images-collection-title)}
 .otsb__root .text-\[rgb\(var\(--colors-text\)\)\]{color:rgb(var(--colors-text))}
@@ -1287,8 +1311,10 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}
 .otsb__root .outline{outline-style:solid}
 .otsb__root .blur{--tw-blur:blur(8px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}
+.otsb__root .drop-shadow-md{--tw-drop-shadow:drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}
 .otsb__root .filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}
 .otsb__root .transition{transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}
+.otsb__root .transition-\[background-color\]{transition-property:background-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}
 .otsb__root .transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}
 .otsb__root .transition-none{transition-property:none}
 .otsb__root .transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}
@@ -2544,6 +2570,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .promotion--has-image.promotion--has-image\:w-\[54\%\]{width:54%}
 @media (min-width: 768px){
 .otsb__root .md\:absolute{position:absolute}
+.otsb__root .md\:relative{position:relative}
 .otsb__root .md\:bottom-0{bottom:0px}
 .otsb__root .md\:bottom-5{bottom:1.25rem}
 .otsb__root .md\:left-0{left:0px}
@@ -2676,6 +2703,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .md\:p-5{padding:1.25rem}
 .otsb__root .md\:px-0{padding-left:0px;padding-right:0px}
 .otsb__root .md\:px-4{padding-left:1rem;padding-right:1rem}
+.otsb__root .md\:px-6{padding-left:1.5rem;padding-right:1.5rem}
 .otsb__root .md\:px-\[30px\]{padding-left:30px;padding-right:30px}
 .otsb__root .md\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}
 .otsb__root .md\:pb-0{padding-bottom:0px}
@@ -2827,6 +2855,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .lg\:m-8{margin:2rem}
 .otsb__root .lg\:mx-auto{margin-left:auto;margin-right:auto}
 .otsb__root .lg\:my-12{margin-top:3rem;margin-bottom:3rem}
+.otsb__root .lg\:my-\[2em\]{margin-top:2em;margin-bottom:2em}
 .otsb__root .lg\:mb-0{margin-bottom:0px}
 .otsb__root .lg\:mb-10{margin-bottom:2.5rem}
 .otsb__root .lg\:mb-3{margin-bottom:0.75rem}
@@ -2878,8 +2907,8 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .lg\:max-w-\[270px\]{max-width:270px}
 .otsb__root .lg\:max-w-\[300px\]{max-width:300px}
 .otsb__root .lg\:max-w-\[350px\]{max-width:350px}
-.otsb__root .lg\:max-w-\[45vw\]{max-width:45vw}
 .otsb__root .lg\:max-w-\[61\.25\%\]{max-width:61.25%}
+.otsb__root .lg\:max-w-\[810px\]{max-width:810px}
 .otsb__root .lg\:grow{flex-grow:1}
 .otsb__root .lg\:grow-0{flex-grow:0}
 .otsb__root .lg\:-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
@@ -2914,11 +2943,14 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .lg\:gap-x-\[8\%\]{-moz-column-gap:8%;column-gap:8%}
 .otsb__root .lg\:gap-y-7{row-gap:1.75rem}
 .otsb__root .lg\:px-14{padding-left:3.5rem;padding-right:3.5rem}
+.otsb__root .lg\:px-20{padding-left:5rem;padding-right:5rem}
 .otsb__root .lg\:px-5{padding-left:1.25rem;padding-right:1.25rem}
 .otsb__root .lg\:px-8{padding-left:2rem;padding-right:2rem}
 .otsb__root .lg\:py-16{padding-top:4rem;padding-bottom:4rem}
+.otsb__root .lg\:py-24{padding-top:6rem;padding-bottom:6rem}
 .otsb__root .lg\:py-3{padding-top:0.75rem;padding-bottom:0.75rem}
 .otsb__root .lg\:py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}
+.otsb__root .lg\:py-40{padding-top:10rem;padding-bottom:10rem}
 .otsb__root .lg\:py-\[22px\]{padding-top:22px;padding-bottom:22px}
 .otsb__root .lg\:pb-0{padding-bottom:0px}
 .otsb__root .lg\:pb-0\.5{padding-bottom:0.125rem}

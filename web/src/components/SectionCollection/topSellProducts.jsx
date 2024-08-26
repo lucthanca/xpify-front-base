@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react';
 import { BlockStack, Box, Text } from '@shopify/polaris';
 import LazyProductCarousel from '~/components/LazyProductCarousel';
-import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
+import { QUERY_SECTION_COLLECTION_KEY, SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
 import ProductCard, { Skeleton } from '~/components/block/product';
 import ModalProduct from '~/components/block/product/modal.jsx';
 
@@ -22,7 +22,7 @@ const topSellProducts = props => {
     <Box padding='600'>
       <BlockStack gap='200'>
         <Text variant="headingMd" as="h2">Top Sells</Text>
-        <LazyProductCarousel renderItem={renderProduct} fetchQuery={SECTIONS_QUERY} queryRootKey={'getSections'} skeletonLoader={<Skeleton total={1} />} />
+        <LazyProductCarousel renderItem={renderProduct} fetchQuery={SECTIONS_QUERY} queryRootKey={QUERY_SECTION_COLLECTION_KEY} skeletonLoader={<Skeleton total={1} />} />
       </BlockStack>
       <ModalProduct section={currentProduct} isShowPopup={isShowPopup} setIsShowPopup={setIsShowPopup} />
     </Box>

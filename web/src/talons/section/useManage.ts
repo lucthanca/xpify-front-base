@@ -1,25 +1,25 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery, ApolloError } from '@apollo/client';
 import { useToast } from '@shopify/app-bridge-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DELETE_ASSET_MUTATION, UPDATE_ASSET_MUTATION } from '~/queries/section-builder/asset.gql';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  UNINSTALL_SECTION_MUTATION,
+  UPDATE_ASSET_MUTATION,
+  UNINSTALL_SECTION_MUTATION_KEY,
+} from '~/queries/section-builder/asset.gql';
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
-import { SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
-import { THEMES_QUERY } from '~/queries/section-builder/theme.gql';
+import {
+  SECTIONS_QUERY,
+  QUERY_SECTION_COLLECTION_KEY,
+} from '~/queries/section-builder/product.gql';
+import { THEMES_QUERY, THEMES_QUERY_KEY } from '~/queries/section-builder/theme.gql';
+import type { ShopifyTheme, Section, Install } from '~/@types';
+import { SECTION_TYPE_SIMPLE } from '~/constants';
 
 const titleRoleTheme = {
   'main': 'Live',
   'unpublished': 'Draft',
   'demo': 'Trial', // Không edit code được loại theme này
   'development': 'Dev',
-};
-
-export type ThemeData = {
-  id: string;
-  name: string;
-  role: 'main' | 'unpublished' | 'demo' | 'development';
-  previewable?: string;
-  processing?: string;
-  admin_graphql_api_id?: string;
 };
 
 interface BannerAlert {
@@ -31,71 +31,97 @@ interface BannerAlert {
 }
 
 type UseManageProps = {
-  section: any;
+  section: Section;
   typeSelect: boolean;
 };
-
+type SelectOption = {
+  value: string;
+  label: string;
+};
 type UseManageTalon = {
   section: any,
   installed: boolean,
   handleUpdate: () => void,
-  handleDelete: () => void,
+  handleUninstall: () => void,
   dataUpdateLoading: boolean,
   dataDeleteLoading: boolean,
   bannerAlert: BannerAlert | undefined,
-  setBannerAlert: any,
-  options: object,
+  setBannerAlert: (alert: BannerAlert | undefined) => void,
+  options?: SelectOption[],
   selected: string,
   handleSelectChange: any,
-  currentThemeSelected: ThemeData,
-  executeSection: string
+  currentThemeSelected: ShopifyTheme | undefined,
+  executeSection: string,
+  step: number,
+  getThemeEditUrl: () => string | undefined,
+  setStep: (step: number) => void,
+  updateNotes: BannerAlert | null,
+  primaryActionContent: string,
+  primaryActionHandle: () => void,
 };
+
+
+export const STEP_INIT = 1;
+export const STEP_COMPLETE = 2;
 
 export const useManage = (props: UseManageProps): UseManageTalon => {
   const { section, typeSelect } = props;
+  const interaction = useRef(false);
   const [selected, setSelected] = useState("");
   const [bannerAlert, setBannerAlert] = useState<BannerAlert | undefined>(undefined);
   const [executeSection, setExecuteSection] = useState<string>('');
-  const [urlEditTheme, setUrlEditTheme] = useState<string>('#');
+  // const [urlEditTheme, setUrlEditTheme] = useState<string>('#');
   const toast = useToast();
-
-  const { data:themesData } = useQuery(THEMES_QUERY, {
+  const [step, setStep] = useState(STEP_INIT);
+  const [updateAction, { loading: dataUpdateLoading }] = useMutation(UPDATE_ASSET_MUTATION, {});
+  const [deleteAction, { loading: dataDeleteLoading }] = useMutation(UNINSTALL_SECTION_MUTATION, {});
+  const { data: themesData } = useQuery(THEMES_QUERY, {
     fetchPolicy: "cache-and-network",
     skip: Boolean(!section?.entity_id),
   });
-  const themes = useMemo(() => themesData?.getThemes || [], [themesData]);
-  const { data: groupChildSections, loading: groupChildSectionsLoad } = useQuery(SECTIONS_QUERY, {
+  const themes = useMemo<ShopifyTheme[]>(() => themesData?.[THEMES_QUERY_KEY] || [], [themesData]);
+  const childIds = section && 'child_ids' in section && section.child_ids || [];
+  const { data: groupChildSections, loading: groupChildrenLoading } = useQuery(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       filter: {
-        product_id: section?.child_ids ?? []
+        product_id: childIds,
       },
       pageSize: 99,
       currentPage: 1
     },
-    skip: !Array.isArray(section?.child_ids) || section?.child_ids?.length === 0,
+    skip: !Array.isArray(childIds) || childIds.length === 0,
   });
-  const childSections = useMemo(() => groupChildSections?.getSections?.items || [], [groupChildSections]);
-
+  const childSections = useMemo(() => groupChildSections?.[QUERY_SECTION_COLLECTION_KEY]?.items || [], [groupChildSections]);
+  const onActionLoading = dataUpdateLoading || dataDeleteLoading;
   const handleSelectChange = useCallback((value: any) => {
+    // restrict select change when on action loading
+    if (onActionLoading) return;
+    setStep(STEP_INIT);
+    setBannerAlert(undefined);
     setSelected(typeSelect ? value : value[0]);
+    interaction.current = true;
   }, []);
-  const getUpdateMessage = useCallback((item: any, currentTheme: any, parent: any = null) => {
-    const installVersion = item?.installed && item.installed.find((item: any) => item.theme_id == currentTheme)?.product_version;
-    if (installVersion) {
-      if (installVersion != item.version) {
-        return {message: `Update ${item.name} from v${installVersion} to v${item.version}`};
+  const getUpdateMessage = (item: Section, themeId: string | null = null) => {
+    if (!item) return;
+    if (!Array.isArray(item.installed)) return;
+    let targetThemeId = themeId || selected;
+    const theme: Install | undefined = item.installed.find((item: Install) => item.theme_id == targetThemeId);
+    if (!theme) return;
+    if (theme.product_version) {
+      if (theme.product_version != item.version) {
+        return {message: `Update ${item.name} from v${theme.product_version} to v${item.version}`};
       } else {
         return '';
       }
     } else {
-      if (parent?.child_ids) {
+      if (childIds) {
         return {message: `Install ${item.name}`};
       }
     }
 
     return '';
-  }, []);
+  };
 
   const { data: myShop } = useQuery(MY_SHOP, {
     fetchPolicy: "cache-and-network",
@@ -104,23 +130,24 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   const options = useMemo(() => {
     if (!themes?.length
       || !section?.url_key
-      || (section?.child_ids && !childSections?.length)
+      || (childIds.length > 0 && !childSections?.length)
     ) {
-      return {};
+      return [];
     }
 
-    let result = themes.map((theme: ThemeData) => {
+    return themes.map((theme) => {
       if (theme.role == 'demo') { // Demo theme không thể thêm section
-        return false;
+        return null;
       }
 
       var status = 'Not installed';
-      const installedInTheme = section?.installed && section.installed.find((item: any) => item.theme_id == theme.id);
+      const hasInstalled = Array.isArray(section?.installed);
+      const installedInTheme = hasInstalled && section.installed.find((item: Install) => item.theme_id == theme.id);
 
       if (installedInTheme) {
         var content = [];
         if (childSections.length) {
-          content = childSections.map((item: any) => getUpdateMessage(item, theme.id, section))
+          content = childSections.map((item: any) => getUpdateMessage(item, theme.id))
         } else {
           content = [getUpdateMessage(section, theme.id)];
         }
@@ -135,21 +162,14 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
         }
       }
 
-      return ({
+      return {
         value: theme.id,
-        label: `${theme.name} (${titleRoleTheme[theme.role] ?? theme.role}) - ${status}`
-      });
-    });
+        label: `${theme.name} (${titleRoleTheme[theme.role] ?? theme.role}) - ${status}`,
+      };
+    }).filter((item): item is SelectOption => item !== null);
+  }, [section, themes, childSections, childIds]);
 
-    return result.filter((item: any) => item?.value);
-  }, [section, themes, childSections]);
-  useMemo(() => {
-    if (themes && themes.length && section?.entity_id) {
-      setSelected(themes[0]['id'] ?? "");
-    }
-  }, [themes, section?.entity_id]);
   const installed = useMemo(() => {
-    setBannerAlert(undefined);
     if (!section?.installed) {
       return false;
     }
@@ -159,115 +179,162 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     if (installedInTheme) {
       var content = [];
       if (childSections.length) {
-        content = childSections.map((item: any) => getUpdateMessage(item, selected, section));
+        content = childSections.map((item: Section) => getUpdateMessage(item));
       } else {
-        content = [getUpdateMessage(section, selected)];
+        content = [getUpdateMessage(section)];
       }
       content = content.filter((item: any) => item !== undefined);
-      const contentUpdate = content.filter((item: any) => item !== "");
-      if (contentUpdate.length) {
-        let title = "";
-        if (childSections.length) {
-          if (contentUpdate.length > 1) {
-            title = "Re-install group to update these sections:";
-          } else {
-            title = "Re-install group to update this section:";
-          }
-        } else {
-          title = "Re-install this section to update it to the latest version";
-        }
 
-        setBannerAlert({
-          'title': title,
-          'tone': 'info',
-          'content': contentUpdate
-        });
-      }
-
-      return content.length ? true : false;
+      return !!content.length;
     }
     return false;
   }, [selected, options]);
 
-  const [updateAction, { data:dataUpdate, loading:dataUpdateLoading, error:dataUpdateError }] = useMutation(UPDATE_ASSET_MUTATION, {});
-  const [deleteAction, { data:dataDelete, loading:dataDeleteLoading, error:dataDeleteError }] = useMutation(DELETE_ASSET_MUTATION, {});
+  const updateNotes = useMemo(() => {
+    if (!section || groupChildrenLoading || !installed) return null;
+    let content = [];
+    if (parseInt(section.type_id) === SECTION_TYPE_SIMPLE) {
+      content = [getUpdateMessage(section)];
+    } else if (childSections.length) {
+      content = childSections.map((item: Section) => getUpdateMessage(item))
+    } else {
+      content = [getUpdateMessage(section)];
+    }
+    // remove item empty or undefined
+    content = content.filter((item: any) => item !== undefined && item !== '');
+    if (content.length > 0) {
+      let title = 'Re-install this section to update it to the latest version';
+      if (childSections.length > 0) {
+        title = 'Re-install group to update this section:';
+        if (content.length > 1) {
+          title = 'Re-install group to update these sections:';
+        }
+      }
+      return {
+        'title': title,
+        'tone': 'info',
+        'content': content,
+      };
+    }
+    return null;
+  }, [section, childSections, groupChildrenLoading, installed]);
+
+  const getThemeEditUrl= useCallback(() => {
+    if (!myShop?.myShop?.domain) return undefined;
+    return 'https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor'
+  }, [myShop, selected]);
 
   const handleUpdate = useCallback(async () => {
+    setBannerAlert(undefined);
     setExecuteSection(section?.url_key);
-    setUrlEditTheme('https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor');
-    await updateAction({
-      variables: {
-        theme_id: selected,
-        key: section?.url_key
+    // setUrlEditTheme('https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor');
+    let alert: BannerAlert;
+    try {
+      await updateAction({
+        variables: {
+          theme_id: selected,
+          key: section?.url_key
+        },
+      });
+      setStep(STEP_COMPLETE);
+      const themeEditorUrl = getThemeEditUrl();
+      if (!themeEditorUrl) {
+        alert = {
+          'title': `Install section to theme successfully.`,
+          'tone': 'success'
+        };
+      } else {
+        alert = {
+          'urlSuccessEditTheme': themeEditorUrl,
+          'isSimple': !childIds.length,
+          'tone': 'success'
+        };
       }
-    });
-  }, [selected, section?.entity_id]);
-  const handleDelete = useCallback(async () => {
-    setExecuteSection(section?.url_key);
-    await deleteAction({
-      variables: {
-        theme_id: selected,
-        key: section?.url_key
+      toast.show('Installed successfully');
+    } catch (e) {
+      if (e instanceof ApolloError) {
+        alert = {
+          'title': e.message,
+          'tone': 'critical',
+          'content': e.graphQLErrors ?? []
+        };
+      } else {
+        alert = {
+          'title': `Something went wrong. Try again later.`,
+          'tone': 'critical'
+        };
       }
-    });
-  }, [selected, section?.entity_id]);
+      toast.show('Installed failed', { isError: true });
+    }
+    Object.keys(alert).length > 0 && setBannerAlert(alert);
+  }, [selected, section?.url_key]);
+  const handleUninstall = useCallback(async () => {
+    try {
+      setBannerAlert(undefined);
+      setExecuteSection(section?.url_key);
+      const result = await deleteAction({
+        variables: {
+          theme_id: selected,
+          key: section?.url_key
+        },
+      });
+      setStep(STEP_COMPLETE);
+      if (result.data?.[UNINSTALL_SECTION_MUTATION_KEY]?.length > 0) {
+        toast.show('Section was uninstalled!');
+        return;
+      }
+      throw new Error('Can not delete this section by some reason');
+    } catch (e) {
+      let alert: BannerAlert;
+      if (e instanceof ApolloError) {
+        alert = {
+          'title': e.message,
+          'tone': 'critical',
+          'content': e.graphQLErrors ?? []
+        };
+      } else {
+        console.log(e);
+        alert = {
+          'title': `Something went wrong. Try again later.`,
+          'tone': 'critical'
+        };
+      }
+      Object.keys(alert).length > 0 && setBannerAlert(alert);
+    }
+  }, [selected, section?.url_key]);
 
   const currentThemeSelected = useMemo(() => {
     return themes.find((item: any) => item.id == selected);
   }, [selected]);
 
   useEffect(() => {
-    if (dataUpdate && dataUpdate.updateAsset) {
-      if (dataUpdate.updateAsset?.length) {
-        if (section?.url_key === executeSection) {
-          setBannerAlert({
-            'urlSuccessEditTheme': urlEditTheme,
-            'isSimple': !section?.child_ids?.length,
-            'tone': 'success'
-          });
-        }
-        toast.show('Installed successfully');
-      } else {
-        if (section?.url_key === executeSection) {
-          setBannerAlert({
-            'title': `Error. Try later`,
-            'tone': 'critical'
-          });
-        }
-        toast.show('Installed fail', { isError: true });
-      }
+    if (interaction.current) return;
+    if (themes && themes.length && section?.entity_id) {
+      setSelected(themes[0]['id'] ?? "");
     }
-  }, [dataUpdate]);
-  useEffect(() => {
-    if (dataUpdateError) {
-      setBannerAlert({
-        'title': dataUpdateError.message,
-        'tone': 'critical',
-        'content': dataUpdateError.graphQLErrors ?? []
-      });
-      toast.show('Installed fail', { isError: true });
+  }, [themes, section?.entity_id]);
+
+  const primaryActionContent = useMemo(() => {
+    if (step === STEP_COMPLETE && installed) {
+      return 'Go to theme editor';
     }
-  }, [dataUpdateError]);
-  useEffect(() => {
-    if (dataDelete && dataDelete.deleteAsset) {
-      if (dataDelete.deleteAsset?.length) {
-        toast.show('Deleted successfully');
-      } else {
-        toast.show('Deleted fail', { isError: true });
-      }
+    if (installed) return 'Reinstall';
+    return 'Install'
+  }, [step, installed]);
+
+  const primaryActionHandle = () => {
+    if (step === STEP_COMPLETE && installed) {
+      window.open(getThemeEditUrl(), '_blank');
+      return;
     }
-  }, [dataDelete]);
-  useEffect(() => {
-    if (dataDeleteError) {
-      toast.show('Deleted fail', { isError: true });
-    }
-  }, [dataDeleteError]);
+    handleUpdate();
+  }
 
   return {
     section,
     installed,
     handleUpdate,
-    handleDelete,
+    handleUninstall,
     dataUpdateLoading,
     dataDeleteLoading,
     bannerAlert,
@@ -276,6 +343,12 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     selected,
     handleSelectChange,
     currentThemeSelected,
-    executeSection
+    executeSection,
+    step,
+    getThemeEditUrl,
+    setStep,
+    updateNotes,
+    primaryActionContent,
+    primaryActionHandle,
   };
 };

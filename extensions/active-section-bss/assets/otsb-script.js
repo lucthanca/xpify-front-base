@@ -1,4 +1,4 @@
-window.OTSB = {
+window.otsb = {
   sliderScript: 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js',
   loadedScript: [],
 };
@@ -359,8 +359,8 @@ requestAnimationFrame(() => {
                   splide.mount();
               };
 
-              if (!window.OTSB.loadedScript.includes('slider')) {
-                  deferScriptLoad('slider', window.OTSB.sliderScript, initSlider, true);
+              if (!window.otsb.loadedScript.includes('slider')) {
+                  deferScriptLoadOTSB('slider', window.otsb.sliderScript, initSlider, true);
               } else if (window.Splide) {
                   initSlider();
               } else {
@@ -674,8 +674,9 @@ requestAnimationFrame(() => {
   })
 });
 
-const deferScriptLoad = (name, src, onload, requestVisualChange = false) => {
-  window.OTSB.loadedScript.push(name);
+if (typeof window.deferScriptLoadOTSB != 'function') {
+window.deferScriptLoadOTSB = (name, src, onload, requestVisualChange = false) => {
+  window.otsb.loadedScript.push(name);
 
   ((events) => {
       const loadScript = () => {
@@ -717,6 +718,7 @@ const deferScriptLoad = (name, src, onload, requestVisualChange = false) => {
       }
   })(['touchstart', 'mouseover', 'wheel', 'scroll', 'keydown']);
 };
+}
 
 /** intersect 3.10.5 */
 requestAnimationFrame(() => {(()=>{function c(e){e.directive("intersect",(t,{value:i,expression:l,modifiers:n},{evaluateLater:r,cleanup:o})=>{let s=r(l),d={rootMargin:p(n),threshold:f(n)},u=new IntersectionObserver(h=>{h.forEach(a=>{a.isIntersecting!==(i==="leave")&&(s(),n.includes("once")&&u.disconnect())})},d);u.observe(t),o(()=>{u.disconnect()})})}function f(e){if(e.includes("full"))return .99;if(e.includes("half"))return .5;if(!e.includes("threshold"))return 0;let t=e[e.indexOf("threshold")+1];return t==="100"?1:t==="0"?0:Number(`.${t}`)}function x(e){let t=e.match(/^(-?[0-9]+)(px|%)?$/);return t?t[1]+(t[2]||"px"):void 0}function p(e){let t="margin",i="0px 0px 0px 0px",l=e.indexOf(t);if(l===-1)return i;let n=[];for(let r=1;r<5;r++)n.push(x(e[l+r]||""));return n=n.filter(r=>r!==void 0),n.length?n.join(" ").trim():i}document.addEventListener("alpine:init",()=>{window.Alpine.plugin(c)});})();});

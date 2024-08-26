@@ -17,8 +17,9 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
   }
 
   const handleCloseModal = useCallback(() => {
+    if (loadingPrimary) return;
     setIsOpen(false);
-  }, []);
+  }, [loadingPrimary]);
 
   useEffect(() => { // Overlay modal section
     if (cfModalRef.current) {
@@ -44,17 +45,18 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
     <Modal
       open={isOpen}
       onClose={handleCloseModal}
-      title={`Delete ${type}`}
+      title={`Uninstall ${type}`}
       primaryAction={{
         destructive: true,
-        content: 'Delete',
+        content: 'Uninstall',
         onAction: () => handleConfirm(),
         loading: loadingPrimary
       }}
       secondaryActions={[
         {
           content: 'Cancel',
-          onAction: () => handleCloseModal()
+          onAction: handleCloseModal,
+          disabled: loadingPrimary,
         },
       ]}
     >
@@ -62,7 +64,7 @@ function ModalConfirm({section, theme, isOpen, setIsOpen, onConfirm}) {
         <Modal.Section>
           <BlockStack gap='400'>
             <BlockStack gap='100'>
-              <Text>Do you really want to delete {type} {section.name} from theme {theme.name}?</Text>
+              <Text>Do you really want to uninstall {type} {section.name} from theme {theme.name}?</Text>
               <Text>If you want to use {section.name} on {theme.name} again, you will have to reinstall section to theme.</Text>
             </BlockStack>
             <Text tone='subdued'>

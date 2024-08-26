@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { useAuthContext } from '~/context/auth.jsx';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { ShopifyLoadingFull } from '~/components/adapter/index.jsx';
 import { Banner, Layout, Page } from '@shopify/polaris';
 
 const EnsureInstalled = ({ children }) => {
-  const [{ redirectQuery, hasInstalled, loading, error }] = useAuthContext();
+  const [{ redirectQuery, hasInstalled, loading, error, dataVersion }] = useAuthContext();
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();

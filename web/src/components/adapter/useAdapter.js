@@ -36,6 +36,7 @@ export const useAdapter = props => {
   const clearCacheData = useCallback(async (client, cacheType) => {
     // client.cache.evict({ id: 'TypeName' });
     // client.cache.evict({ fieldName: 'queryName' });
+    console.log('[Xpify] Clear Apollo Client Cache');
     client.cache.gc();
     if (client.persistor) {
       await client.persistor.persist();

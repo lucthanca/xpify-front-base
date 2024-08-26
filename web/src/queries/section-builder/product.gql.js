@@ -23,6 +23,7 @@ const CommonSectionField = gql`
       purchase
       install
       plan
+      connected
     }
     installed {
       id

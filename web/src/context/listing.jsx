@@ -26,7 +26,7 @@ const ListingProvider = ({ children }) => {
       }
     })
   }, []);
-  const collectionTalonProps = useSectionListing(handleQueryCompleted);
+  const collectionTalonProps = useSectionListing({ onQueryCompleted: handleQueryCompleted });
   const {
     handleFilterChange,
     sections,

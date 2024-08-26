@@ -1,5 +1,4 @@
 import {
-  Badge,
   BlockStack,
   Box,
   Button,
@@ -9,7 +8,7 @@ import {
   Text,
   Tooltip
 } from '@shopify/polaris';
-import { ViewIcon, PlusCircleIcon, PaymentFilledIcon, HeartIcon } from '@shopify/polaris-icons';
+import {ViewIcon, PlusCircleIcon, PaymentFilledIcon, HeartIcon, ConnectIcon} from '@shopify/polaris-icons';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import Badges from '~/components/block/product/badge/bagList';
 import BadgeStatusSection from '~/components/block/badge/statusSection';
@@ -18,7 +17,9 @@ import { useRedirectGroupPage, useRedirectSectionPage } from '~/hooks/section-bu
 import { useSectionListContext } from '~/context';
 import TrySectionButton from '~/components/block/product/demolinkbtn';
 import LazyLoadImage from '~/components/block/image';
+import ConnectPopup from '~/components/block/modal/connectInstagram';
 import { useWishlist } from '~/hooks/section-builder/wishlist';
+import { SECTION_TYPE_GROUP } from '~/constants/index.js';
 
 const productType = {
   'simple': 1,
@@ -70,6 +71,8 @@ const InstallButton = props => {
 };
 
 function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) / 4), (min-width: 768px) calc((100vw - 2rem) / 2), 100vw"}) {
+  const [showConnect, setShowConnect] = useState(false);
+  const toggleModal = useCallback(() => setShowConnect((showConnect) => !showConnect), []);
   const handleRedirectProductPage = useRedirectSectionPage();
   const handleRedirectGroupPage = useRedirectGroupPage();
   const handleRedirect = useCallback((product) => {
@@ -85,55 +88,64 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
 
   const { handleUpdate:addWishlist, dataUpdateLoading:addWishlistLoading, handleDelete:deleteWishlist, dataDeleteLoading:deleteWishlistLoading } = useWishlist(item);
 
+  const isGroup = parseInt(item.type_id) === SECTION_TYPE_GROUP;
+  const showInstallButton = !(item?.special_status === 'coming_soon') && item.actions?.install && (!isGroup || (isGroup && item?.child_ids?.length));
+  if (!item) return null;
   return (
-    item &&
-    <>
-      <Card padding='0' background="bg-surface-secondary" className='h-full'>
-        <div className='cursor-pointer aspect-[16/9]' onClick={() => handleRedirect(item)}>
-          <LazyLoadImage className={"object-cover w-full max-h-full"} src={ item?.images[0]?.src } srcSet={ item?.images[0]?.srcset } imgSizes={imgSizes} />
-        </div>
+    <Card padding='0' background="bg-surface-secondary" className="h-full">
+      <div className='cursor-pointer aspect-[16/9]' onClick={() => handleRedirect(item)}>
+        <LazyLoadImage className={"object-cover w-full max-h-full"} src={ item?.images[0]?.src } srcSet={ item?.images[0]?.srcset } imgSizes={imgSizes} />
+      </div>
 
-        <Box padding={400}>
+      <Box padding={400}>
+        <BlockStack gap={200}>
           <BlockStack gap={200}>
-            <BlockStack gap={200}>
-              <InlineStack align='space-between'>
-                <div className='cursor-pointer' onClick={() => handleRedirect(item)}>
-                  <Text variant="headingMd" as="h2">{item.name}</Text>
-                </div>
-                {item.price > 0 &&
-                  <Text variant="bodyLg" fontWeight='bold'>${item.price}</Text>
-                }
-              </InlineStack>
-              <InlineStack gap={200}>
-                <BadgeStatusSection item={item} />
-              </InlineStack>
-              {item.version &&
-                <Text variant="bodySm">Version: {item.version}</Text>
+            <InlineStack align='space-between'>
+              <div className='cursor-pointer' onClick={() => handleRedirect(item)}>
+                <Text variant="headingMd" as="h2">{item.name}</Text>
+              </div>
+              {item.price > 0 &&
+                <Text variant="bodyLg" fontWeight='bold'>${item.price}</Text>
               }
-              {item?.categoriesV2?.length > 0 && (
-                <Badges items={item.categoriesV2} isSimpleSection={!item?.child_ids?.length} searchKey={'category'} title={'Categories'} />
-              )}
-              {item?.tags?.length > 0 &&
-                <Badges items={item.tags} isSimpleSection={!item?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} />
-              }
-            </BlockStack>
+            </InlineStack>
+            <InlineStack gap={200}>
+              <BadgeStatusSection item={item} />
+            </InlineStack>
+            {item.version &&
+              <Text variant="bodySm">Version: {item.version}</Text>
+            }
+            {item?.categoriesV2?.length > 0 && (
+              <Badges items={item.categoriesV2} isSimpleSection={!item?.child_ids?.length} searchKey={'category'} title={'Categories'} />
+            )}
+            {item?.tags?.length > 0 &&
+              <Badges items={item.tags} isSimpleSection={!item?.child_ids?.length} searchKey={'tags'} itemContentRenderer={tagBadgeItemRender} title={'Tags'} />
+            }
+          </BlockStack>
 
-            <InlineStack gap='200'>
-              {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="View section" />)}
-              {parseInt(item.type_id) === parseInt(productType.simple) && !(item?.special_status === 'coming_soon') && <TrySectionButton id={item.id} />}
-              {item.actions?.install && !(item?.special_status === 'coming_soon') && <InstallButton item={item} />}
-              {
-                item.actions?.purchase &&
-                <Tooltip content="Purchase now">
-                  <Button
-                    loading={purchaseLoading}
-                    icon={<Icon source={PaymentFilledIcon} tone="base" />}
-                    size="large"
-                    onClick={() => handlePurchase(item)}
-                  />
-                </Tooltip>
-              }
-              {!item?.is_in_wishlist
+          <InlineStack gap='200'>
+            {parseInt(item.type_id) === parseInt(productType.simple) && (<QuickViewButton item={item} tooltip="View section" />)}
+            {parseInt(item.type_id) === parseInt(productType.simple) && !(item?.special_status === 'coming_soon') && <TrySectionButton id={item.id} />}
+            {showInstallButton && <InstallButton item={item} />}
+            {item?.url_key === 'instagram-feeds' && <Tooltip content={item?.actions?.connected ? 'Disconnect' : 'Connect'}>
+              <Button
+                loading={purchaseLoading}
+                icon={<Icon source={ConnectIcon} tone="base" />}
+                size="large"
+                onClick={toggleModal}
+              />
+            </Tooltip>}
+            {
+              item.actions?.purchase &&
+              <Tooltip content="Purchase now">
+                <Button
+                  loading={purchaseLoading}
+                  icon={<Icon source={PaymentFilledIcon} tone="base" />}
+                  size="large"
+                  onClick={() => handlePurchase(item)}
+                />
+              </Tooltip>
+            }
+            {!item?.is_in_wishlist
               ? <Tooltip content="Like">
                 <Button
                   loading={addWishlistLoading}
@@ -152,12 +164,12 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
                   variant='primary'
                 />
               </Tooltip>
-              }
-            </InlineStack>
-          </BlockStack>
-        </Box>
-      </Card>
-    </>
+            }
+            { showConnect && (<ConnectPopup active={showConnect} toggleModal={toggleModal} connected={item?.actions?.connected}/>)}
+          </InlineStack>
+        </BlockStack>
+      </Box>
+    </Card>
   );
 }
 

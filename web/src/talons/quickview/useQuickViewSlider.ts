@@ -5,6 +5,7 @@ import { SectionData } from '~/talons/section/useSection';
 type SectionListContextState = {
   activeSection: SectionData | null;
   modal: string;
+  canCloseModal: boolean;
 };
 type SectionListContextApi = {
   setActiveSection: (section: SectionData | null) => void;
@@ -13,7 +14,7 @@ type SectionListContextApi = {
 };
 export type SectionListContext = [SectionListContextState, SectionListContextApi];
 export const useQuickViewSlider = () => {
-  const [{ activeSection, modal }, { setActiveSection, setModalLoading, setModal }] = useSectionListContext() as unknown as SectionListContext;
+  const [{ activeSection, modal, canCloseModal }, { setActiveSection, setModalLoading, setModal }] = useSectionListContext() as unknown as SectionListContext;
   const onCloseQuickViewModal = useCallback(() => {
     setModalLoading(false);
     setActiveSection(null);
@@ -24,5 +25,6 @@ export const useQuickViewSlider = () => {
     activeSection,
     show,
     onCloseQuickViewModal,
+    canCloseModal,
   };
 };

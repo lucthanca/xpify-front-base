@@ -1,21 +1,22 @@
-import { Box, Button, InlineGrid, InlineStack, Layout, OptionList, Page, Popover, Text } from '@shopify/polaris';
+import { Button, Layout, OptionList, Page, Popover } from '@shopify/polaris';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import SectionCollection from '~/components/SectionCollection';
-import GroupCollection from '~/components/GroupCollection';
-import { useNavigate, createSearchParams, useSearchParams } from 'react-router-dom';
-import Footer from '~/components/block/footer';
+import { useSearchParams } from 'react-router-dom';
+import { SECTION_TYPE_SIMPLE, SECTION_TYPE_GROUP } from '~/constants';
 
 const defaultSelected = 'simple';
 const options = [
   {value: 'simple', label: 'Sections'},
   {value: 'group', label: 'Groups'}
 ];
+const TYPE_MAPPING = {
+  simple: SECTION_TYPE_SIMPLE,
+  group: SECTION_TYPE_GROUP,
+}
 
 function MyLibrary() {
   const initialized = useRef(false);
   const [popoverActive, setPopoverActive] = useState(false);
-  const [pageActivea, setPageActive] = useState(undefined);
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const togglePopoverActive = useCallback(() => {
     setPopoverActive((popoverActive) => !popoverActive);
@@ -54,14 +55,6 @@ function MyLibrary() {
     }
   }, [searchParams]);
 
-  const pageActive = useMemo(() => {
-    if (selected == 'simple') {
-      return <SectionCollection />;
-    } else {
-      return <GroupCollection />;
-    }
-  }, [selected]);
-
   const activator = useMemo(() => {
     return <Button onClick={togglePopoverActive} variant='tertiary' size='large' disclosure>
       {options.find(item => item.value === selected[0])?.label}
@@ -89,7 +82,7 @@ function MyLibrary() {
       fullWidth
     >
       <Layout>
-        {pageActive}
+        <SectionCollection type={TYPE_MAPPING[selected]} owned={true} pageSize={null} />
       </Layout>
     </Page>
   );

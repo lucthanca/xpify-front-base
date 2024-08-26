@@ -1,12 +1,14 @@
 import { gql } from '@apollo/client';
 
+export const INSTALL_SECTION_MUTATION_KEY = 'updateAsset';
 /* Asset in Store */
 export const UPDATE_ASSET_MUTATION = gql`
-  mutation Update($theme_id: String!, $key: String!) {
-    updateAsset(theme_id: $theme_id, key: $key) {
+  mutation InstallSectionToTheme($theme_id: String!, $key: String!) {
+    ${INSTALL_SECTION_MUTATION_KEY}(theme_id: $theme_id, key: $key) {
       id
       name
       entity_id
+      url_key
       actions {
         purchase
         install
@@ -20,11 +22,13 @@ export const UPDATE_ASSET_MUTATION = gql`
     }
   }
 `;
-export const DELETE_ASSET_MUTATION = gql`
-  mutation Delete($theme_id: String!, $key: String!) {
-    deleteAsset(theme_id: $theme_id, key: $key) {
+export const UNINSTALL_SECTION_MUTATION_KEY = 'deleteAsset';
+export const UNINSTALL_SECTION_MUTATION = gql`
+  mutation UninstallSectionFromTheme($theme_id: String!, $key: String!) {
+    ${UNINSTALL_SECTION_MUTATION_KEY}(theme_id: $theme_id, key: $key) {
       id
       name
+      url_key
       entity_id
       actions {
         purchase
