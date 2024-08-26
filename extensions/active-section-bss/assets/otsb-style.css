@@ -926,6 +926,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .w-3\.5{width:0.875rem}
 .otsb__root .w-4{width:1rem}
 .otsb__root .w-5{width:1.25rem}
+.otsb__root .w-5\/12{width:41.666667%}
 .otsb__root .w-6{width:1.5rem}
 .otsb__root .w-8{width:2rem}
 .otsb__root .w-\[120px\]{width:120px}
@@ -2834,6 +2835,7 @@ to{transform:rotate(360deg)}}
 @media (min-width: 1024px){
 .otsb__root .lg\:static{position:static}
 .otsb__root .lg\:absolute{position:absolute}
+.otsb__root .lg\:relative{position:relative}
 .otsb__root .lg\:-left-24{left:-6rem}
 .otsb__root .lg\:-right-24{right:-6rem}
 .otsb__root .lg\:left-1\/2{left:50%}
@@ -2978,6 +2980,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .lg\:pl-4{padding-left:1rem}
 .otsb__root .lg\:pl-5{padding-left:1.25rem}
 .otsb__root .lg\:pl-6{padding-left:1.5rem}
+.otsb__root .lg\:pl-7{padding-left:1.75rem}
 .otsb__root .lg\:pl-8{padding-left:2rem}
 .otsb__root .lg\:pl-9{padding-left:2.25rem}
 .otsb__root .lg\:pl-\[3\.75rem\]{padding-left:3.75rem}
@@ -2991,6 +2994,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .lg\:pr-4{padding-right:1rem}
 .otsb__root .lg\:pr-5{padding-right:1.25rem}
 .otsb__root .lg\:pr-6{padding-right:1.5rem}
+.otsb__root .lg\:pr-7{padding-right:1.75rem}
 .otsb__root .lg\:pr-8{padding-right:2rem}
 .otsb__root .lg\:pr-9{padding-right:2.25rem}
 .otsb__root .lg\:pr-\[3\.75rem\]{padding-right:3.75rem}
