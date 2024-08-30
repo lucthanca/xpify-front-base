@@ -741,7 +741,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .pointer-events-none{pointer-events:none}
 .otsb__root .pointer-events-auto{pointer-events:auto}
 .otsb__root .visible{visibility:visible}
-.otsb__root .collapse{visibility:collapse}
 .otsb__root .static{position:static}
 .otsb__root .fixed{position:fixed}
 .otsb__root .absolute{position:absolute}
@@ -901,7 +900,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .h-fit{height:-moz-fit-content;height:fit-content}
 .otsb__root .h-full{height:100%}
 .otsb__root .h-px{height:1px}
-.otsb__root .max-h-0{max-height:0px}
 .otsb__root .max-h-\[50\%\]{max-height:50%}
 .otsb__root .max-h-\[calc\(75vh-96px\)\]{max-height:calc(75vh - 96px)}
 .otsb__root .max-h-\[calc\(85vh-96px\)\]{max-height:calc(85vh - 96px)}
