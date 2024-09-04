@@ -1,10 +1,11 @@
-import { useMutation, useQuery, ApolloError } from '@apollo/client';
+import { useMutation, useQuery, ApolloError, useLazyQuery } from '@apollo/client';
 import { useToast } from '@shopify/app-bridge-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   UNINSTALL_SECTION_MUTATION,
   UPDATE_ASSET_MUTATION,
   UNINSTALL_SECTION_MUTATION_KEY,
+  APP_EMBED_VERIFY_QUERY, APP_EMBED_VERIFY_QUERY_KEY,
 } from '~/queries/section-builder/asset.gql';
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
 import {
@@ -27,7 +28,8 @@ interface BannerAlert {
   tone?: string;
   content?: any;
   urlSuccessEditTheme?: string;
-  isSimple?: boolean
+  isSimple?: boolean,
+  embedAppUrl?: string;
 }
 
 type UseManageProps = {
@@ -73,6 +75,8 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   // const [urlEditTheme, setUrlEditTheme] = useState<string>('#');
   const toast = useToast();
   const [step, setStep] = useState(STEP_INIT);
+  const [verifyEmbedApp] = useLazyQuery(APP_EMBED_VERIFY_QUERY, { fetchPolicy: 'network-only' });
+  const [installationLoading, setInstallationLoading] = useState(false);
   const [updateAction, { loading: dataUpdateLoading }] = useMutation(UPDATE_ASSET_MUTATION, {});
   const [deleteAction, { loading: dataDeleteLoading }] = useMutation(UNINSTALL_SECTION_MUTATION, {});
   const { data: themesData } = useQuery(THEMES_QUERY, {
@@ -227,46 +231,50 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
   const handleUpdate = useCallback(async () => {
     setBannerAlert(undefined);
     setExecuteSection(section?.url_key);
-    // setUrlEditTheme('https://' + myShop?.myShop?.domain + '/admin/themes/' + selected + '/editor');
-    let alert: BannerAlert;
+
+    setInstallationLoading(true);
     try {
       await updateAction({
         variables: {
           theme_id: selected,
-          key: section?.url_key
+          key: section?.url_key,
         },
       });
+
+      const appEmbedResponse = await verifyEmbedApp({ variables: { themeId: selected } });
       setStep(STEP_COMPLETE);
-      const themeEditorUrl = getThemeEditUrl();
-      if (!themeEditorUrl) {
-        alert = {
-          'title': `Install section to theme successfully.`,
-          'tone': 'success'
+
+      const alert: BannerAlert = appEmbedResponse?.data?.[APP_EMBED_VERIFY_QUERY_KEY]
+        ? { embedAppUrl: appEmbedResponse.data[APP_EMBED_VERIFY_QUERY_KEY] }
+        : {
+          ...(getThemeEditUrl()
+            ? {
+              urlSuccessEditTheme: getThemeEditUrl(),
+              isSimple: !childIds.length,
+            }
+            : { title: 'Install section to theme successfully.' }),
+          tone: 'success',
         };
-      } else {
-        alert = {
-          'urlSuccessEditTheme': themeEditorUrl,
-          'isSimple': !childIds.length,
-          'tone': 'success'
-        };
-      }
+
       toast.show('Installed successfully');
+      setBannerAlert(alert);
     } catch (e) {
-      if (e instanceof ApolloError) {
-        alert = {
-          'title': e.message,
-          'tone': 'critical',
-          'content': e.graphQLErrors ?? []
-        };
-      } else {
-        alert = {
-          'title': `Something went wrong. Try again later.`,
-          'tone': 'critical'
-        };
-      }
-      toast.show('Installed failed', { isError: true });
+      const alert: BannerAlert =
+        e instanceof ApolloError
+          ? {
+            title: e.message,
+            tone: 'critical',
+            content: e.graphQLErrors ?? [],
+          }
+          : {
+            title: 'Something went wrong. Try again later.',
+            tone: 'critical',
+          };
+
+      toast.show('Install failed', { isError: true });
+      setBannerAlert(alert);
     }
-    Object.keys(alert).length > 0 && setBannerAlert(alert);
+    setInstallationLoading(false);
   }, [selected, section?.url_key]);
   const handleUninstall = useCallback(async () => {
     try {
@@ -335,7 +343,7 @@ export const useManage = (props: UseManageProps): UseManageTalon => {
     installed,
     handleUpdate,
     handleUninstall,
-    dataUpdateLoading,
+    dataUpdateLoading: installationLoading,
     dataDeleteLoading,
     bannerAlert,
     setBannerAlert,

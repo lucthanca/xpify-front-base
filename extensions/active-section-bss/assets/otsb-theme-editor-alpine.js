@@ -7,10 +7,10 @@ if (typeof window.xParseJSONOTSB != 'function') {
   }
 }
 if (!window.otsb) {
-  window.otsb = {}
+  window.otsb = {};
 }
 if (!window.otsb.loadedScript) {
-  window.otsb.loadedScript = []
+  window.otsb.loadedScript = [];
 }
 if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
   window.otsb.loadedScript.push('otsb-popup.js')
@@ -2946,4 +2946,8 @@ if(window?.otsb?.loadedScript||(window.otsb={loadedScript:[]}),!window.otsb.load
       });
     });
   })();
+}
+
+if (!window.otsb.loadedScript.includes('otsb_theme_editor_alpine_loaded')) {
+  window.otsb.loadedScript.push('otsb_theme_editor_alpine_loaded');
 }

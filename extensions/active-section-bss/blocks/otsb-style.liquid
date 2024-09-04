@@ -1,4 +1,7 @@
 {{ 'otsb-style.css' | asset_url | stylesheet_tag }}
+{%- if request.design_mode -%}
+  <script src="{{ 'otsb-theme-editor-alpine.js' | asset_url }}" defer></script>
+{%- endif -%}
 <script src="{{ 'otsb-script.js' | asset_url }}" defer></script>
 
 {% schema %}

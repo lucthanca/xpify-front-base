@@ -1,6 +1,12 @@
 import { gql } from '@apollo/client';
 
 export const INSTALL_SECTION_MUTATION_KEY = 'updateAsset';
+export const APP_EMBED_VERIFY_QUERY_KEY = 'appEmbedVerify';
+export const APP_EMBED_VERIFY_QUERY = gql`
+  query AppEmbedVerify($themeId: String!) {
+    ${APP_EMBED_VERIFY_QUERY_KEY}(theme_id: $themeId)
+  }
+`;
 /* Asset in Store */
 export const UPDATE_ASSET_MUTATION = gql`
   mutation InstallSectionToTheme($theme_id: String!, $key: String!) {

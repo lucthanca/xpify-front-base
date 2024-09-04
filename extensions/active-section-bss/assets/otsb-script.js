@@ -1,6 +1,6 @@
 window.otsb = {
   sliderScript: 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js',
-  loadedScript: [],
+  loadedScript: window?.otsb?.loadedScript || [],
   components: {
     splides: {},
   },
@@ -729,5 +729,23 @@ requestAnimationFrame(() => {
         }
       },
     });
+    Alpine.data('otsb_script_require', () => {
+      return {
+        init () {
+          this.$el.remove();
+        }
+      };
+    });
+    Alpine.data('otsb_script_1', () => {
+      return {
+        init () {
+          this.$el.classList.remove('otsb_nope');
+        }
+      };
+    });
   });
 });
+
+if (!window.otsb.loadedScript.includes('otsb_main_script_loaded')) {
+  window.otsb.loadedScript.push('otsb_main_script_loaded');
+}

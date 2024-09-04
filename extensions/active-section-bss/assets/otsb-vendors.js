@@ -1846,7 +1846,27 @@ ${r ? 'Expression: "' + r + `"
       var It = I;
       window.Alpine = It;
       queueMicrotask(() => {
-        It.start()
+        if (!window?.otsb?.loadedScript) return;
+        let e = window.otsb.loadedScript;
+        const k = ["otsb_main_script_loaded"];
+
+        if (Shopify.designMode) {
+          k.push("otsb_theme_editor_alpine_loaded");
+        }
+
+        // Sử dụng every để kiểm tra tất cả các giá trị trong mảng k có nằm trong mảng e hay không
+        const c = k.every((key) => e.includes(key));
+        if (c) {
+          It.start();
+        } else {
+          // if not check every 100ms
+          let t = setInterval(() => {
+            if (c) {
+              clearInterval(t);
+              It.start();
+            }
+          }, 100);
+        }
       });
     })();
   });
