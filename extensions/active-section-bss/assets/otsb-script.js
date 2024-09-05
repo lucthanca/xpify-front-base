@@ -689,31 +689,36 @@ requestAnimationFrame(() => {
           splide.mount();
         };
 
-        if (window.otsb.components.splides[id]) return;
-        if (window.Splide) {
-          initSlider();
-          window.otsb.components.splides[id] = true;
-          return;
-        }
-        if (window?.Eurus?.sliderScript) {
-          document.addEventListener('slider loaded', () => {
-            initSlider();
-          });
-          if (!window.Eurus.loadedScript?.includes('slider')) {
-            deferScriptLoad('slider', window.Eurus.sliderScript, () => {}, true);
+          // if (window.otsb.components.splides[id]) return;
+          // if (window.Splide) {
+          //   initSlider();
+          //   window.otsb.components.splides[id] = true;
+          //   return;
+          // }
+          if (window?.Eurus?.sliderScript) {
+              document.addEventListener('slider loaded', () => {
+                  initSlider();
+              });
+              if (!window.Eurus.loadedScript?.includes('slider')) {
+                  deferScriptLoad('slider', window.Eurus.sliderScript, () => {}, true);
+              }
+              else if (window.Splide) {
+                  initSlider();
+              }
+              // window.otsb.components.splides[id] = true;
+              // return;
           }
-          window.otsb.components.splides[id] = true;
-          return;
-        }
 
-        if (!window.otsb.loadedScript.includes('otsb__slider')) {
-          deferScriptLoadOTSB('slider', window.otsb.sliderScript, initSlider, true);
-        } else {
-          document.addEventListener('otsb__slider-loaded', () => {
-            initSlider();
-          });
-        }
-        window.otsb.components.splides[id] = true;
+          if (!window.otsb.loadedScript.includes('otsb__slider')) {
+              deferScriptLoadOTSB('otsb__slider', window.otsb.sliderScript, initSlider, true);
+          } else if (window.Splide) {
+              initSlider();
+          } else {
+              document.addEventListener('otsb__slider-loaded', () => {
+                  initSlider();
+              });
+          }
+          // window.otsb.components.splides[id] = true;
       },
       moveThumbnail(index, thumbnail, thumbsRoot, direction) {
         if (direction == 'vertical') {
