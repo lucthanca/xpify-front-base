@@ -700,7 +700,7 @@ requestAnimationFrame(() => {
         } else if (window.Splide) {
           initSlider();
         } else {
-          document.addEventListener('otsb__slider-loaded', () => {
+          document.addEventListener('otsb__otsb__slider-loaded', () => {
             initSlider();
           });
         }
