@@ -741,6 +741,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .pointer-events-none{pointer-events:none}
 .otsb__root .pointer-events-auto{pointer-events:auto}
 .otsb__root .visible{visibility:visible}
+.otsb__root .collapse{visibility:collapse}
 .otsb__root .static{position:static}
 .otsb__root .fixed{position:fixed}
 .otsb__root .absolute{position:absolute}
@@ -2294,6 +2295,13 @@ to{transform:rotate(360deg)}}
     content:var(--tw-content);
     background: rgba(var(--image-treatment-text, 255, 255, 255));
   }
+.otsb__root .after\:otsb-hidden::after {
+        content:var(--tw-content);
+        display:none;
+    }
+.otsb__root .active-row.after\:otsb-hidden::after {
+  display: flex;
+}
 .otsb__root .after\:round::after{
         content:var(--tw-content);
         border-radius:9999px}
@@ -2619,7 +2627,6 @@ to{transform:rotate(360deg)}}
 .otsb__root .md\:mt-8{margin-top:2rem}
 .otsb__root .md\:block{display:block}
 .otsb__root .md\:flex{display:flex}
-.otsb__root .md\:hidden{display:none}
 .otsb__root .md\:\!h-\[500px\]{height:500px !important}
 .otsb__root .md\:\!h-\[600px\]{height:600px !important}
 .otsb__root .md\:\!h-\[650px\]{height:650px !important}

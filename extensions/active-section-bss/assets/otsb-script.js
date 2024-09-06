@@ -8,10 +8,10 @@ window.otsb = {
 if (typeof window.xParseJSONOTSB != 'function') {
   window.xParseJSONOTSB = (jsonString) => {
     jsonString = String.raw`${jsonString}`;
-    jsonString = jsonString.replaceAll("\\","\\\\").replaceAll('\\"', '\"');
+    jsonString = jsonString.replaceAll('\\', '\\\\').replaceAll('\\"', '"');
 
     return JSON.parse(jsonString);
-  }
+  };
 }
 if (typeof window.deferScriptLoadOTSB != 'function') {
   window.deferScriptLoadOTSB = (name, src, onload, requestVisualChange = false) => {
@@ -62,20 +62,20 @@ requestAnimationFrame(() => {
   document.addEventListener('alpine:init', () => {
     Alpine.store('otsb_xCartAnalytics', {
       viewCart() {
-        fetch(
-          '/cart.js'
-        ).then(response => {
-          return response.text();
-        }).then(cart => {
-          cart = JSON.parse(cart);
-          if (cart.items.length > 0) {
-            Shopify.analytics.publish('view_cart', {'cart': cart});
-          }
-        });
-      }
+        fetch('/cart.js')
+          .then((response) => {
+            return response.text();
+          })
+          .then((cart) => {
+            cart = JSON.parse(cart);
+            if (cart.items.length > 0) {
+              Shopify.analytics.publish('view_cart', { cart: cart });
+            }
+          });
+      },
     });
     Alpine.store('otsb_xModal', {
-      activeElement: "",
+      activeElement: '',
       setActiveElement(element) {
         this.activeElement = element;
       },
@@ -85,13 +85,13 @@ requestAnimationFrame(() => {
       removeFocus() {
         const openedBy = document.getElementById(this.activeElement);
         Alpine.store('otsb_xFocusElement').removeTrapFocus(openedBy);
-      }
+      },
     });
     Alpine.store('otsb_xFocusElement', {
       focusableElements: ['button, [href], input, select, textarea, [tabindex]:not([tabindex^="-"])'],
       listeners: {},
       trapFocus(container, elementFocus) {
-        if ( window.innerWidth < 1025 ) return;
+        if (window.innerWidth < 1025) return;
 
         let c = document.getElementById(container);
         let e = document.getElementById(elementFocus);
@@ -102,12 +102,8 @@ requestAnimationFrame(() => {
 
         this.removeTrapFocus();
 
-        this.listeners.focusin = (event)=>{
-          if (
-            event.target !== c &&
-            event.target !== last &&
-            event.target !== first
-          ){
+        this.listeners.focusin = (event) => {
+          if (event.target !== c && event.target !== last && event.target !== first) {
             return;
           }
           document.addEventListener('keydown', this.listeners.keydown);
@@ -115,9 +111,9 @@ requestAnimationFrame(() => {
 
         this.listeners.focusout = () => {
           document.removeEventListener('keydown', this.listeners.keydown);
-        }
+        };
 
-        this.listeners.keydown = (e) =>{
+        this.listeners.keydown = (e) => {
           if (e.code.toUpperCase() !== 'TAB') return;
 
           if (e.target === last && !e.shiftKey) {
@@ -129,23 +125,23 @@ requestAnimationFrame(() => {
             e.preventDefault();
             last.focus();
           }
-        }
+        };
         document.addEventListener('focusout', this.listeners.focusout);
         document.addEventListener('focusin', this.listeners.focusin);
         e.focus();
       },
       removeTrapFocus(elementToFocus = null) {
-        if ( window.innerWidth < 1025 ) return;
+        if (window.innerWidth < 1025) return;
 
-        document.removeEventListener('focusin', ()=>{
+        document.removeEventListener('focusin', () => {
           document.addEventListener('keydown', this.listeners.focusin);
         });
-        document.removeEventListener('focusout', ()=>{
+        document.removeEventListener('focusout', () => {
           document.removeEventListener('keydown', this.listeners.focusout);
         });
         document.removeEventListener('keydown', this.listeners.keydown);
         if (elementToFocus) elementToFocus.focus();
-      }
+      },
     });
     Alpine.store('xPopup', {
       open: false,
@@ -156,7 +152,7 @@ requestAnimationFrame(() => {
         for (let i = 0; i < scroll.length; i++) {
           scroll[i].classList.add('animate-scroll-banner');
         }
-      }
+      },
     });
     Alpine.store('xCustomerEvent', {
       fire(eventName, el, data) {
@@ -164,7 +160,7 @@ requestAnimationFrame(() => {
 
         const formatedData = data ? data : xParseJSONOTSB(el.getAttribute('x-customer-event-data'));
         Shopify.analytics.publish(eventName, formatedData);
-      }
+      },
     });
     Alpine.store('xHelper', {
       /**
@@ -195,14 +191,8 @@ requestAnimationFrame(() => {
       countdown(configs, callback) {
         const calculateAdjustedTime = function (date, tz) {
           return date.getTime() + (-1 * tz * 60 - date.getTimezoneOffset()) * 60 * 1000;
-        }
-        let endDate = new Date(
-          configs.end_year,
-          configs.end_month - 1,
-          configs.end_day,
-          configs.end_hour,
-          configs.end_minute
-        );
+        };
+        let endDate = new Date(configs.end_year, configs.end_month - 1, configs.end_day, configs.end_hour, configs.end_minute);
         const initialEndTime = calculateAdjustedTime(endDate, configs.timezone);
         let endTime = initialEndTime;
 
@@ -221,7 +211,7 @@ requestAnimationFrame(() => {
         }
         let last = 0;
         let that = this;
-        function updateCountdown () {
+        function updateCountdown() {
           const now = new Date().getTime();
           let distance = -1;
           [distance, endTime] = that.calculateCountdownDistance(configs, initialEndTime, endTime, now);
@@ -242,13 +232,7 @@ requestAnimationFrame(() => {
         requestAnimationFrame(updateCountdown);
       },
       canShow(configs) {
-        let endDate = new Date(
-          configs.end_year,
-          configs.end_month - 1,
-          configs.end_day,
-          configs.end_hour,
-          configs.end_minute
-        );
+        let endDate = new Date(configs.end_year, configs.end_month - 1, configs.end_day, configs.end_hour, configs.end_minute);
         const initialEndTime = endDate.getTime() + (-1 * configs.timezone * 60 - endDate.getTimezoneOffset()) * 60 * 1000;
         let endTime = initialEndTime;
 
@@ -274,13 +258,7 @@ requestAnimationFrame(() => {
         return true;
       },
       handleTime(configs) {
-        let endDate = new Date(
-          configs.end_year,
-          configs.end_month - 1,
-          configs.end_day,
-          configs.end_hour,
-          configs.end_minute
-        );
+        let endDate = new Date(configs.end_year, configs.end_month - 1, configs.end_day, configs.end_hour, configs.end_minute);
         const initialEndTime = endDate.getTime() + (-1 * configs.timezone * 60 - endDate.getTimezoneOffset()) * 60 * 1000;
         let endTime = initialEndTime;
 
@@ -300,15 +278,16 @@ requestAnimationFrame(() => {
         const now = new Date().getTime();
         let distance = -1;
         [distance, endTime] = this.calculateCountdownDistance(configs, initialEndTime, endTime, now);
-        return { "startTime": startTime, "endTime": endTime, "now": now, "distance": distance};
-      }
+        return { startTime: startTime, endTime: endTime, now: now, distance: distance };
+      },
     });
     Alpine.data('xParallax', () => ({
       debounce(func, wait) {
         var timeout;
-        return function() {
-          var context = this, args = arguments;
-          var later = function() {
+        return function () {
+          var context = this,
+            args = arguments;
+          var later = function () {
             timeout = null;
             func.apply(context, args);
           };
@@ -319,29 +298,29 @@ requestAnimationFrame(() => {
       load(disable) {
         if (disable) return;
 
-        if ("IntersectionObserver" in window && 'IntersectionObserverEntry' in window) {
+        if ('IntersectionObserver' in window && 'IntersectionObserverEntry' in window) {
           const observerOptions = {
             root: null,
             rootMargin: '0px 0px',
-            threshold: 0
+            threshold: 0,
           };
 
           var observer = new IntersectionObserver(handleIntersect, observerOptions);
           var el;
           function handleIntersect(entries) {
-            entries.forEach(function(entry) {
+            entries.forEach(function (entry) {
               if (entry.isIntersecting) {
                 el = entry.target;
-                window.addEventListener('scroll', parallax, {passive: true, capture: false});
+                window.addEventListener('scroll', parallax, { passive: true, capture: false });
               } else {
-                window.removeEventListener('scroll', parallax, {passive: true, capture: false});
+                window.removeEventListener('scroll', parallax, { passive: true, capture: false });
               }
             });
           }
 
           observer.observe(this.$el);
 
-          var parallax = this.debounce(function() {
+          var parallax = this.debounce(function () {
             var rect = el.getBoundingClientRect();
             var speed = (window.innerHeight / el.parentElement.offsetHeight) * 20;
             var shiftDistance = (rect.top - window.innerHeight) / speed;
@@ -351,10 +330,10 @@ requestAnimationFrame(() => {
               shiftDistance = -maxShiftDistance;
             }
 
-            el.style.transform = 'translate3d(0, '+ shiftDistance +'px, 0)';
+            el.style.transform = 'translate3d(0, ' + shiftDistance + 'px, 0)';
           }, 10);
         }
-      }
+      },
     }));
     Alpine.store('xVideo', {
       ytIframeId: 0,
@@ -398,7 +377,7 @@ requestAnimationFrame(() => {
           buttonPlay.classList.add('hidden');
         }
         if (video) {
-          video.setAttribute("controls",'');
+          video.setAttribute('controls', '');
         }
         this.play(videoContainer);
       },
@@ -412,31 +391,37 @@ requestAnimationFrame(() => {
         }
 
         if (controls == 0) {
-          pointerEvent = " pointer-events-none";
+          pointerEvent = ' pointer-events-none';
         }
         requestAnimationFrame(() => {
           const videoContainer = el.closest('.otsb-external-video');
-          videoContainer.innerHTML = `<iframe data-video-loop="${loop}" class="otsb-iframe-video absolute w-full h-full otsb-video top-1/2 -translate-y-1/2 ${ pointerEvent }"
+          videoContainer.innerHTML = `<iframe data-video-loop="${loop}" class="otsb-iframe-video absolute w-full h-full otsb-video top-1/2 -translate-y-1/2 ${pointerEvent}"
                 frameborder="0" host="${host}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen playsinline
                 src="${src}" title="${title}"></iframe>`;
 
-          videoContainer.querySelector('.otsb-iframe-video').addEventListener("load", () => {
+          videoContainer.querySelector('.otsb-iframe-video').addEventListener('load', () => {
             setTimeout(() => {
               this.play(videoContainer);
 
               if (host == 'youtube') {
                 this.ytIframeId++;
-                videoContainer.querySelector('.otsb-iframe-video').contentWindow.postMessage(JSON.stringify({
-                  event: 'listening',
-                  id: this.ytIframeId,
-                  channel: 'widget'
-                }), '*');
+                videoContainer.querySelector('.otsb-iframe-video').contentWindow.postMessage(
+                  JSON.stringify({
+                    event: 'listening',
+                    id: this.ytIframeId,
+                    channel: 'widget',
+                  }),
+                  '*'
+                );
               } else {
                 this.vimeoIframeId++;
-                videoContainer.querySelector('.otsb-iframe-video').contentWindow.postMessage(JSON.stringify({
-                  method: 'addEventListener',
-                  value: 'finish'
-                }), '*');
+                videoContainer.querySelector('.otsb-iframe-video').contentWindow.postMessage(
+                  JSON.stringify({
+                    method: 'addEventListener',
+                    value: 'finish',
+                  }),
+                  '*'
+                );
               }
             }, 100);
           });
@@ -446,19 +431,20 @@ requestAnimationFrame(() => {
       },
       renderVimeoFacade(el, id, options) {
         fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}&width=${options.width}`)
-          .then(reponse => {
+          .then((reponse) => {
             return reponse.json();
-          }).then((response) => {
-          const html = `
+          })
+          .then((response) => {
+            const html = `
                   <picture>
                     <img src="${response.thumbnail_url}" loading="lazy" class="w-full h-full object-cover" alt="${options.alt}" width="${response.width}" height="${response.height}"/>
                   </picture>
                 `;
 
-          requestAnimationFrame(() => {
-            el.innerHTML = html;
+            requestAnimationFrame(() => {
+              el.innerHTML = html;
+            });
           });
-        });
       },
       externalListen() {
         if (!this.externalListened) {
@@ -483,7 +469,7 @@ requestAnimationFrame(() => {
 
                 if (event.origin == 'https://player.vimeo.com') {
                   message = JSON.parse(event.data);
-                  if (message.event == "finish") {
+                  if (message.event == 'finish') {
                     this.play(iframe.parentNode);
                   }
                 }
@@ -496,27 +482,30 @@ requestAnimationFrame(() => {
       },
       externalPostCommand(iframe, cmd) {
         const host = iframe.getAttribute('host');
-        const command = host == 'youtube' ? {
-          "event": "command",
-          "func": cmd + "Video"
-        } : {
-          "method": cmd,
-          "value": "true"
-        };
+        const command =
+          host == 'youtube'
+            ? {
+                event: 'command',
+                func: cmd + 'Video',
+              }
+            : {
+                method: cmd,
+                value: 'true',
+              };
 
         iframe.contentWindow.postMessage(JSON.stringify(command), '*');
       },
     });
     Alpine.data('xImageComparison', (sectionId, layout) => ({
       load(e) {
-        if(layout == "horizontal") {
+        if (layout == 'horizontal') {
           this.$refs.image.style.setProperty('--compare_' + sectionId, e.target.value + '%');
         } else {
           this.$refs.image.style.setProperty('--compare_vertical_' + sectionId, 100 - e.target.value + '%');
         }
       },
       resizeWindow(el) {
-        addEventListener("resize", () => {
+        addEventListener('resize', () => {
           this.setMinMaxInput(el, layout);
         });
       },
@@ -531,38 +520,36 @@ requestAnimationFrame(() => {
       },
       setMinMaxInput(el) {
         let totalSpacing = layout == 'horizontal' ? el.offsetWidth : el.offsetHeight;
-        let spacing = ((24/totalSpacing)*100).toFixed(1);
+        let spacing = ((24 / totalSpacing) * 100).toFixed(1);
         if (spacing > 0) {
           el.min = spacing;
           el.max = 100 - spacing;
         }
-      }
+      },
     }));
-    Alpine.data("xMap", (data) => ({
+    Alpine.data('xMap', (data) => ({
       load() {
         this.$el.querySelector(
-          "iframe"
+          'iframe'
         ).src = `https://maps.google.com/maps?q=${data}&t=m&z=17&ie=UTF8&output=embed&iwloc=near`;
       },
       loadMap(location) {
         this.$el.querySelector(
-          "iframe"
+          'iframe'
         ).src = `https://maps.google.com/maps?q=${location}&t=m&z=17&ie=UTF8&output=embed&iwloc=near`;
       },
       removeMap() {
-        this.$el.querySelector(
-          "iframe"
-        ).src = ``;
-      }
+        this.$el.querySelector('iframe').src = ``;
+      },
     }));
     Alpine.data('xTruncateText', () => ({
-      truncateEl: "",
-      truncateInnerEl: "",
+      truncateEl: '',
+      truncateInnerEl: '',
       truncated: false,
       truncatable: false,
       load(truncateEl) {
         const truncateRect = truncateEl.getBoundingClientRect();
-        truncateEl.style.setProperty("--truncate-height", `${truncateRect.height}px`);
+        truncateEl.style.setProperty('--truncate-height', `${truncateRect.height}px`);
       },
       setTruncate(element) {
         if (element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth) {
@@ -582,12 +569,12 @@ requestAnimationFrame(() => {
           truncateEl.classList.remove('otsb-truncate-line-clamped');
           window.requestAnimationFrame(() => {
             const truncateInnerRect = truncateInnerEl.getBoundingClientRect();
-            truncateEl.style.setProperty("--truncate-height-expanded", `${truncateInnerRect.height}px`);
+            truncateEl.style.setProperty('--truncate-height-expanded', `${truncateInnerRect.height}px`);
             truncateEl.classList.add('otsb-truncate-expanded');
           });
           this.truncated = false;
         }
-      }
+      },
     }));
     Alpine.store('otsb_xSplide', {
       load(el, configs) {
@@ -689,45 +676,41 @@ requestAnimationFrame(() => {
           splide.mount();
         };
 
-          // if (window.otsb.components.splides[id]) return;
-          // if (window.Splide) {
-          //   initSlider();
-          //   window.otsb.components.splides[id] = true;
-          //   return;
-          // }
-          if (window?.Eurus?.sliderScript) {
-              document.addEventListener('slider loaded', () => {
-                  initSlider();
-              });
-              if (!window.Eurus.loadedScript?.includes('slider')) {
-                  deferScriptLoad('slider', window.Eurus.sliderScript, () => {}, true);
-              }
-              else if (window.Splide) {
-                  initSlider();
-              }
-              // window.otsb.components.splides[id] = true;
-              // return;
-          }
-
-          if (!window.otsb.loadedScript.includes('otsb__slider')) {
-              deferScriptLoadOTSB('otsb__slider', window.otsb.sliderScript, initSlider, true);
+        // if (window.otsb.components.splides[id]) return;
+        // if (window.Splide) {
+        //   initSlider();
+        //   window.otsb.components.splides[id] = true;
+        //   return;
+        // }
+        if (window?.Eurus?.sliderScript) {
+          document.addEventListener('slider loaded', () => {
+            initSlider();
+          });
+          if (!window.Eurus.loadedScript?.includes('slider')) {
+            deferScriptLoad('slider', window.Eurus.sliderScript, () => {}, true);
           } else if (window.Splide) {
-              initSlider();
-          } else {
-              document.addEventListener('otsb__slider-loaded', () => {
-                  initSlider();
-              });
+            initSlider();
           }
           // window.otsb.components.splides[id] = true;
+          // return;
+        }
+
+        if (!window.otsb.loadedScript.includes('otsb__slider')) {
+          deferScriptLoadOTSB('otsb__slider', window.otsb.sliderScript, initSlider, true);
+        } else if (window.Splide) {
+          initSlider();
+        } else {
+          document.addEventListener('otsb__slider-loaded', () => {
+            initSlider();
+          });
+        }
+        // window.otsb.components.splides[id] = true;
       },
       moveThumbnail(index, thumbnail, thumbsRoot, direction) {
         if (direction == 'vertical') {
           setTimeout(() => {
             thumbsRoot.scrollTop =
-              (index + 1) * thumbnail.offsetHeight -
-              thumbsRoot.offsetHeight * 0.5 +
-              thumbnail.offsetHeight * 0.5 +
-              index * 12;
+              (index + 1) * thumbnail.offsetHeight - thumbsRoot.offsetHeight * 0.5 + thumbnail.offsetHeight * 0.5 + index * 12;
           }, 50);
         } else {
           thumbsRoot.scrollLeft = (index - 2) * thumbnail.offsetWidth;
@@ -736,16 +719,16 @@ requestAnimationFrame(() => {
     });
     Alpine.data('otsb_script_require', () => {
       return {
-        init () {
+        init() {
           this.$el.remove();
-        }
+        },
       };
     });
     Alpine.data('otsb_script_1', () => {
       return {
-        init () {
+        init() {
           this.$el.classList.remove('otsb_nope');
-        }
+        },
       };
     });
   });
