@@ -933,6 +933,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .w-\[17px\]{width:17px}
 .otsb__root .w-\[1em\]{width:1em}
 .otsb__root .w-\[var\(--base-font-size\)\]{width:var(--base-font-size)}
+.otsb__root .w-auto{width:auto}
 .otsb__root .w-fit{width:-moz-fit-content;width:fit-content}
 .otsb__root .w-full{width:100%}
 .otsb__root .w-max{width:-moz-max-content;width:max-content}
