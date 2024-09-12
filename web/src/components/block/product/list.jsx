@@ -30,7 +30,7 @@ function ProductList({ items, refetch, columns, fetchNextPage }) {
       <InlineGrid columns={columns} gap='400'>
         {items.map((item, index) => (
           <div key={item.id} ref={index === items.length-1 ? ref : undefined} className='xpify-sb-section-card-root'>
-            <ProductCard item={item}/>
+            <ProductCard item={item} index={index}/>
           </div>
         ))}
         <QuickViewSlider refetch={refetch} type={'normal'} />

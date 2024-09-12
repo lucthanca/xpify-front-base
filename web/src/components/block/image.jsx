@@ -1,22 +1,27 @@
 import { Spinner } from "@shopify/polaris";
 import { memo, useCallback, useState } from "react";
 
-function LazyLoadImage({className, src, srcSet, imgSizes}) {
-  const [loadingImg, setLoadingImg] = useState(true);
+function LazyLoadImage({className, src, srcSet, imgSizes, shouldLazy}) {
+  const [loadingImg, setLoadingImg] = useState(false);
   const handleOnLoadImg = useCallback(() => {
     setLoadingImg(false);
   });
+
+  const imgAttr = {};
+  if (shouldLazy) {
+    imgAttr.loading = 'lazy';
+  }
 
   return (
     <>
       <img
         className={className}
         style={loadingImg ? {opacity: '0', position: 'absolute'} : {}}
-        loading="lazy"
         src={src}
         srcSet={srcSet}
         sizes={imgSizes}
         onLoad={handleOnLoadImg}
+        {...imgAttr}
       />
       {loadingImg &&
         <div className='w-full h-full flex justify-center items-center'>

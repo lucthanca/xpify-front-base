@@ -32,8 +32,6 @@ const customFetchToShrinkQuery = (uri, options) => {
 };
 
 export const httpLink = (uri, app) => {
-  const fetchFunction = authenticatedFetch(app);
-
   /**
    * A function that returns an auth-aware fetch function.
    * @desc The returned fetch function that matches the browser's fetch API
@@ -46,11 +44,11 @@ export const httpLink = (uri, app) => {
    */
   const authenticatedFetchToShrinkQuery = async (uri, options) => {
     const resource = options.method === 'GET' ? shrinkQuery(uri) : uri;
-    return await fetchFunction(resource, options);
+    return fetch(resource, options);
   };
 
   return createHttpLink({
-    fetch: authenticatedFetchToShrinkQuery,
+    fetch: authenticatedFetch(app, authenticatedFetchToShrinkQuery),
     useGETForQueries: true,
     uri,
   });
