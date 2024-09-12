@@ -62,7 +62,7 @@ export const useAdapter = props => {
       // await attachClient(apolloClient);
       setTimeout(() => {
         setInitialized(true);
-      }, 300)
+      }, 0);
     })();
   }, [apolloClient, initialized]);
   return {

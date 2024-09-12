@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import {
   BlockStack,
   Box,
@@ -19,10 +19,10 @@ import { BestSeller, LatestRelease } from '~/components/hompage';
 import Footer from '~/components/block/footer';
 import { Loading } from '@shopify/app-bridge-react';
 import { useFreshChat } from '~/components/providers/freshchat';
-import {onLCP, onFID, onCLS} from 'web-vitals';
-onCLS(console.log);
-onFID(console.log);
-onLCP(console.log);
+// import {onLCP, onFID, onCLS} from 'web-vitals';
+// onCLS(console.log);
+// onFID(console.log);
+// onLCP(console.log);
 
 
 function HomePage() {
@@ -33,12 +33,22 @@ function HomePage() {
   const handleRedirectSectionsPage = useRedirectSectionsPage();
   const handleRedirectGroupsPage = useRedirectGroupsPage();
   const handleRedirectMyLibraryPage = useRedirectMyLibraryPage();
+  const [loading, setLoading] = useState(false);
 
   const { open: openChat } = useFreshChat();
+  useEffect(() => {
+    const handleReauthorization = () => {
+      setLoading(true);
+    };
+    document.addEventListener('xpify:request-reauthorization', handleReauthorization);
+    return () => {
+      document.removeEventListener('xpify:request-reauthorization', handleReauthorization)
+    };
+  }, []);
 
   return (
     <>
-      {myShopLoading && <Loading />}
+      {myShopLoading || loading && <Loading />}
       <Page title="Welcome to Omni Themes: Theme Sections!">
         <Layout>
           <Layout.Section>
@@ -69,22 +79,22 @@ function HomePage() {
                     <NavCard
                       title='Sections'
                       content='Select your missing parts to complete your store!'
-                      actions={<Button onClick={handleRedirectSectionsPage}>Browse Sections</Button>}
+                      actions={<Button disabled={loading} onClick={handleRedirectSectionsPage}>Browse Sections</Button>}
                     />
                     <NavCard
                       title='Groups'
                       content="Don't know where to start? Select a whole pack of solution for your store!"
-                      actions={<Button onClick={handleRedirectGroupsPage}>Browse Groups</Button>}
+                      actions={<Button disabled={loading} onClick={handleRedirectGroupsPage}>Browse Groups</Button>}
                     />
                     <NavCard
                       title='My Library'
                       content='All your added sections in one place, ready to tailor your store.'
-                      actions={<Button onClick={handleRedirectMyLibraryPage}>Open My Library</Button>}
+                      actions={<Button disabled={loading} onClick={handleRedirectMyLibraryPage}>Open My Library</Button>}
                     />
                     <NavCard
                       title='Support'
                       content='Need a helping hand? Check our FAQs or chat directly with our support agents for quick and friendly support.'
-                      actions={<Button onClick={openChat}>Open live chat</Button>}
+                      actions={<Button disabled={loading} onClick={openChat}>Open live chat</Button>}
                     />
                   </InlineGrid>
                 </BlockStack>

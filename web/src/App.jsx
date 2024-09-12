@@ -1,7 +1,10 @@
 import NavigationMenu from "~/components/Navigation";
 import Routes from "~/Routes";
-import AuthProvider from "~/context/auth";
-import { EnsureInstalledProvider, FreshChat } from "~/components/providers";
+// import AuthProvider from "~/context/auth";
+import {
+  // EnsureInstalledProvider,
+  FreshChat,
+} from "~/components/providers";
 import { useEffect } from 'react';
 import { logAllInteractions } from '~/utils/onInteraction';
 
@@ -14,13 +17,13 @@ export default function App() {
     logAllInteractions();
   }, [])
   return (
-    <AuthProvider>
-      <EnsureInstalledProvider>
+    // <AuthProvider>
+    //   <EnsureInstalledProvider>
         <FreshChat>
           <NavigationMenu />
           <Routes pages={pages} />
         </FreshChat>
-      </EnsureInstalledProvider>
-    </AuthProvider>
+    //   </EnsureInstalledProvider>
+    // </AuthProvider>
   );
 }
