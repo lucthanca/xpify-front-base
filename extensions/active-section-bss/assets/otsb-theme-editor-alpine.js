@@ -132,7 +132,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             )
               return
 
-            // if (data.name == 'popup-promotion' && document.querySelector("#x-age-popup") && xParseJSONOTSB(localStorage.getItem('popup-age-verification')) == null) {
+            // if (data.name == 'popup-age-verification' && document.querySelector("#x-age-popup") && xParseJSONOTSB(localStorage.getItem(data.name + '-' + data.sectionId)) == null) {
             //   document.addEventListener("close-age-verification", () => {
             //     setTimeout(() => {
             //       _this.open();
