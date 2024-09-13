@@ -12,6 +12,13 @@ function BannerDefault({bannerAlert, setBannerAlert, noDismiss }) {
   const handleDismiss = useCallback(() => {
     setBannerAlert && setBannerAlert(undefined);
   }, [setBannerAlert]);
+  if (bannerAlert?.embedAppUrl) {
+    return (
+      <Banner onDismiss={noDismiss ? undefined : handleDismiss} tone='warning'>
+        <Text as={'span'}>Enable to allow OT: Theme Sections work on your theme. Go to <Link url={bannerAlert.embedAppUrl}>App Embeds</Link> then enable "Section Builder Script" and "Section Builder Style", make "Save" in your theme editor.</Text>
+      </Banner>
+    );
+  }
   return (
     bannerAlert &&
     <Banner {...bannerAlert} onDismiss={noDismiss ? undefined : handleDismiss}>

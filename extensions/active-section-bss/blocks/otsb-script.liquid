@@ -1,7 +1,4 @@
-{%- if request.design_mode -%}
-  <script src="{{ 'otsb-theme-editor-alpine.js' | asset_url }}" defer></script>
-{%- endif -%}
-<script src="{{ 'otsb-script.js' | asset_url }}" defer></script>
+<script src="{{ 'otsb-vendors.js' | asset_url }}" defer></script>
 <div class="otsb__root">
   <div id="otsb-popup-exit-intent" x-data x-cloak></div>
   <div id="otsb-popup-minimal-left"></div>
