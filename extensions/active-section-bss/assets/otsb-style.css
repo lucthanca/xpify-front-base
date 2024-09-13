@@ -741,7 +741,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .pointer-events-none{pointer-events:none}
 .otsb__root .pointer-events-auto{pointer-events:auto}
 .otsb__root .visible{visibility:visible}
-.otsb__root .collapse{visibility:collapse}
 .otsb__root .static{position:static}
 .otsb__root .fixed{position:fixed}
 .otsb__root .absolute{position:absolute}

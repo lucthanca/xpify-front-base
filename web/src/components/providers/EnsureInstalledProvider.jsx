@@ -6,7 +6,7 @@ import { ShopifyLoadingFull } from '~/components/adapter/index.jsx';
 import { Banner, Layout, Page } from '@shopify/polaris';
 
 const EnsureInstalled = ({ children }) => {
-  const [{ redirectQuery, hasInstalled, loading, error, dataVersion }] = useAuthContext();
+  const [{ redirectQuery, hasInstalled, loading, error }] = useAuthContext();
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();

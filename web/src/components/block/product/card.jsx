@@ -70,7 +70,7 @@ const InstallButton = props => {
   );
 };
 
-function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) / 4), (min-width: 768px) calc((100vw - 2rem) / 2), 100vw"}) {
+function ProductCard({index, item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) / 4), (min-width: 768px) calc((100vw - 2rem) / 2), 100vw"}) {
   const [showConnect, setShowConnect] = useState(false);
   const toggleModal = useCallback(() => setShowConnect((showConnect) => !showConnect), []);
   const handleRedirectProductPage = useRedirectSectionPage();
@@ -94,7 +94,7 @@ function ProductCard({item, imgSizes = "(min-width: 1024px) calc((100vw - 4rem) 
   return (
     <Card padding='0' background="bg-surface-secondary" className="h-full">
       <div className='cursor-pointer aspect-[16/9]' onClick={() => handleRedirect(item)}>
-        <LazyLoadImage className={"object-cover w-full max-h-full"} src={ item?.images[0]?.src } srcSet={ item?.images[0]?.srcset } imgSizes={imgSizes} />
+        <LazyLoadImage shouldLazy={index >= 4} className={"object-cover w-full max-h-full"} src={ item?.images[0]?.src } srcSet={ item?.images[0]?.srcset } imgSizes={imgSizes} />
       </div>
 
       <Box padding={400}>

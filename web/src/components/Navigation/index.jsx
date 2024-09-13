@@ -1,10 +1,11 @@
-import { memo, useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { NavigationMenu, useAppBridge } from '@shopify/app-bridge-react';
 import { useNavigationLinks } from '~/components/Navigation/links';
 import { Redirect } from '@shopify/app-bridge/actions';
 
 const Nav = () => {
   const links = useNavigationLinks();
+  const [stateLinks, setStateLinks] = useState(links);
   const matcher = useCallback((link, location) => link.destination === location.pathname, []);
   const app = useAppBridge();
   const scrollToTop = () => {
@@ -20,7 +21,17 @@ const Nav = () => {
       window.scrollTo(0, 0);
     });
   }, []);
-  return <NavigationMenu navigationLinks={links} matcher={matcher} />;
+
+  useEffect(() => {
+    const removeNavs = () => {
+      setStateLinks([]);
+    };
+    document.addEventListener('xpify:request-reauthorization', removeNavs);
+    return () => {
+      document.removeEventListener('xpify:request-reauthorization', removeNavs)
+    };
+  }, []);
+  return <NavigationMenu navigationLinks={stateLinks} matcher={matcher} />;
 };
 
 export default memo(Nav);

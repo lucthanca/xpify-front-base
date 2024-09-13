@@ -17,6 +17,7 @@ export const checkForReauthorizationLink = (app) => {
           if (!authUrlHeader) {
             return;
           }
+          document.dispatchEvent(new CustomEvent('xpify:request-reauthorization'));
           const decodedAuthUrlHeader = decodeURIComponent(authUrlHeader);
           redirect.dispatch(
             Redirect.Action.REMOTE,
