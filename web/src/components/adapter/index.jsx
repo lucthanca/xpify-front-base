@@ -20,8 +20,15 @@ export const ShopifyLoadingFull = () => {
 const Adapter = props => {
   const talonProps = useAdapter(props);
   const { client, initialized } = talonProps;
-  if (!initialized || !props.domain)
+  const loadingScreen = document.getElementById('otsb-app-loading');
+  if (!initialized || !props.domain) {
+    if (loadingScreen) return null;
     return <ShopifyLoadingFull />
+    }
+
+  if (loadingScreen) {
+    loadingScreen.remove();
+  }
   return (
     <ApolloProvider client={client}>
       <App />

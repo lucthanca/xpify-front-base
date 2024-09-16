@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="shopify-debug" content="web-vitals" />
+  <meta name="shopify-api-key" content="04c480ae1b7a9b83e2fbab2cc8639b01" />
+  <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="module">
+    if (!import.meta.env || !import.meta.env.PROD) {
+      // Because the base HTML is rendered in the server side, we need to manually embed the code to enable HMR in our
+      // code, so that the vite server is properly enabled to run HMR
+      const script = document.createElement('script');
+      script.setAttribute('type', "module");
+      const origin = window.location.origin;
+      script.setAttribute('src', `${origin}/dev_embed.js`);
+      document.getElementsByTagName('head')[0].append(script);
+    }
+  </script>
+  <script type='text/javascript'>
+    setTimeout(() => {
+      window.smartlook||(function(d) {
+        var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
+        var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
+        c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
+      })(document);
+      smartlook('init', 'f0d793b8e3f09b6bd0eb4ef0000ad14231242913', { region: 'eu' });
+    }, 3000);
+  </script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/splidejs/4.1.4/css/splide.min.css"
+  >
+  <style>
+    #otsb-app-loading {
+      --otsb-skeleton-bg-color: #e3e3e3;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 99999;
+    }
+    #otsb-app-loading * {
+      border-width: 0;
+      box-sizing: border-box;
+      border-style: solid;
+      border-color: #e5e7eb;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+    #otsb-app-loading .otsb-page {
+      margin: 0 auto;
+      padding: 0;
+      max-width: 62.375rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      @media (min-width: 30.625em) {
+        padding: 0 1.5rem;
+      }
+    }
+    #otsb-app-loading .otsb_title_skeleton {
+      min-height: 28px;
+      padding: 24px 0;
+      width: 100%;
+    }
+    #otsb-app-loading .otsb_skeleton_box {
+      background: #fff;
+      border-radius: 0.75rem;
+      box-shadow: 0 0.0625rem 0 0 rgba(26,26,26,.07);
+      overflow: clip;
+      outline: 0.0625rem solid transparent;
+      position: relative;
+    }
+    #otsb-app-loading .otsb_skeleton_box:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 101;
+      box-shadow: 0.0625rem 0rem 0rem 0rem rgba(0,0,0,.13) inset,-0.0625rem 0rem 0rem 0rem rgba(0,0,0,.13) inset,0rem -0.0625rem 0rem 0rem rgba(0,0,0,.17) inset,0rem 0.0625rem 0rem 0rem hsla(0,0%,80%,.5) inset;
+      border-radius: 0.75rem;
+      pointer-events: none;
+      mix-blend-mode: luminosity;
+    }
+    #otsb-app-loading .otsb_skeleton_box_section {
+      border-radius: 0.75rem;
+      padding: 1rem;
+    }
+    #otsb-app-loading .otsb_skeleton_text_container {
+      width: 100%;
+    }
+    #otsb-app-loading .otsb_skeleton_text {
+      height: 0.5rem;
+      display: flex;
+      background: var(--otsb-skeleton-bg-color);
+      border-radius: 0.25rem;
+    }
+    #otsb-app-loading .otsb_skeleton_text:last-child:not(:first-child) {
+      width: 80%;
+    }
+    .otsb_skeleton_text+.otsb_skeleton_text,
+    .otsb_skeleton_box_title+.otsb_skeleton_text_container,
+    .otsb_skeleton_text_container+.otsb_skeleton_box_bottom {
+      margin-top: 1rem;
+    }
+    .otsb_skeleton_box_title, .otsb_skeleton_box_button {
+      height: 28px;
+      border-radius: 0.25rem;
+      display: flex;
+      background: var(--otsb-skeleton-bg-color);
+      width: 10%;
+    }
+    #otsb-app-loading p {
+      font-size: 13px;
+      line-height: 20px;
+      font-weight: 450;
+      margin: 0;
+      max-height: 20px;
+      display: flex;
+    }
+    .dotted-icon1 > circle { display: none; }
+    .dotted-icon1:hover > circle {
+      display: block;
+    }
+  </style>
+  <script type="module">
+    import { onLCP } from 'web-vitals';
+
+    onLCP((metric) => {
+      console.log(metric);
+    });
+  </script>
+</head>
+<body>
+<div id="otsb-app-loading">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      height: 100%;
+    }
+  </style>
+  <div class="otsb-page">
+    <div class="otsb_title_skeleton">
+      <div class="otsb_skeleton" style="letter-spacing:-0.0125rem;color:rgb(48,48,48);border-radius:0.25rem;width:45%;height:28px;line-height:28px;font-size:1.25rem;font-weight:700">
+        <span style="display: inline">Welcome to Omni Themes: Theme Sections!</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:24px">
+      <!--        <div class="Polaris-Box"><div class="Polaris-ShadowBevel" style="&#45;&#45;pc-shadow-bevel-z-index: 32; &#45;&#45;pc-shadow-bevel-content-xs: &quot;&quot;; &#45;&#45;pc-shadow-bevel-box-shadow-xs: var(&#45;&#45;p-shadow-100); &#45;&#45;pc-shadow-bevel-border-radius-xs: var(&#45;&#45;p-border-radius-300);"><div class="Polaris-Box" style="&#45;&#45;pc-box-background: var(&#45;&#45;p-color-bg-surface); &#45;&#45;pc-box-min-height: 100%; &#45;&#45;pc-box-overflow-x: clip; &#45;&#45;pc-box-overflow-y: clip; &#45;&#45;pc-box-padding-block-start-xs: var(&#45;&#45;p-space-400); &#45;&#45;pc-box-padding-block-end-xs: var(&#45;&#45;p-space-400); &#45;&#45;pc-box-padding-inline-start-xs: var(&#45;&#45;p-space-400); &#45;&#45;pc-box-padding-inline-end-xs: var(&#45;&#45;p-space-400);"><div class="Polaris-BlockStack" style="&#45;&#45;pc-block-stack-order: column; &#45;&#45;pc-block-stack-gap-xs: var(&#45;&#45;p-space-200);"><p class="Polaris-Text&#45;&#45;root Polaris-Text&#45;&#45;bodyMd">Hi X DũngHv, welcome to our fresh batch of sections to jazz up your Shopify theme!</p><p class="Polaris-Text&#45;&#45;root Polaris-Text&#45;&#45;bodyMd">Once you've got these installed, just hop into the theme editor, and keep an eye out for 'OT' in the search box.</p><p class="Polaris-Text&#45;&#45;root Polaris-Text&#45;&#45;bodyMd">Happy customizing!</p></div></div></div></div>-->
+      <div class="otsb_skeleton_box">
+        <div class="otsb_skeleton_box_section">
+          <div class="otsb_skeleton_text_container" style="display: flex;flex-direction: column;gap: 0.5rem;color:rgb(48,48,48);">
+            <p>Hi&nbsp;<span style="display: inline-flex;width:5rem;min-height: 20px;border-radius:0.25rem;background: var(--otsb-skeleton-bg-color)"></span> , welcome to our fresh batch of sections to jazz up your Shopify theme!</p>
+            <p>Once you've got these installed, just hop into the theme editor, and keep an eye out for 'OT' in the search box.</p>
+            <p>Happy customizing!</p>
+            <!--              <div class="otsb_skeleton_text"></div>-->
+            <!--              <div class="otsb_skeleton_text"></div>-->
+            <!--              <div class="otsb_skeleton_text"></div>-->
+          </div>
+        </div>
+      </div>
+      <div class="otsb_skeleton_box">
+        <div class="otsb_skeleton_box_section" style="display: flex;flex-direction: column;padding: 0">
+          <div style="padding:1rem;padding-bottom: 0.5rem;display: flex;gap:0.5rem;flex-direction: column">
+            <h2 class="otsb_skeleton_box_title" style="background: transparent;font-size: 0.875rem;font-weight: 650;line-height: 1.25rem;margin:0;padding:0;height:20px;">Setup guide</h2>
+            <div class="otsb_skeleton_text_container" style="margin: 0;">
+              <p class="otsb_skeleton_text" style="background: transparent;height: 20px;line-height: 20px;">Use this guide to start customizing your Shopify theme with fresh sections and quickly enhance your store's UI/UX.</p>
+            </div>
+            <div class="otsb_skeleton_step">
+              <div style="border: 0.0625rem solid rgba(227,227,227,1);border-radius: 0.5rem;display: inline-flex;padding:0 0.5rem;">
+                <p>0 / 3 completed</p>
+              </div>
+            </div>
+          </div>
+          <div class="otsb_skeleton_box_bottom" style="display:flex;margin: 0;flex-direction: column;padding:0.5rem;padding-top:0;">
+            <div style="display: flex;gap: 0.75rem;padding:0.5rem;height: 44px">
+                <span>
+                  <svg style="display: block;" viewBox="2 2 20 20" width="20" height="20" class="dotted-icon1"><path fill-rule="evenodd" d="M10.5334 2.10692C11.0126 2.03643 11.5024 2 12 2C12.4976 2 12.9874 2.03643 13.4666 2.10692C14.013 2.18729 14.3908 2.6954 14.3104 3.2418C14.23 3.78821 13.7219 4.166 13.1755 4.08563C12.7924 4.02927 12.3999 4 12 4C11.6001 4 11.2076 4.02927 10.8245 4.08563C10.2781 4.166 9.76995 3.78821 9.68958 3.2418C9.6092 2.6954 9.987 2.18729 10.5334 2.10692ZM7.44122 4.17428C7.77056 4.61763 7.67814 5.24401 7.23479 5.57335C6.603 6.04267 6.04267 6.603 5.57335 7.23479C5.24401 7.67814 4.61763 7.77056 4.17428 7.44122C3.73094 7.11188 3.63852 6.4855 3.96785 6.04216C4.55386 5.25329 5.25329 4.55386 6.04216 3.96785C6.4855 3.63852 7.11188 3.73094 7.44122 4.17428ZM16.5588 4.17428C16.8881 3.73094 17.5145 3.63852 17.9578 3.96785C18.7467 4.55386 19.4461 5.25329 20.0321 6.04216C20.3615 6.4855 20.2691 7.11188 19.8257 7.44122C19.3824 7.77056 18.756 7.67814 18.4267 7.23479C17.9573 6.603 17.397 6.04267 16.7652 5.57335C16.3219 5.24401 16.2294 4.61763 16.5588 4.17428ZM3.2418 9.68958C3.78821 9.76995 4.166 10.2781 4.08563 10.8245C4.02927 11.2076 4 11.6001 4 12C4 12.3999 4.02927 12.7924 4.08563 13.1755C4.166 13.7219 3.78821 14.23 3.2418 14.3104C2.6954 14.3908 2.18729 14.013 2.10692 13.4666C2.03643 12.9874 2 12.4976 2 12C2 11.5024 2.03643 11.0126 2.10692 10.5334C2.18729 9.987 2.6954 9.6092 3.2418 9.68958ZM20.7582 9.68958C21.3046 9.6092 21.8127 9.987 21.8931 10.5334C21.9636 11.0126 22 11.5024 22 12C22 12.4976 21.9636 12.9874 21.8931 13.4666C21.8127 14.013 21.3046 14.3908 20.7582 14.3104C20.2118 14.23 19.834 13.7219 19.9144 13.1755C19.9707 12.7924 20 12.3999 20 12C20 11.6001 19.9707 11.2076 19.9144 10.8245C19.834 10.2781 20.2118 9.76995 20.7582 9.68958ZM4.17428 16.5588C4.61763 16.2294 5.24401 16.3219 5.57335 16.7652C6.04267 17.397 6.603 17.9573 7.23479 18.4267C7.67814 18.756 7.77056 19.3824 7.44122 19.8257C7.11188 20.2691 6.4855 20.3615 6.04216 20.0321C5.25329 19.4461 4.55386 18.7467 3.96785 17.9578C3.63852 17.5145 3.73094 16.8881 4.17428 16.5588ZM19.8257 16.5588C20.2691 16.8881 20.3615 17.5145 20.0321 17.9578C19.4461 18.7467 18.7467 19.4461 17.9578 20.0321C17.5145 20.3615 16.8881 20.2691 16.5588 19.8257C16.2294 19.3824 16.3219 18.756 16.7652 18.4267C17.397 17.9573 17.9573 17.397 18.4267 16.7652C18.756 16.3219 19.3824 16.2294 19.8257 16.5588ZM9.68958 20.7582C9.76995 20.2118 10.2781 19.834 10.8245 19.9144C11.2076 19.9707 11.6001 20 12 20C12.3999 20 12.7924 19.9707 13.1755 19.9144C13.7219 19.834 14.23 20.2118 14.3104 20.7582C14.3908 21.3046 14.013 21.8127 13.4666 21.8931C12.9874 21.9636 12.4976 22 12 22C11.5024 22 11.0126 21.9636 10.5334 21.8931C9.987 21.8127 9.6092 21.3046 9.68958 20.7582Z" fill="#8a8a8a"></path><circle fill="none" cx="12" cy="12" r="9" stroke-width="2" stroke="#8a8a8a"></circle></svg>
+                </span>
+              <p>Enable the app embed in theme editor</p>
+            </div>
+            <div style="display: flex;gap: 0.75rem;padding:0.5rem;height: 44px">
+                <span>
+                  <svg style="display: block;" viewBox="2 2 20 20" width="20" height="20" class="dotted-icon1"><path fill-rule="evenodd" d="M10.5334 2.10692C11.0126 2.03643 11.5024 2 12 2C12.4976 2 12.9874 2.03643 13.4666 2.10692C14.013 2.18729 14.3908 2.6954 14.3104 3.2418C14.23 3.78821 13.7219 4.166 13.1755 4.08563C12.7924 4.02927 12.3999 4 12 4C11.6001 4 11.2076 4.02927 10.8245 4.08563C10.2781 4.166 9.76995 3.78821 9.68958 3.2418C9.6092 2.6954 9.987 2.18729 10.5334 2.10692ZM7.44122 4.17428C7.77056 4.61763 7.67814 5.24401 7.23479 5.57335C6.603 6.04267 6.04267 6.603 5.57335 7.23479C5.24401 7.67814 4.61763 7.77056 4.17428 7.44122C3.73094 7.11188 3.63852 6.4855 3.96785 6.04216C4.55386 5.25329 5.25329 4.55386 6.04216 3.96785C6.4855 3.63852 7.11188 3.73094 7.44122 4.17428ZM16.5588 4.17428C16.8881 3.73094 17.5145 3.63852 17.9578 3.96785C18.7467 4.55386 19.4461 5.25329 20.0321 6.04216C20.3615 6.4855 20.2691 7.11188 19.8257 7.44122C19.3824 7.77056 18.756 7.67814 18.4267 7.23479C17.9573 6.603 17.397 6.04267 16.7652 5.57335C16.3219 5.24401 16.2294 4.61763 16.5588 4.17428ZM3.2418 9.68958C3.78821 9.76995 4.166 10.2781 4.08563 10.8245C4.02927 11.2076 4 11.6001 4 12C4 12.3999 4.02927 12.7924 4.08563 13.1755C4.166 13.7219 3.78821 14.23 3.2418 14.3104C2.6954 14.3908 2.18729 14.013 2.10692 13.4666C2.03643 12.9874 2 12.4976 2 12C2 11.5024 2.03643 11.0126 2.10692 10.5334C2.18729 9.987 2.6954 9.6092 3.2418 9.68958ZM20.7582 9.68958C21.3046 9.6092 21.8127 9.987 21.8931 10.5334C21.9636 11.0126 22 11.5024 22 12C22 12.4976 21.9636 12.9874 21.8931 13.4666C21.8127 14.013 21.3046 14.3908 20.7582 14.3104C20.2118 14.23 19.834 13.7219 19.9144 13.1755C19.9707 12.7924 20 12.3999 20 12C20 11.6001 19.9707 11.2076 19.9144 10.8245C19.834 10.2781 20.2118 9.76995 20.7582 9.68958ZM4.17428 16.5588C4.61763 16.2294 5.24401 16.3219 5.57335 16.7652C6.04267 17.397 6.603 17.9573 7.23479 18.4267C7.67814 18.756 7.77056 19.3824 7.44122 19.8257C7.11188 20.2691 6.4855 20.3615 6.04216 20.0321C5.25329 19.4461 4.55386 18.7467 3.96785 17.9578C3.63852 17.5145 3.73094 16.8881 4.17428 16.5588ZM19.8257 16.5588C20.2691 16.8881 20.3615 17.5145 20.0321 17.9578C19.4461 18.7467 18.7467 19.4461 17.9578 20.0321C17.5145 20.3615 16.8881 20.2691 16.5588 19.8257C16.2294 19.3824 16.3219 18.756 16.7652 18.4267C17.397 17.9573 17.9573 17.397 18.4267 16.7652C18.756 16.3219 19.3824 16.2294 19.8257 16.5588ZM9.68958 20.7582C9.76995 20.2118 10.2781 19.834 10.8245 19.9144C11.2076 19.9707 11.6001 20 12 20C12.3999 20 12.7924 19.9707 13.1755 19.9144C13.7219 19.834 14.23 20.2118 14.3104 20.7582C14.3908 21.3046 14.013 21.8127 13.4666 21.8931C12.9874 21.9636 12.4976 22 12 22C11.5024 22 11.0126 21.9636 10.5334 21.8931C9.987 21.8127 9.6092 21.3046 9.68958 20.7582Z" fill="#8a8a8a"></path><circle fill="none" cx="12" cy="12" r="9" stroke-width="2" stroke="#8a8a8a"></circle></svg>
+                </span>
+              <p>Install sections to theme</p>
+            </div>
+            <div style="display: flex;gap: 0.75rem;padding:0.5rem;height: 44px">
+                <span>
+                  <svg style="display: block;" viewBox="2 2 20 20" width="20" height="20" class="dotted-icon1"><path fill-rule="evenodd" d="M10.5334 2.10692C11.0126 2.03643 11.5024 2 12 2C12.4976 2 12.9874 2.03643 13.4666 2.10692C14.013 2.18729 14.3908 2.6954 14.3104 3.2418C14.23 3.78821 13.7219 4.166 13.1755 4.08563C12.7924 4.02927 12.3999 4 12 4C11.6001 4 11.2076 4.02927 10.8245 4.08563C10.2781 4.166 9.76995 3.78821 9.68958 3.2418C9.6092 2.6954 9.987 2.18729 10.5334 2.10692ZM7.44122 4.17428C7.77056 4.61763 7.67814 5.24401 7.23479 5.57335C6.603 6.04267 6.04267 6.603 5.57335 7.23479C5.24401 7.67814 4.61763 7.77056 4.17428 7.44122C3.73094 7.11188 3.63852 6.4855 3.96785 6.04216C4.55386 5.25329 5.25329 4.55386 6.04216 3.96785C6.4855 3.63852 7.11188 3.73094 7.44122 4.17428ZM16.5588 4.17428C16.8881 3.73094 17.5145 3.63852 17.9578 3.96785C18.7467 4.55386 19.4461 5.25329 20.0321 6.04216C20.3615 6.4855 20.2691 7.11188 19.8257 7.44122C19.3824 7.77056 18.756 7.67814 18.4267 7.23479C17.9573 6.603 17.397 6.04267 16.7652 5.57335C16.3219 5.24401 16.2294 4.61763 16.5588 4.17428ZM3.2418 9.68958C3.78821 9.76995 4.166 10.2781 4.08563 10.8245C4.02927 11.2076 4 11.6001 4 12C4 12.3999 4.02927 12.7924 4.08563 13.1755C4.166 13.7219 3.78821 14.23 3.2418 14.3104C2.6954 14.3908 2.18729 14.013 2.10692 13.4666C2.03643 12.9874 2 12.4976 2 12C2 11.5024 2.03643 11.0126 2.10692 10.5334C2.18729 9.987 2.6954 9.6092 3.2418 9.68958ZM20.7582 9.68958C21.3046 9.6092 21.8127 9.987 21.8931 10.5334C21.9636 11.0126 22 11.5024 22 12C22 12.4976 21.9636 12.9874 21.8931 13.4666C21.8127 14.013 21.3046 14.3908 20.7582 14.3104C20.2118 14.23 19.834 13.7219 19.9144 13.1755C19.9707 12.7924 20 12.3999 20 12C20 11.6001 19.9707 11.2076 19.9144 10.8245C19.834 10.2781 20.2118 9.76995 20.7582 9.68958ZM4.17428 16.5588C4.61763 16.2294 5.24401 16.3219 5.57335 16.7652C6.04267 17.397 6.603 17.9573 7.23479 18.4267C7.67814 18.756 7.77056 19.3824 7.44122 19.8257C7.11188 20.2691 6.4855 20.3615 6.04216 20.0321C5.25329 19.4461 4.55386 18.7467 3.96785 17.9578C3.63852 17.5145 3.73094 16.8881 4.17428 16.5588ZM19.8257 16.5588C20.2691 16.8881 20.3615 17.5145 20.0321 17.9578C19.4461 18.7467 18.7467 19.4461 17.9578 20.0321C17.5145 20.3615 16.8881 20.2691 16.5588 19.8257C16.2294 19.3824 16.3219 18.756 16.7652 18.4267C17.397 17.9573 17.9573 17.397 18.4267 16.7652C18.756 16.3219 19.3824 16.2294 19.8257 16.5588ZM9.68958 20.7582C9.76995 20.2118 10.2781 19.834 10.8245 19.9144C11.2076 19.9707 11.6001 20 12 20C12.3999 20 12.7924 19.9707 13.1755 19.9144C13.7219 19.834 14.23 20.2118 14.3104 20.7582C14.3908 21.3046 14.013 21.8127 13.4666 21.8931C12.9874 21.9636 12.4976 22 12 22C11.5024 22 11.0126 21.9636 10.5334 21.8931C9.987 21.8127 9.6092 21.3046 9.68958 20.7582Z" fill="#8a8a8a"></path><circle fill="none" cx="12" cy="12" r="9" stroke-width="2" stroke="#8a8a8a"></circle></svg>
+                </span>
+              <p>Customize themes with the added sections</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--        <div class="otsb_skeleton_box">-->
+      <!--          <div class="otsb_skeleton_box_section">-->
+      <!--            <div class="otsb_skeleton_box_title"></div>-->
+      <!--            <div class="otsb_skeleton_text_container">-->
+      <!--              <div class="otsb_skeleton_text"></div>-->
+      <!--              <div class="otsb_skeleton_text"></div>-->
+      <!--              <div class="otsb_skeleton_text"></div>-->
+      <!--              <div class="otsb_skeleton_text"></div>-->
+      <!--              <div class="otsb_skeleton_text"></div>-->
+      <!--              <div class="otsb_skeleton_text"></div>-->
+      <!--              <div class="otsb_skeleton_text"></div>-->
+      <!--              <div class="otsb_skeleton_text"></div>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <div class="otsb_skeleton_box">
+        <div class="otsb_skeleton_box_section" style="display: flex;flex-direction: column;gap:0.5rem;">
+          <h2 class="otsb_skeleton_box_title" style="background: transparent;font-size: 0.875rem;font-weight: 650;line-height: 1.25rem;margin:0;padding:0;height:20px;">Support</h2>
+          <div class="otsb_skeleton_text_container" style="margin: 0;">
+            <p class="otsb_skeleton_text" style="background: transparent;height: 20px;line-height: 20px;">Need a helping hand? Check our FAQs or chat directly with our support agents for quick and friendly support.</p>
+          </div>
+          <div class="otsb_skeleton_box_bottom" style="display:flex;margin: 0">
+            <div class="otsb_skeleton_box_button" style="width:10%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="app"></div>
+
+<script type="module">
+  setTimeout(() => {
+    import('/index.jsx').then(module => {
+      module.default();
+    }).catch(err => console.log(err));
+  }, 0);
+</script>
+</body>
+</html>

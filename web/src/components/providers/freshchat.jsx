@@ -1,14 +1,14 @@
-import { createContext, memo, useCallback, useContext, useEffect, useMemo } from 'react';
+import { createContext, useState, useCallback, useContext, useEffect, useMemo } from 'react';
 function initialize(){
   window.$crisp=[];
   window.CRISP_WEBSITE_ID="5e366ec4-30b5-4074-abce-ef95ae74b337";
   (function(){ var d=document; var s=d.createElement("script"); s.src="https://client.crisp.chat/l.js"; s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
 }
-function initiateCall(){initialize()}
 
 const FreshChatContext = createContext(undefined);
 
 const FreshChatProvider = props => {
+  const [initialized, setInitialized] = useState(false);
   const open = useCallback(() => {
     $crisp.push(['do', 'chat:open']);
   }, []);
@@ -17,10 +17,17 @@ const FreshChatProvider = props => {
   }, []);
 
   const api = useMemo(() => {
-    return { open, close };
-  }, [open]);
+    return { open, close, initialized };
+  }, [open, initialized, close]);
   useEffect(() => {
-    initiateCall();
+    const timeout = setTimeout(() => {
+      initialize();
+      setInitialized(true);
+    }, 3000);
+
+    return () => {
+      timeout && clearTimeout(timeout);
+    }
   }, []);
 
   return (
