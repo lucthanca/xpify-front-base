@@ -3,9 +3,6 @@ import { memo, useCallback, useState } from "react";
 
 function LazyLoadImage({className, src, srcSet, imgSizes, shouldLazy}) {
   const [loadingImg, setLoadingImg] = useState(false);
-  const handleOnLoadImg = useCallback(() => {
-    setLoadingImg(false);
-  });
 
   const imgAttr = {};
   if (shouldLazy) {
@@ -20,7 +17,7 @@ function LazyLoadImage({className, src, srcSet, imgSizes, shouldLazy}) {
         src={src}
         srcSet={srcSet}
         sizes={imgSizes}
-        onLoad={handleOnLoadImg}
+        onLoad={() => setLoadingImg(false)}
         {...imgAttr}
       />
       {loadingImg &&
