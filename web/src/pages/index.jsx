@@ -10,32 +10,26 @@ import {
   Text
 } from "@shopify/polaris";
 import GuideCard from '~/components/block/card/guide';
-import TitleBlock from '~/components/block/title';
 import NavCard from '~/components/block/card/nav';
-import { useRedirectGroupsPage, useRedirectHelpCenterPage, useRedirectMyLibraryPage, useRedirectSectionsPage } from '~/hooks/section-builder/redirect';
 import { useQuery } from "@apollo/client";
 import { MY_SHOP } from '~/queries/section-builder/other.gql';
-import { BestSeller, LatestRelease } from '~/components/hompage';
 import Footer from '~/components/block/footer';
 import { Loading } from '@shopify/app-bridge-react';
 import { useFreshChat } from '~/components/providers/freshchat';
-// import {onLCP, onFID, onCLS} from 'web-vitals';
-// onCLS(console.log);
-// onFID(console.log);
-// onLCP(console.log);
-
+// import { BestSeller, LatestRelease } from '~/components/hompage';
+// import { useRedirectGroupsPage, useRedirectMyLibraryPage, useRedirectSectionsPage } from '~/hooks/section-builder/redirect';
 
 function HomePage() {
   const { data: myShop, loading: myShopLoading } = useQuery(MY_SHOP, {
     fetchPolicy: "cache-and-network",
   });
 
-  const handleRedirectSectionsPage = useRedirectSectionsPage();
-  const handleRedirectGroupsPage = useRedirectGroupsPage();
-  const handleRedirectMyLibraryPage = useRedirectMyLibraryPage();
+  // const handleRedirectSectionsPage = useRedirectSectionsPage();
+  // const handleRedirectGroupsPage = useRedirectGroupsPage();
+  // const handleRedirectMyLibraryPage = useRedirectMyLibraryPage();
   const [loading, setLoading] = useState(false);
 
-  const { open: openChat } = useFreshChat();
+  const { open: openChat, initialized: freshchatInitialized } = useFreshChat();
   useEffect(() => {
     const handleReauthorization = () => {
       setLoading(true);
@@ -75,33 +69,18 @@ function HomePage() {
 
               <Box>
                 <BlockStack gap={400}>
-                  <InlineGrid gap="400" columns={{ xs: 1, sm: 2 }}>
-                    <NavCard
-                      title='Sections'
-                      content='Select your missing parts to complete your store!'
-                      actions={<Button disabled={loading} onClick={handleRedirectSectionsPage}>Browse Sections</Button>}
-                    />
-                    <NavCard
-                      title='Groups'
-                      content="Don't know where to start? Select a whole pack of solution for your store!"
-                      actions={<Button disabled={loading} onClick={handleRedirectGroupsPage}>Browse Groups</Button>}
-                    />
-                    <NavCard
-                      title='My Library'
-                      content='All your added sections in one place, ready to tailor your store.'
-                      actions={<Button disabled={loading} onClick={handleRedirectMyLibraryPage}>Open My Library</Button>}
-                    />
+                  <InlineGrid gap="400" columns="1">
                     <NavCard
                       title='Support'
                       content='Need a helping hand? Check our FAQs or chat directly with our support agents for quick and friendly support.'
-                      actions={<Button disabled={loading} onClick={openChat}>Open live chat</Button>}
+                      actions={<Button disabled={loading || !freshchatInitialized} onClick={openChat}>Open live chat</Button>}
                     />
                   </InlineGrid>
                 </BlockStack>
               </Box>
 
-              <BestSeller />
-              <LatestRelease />
+              {/*<BestSeller />*/}
+              {/*<LatestRelease />*/}
             </BlockStack>
           </Layout.Section>
         </Layout>
