@@ -656,24 +656,12 @@ requestAnimationFrame(() => {
           }
 
           if (configs.progressBar) {
-            var bar = splide.root.querySelector( '.splide-progress-bar' );
-            splide.on( 'mounted move', function () {
-              var end  = configs.progressBar;
-              if (configs.progressBarHeader) {
-                end  = splide.Components.Slides.getLength();
-              }
-              var rate = 100 * (splide.index / end);
+            var bar = splide.root.querySelector('.splide-progress-bar');
+            splide.on('mounted move', function () {
+              var end = splide.Components.Controller.getEnd() + 1;
+              var rate = (splide.index + 1) / end;
               if (bar) {
-                var rateBar = rate + Number(bar.style.width.replace("%", ''));
-                var maxRate = 100 - Number(bar.style.width.replace("%", ''));
-                if(rateBar > 100 ) {
-                  rate = maxRate;
-                }
-                if(document.querySelector('body').classList.contains('rtl')) {
-                  bar.style.marginRight = rate + '%';
-                }else {
-                  bar.style.marginLeft = rate + '%';
-                }  
+                bar.style.width = String(100 * rate) + '%';
               }
             });
           }
@@ -729,6 +717,9 @@ requestAnimationFrame(() => {
         }
       },
     });
+    if (!window.Eurus || !Alpine.store('xSplide')) {
+      Alpine.store('xSplide', Alpine.store('otsb_xSplide'));
+    }
     Alpine.data('otsb_script_require', () => {
       return {
         init() {
