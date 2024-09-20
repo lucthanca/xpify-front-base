@@ -384,6 +384,11 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
               code = document.getElementById(
                 'otsb-success-code-' + data.sectionId
               )
+              if (Shopify.designMode) {
+                heading.innerHTML = ''
+                subheading.innerHTML = ''
+                code.innerHTML = ''
+              } 
             heading.append(item[picked].heading)
             subheading.append(item[picked].subheading)
             if (item[picked].code !== '') {
@@ -532,6 +537,9 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
               )
               text.setAttribute('text-anchor', 'end')
               text.textContent = d.item.label
+              if(d.item.text_color != 'none') {
+                text.setAttribute('fill', d.item.text_color)
+              }
               g.appendChild(text)
 
               return g
@@ -732,18 +740,6 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
           })
 
           function showSuccess(picked) {
-            if (heading.innerHTML.trim() === '') {
-              heading.append(item[picked].heading)
-              subheading.append(item[picked].subheading)
-              if (item[picked].code !== '') {
-                code.append(item[picked].code)
-              } else {
-                code.classList.add('hidden')
-                document
-                  .getElementsByClassName('otsb-code-' + data.sectionId)[0]
-                  .classList.add('hidden')
-              }
-            }
 
             // Add active class to next content
             // changeButtonClose()
