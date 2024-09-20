@@ -61,14 +61,14 @@ const SectionFullpageDetails = props => {
         }
         //subtitle={"version " + section.version}
         compactTitle
-        primaryAction={{
-          icon: HeartIcon,
-          destructive: !!section?.is_in_wishlist,
-          loading: !section?.is_in_wishlist ? addWishlistLoading : deleteWishlistLoading,
-          onAction: () => {!section?.is_in_wishlist ? addWishlist() : deleteWishlist()},
-          primary: !!section?.is_in_wishlist,
-          helpText: !section?.is_in_wishlist ? 'Like' : 'Unlike',
-        }}
+        // primaryAction={{
+        //   icon: HeartIcon,
+        //   destructive: !!section?.is_in_wishlist,
+        //   loading: !section?.is_in_wishlist ? addWishlistLoading : deleteWishlistLoading,
+        //   onAction: () => {!section?.is_in_wishlist ? addWishlist() : deleteWishlist()},
+        //   primary: !!section?.is_in_wishlist,
+        //   helpText: !section?.is_in_wishlist ? 'Like' : 'Unlike',
+        // }}
       >
         <Layout>
           <Layout.Section>
@@ -121,7 +121,7 @@ const SectionFullpageDetails = props => {
               {section.actions?.install
               && !(section?.special_status === 'coming_soon')
               &&
-                <Box>
+                <Box paddingInline='400'>
                   <ModalInstallSection section={section} fullWith={false} />
                 </Box>
               }

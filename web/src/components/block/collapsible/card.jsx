@@ -12,16 +12,17 @@ import {
   CircleChevronUpIcon,
   CircleChevronDownIcon
 } from '@shopify/polaris-icons';
+import './style.scss';
 
-function CollapsibleCard({title, content: propContent, childSections, isOpen = false, isJsx = false}) {
+function CollapsibleCard({title, content: propContent, childSections, isOpen = false, isJsx = false, id}) {
   const [open, setOpen] = useState(isOpen);
 
   const handleToggle = useCallback(() => setOpen((open) => !open), []);
   const content = useMemo(() => {
     if (!isJsx) return (
-      <div dangerouslySetInnerHTML={{__html: propContent}}></div>
+      <div className='collapsible-richcontent' dangerouslySetInnerHTML={{__html: propContent}}></div>
     );
-    return propContent;
+    return <Text as="div" variant="bodyMd">{propContent}</Text>;
   }, [isJsx, propContent]);
 
   return (
@@ -46,9 +47,7 @@ function CollapsibleCard({title, content: propContent, childSections, isOpen = f
           >
             {content &&
               <Box paddingInline={200}>
-                <Text as="div" variant="bodyMd">
-                  {content}
-                </Text>
+                {content}
               </Box>
             }
           </Collapsible>
