@@ -4,6 +4,8 @@ import { fileURLToPath } from "url";
 import react from "@vitejs/plugin-react";
 import buildpack from './src/utils/buildpack';
 
+const preloadImage = '<https://api.omnithemes.com/media/section_builder/mask_Opt.png>; rel=preload; as=image';
+
 if (
   process.env.npm_lifecycle_event === "build" &&
   !process.env.CI &&
@@ -89,6 +91,7 @@ export default defineConfig(async ({ mode }) => {
         'cache-control': 'no-cache, no-store, must-revalidate',
         'Content-Security-Policy': "frame-ancestors 'self' https: admin.shopify.com;",
         'X-Frame-Options': 'allow-from https://admin.shopify.com',
+        'Link': preloadImage,
       },
       proxy: {
         '^/api(/|(\\?.*)?$)': proxyOptions,
