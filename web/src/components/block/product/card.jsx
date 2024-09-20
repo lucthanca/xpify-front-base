@@ -18,7 +18,7 @@ import { useSectionListContext } from '~/context';
 import TrySectionButton from '~/components/block/product/demolinkbtn';
 import LazyLoadImage from '~/components/block/image';
 import ConnectPopup from '~/components/block/modal/connectInstagram';
-import { useWishlist } from '~/hooks/section-builder/wishlist';
+// import { useWishlist } from '~/hooks/section-builder/wishlist';
 import { SECTION_TYPE_GROUP } from '~/constants/index.js';
 
 const productType = {
@@ -86,13 +86,13 @@ function ProductCard({index, item, imgSizes = "(min-width: 1024px) calc((100vw -
   const { handlePurchase, purchaseLoading} = usePurchase();
   const tagBadgeItemRender = useCallback((item) => `${item.name}`, []);
 
-  const { handleUpdate:addWishlist, dataUpdateLoading:addWishlistLoading, handleDelete:deleteWishlist, dataDeleteLoading:deleteWishlistLoading } = useWishlist(item);
+  // const { handleUpdate:addWishlist, dataUpdateLoading:addWishlistLoading, handleDelete:deleteWishlist, dataDeleteLoading:deleteWishlistLoading } = useWishlist(item);
 
   const isGroup = parseInt(item.type_id) === SECTION_TYPE_GROUP;
   const showInstallButton = !(item?.special_status === 'coming_soon') && item.actions?.install && (!isGroup || (isGroup && item?.child_ids?.length));
   if (!item) return null;
   return (
-    <Card padding='0' background="bg-surface-secondary" className="h-full">
+    <Card padding='0' className="h-full">
       <div className='cursor-pointer aspect-[16/9]' onClick={() => handleRedirect(item)}>
         <LazyLoadImage shouldLazy={index >= 4} className={"object-cover w-full max-h-full"} src={ item?.images[0]?.src } srcSet={ item?.images[0]?.srcset } imgSizes={imgSizes} />
       </div>
@@ -145,26 +145,26 @@ function ProductCard({index, item, imgSizes = "(min-width: 1024px) calc((100vw -
                 />
               </Tooltip>
             }
-            {!item?.is_in_wishlist
-              ? <Tooltip content="Like">
-                <Button
-                  loading={addWishlistLoading}
-                  icon={<Icon source={HeartIcon} tone="base" />}
-                  size="large"
-                  onClick={() => addWishlist()}
-                />
-              </Tooltip>
-              : <Tooltip content="Unlike">
-                <Button
-                  loading={deleteWishlistLoading}
-                  icon={<Icon source={HeartIcon} tone="base" />}
-                  size="large"
-                  onClick={() => deleteWishlist()}
-                  tone='critical'
-                  variant='primary'
-                />
-              </Tooltip>
-            }
+            {/*{!item?.is_in_wishlist*/}
+            {/*  ? <Tooltip content="Like">*/}
+            {/*    <Button*/}
+            {/*      loading={addWishlistLoading}*/}
+            {/*      icon={<Icon source={HeartIcon} tone="base" />}*/}
+            {/*      size="large"*/}
+            {/*      onClick={() => addWishlist()}*/}
+            {/*    />*/}
+            {/*  </Tooltip>*/}
+            {/*  : <Tooltip content="Unlike">*/}
+            {/*    <Button*/}
+            {/*      loading={deleteWishlistLoading}*/}
+            {/*      icon={<Icon source={HeartIcon} tone="base" />}*/}
+            {/*      size="large"*/}
+            {/*      onClick={() => deleteWishlist()}*/}
+            {/*      tone='critical'*/}
+            {/*      variant='primary'*/}
+            {/*    />*/}
+            {/*  </Tooltip>*/}
+            {/*}*/}
             { showConnect && (<ConnectPopup active={showConnect} toggleModal={toggleModal} connected={item?.actions?.connected}/>)}
           </InlineStack>
         </BlockStack>

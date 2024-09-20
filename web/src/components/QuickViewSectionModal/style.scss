@@ -9,4 +9,7 @@ div.quickViewModal__scrollable__content {
 .quickViewModal__gallery__root > div > div.splide__track > ul > li img {
     @apply object-contain;
 }
+.quickViewModal__scrollable__content .Polaris-Select__SelectedOption {
+    @apply w-0 md:w-auto;
+}
 

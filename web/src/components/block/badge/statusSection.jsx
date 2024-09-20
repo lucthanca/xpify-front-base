@@ -42,11 +42,11 @@ function BadgeStatusSection({item}) {
 
       const updated = item.installed.find(data => data.product_version == item.version);
       if (updated) {
-        return <Badge tone='success' size="small" progress='complete'>
+        return <Badge size="small" progress='complete'>
           <Text>Installed</Text>
         </Badge>;
       }
-      return <Badge tone='success' size="small" progress='incomplete'>
+      return <Badge size="small" progress='incomplete'>
         <Text>Installed</Text>
       </Badge>;
     }

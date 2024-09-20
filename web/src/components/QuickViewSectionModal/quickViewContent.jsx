@@ -83,26 +83,26 @@ const LazyQuickViewContent = props => {
                       <BadgeStatusSection item={section} />
                     </InlineStack>
                   </div>
-                  {!section?.is_in_wishlist
-                  ? <Tooltip content="Like">
-                    <Button
-                      loading={addWishlistLoading}
-                      icon={<Icon source={HeartIcon} tone="base" />}
-                      size="medium"
-                      onClick={() => addWishlist()}
-                    />
-                  </Tooltip>
-                  : <Tooltip content="Unlike">
-                    <Button
-                      loading={deleteWishlistLoading}
-                      icon={<Icon source={HeartIcon} tone="base" />}
-                      size="medium"
-                      onClick={() => deleteWishlist()}
-                      tone='critical'
-                      variant='primary'
-                    />
-                  </Tooltip>
-                  }
+                  {/*{!section?.is_in_wishlist*/}
+                  {/*? <Tooltip content="Like">*/}
+                  {/*  <Button*/}
+                  {/*    loading={addWishlistLoading}*/}
+                  {/*    icon={<Icon source={HeartIcon} tone="base" />}*/}
+                  {/*    size="medium"*/}
+                  {/*    onClick={() => addWishlist()}*/}
+                  {/*  />*/}
+                  {/*</Tooltip>*/}
+                  {/*: <Tooltip content="Unlike">*/}
+                  {/*  <Button*/}
+                  {/*    loading={deleteWishlistLoading}*/}
+                  {/*    icon={<Icon source={HeartIcon} tone="base" />}*/}
+                  {/*    size="medium"*/}
+                  {/*    onClick={() => deleteWishlist()}*/}
+                  {/*    tone='critical'*/}
+                  {/*    variant='primary'*/}
+                  {/*  />*/}
+                  {/*</Tooltip>*/}
+                  {/*}*/}
                 </InlineStack>
 
                 <Text variant='bodySm' as='p'>
@@ -118,7 +118,7 @@ const LazyQuickViewContent = props => {
                 <BannerDefault bannerAlert={bannerAlert} setBannerAlert={setBannerAlert} />
 
 
-                {section.actions?.install 
+                {section.actions?.install
                 && !(section?.special_status === 'coming_soon')
                 && <ModalInstallSection section={section} refectQuery={SECTION_V2_QUERY} />
                 }

@@ -8,10 +8,10 @@ import {
 } from "@shopify/polaris";
 
 function BannerDefault({bannerAlert, setBannerAlert, noDismiss }) {
-  console.log('re-render banner');
   const handleDismiss = useCallback(() => {
     setBannerAlert && setBannerAlert(undefined);
   }, [setBannerAlert]);
+  if (!bannerAlert) return null;
   if (bannerAlert?.embedAppUrl) {
     return (
       <Banner onDismiss={noDismiss ? undefined : handleDismiss} tone='warning'>
@@ -19,12 +19,13 @@ function BannerDefault({bannerAlert, setBannerAlert, noDismiss }) {
       </Banner>
     );
   }
+  const title = bannerAlert?.title || (bannerAlert.urlSuccessEditTheme ? (bannerAlert.isSimple ? 'Section' : 'Group') + ' installed successfully.' : undefined)
   return (
     bannerAlert &&
-    <Banner {...bannerAlert} onDismiss={noDismiss ? undefined : handleDismiss}>
+    <Banner {...bannerAlert} onDismiss={noDismiss ? undefined : handleDismiss} title={title}>
       {
         bannerAlert?.urlSuccessEditTheme &&
-        <div>{bannerAlert.isSimple ? 'Section' : 'Group'} installed successfully. Go to <Link url={bannerAlert.urlSuccessEditTheme}>theme editor</Link> to use this {bannerAlert.isSimple ? 'section' : 'group'}.</div>
+        <>Go to <Link url={bannerAlert.urlSuccessEditTheme}>theme editor</Link> to use this {bannerAlert.isSimple ? 'section' : 'group'}.</>
       }
       {
         bannerAlert.content &&

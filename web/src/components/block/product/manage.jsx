@@ -53,16 +53,8 @@ function ModalInstallSection({section, fullWith = true}) {
 
   return (
     <BlockStack gap='200'>
-      {talonManageProps.bannerAlert &&
-        fullWith
-        ? <BannerDefault bannerAlert={talonManageProps.bannerAlert} setBannerAlert={talonManageProps.setBannerAlert} />
-        : <Card padding='0'>
-          <BannerDefault bannerAlert={talonManageProps.bannerAlert} setBannerAlert={talonManageProps.setBannerAlert} />
-        </Card>
-      }
-      {
-        updateNotes && fullWith ? <BannerDefault bannerAlert={updateNotes} noDismiss={true} /> : <Card padding='0'><BannerDefault bannerAlert={updateNotes} noDismiss={true} /></Card>
-      }
+      {talonManageProps.bannerAlert && <BannerDefault bannerAlert={talonManageProps.bannerAlert} setBannerAlert={talonManageProps.setBannerAlert} />}
+      {updateNotes && <BannerDefault bannerAlert={updateNotes} noDismiss={true} />}
       <Text variant='headingMd' as='h2'>Choose theme for installation:</Text>
 
       <div className={fullWith ? 'grid gap-2' : (isSimpleSection ? 'grid-template-section-simple' : 'grid-template-section-group')}>
@@ -90,7 +82,9 @@ function ModalInstallSection({section, fullWith = true}) {
               disabled={section?.installed ? !talonManageProps.installed : true}
               loading={isLoading}
               fullWidth
-            >Uninstall</Button>
+            >
+              Uninstall
+            </Button>
             }
 
             <Button

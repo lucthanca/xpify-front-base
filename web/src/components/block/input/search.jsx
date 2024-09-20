@@ -27,7 +27,7 @@ function buildFilterKey (key) {
 
 const useSearch = props => {
   const { onFilterChange, onSortChange } = props;
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, s] = useSearchParams();
   const [search, setSearch] = useState(() => {
     const urlSearch = searchParams.get('search') || '';
     if (urlSearch.trim().length > 0) {
@@ -35,6 +35,12 @@ const useSearch = props => {
     }
     return urlSearch;
   });
+  const setSearchParams = (params) => {
+    s(prev => {
+      requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      return params;
+    });
+  }
   const searchSection = useCallback(async (value) => {
     if (onFilterChange) onFilterChange(QUERY_SEARCH_KEY, value);
   }, []);
