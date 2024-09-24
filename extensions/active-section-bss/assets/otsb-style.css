@@ -26,7 +26,7 @@
 .otsb__root .splide__toggle.is-active .splide__toggle__pause{display:inline}
 .otsb__root .splide__track{overflow:hidden;position:relative;z-index:0}
 /* @import url(components/otsb-preflight.scss); */
-/*! tailwindcss v3.4.4 | MIT License | https://tailwindcss.com
+/*! tailwindcss v3.4.11 | MIT License | https://tailwindcss.com
  */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -741,12 +741,14 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .pointer-events-none{pointer-events:none}
 .otsb__root .pointer-events-auto{pointer-events:auto}
 .otsb__root .visible{visibility:visible}
+.otsb__root .collapse{visibility:collapse}
 .otsb__root .static{position:static}
 .otsb__root .fixed{position:fixed}
 .otsb__root .absolute{position:absolute}
 .otsb__root .relative{position:relative}
 .otsb__root .sticky{position:sticky}
 .otsb__root .inset-0{inset:0px}
+.otsb__root .-bottom-\[20\%\]{bottom:-20%}
 .otsb__root .bottom-0{bottom:0px}
 .otsb__root .bottom-5{bottom:1.25rem}
 .otsb__root .bottom-6{bottom:1.5rem}
@@ -772,6 +774,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .top-\[0\.625rem\]{top:0.625rem}
 .otsb__root .top-\[1px\]{top:1px}
 .otsb__root .top-\[calc\(\(100\%-18px\)\/2\)\]{top:calc((100% - 18px) / 2)}
+.otsb__root .top-auto{top:auto}
 .otsb__root .top-full{top:100%}
 .otsb__root .isolate{isolation:isolate}
 .otsb__root .z-0{z-index:0}
@@ -782,6 +785,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .z-50{z-index:50}
 .otsb__root .z-\[1\]{z-index:1}
 .otsb__root .z-\[45\]{z-index:45}
+.otsb__root .z-\[60\]{z-index:60}
 .otsb__root .order-1{order:1}
 .otsb__root .order-2{order:2}
 .otsb__root .col-span-1{grid-column:span 1 / span 1}
@@ -796,16 +800,15 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .float-left{float:left}
 .otsb__root .m-2{margin:0.5rem}
 .otsb__root .m-auto{margin:auto}
+.otsb__root .mx-0\.5{margin-left:0.125rem;margin-right:0.125rem}
 .otsb__root .mx-1{margin-left:0.25rem;margin-right:0.25rem}
 .otsb__root .mx-auto{margin-left:auto;margin-right:auto}
 .otsb__root .my-2{margin-top:0.5rem;margin-bottom:0.5rem}
 .otsb__root .my-\[1\.5em\]{margin-top:1.5em;margin-bottom:1.5em}
 .otsb__root .\!mr-2{margin-right:0.5rem !important}
-.otsb__root .-ml-0{margin-left:-0px}
 .otsb__root .-ml-0\.5{margin-left:-0.125rem}
-.otsb__root .-mr-0{margin-right:-0px}
 .otsb__root .-mr-0\.5{margin-right:-0.125rem}
-.otsb__root .mb-0{margin-bottom:0px}
+.otsb__root .-mt-6{margin-top:-1.5rem}
 .otsb__root .mb-0\.5{margin-bottom:0.125rem}
 .otsb__root .mb-1{margin-bottom:0.25rem}
 .otsb__root .mb-1\.5{margin-bottom:0.375rem}
@@ -819,7 +822,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .mb-7{margin-bottom:1.75rem}
 .otsb__root .mb-8{margin-bottom:2rem}
 .otsb__root .mb-9{margin-bottom:2.25rem}
-.otsb__root .ml-0{margin-left:0px}
 .otsb__root .ml-0\.5{margin-left:0.125rem}
 .otsb__root .ml-1{margin-left:0.25rem}
 .otsb__root .ml-1\.5{margin-left:0.375rem}
@@ -829,7 +831,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .ml-5{margin-left:1.25rem}
 .otsb__root .ml-7{margin-left:1.75rem}
 .otsb__root .ml-auto{margin-left:auto}
-.otsb__root .mr-0{margin-right:0px}
 .otsb__root .mr-0\.5{margin-right:0.125rem}
 .otsb__root .mr-2{margin-right:0.5rem}
 .otsb__root .mr-2\.5{margin-right:0.625rem}
@@ -868,6 +869,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .h-0{height:0px}
 .otsb__root .h-10{height:2.5rem}
 .otsb__root .h-11{height:2.75rem}
+.otsb__root .h-12{height:3rem}
 .otsb__root .h-128{height:32rem}
 .otsb__root .h-14{height:3.5rem}
 .otsb__root .h-16{height:4rem}
@@ -885,6 +887,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .h-\[18px\]{height:18px}
 .otsb__root .h-\[200px\]{height:200px}
 .otsb__root .h-\[250px\]{height:250px}
+.otsb__root .h-\[30\%\]{height:30%}
 .otsb__root .h-\[300px\]{height:300px}
 .otsb__root .h-\[350px\]{height:350px}
 .otsb__root .h-\[400px\]{height:400px}
@@ -915,6 +918,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .w-10{width:2.5rem}
 .otsb__root .w-11{width:2.75rem}
 .otsb__root .w-11\/12{width:91.666667%}
+.otsb__root .w-12{width:3rem}
 .otsb__root .w-14{width:3.5rem}
 .otsb__root .w-16{width:4rem}
 .otsb__root .w-2{width:0.5rem}
@@ -924,7 +928,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .w-3\.5{width:0.875rem}
 .otsb__root .w-4{width:1rem}
 .otsb__root .w-5{width:1.25rem}
-.otsb__root .w-5\/12{width:41.666667%}
 .otsb__root .w-6{width:1.5rem}
 .otsb__root .w-8{width:2rem}
 .otsb__root .w-\[120px\]{width:120px}
@@ -937,6 +940,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .w-full{width:100%}
 .otsb__root .w-max{width:-moz-max-content;width:max-content}
 .otsb__root .w-px{width:1px}
+.otsb__root .min-w-12{min-width:3rem}
 .otsb__root .min-w-\[300px\]{min-width:300px}
 .otsb__root .min-w-\[90\%\]{min-width:90%}
 .otsb__root .min-w-full{min-width:100%}
@@ -944,6 +948,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .max-w-2xl{max-width:42rem}
 .otsb__root .max-w-3xl{max-width:48rem}
 .otsb__root .max-w-\[500px\]{max-width:500px}
+.otsb__root .max-w-\[530px\]{max-width:530px}
 .otsb__root .max-w-\[550px\]{max-width:550px}
 .otsb__root .max-w-\[600px\]{max-width:600px}
 .otsb__root .max-w-\[650px\]{max-width:650px}
@@ -963,6 +968,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .shrink-0{flex-shrink:0}
 .otsb__root .flex-grow{flex-grow:1}
 .otsb__root .grow{flex-grow:1}
+.otsb__root .origin-center{transform-origin:center}
 .otsb__root .-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .-translate-x-\[4px\]{--tw-translate-x:-4px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .-translate-x-\[5px\]{--tw-translate-x:-5px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
@@ -972,6 +978,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .translate-y-1\/3{--tw-translate-y:33.333333%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .translate-y-full{--tw-translate-y:100%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .-rotate-180{--tw-rotate:-180deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
+.otsb__root .-rotate-90{--tw-rotate:-90deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .rotate-180{--tw-rotate:180deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .rotate-90{--tw-rotate:90deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
@@ -1001,6 +1008,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .grid-cols-8{grid-template-columns:repeat(8, minmax(0, 1fr))}
 .otsb__root .grid-cols-9{grid-template-columns:repeat(9, minmax(0, 1fr))}
 .otsb__root .flex-row{flex-direction:row}
+.otsb__root .flex-row-reverse{flex-direction:row-reverse}
 .otsb__root .flex-col{flex-direction:column}
 .otsb__root .flex-col-reverse{flex-direction:column-reverse}
 .otsb__root .flex-wrap{flex-wrap:wrap}
@@ -1012,7 +1020,6 @@ to{transform:rotate(360deg)}}
 .otsb__root .justify-end{justify-content:flex-end}
 .otsb__root .justify-center{justify-content:center}
 .otsb__root .justify-between{justify-content:space-between}
-.otsb__root .gap-1{gap:0.25rem}
 .otsb__root .gap-1\.5{gap:0.375rem}
 .otsb__root .gap-2{gap:0.5rem}
 .otsb__root .gap-3{gap:0.75rem}
@@ -1066,6 +1073,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .bg-\[\#F2F2F2\]{--tw-bg-opacity:1;background-color:rgb(242 242 242 / var(--tw-bg-opacity))}
 .otsb__root .bg-\[\#acacac\]{--tw-bg-opacity:1;background-color:rgb(172 172 172 / var(--tw-bg-opacity))}
 .otsb__root .bg-\[\#c9c9c9\]{--tw-bg-opacity:1;background-color:rgb(201 201 201 / var(--tw-bg-opacity))}
+.otsb__root .bg-\[rgb\(var\(--colors-line-and-border\)\)\]{background-color:rgb(var(--colors-line-and-border))}
 .otsb__root .bg-\[rgba\(var\(--background-color\)\)\]{background-color:rgba(var(--background-color))}
 .otsb__root .bg-\[rgba\(var\(--background-color\)\2c 1\)\]{background-color:rgba(var(--background-color),1)}
 .otsb__root .bg-\[rgba\(var\(--color-background\)\2c 1\)\]{background-color:rgba(var(--color-background),1)}
@@ -1100,7 +1108,6 @@ to{transform:rotate(360deg)}}
 .otsb__root .p-5{padding:1.25rem}
 .otsb__root .p-6{padding:1.5rem}
 .otsb__root .px-0{padding-left:0px;padding-right:0px}
-.otsb__root .px-1{padding-left:0.25rem;padding-right:0.25rem}
 .otsb__root .px-1\.5{padding-left:0.375rem;padding-right:0.375rem}
 .otsb__root .px-5{padding-left:1.25rem;padding-right:1.25rem}
 .otsb__root .px-6{padding-left:1.5rem;padding-right:1.5rem}
@@ -1115,7 +1122,6 @@ to{transform:rotate(360deg)}}
 .otsb__root .py-7{padding-top:1.75rem;padding-bottom:1.75rem}
 .otsb__root .\!pl-5{padding-left:1.25rem !important}
 .otsb__root .\!pr-5{padding-right:1.25rem !important}
-.otsb__root .pb-0{padding-bottom:0px}
 .otsb__root .pb-0\.5{padding-bottom:0.125rem}
 .otsb__root .pb-1{padding-bottom:0.25rem}
 .otsb__root .pb-1\.5{padding-bottom:0.375rem}
@@ -1208,7 +1214,6 @@ to{transform:rotate(360deg)}}
 .otsb__root .pr-6{padding-right:1.5rem}
 .otsb__root .pr-7{padding-right:1.75rem}
 .otsb__root .pr-8{padding-right:2rem}
-.otsb__root .pt-0{padding-top:0px}
 .otsb__root .pt-0\.5{padding-top:0.125rem}
 .otsb__root .pt-1{padding-top:0.25rem}
 .otsb__root .pt-10{padding-top:2.5rem}
@@ -1221,6 +1226,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .pt-6{padding-top:1.5rem}
 .otsb__root .pt-7{padding-top:1.75rem}
 .otsb__root .pt-8{padding-top:2rem}
+.otsb__root .pt-9{padding-top:2.25rem}
 .otsb__root .pt-\[0\]{padding-top:0}
 .otsb__root .pt-\[100px\]{padding-top:100px}
 .otsb__root .pt-\[12px\]{padding-top:12px}
@@ -1292,6 +1298,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .text-\[\#999\]{--tw-text-opacity:1;color:rgb(153 153 153 / var(--tw-text-opacity))}
 .otsb__root .text-\[\#acacac\]{--tw-text-opacity:1;color:rgb(172 172 172 / var(--tw-text-opacity))}
 .otsb__root .text-\[--otsb-images-collection-title\]{color:var(--otsb-images-collection-title)}
+.otsb__root .text-\[rgb\(var\(--colors-icon-rating\)\)\]{color:rgb(var(--colors-icon-rating))}
 .otsb__root .text-\[rgb\(var\(--colors-text\)\)\]{color:rgb(var(--colors-text))}
 .otsb__root .text-\[rgba\(var\(--color-error\)\)\]{color:rgba(var(--color-error))}
 .otsb__root .text-\[rgba\(var\(--color-success\)\)\]{color:rgba(var(--color-success))}
@@ -1329,6 +1336,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .duration-150{transition-duration:150ms}
 .otsb__root .duration-200{transition-duration:200ms}
 .otsb__root .duration-300{transition-duration:300ms}
+.otsb__root .duration-500{transition-duration:500ms}
 .otsb__root .ease-in-out{transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1)}
 .otsb__root .ease-out{transition-timing-function:cubic-bezier(0, 0, 0.2, 1)}
 .otsb__root *,
@@ -2526,6 +2534,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .focus-visible\:shadow-none:focus-visible{--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}
 .otsb__root .focus-visible\:outline-none:focus-visible{outline:2px solid transparent;outline-offset:2px}
 .otsb__root .disabled\:cursor-not-allowed:disabled{cursor:not-allowed}
+.otsb__root .disabled\:opacity-30:disabled{opacity:0.3}
 .otsb__root .disabled\:opacity-40:disabled{opacity:0.4}
 .otsb__root .dark .otsb-dark\:pb-0{padding-bottom:0px}
 .otsb__root .dark .otsb-dark\:pb-1{padding-bottom:0.25rem}
@@ -2570,14 +2579,11 @@ to{transform:rotate(360deg)}}
 100%{content:var(--tw-content);transform:translateX(0%)}}
 .otsb__root .pagination-bars .is-active.pagination-bars\:is-active-pagination\:after\:animate-shimmerX_9s::after{content:var(--tw-content);animation:shimmerX 9s ease-out}
 .otsb__root .otsb-input:focus~.input_focus\:top-1{top:0.25rem}
-.otsb__root .otsb-input:focus~.input_focus\:top-2{top:0.5rem}
 .otsb__root .otsb-input:focus~.input_focus\:top-2\.5{top:0.625rem}
 .otsb__root .otsb-input:focus~.input_focus\:top-3{top:0.75rem}
 .otsb__root .otsb-input:focus~.input_focus\:text-xs{font-size:0.75rem;line-height:1rem}
 .otsb__root .otsb-input:not(:-moz-placeholder-shown)~.input_not_empty\:top-1{top:0.25rem}
 .otsb__root .otsb-input:not(:placeholder-shown)~.input_not_empty\:top-1{top:0.25rem}
-.otsb__root .otsb-input:not(:-moz-placeholder-shown)~.input_not_empty\:top-2{top:0.5rem}
-.otsb__root .otsb-input:not(:placeholder-shown)~.input_not_empty\:top-2{top:0.5rem}
 .otsb__root .otsb-input:not(:-moz-placeholder-shown)~.input_not_empty\:top-2\.5{top:0.625rem}
 .otsb__root .otsb-input:not(:placeholder-shown)~.input_not_empty\:top-2\.5{top:0.625rem}
 .otsb__root .otsb-input:not(:-moz-placeholder-shown)~.input_not_empty\:top-3{top:0.75rem}
@@ -2611,15 +2617,22 @@ to{transform:rotate(360deg)}}
 .otsb__root .md\:row-span-2{grid-row:span 2 / span 2}
 .otsb__root .md\:row-span-3{grid-row:span 3 / span 3}
 .otsb__root .md\:mb-0{margin-bottom:0px}
+.otsb__root .md\:mb-1{margin-bottom:0.25rem}
 .otsb__root .md\:mb-10{margin-bottom:2.5rem}
+.otsb__root .md\:mb-2{margin-bottom:0.5rem}
 .otsb__root .md\:mb-3{margin-bottom:0.75rem}
 .otsb__root .md\:mb-4{margin-bottom:1rem}
 .otsb__root .md\:mb-5{margin-bottom:1.25rem}
+.otsb__root .md\:mb-6{margin-bottom:1.5rem}
 .otsb__root .md\:mb-8{margin-bottom:2rem}
+.otsb__root .md\:ml-auto{margin-left:auto}
 .otsb__root .md\:mr-3{margin-right:0.75rem}
-.otsb__root .md\:mt-2{margin-top:0.5rem}
+.otsb__root .md\:mr-auto{margin-right:auto}
+.otsb__root .md\:mt-1{margin-top:0.25rem}
+.otsb__root .md\:mt-1\.5{margin-top:0.375rem}
 .otsb__root .md\:mt-2\.5{margin-top:0.625rem}
 .otsb__root .md\:mt-20{margin-top:5rem}
+.otsb__root .md\:mt-3\.5{margin-top:0.875rem}
 .otsb__root .md\:mt-4{margin-top:1rem}
 .otsb__root .md\:mt-5{margin-top:1.25rem}
 .otsb__root .md\:mt-6{margin-top:1.5rem}
@@ -2627,6 +2640,8 @@ to{transform:rotate(360deg)}}
 .otsb__root .md\:mt-8{margin-top:2rem}
 .otsb__root .md\:block{display:block}
 .otsb__root .md\:flex{display:flex}
+.otsb__root .md\:grid{display:grid}
+.otsb__root .md\:hidden{display:none}
 .otsb__root .md\:\!h-\[500px\]{height:500px !important}
 .otsb__root .md\:\!h-\[600px\]{height:600px !important}
 .otsb__root .md\:\!h-\[650px\]{height:650px !important}
@@ -2635,6 +2650,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .md\:h-10{height:2.5rem}
 .otsb__root .md\:h-16{height:4rem}
 .otsb__root .md\:h-24{height:6rem}
+.otsb__root .md\:h-3{height:0.75rem}
 .otsb__root .md\:h-40{height:10rem}
 .otsb__root .md\:h-7{height:1.75rem}
 .otsb__root .md\:h-\[450px\]{height:450px}
@@ -2650,6 +2666,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .md\:max-h-\[85vh\]{max-height:85vh}
 .otsb__root .md\:max-h-full{max-height:100%}
 .otsb__root .md\:min-h-\[28px\]{min-height:28px}
+.otsb__root .md\:min-h-\[350px\]{min-height:350px}
 .otsb__root .md\:min-h-\[80px\]{min-height:80px}
 .otsb__root .md\:w-1\/2{width:50%}
 .otsb__root .md\:w-1\/3{width:33.333333%}
@@ -2716,18 +2733,18 @@ to{transform:rotate(360deg)}}
 .otsb__root .md\:rounded-none{border-radius:0px}
 .otsb__root .md\:border-b{border-bottom-width:1px}
 .otsb__root .md\:border-t{border-top-width:1px}
-.otsb__root .md\:bg-\[rgba\(var\(--background-color\)\)\]{background-color:rgba(var(--background-color))}
+.otsb__root .md\:bg-\[rgba\(var\(--background-color\)\2c 1\)\]{background-color:rgba(var(--background-color),1)}
 .otsb__root .md\:bg-none{background-image:none}
 .otsb__root .md\:p-5{padding:1.25rem}
 .otsb__root .md\:px-0{padding-left:0px;padding-right:0px}
 .otsb__root .md\:px-4{padding-left:1rem;padding-right:1rem}
-.otsb__root .md\:px-5{padding-left:1.25rem;padding-right:1.25rem}
 .otsb__root .md\:px-6{padding-left:1.5rem;padding-right:1.5rem}
 .otsb__root .md\:px-\[30px\]{padding-left:30px;padding-right:30px}
 .otsb__root .md\:py-0{padding-top:0px;padding-bottom:0px}
 .otsb__root .md\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}
 .otsb__root .md\:py-7{padding-top:1.75rem;padding-bottom:1.75rem}
 .otsb__root .md\:pb-0{padding-bottom:0px}
+.otsb__root .md\:pb-1{padding-bottom:0.25rem}
 .otsb__root .md\:pb-10{padding-bottom:2.5rem}
 .otsb__root .md\:pb-12{padding-bottom:3rem}
 .otsb__root .md\:pb-14{padding-bottom:3.5rem}
@@ -2775,7 +2792,6 @@ to{transform:rotate(360deg)}}
 .otsb__root .md\:pl-10{padding-left:2.5rem}
 .otsb__root .md\:pl-11{padding-left:2.75rem}
 .otsb__root .md\:pl-12{padding-left:3rem}
-.otsb__root .md\:pl-2{padding-left:0.5rem}
 .otsb__root .md\:pl-2\.5{padding-left:0.625rem}
 .otsb__root .md\:pl-20{padding-left:5rem}
 .otsb__root .md\:pl-3{padding-left:0.75rem}
@@ -2800,6 +2816,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .md\:pt-2{padding-top:0.5rem}
 .otsb__root .md\:pt-2\.5{padding-top:0.625rem}
 .otsb__root .md\:pt-3{padding-top:0.75rem}
+.otsb__root .md\:pt-3\.5{padding-top:0.875rem}
 .otsb__root .md\:pt-4{padding-top:1rem}
 .otsb__root .md\:pt-5{padding-top:1.25rem}
 .otsb__root .md\:pt-7{padding-top:1.75rem}
@@ -2833,6 +2850,8 @@ to{transform:rotate(360deg)}}
 .otsb__root .md\:text-left{text-align:left}
 .otsb__root .md\:text-center{text-align:center}
 .otsb__root .md\:text-right{text-align:right}
+.otsb__root .md\:text-start{text-align:start}
+.otsb__root .md\:text-end{text-align:end}
 .otsb__root .md\:font-medium{font-weight:500}
 .otsb__root .md\:shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}
 .otsb__root .dark .md\:otsb-dark\:pb-2{padding-bottom:0.5rem}
@@ -2884,6 +2903,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .lg\:mb-3{margin-bottom:0.75rem}
 .otsb__root .lg\:mb-4{margin-bottom:1rem}
 .otsb__root .lg\:mb-5{margin-bottom:1.25rem}
+.otsb__root .lg\:mb-8{margin-bottom:2rem}
 .otsb__root .lg\:ml-0{margin-left:0px}
 .otsb__root .lg\:ml-10{margin-left:2.5rem}
 .otsb__root .lg\:ml-14{margin-left:3.5rem}
@@ -2937,7 +2957,9 @@ to{transform:rotate(360deg)}}
 .otsb__root .lg\:grow{flex-grow:1}
 .otsb__root .lg\:grow-0{flex-grow:0}
 .otsb__root .lg\:-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
+.otsb__root .lg\:-translate-x-full{--tw-translate-x:-100%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .lg\:translate-x-0{--tw-translate-x:0px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
+.otsb__root .lg\:translate-x-full{--tw-translate-x:100%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .lg\:translate-y-0{--tw-translate-y:0px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .lg\:transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .lg\:grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}
@@ -2975,16 +2997,15 @@ to{transform:rotate(360deg)}}
 .otsb__root .lg\:px-8{padding-left:2rem;padding-right:2rem}
 .otsb__root .lg\:py-16{padding-top:4rem;padding-bottom:4rem}
 .otsb__root .lg\:py-24{padding-top:6rem;padding-bottom:6rem}
-.otsb__root .lg\:py-3{padding-top:0.75rem;padding-bottom:0.75rem}
 .otsb__root .lg\:py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}
 .otsb__root .lg\:py-40{padding-top:10rem;padding-bottom:10rem}
 .otsb__root .lg\:py-\[22px\]{padding-top:22px;padding-bottom:22px}
 .otsb__root .lg\:pb-0{padding-bottom:0px}
 .otsb__root .lg\:pb-0\.5{padding-bottom:0.125rem}
-.otsb__root .lg\:pb-1{padding-bottom:0.25rem}
 .otsb__root .lg\:pb-1\.5{padding-bottom:0.375rem}
 .otsb__root .lg\:pb-10{padding-bottom:2.5rem}
 .otsb__root .lg\:pb-12{padding-bottom:3rem}
+.otsb__root .lg\:pb-14{padding-bottom:3.5rem}
 .otsb__root .lg\:pb-2{padding-bottom:0.5rem}
 .otsb__root .lg\:pb-2\.5{padding-bottom:0.625rem}
 .otsb__root .lg\:pb-3{padding-bottom:0.75rem}
@@ -2998,7 +3019,8 @@ to{transform:rotate(360deg)}}
 .otsb__root .lg\:pl-0{padding-left:0px}
 .otsb__root .lg\:pl-10{padding-left:2.5rem}
 .otsb__root .lg\:pl-11{padding-left:2.75rem}
-.otsb__root .lg\:pl-2{padding-left:0.5rem}
+.otsb__root .lg\:pl-14{padding-left:3.5rem}
+.otsb__root .lg\:pl-16{padding-left:4rem}
 .otsb__root .lg\:pl-2\.5{padding-left:0.625rem}
 .otsb__root .lg\:pl-20{padding-left:5rem}
 .otsb__root .lg\:pl-24{padding-left:6rem}
@@ -3012,7 +3034,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .lg\:pr-0{padding-right:0px}
 .otsb__root .lg\:pr-10{padding-right:2.5rem}
 .otsb__root .lg\:pr-11{padding-right:2.75rem}
-.otsb__root .lg\:pr-2{padding-right:0.5rem}
+.otsb__root .lg\:pr-16{padding-right:4rem}
 .otsb__root .lg\:pr-2\.5{padding-right:0.625rem}
 .otsb__root .lg\:pr-20{padding-right:5rem}
 .otsb__root .lg\:pr-24{padding-right:6rem}
@@ -3025,9 +3047,9 @@ to{transform:rotate(360deg)}}
 .otsb__root .lg\:pr-\[3\.75rem\]{padding-right:3.75rem}
 .otsb__root .lg\:pt-0{padding-top:0px}
 .otsb__root .lg\:pt-0\.5{padding-top:0.125rem}
-.otsb__root .lg\:pt-1{padding-top:0.25rem}
 .otsb__root .lg\:pt-1\.5{padding-top:0.375rem}
 .otsb__root .lg\:pt-10{padding-top:2.5rem}
+.otsb__root .lg\:pt-12{padding-top:3rem}
 .otsb__root .lg\:pt-2{padding-top:0.5rem}
 .otsb__root .lg\:pt-2\.5{padding-top:0.625rem}
 .otsb__root .lg\:pt-3{padding-top:0.75rem}
@@ -3042,10 +3064,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .group:hover .group-hover\:lg\:block{display:block}
 .otsb__root .dark .otsb-dark\:lg\:pl-0{padding-left:0px}
 .otsb__root .dark .otsb-dark\:lg\:pr-0{padding-right:0px}
-.otsb__root .otsb-input:focus~.lg\:input_focus\:top-3{top:0.75rem}
 .otsb__root .otsb-input:focus~.lg\:input_focus\:top-3\.5{top:0.875rem}
-.otsb__root .otsb-input:not(:-moz-placeholder-shown)~.lg\:input_not_empty\:top-3{top:0.75rem}
-.otsb__root .otsb-input:not(:placeholder-shown)~.lg\:input_not_empty\:top-3{top:0.75rem}
 .otsb__root .otsb-input:not(:-moz-placeholder-shown)~.lg\:input_not_empty\:top-3\.5{top:0.875rem}
 .otsb__root .otsb-input:not(:placeholder-shown)~.lg\:input_not_empty\:top-3\.5{top:0.875rem}}
 @media (min-width: 1280px){
@@ -3065,6 +3084,7 @@ to{transform:rotate(360deg)}}
 .otsb__root .\32xl\:max-h-\[77vh\]{max-height:77vh}
 .otsb__root .\32xl\:max-w-\[180px\]{max-width:180px}
 .otsb__root .\32xl\:max-w-\[200px\]{max-width:200px}}
+.otsb__root .rtl\:left-0:where([dir="rtl"], [dir="rtl"] *){left:0px}
 .otsb__root .rtl\:left-2:where([dir="rtl"], [dir="rtl"] *){left:0.5rem}
 .otsb__root .rtl\:left-4:where([dir="rtl"], [dir="rtl"] *){left:1rem}
 .otsb__root .rtl\:left-auto:where([dir="rtl"], [dir="rtl"] *){left:auto}
@@ -3074,11 +3094,12 @@ to{transform:rotate(360deg)}}
 .otsb__root .rtl\:ml-0:where([dir="rtl"], [dir="rtl"] *){margin-left:0px}
 .otsb__root .rtl\:ml-2:where([dir="rtl"], [dir="rtl"] *){margin-left:0.5rem}
 .otsb__root .rtl\:mr-0:where([dir="rtl"], [dir="rtl"] *){margin-right:0px}
-.otsb__root .rtl\:mr-1:where([dir="rtl"], [dir="rtl"] *){margin-right:0.25rem}
 .otsb__root .rtl\:mr-1\.5:where([dir="rtl"], [dir="rtl"] *){margin-right:0.375rem}
 .otsb__root .rtl\:mr-2:where([dir="rtl"], [dir="rtl"] *){margin-right:0.5rem}
 .otsb__root .rtl\:mt-0:where([dir="rtl"], [dir="rtl"] *){margin-top:0px}
+.otsb__root .rtl\:-rotate-90:where([dir="rtl"], [dir="rtl"] *){--tw-rotate:-90deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .rtl\:rotate-180:where([dir="rtl"], [dir="rtl"] *){--tw-rotate:180deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
+.otsb__root .rtl\:rotate-90:where([dir="rtl"], [dir="rtl"] *){--tw-rotate:90deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .rtl\:flex-row-reverse:where([dir="rtl"], [dir="rtl"] *){flex-direction:row-reverse}
 .otsb__root .rtl\:pl-0:where([dir="rtl"], [dir="rtl"] *){padding-left:0px}
 .otsb__root .rtl\:pl-6:where([dir="rtl"], [dir="rtl"] *){padding-left:1.5rem}
@@ -3090,4 +3111,17 @@ to{transform:rotate(360deg)}}
 @media (min-width: 768px){
 .otsb__root .rtl\:md\:left-8:where([dir="rtl"], [dir="rtl"] *){left:2rem}}
 @media (min-width: 1024px){
+.otsb__root .rtl\:lg\:-translate-x-full:where([dir="rtl"], [dir="rtl"] *){--tw-translate-x:-100%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
+.otsb__root .rtl\:lg\:translate-x-full:where([dir="rtl"], [dir="rtl"] *){--tw-translate-x:100%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}
 .otsb__root .rtl\:lg\:pr-6:where([dir="rtl"], [dir="rtl"] *){padding-right:1.5rem}}
+@media (prefers-color-scheme: dark){
+@media (min-width: 768px){
+.otsb__root .dark\:md\:pl-0{padding-left:0px}
+.otsb__root .dark\:md\:pl-10{padding-left:2.5rem}
+.otsb__root .dark\:md\:pl-8{padding-left:2rem}
+.otsb__root .dark\:md\:pr-10{padding-right:2.5rem}
+.otsb__root .dark\:md\:pr-6{padding-right:1.5rem}
+.otsb__root .dark\:md\:pr-8{padding-right:2rem}}
+@media (min-width: 1024px){
+.otsb__root .dark\:lg\:pl-14{padding-left:3.5rem}
+.otsb__root .dark\:lg\:pr-16{padding-right:4rem}}}

@@ -717,6 +717,9 @@ requestAnimationFrame(() => {
         }
       },
     });
+    if (!window.Eurus || !Alpine.store('xSplide')) {
+      Alpine.store('xSplide', Alpine.store('otsb_xSplide'));
+    }
     Alpine.data('otsb_script_require', () => {
       return {
         init() {
