@@ -2283,6 +2283,11 @@ to{transform:rotate(360deg)}}
             left: 0%;
           }
 }
+@media (max-width: 1023px) {
+  .otsb__root .otsb-btn__solid.otsb-btn__sliced:not(.otsb-btn__no-sliced) .otsb-btn-icon {
+    display: none;
+  }
+}
 .otsb__root .minimal-left{pointer-events:auto;left:0px;top:auto;width:-moz-fit-content;width:fit-content;padding-left:1rem}
 @media (min-width: 768px){
 .otsb__root .minimal-left{position:absolute;bottom:0.625rem;left:1.25rem;padding-left:0px}}
