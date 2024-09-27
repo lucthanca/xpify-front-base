@@ -476,6 +476,9 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
     margin-block-start: 1em;
     margin-block-end: 0.5em;
   }
+  .otsb-rte li h1, .otsb-rte li h2, .otsb-rte li h3, .otsb-rte li h4, .otsb-rte li h5, .otsb-rte li h6 {
+    display: inline;
+  }
 .otsb__root .otsb-heading-right{display:flex;flex-direction:row-reverse;flex-wrap:wrap}
 .otsb__root .otsb-heading-right .otsb-section-header,
     .otsb__root .otsb-heading-right h2{text-align:end}
