@@ -47,7 +47,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
   return (
     <Box>
       <BlockStack gap='200'>
-        <TitleBlock title={title} subTitle={subTitle} />
+        <Box paddingInline='400'><TitleBlock title={title} subTitle={subTitle} /></Box>
 
         <SectionListProvider>
           <Splide ref={splideRef} options={options}>

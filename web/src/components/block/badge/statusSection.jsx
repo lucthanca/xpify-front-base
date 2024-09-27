@@ -7,7 +7,7 @@ import {
 function BadgeStatusSection({item}) {
 	const owned = useMemo(() => {
     if (item?.special_status === 'coming_soon') {
-			return <Badge tone='attention' size="small">
+			return <Badge size="small">
         <Text>Coming soon</Text>
       </Badge>
 		}
@@ -35,7 +35,7 @@ function BadgeStatusSection({item}) {
     if (item?.installed && item.installed.length) {
       // Group not handle check should update - optimize performance
       if (item?.child_ids) {
-        return <Badge tone='success' size="small">
+        return <Badge size="small">
           <Text>Installed</Text>
         </Badge>;
       }
