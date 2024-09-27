@@ -869,6 +869,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .h-0{height:0px}
 .otsb__root .h-10{height:2.5rem}
 .otsb__root .h-11{height:2.75rem}
+.otsb__root .h-12{height:3rem}
 .otsb__root .h-128{height:32rem}
 .otsb__root .h-14{height:3.5rem}
 .otsb__root .h-16{height:4rem}
@@ -917,6 +918,7 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .w-10{width:2.5rem}
 .otsb__root .w-11{width:2.75rem}
 .otsb__root .w-11\/12{width:91.666667%}
+.otsb__root .w-12{width:3rem}
 .otsb__root .w-14{width:3.5rem}
 .otsb__root .w-16{width:4rem}
 .otsb__root .w-2{width:0.5rem}
@@ -926,7 +928,6 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 .otsb__root .w-3\.5{width:0.875rem}
 .otsb__root .w-4{width:1rem}
 .otsb__root .w-5{width:1.25rem}
-.otsb__root .w-5\/12{width:41.666667%}
 .otsb__root .w-6{width:1.5rem}
 .otsb__root .w-8{width:2rem}
 .otsb__root .w-\[120px\]{width:120px}
