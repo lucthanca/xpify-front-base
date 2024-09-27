@@ -1,4 +1,4 @@
-import { useCallback, memo, useState, useEffect } from 'react';
+import { useCallback, memo, useState, useEffect, useMemo } from 'react';
 import {
   InlineGrid,
   BlockStack,
@@ -6,7 +6,6 @@ import {
   InlineStack,
   Button,
   Text,
-  Card,
   Spinner
 } from '@shopify/polaris';
 import ModalConfirm from '~/components/block/modal/confirm';
@@ -14,6 +13,7 @@ import BannerDefault from '~/components/block/banner/alert';
 import { useManage } from '~/talons/section/useManage';
 import { SECTION_TYPE_SIMPLE } from '~/constants/index.js';
 import { useSectionListContext } from '~/context/index.js';
+import './manage.scss';
 
 function ModalInstallSection({section, fullWith = true}) {
   const talonManageProps = useManage({ section: section, typeSelect: true });
@@ -51,21 +51,22 @@ function ModalInstallSection({section, fullWith = true}) {
     }
   }, [dataDeleteLoading, dataUpdateLoading]);
 
+  const dropdownOptionsClass = useMemo(() => {
+  const baseClass = 'otsb__install_theme_dropdown';
+  const additionalClasses = fullWith
+    ? 'grid gap-2'
+    : isSimpleSection
+    ? 'grid-template-section-simple'
+    : 'grid-template-section-group';
+  return `${baseClass} ${additionalClasses}`;
+}, [isSimpleSection, fullWith]);
   return (
     <BlockStack gap='200'>
-      {talonManageProps.bannerAlert &&
-        fullWith
-        ? <BannerDefault bannerAlert={talonManageProps.bannerAlert} setBannerAlert={talonManageProps.setBannerAlert} />
-        : <Card padding='0'>
-          <BannerDefault bannerAlert={talonManageProps.bannerAlert} setBannerAlert={talonManageProps.setBannerAlert} />
-        </Card>
-      }
-      {
-        updateNotes && fullWith ? <BannerDefault bannerAlert={updateNotes} noDismiss={true} /> : <Card padding='0'><BannerDefault bannerAlert={updateNotes} noDismiss={true} /></Card>
-      }
+      {talonManageProps.bannerAlert && <BannerDefault bannerAlert={talonManageProps.bannerAlert} setBannerAlert={talonManageProps.setBannerAlert} />}
+      {updateNotes && <BannerDefault bannerAlert={updateNotes} noDismiss={true} />}
       <Text variant='headingMd' as='h2'>Choose theme for installation:</Text>
 
-      <div className={fullWith ? 'grid gap-2' : (isSimpleSection ? 'grid-template-section-simple' : 'grid-template-section-group')}>
+      <div className={dropdownOptionsClass}>
         {talonManageProps.options.length
         ? <div>
           <Select
@@ -90,7 +91,9 @@ function ModalInstallSection({section, fullWith = true}) {
               disabled={section?.installed ? !talonManageProps.installed : true}
               loading={isLoading}
               fullWidth
-            >Uninstall</Button>
+            >
+              Uninstall
+            </Button>
             }
 
             <Button

@@ -47,15 +47,16 @@ const Carousel: React.FC<CarouselProps> = (props) => {
   return (
     <Box>
       <BlockStack gap='200'>
-        <TitleBlock title={title} subTitle={subTitle} />
+        <Box paddingInline='400'><TitleBlock title={title} subTitle={subTitle} /></Box>
 
         <SectionListProvider>
           <Splide ref={splideRef} options={options}>
-            {items.map((item) => {
+            {items.map((item, index) => {
               return (
                 <SplideSlide key={item.id}>
                   <div className='sliderItemCardRoot'>
                     <ProductCard
+                      index={index}
                       key={item.id}
                       item={item}
                       imgSizes="(min-width: 1024px) calc((var(--pg-layout-width-primary-max) + var(--pg-layout-width-secondary-max) + var(--pg-layout-width-inner-spacing-base)) / 2), (min-width: 450px) 50vw, 100vw"

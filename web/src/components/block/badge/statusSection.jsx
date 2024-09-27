@@ -7,7 +7,7 @@ import {
 function BadgeStatusSection({item}) {
 	const owned = useMemo(() => {
     if (item?.special_status === 'coming_soon') {
-			return <Badge tone='attention' size="small">
+			return <Badge size="small">
         <Text>Coming soon</Text>
       </Badge>
 		}
@@ -35,18 +35,18 @@ function BadgeStatusSection({item}) {
     if (item?.installed && item.installed.length) {
       // Group not handle check should update - optimize performance
       if (item?.child_ids) {
-        return <Badge tone='success' size="small">
+        return <Badge size="small">
           <Text>Installed</Text>
         </Badge>;
       }
 
       const updated = item.installed.find(data => data.product_version == item.version);
       if (updated) {
-        return <Badge tone='success' size="small" progress='complete'>
+        return <Badge size="small" progress='complete'>
           <Text>Installed</Text>
         </Badge>;
       }
-      return <Badge tone='success' size="small" progress='incomplete'>
+      return <Badge size="small" progress='incomplete'>
         <Text>Installed</Text>
       </Badge>;
     }
