@@ -2284,7 +2284,7 @@ to{transform:rotate(360deg)}}
             left: 0%;
           }
 }
-@media (max-width: 1023px) {
+@media (max-width: 1024px) {
   .otsb__root .otsb-btn__solid.otsb-btn__sliced:not(.otsb-btn__no-sliced) .otsb-btn-icon {
     display: none;
   }
