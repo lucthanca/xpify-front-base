@@ -1,5 +1,6 @@
 import NavigationMenu from "~/components/Navigation";
 import Routes from "~/Routes";
+import UserProvider from "~/context/user.tsx";
 // import AuthProvider from "~/context/auth";
 import {
   // EnsureInstalledProvider,
@@ -19,10 +20,12 @@ export default function App() {
   return (
     // <AuthProvider>
     //   <EnsureInstalledProvider>
-        <FreshChat>
-          <NavigationMenu />
-          <Routes pages={pages} />
-        </FreshChat>
+    <UserProvider>
+      <FreshChat>
+        <NavigationMenu />
+        <Routes pages={pages} />
+      </FreshChat>
+    </UserProvider>
     //   </EnsureInstalledProvider>
     // </AuthProvider>
   );

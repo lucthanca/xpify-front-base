@@ -94,3 +94,21 @@ export type ShopifyTheme = {
   admin_graphql_api_id: string;
   errors?: string;
 }
+
+export type HomeBlock = {
+  id: string;
+  dismissed: boolean;
+}
+
+export type Shop = {
+  domain: string;
+  email: string;
+  name: string;
+  shop_owner: string;
+  home_blocks: HomeBlock[];
+}
+
+export interface UserContextType {
+  shop: Shop;
+  loading: boolean;
+}

@@ -71,12 +71,15 @@ export const CANCEL_PLAN_MUTATION = gql`
 
 /* Sort options use */
 export const MY_SHOP = gql`
-  query Get {
-    myShop {
+  query GetShop {
+    shop: myShop {
       email
       name
       shop_owner
       domain
+      home_blocks {
+        id dismissed
+      }
     }
   }
 `;

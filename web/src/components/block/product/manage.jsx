@@ -83,19 +83,6 @@ function ModalInstallSection({section, fullWith = true}) {
 
         <div>
           <InlineGrid columns={isSimpleSection ? 2 : 1} gap='200'>
-            {isSimpleSection &&
-            <Button
-              onClick={confirmDelete}
-              variant='primary'
-              tone="critical"
-              disabled={section?.installed ? !talonManageProps.installed : true}
-              loading={isLoading}
-              fullWidth
-            >
-              Uninstall
-            </Button>
-            }
-
             <Button
               onClick={primaryActionHandle}
               variant='primary'
@@ -105,6 +92,17 @@ function ModalInstallSection({section, fullWith = true}) {
             >
               {primaryActionContent}
             </Button>
+            {isSimpleSection &&
+            <Button
+              onClick={confirmDelete}
+              variant='secondary'
+              disabled={section?.installed ? !talonManageProps.installed : true}
+              loading={isLoading}
+              fullWidth
+            >
+              Uninstall
+            </Button>
+            }
           </InlineGrid>
 
           <ModalConfirm section={section} theme={talonManageProps.currentThemeSelected} isOpen={isShowConfirm} setIsOpen={setIsShowConfirm} onConfirm={confirmAction} />

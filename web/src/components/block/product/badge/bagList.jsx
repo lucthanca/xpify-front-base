@@ -32,7 +32,7 @@ const BadgeItem = props => {
 const BadgeList = (props) => {
   const { items, isSimpleSection, itemContentRenderer, onClick, searchKey, title } = props;
   return (
-    <InlineStack blockAlign='center' gap='200'>
+    <InlineStack blockAlign='start' gap='200' wrap={false}>
       <Text as="span" variant="bodySm">{title}:</Text>
       <InlineStack gap='100' blockAlign='start'>
         {items.map(item => (

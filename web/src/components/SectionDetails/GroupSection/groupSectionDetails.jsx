@@ -126,7 +126,7 @@ const GroupSectionDetails = props => {
               )}
 
               <Card title='Gallery' padding='0'>
-                <div className='quickViewModal__gallery__root aspect-[16/9] bg-[#eee]'>
+                <div className='quickViewModal__gallery__root aspect-[16/9] bg-white'>
                   <GallerySlider gallery={groupSection?.images || []} />
                 </div>
               </Card>

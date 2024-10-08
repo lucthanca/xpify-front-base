@@ -1,0 +1,29 @@
+.xpify_dismiss {
+    --p-color-icon-secondary: rgba(74,74,74,1);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    padding: var(--p-space-100);
+    -webkit-backdrop-filter: blur(var(--p-space-200));
+    backdrop-filter: blur(var(--p-space-200));
+    border-radius: var(--p-border-radius-200);
+    background-color: #fff9;
+    cursor: pointer;
+    color: var(--p-color-icon-secondary);
+    transition-property: background-color, opacity, color;
+    transition-duration: var(--p-motion-duration-200);
+    transition-timing-function: var(--p-motion-ease);
+}
+.xpify_dismiss:is(:hover, :focus-visible) {
+    color: var(--p-color-icon-secondary-hover);
+    background-color: var(--p-color-bg);
+}
+.xpify_dismissible_content:is(:hover,:focus-within) .xpify-close-btn {
+    opacity: 1;
+}
+@media (pointer: fine) {
+    .xpify-close-btn {
+        opacity: 0;
+    }
+}

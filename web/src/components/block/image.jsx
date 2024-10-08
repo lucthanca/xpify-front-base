@@ -1,5 +1,5 @@
 import { Spinner } from "@shopify/polaris";
-import { memo, useCallback, useState } from "react";
+import { memo, useState } from "react";
 
 function LazyLoadImage({className, src, srcSet, imgSizes, shouldLazy}) {
   const [loadingImg, setLoadingImg] = useState(false);

@@ -100,6 +100,7 @@ const InstallModal = props => {
             disabled: dataDeleteLoading || dataUpdateLoading || loadingWithoutData || !installed,
             loading: talonManageProps?.executeSection === activeSection?.url_key ? talonManageProps.dataDeleteLoading : false,
             onAction: () => setIsShowConfirm(true),
+            plain: true,
           }]
         : []
       }
