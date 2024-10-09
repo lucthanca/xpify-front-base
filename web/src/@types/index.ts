@@ -109,6 +109,6 @@ export type Shop = {
 }
 
 export interface UserContextType {
-  shop: Shop;
+  shop: Shop | undefined;
   loading: boolean;
 }

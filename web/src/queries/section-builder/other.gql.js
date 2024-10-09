@@ -83,3 +83,11 @@ export const MY_SHOP = gql`
     }
   }
 `;
+
+export const DISMISS_HOME_BLOCK_MUTATION = gql`
+  mutation DismissBlock($id: String!, $undo: Boolean) {
+    dismissHomeBlock(id: $id, undo: $undo) {
+      id dismissed
+    }
+  }
+`;
