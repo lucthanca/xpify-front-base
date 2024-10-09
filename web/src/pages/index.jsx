@@ -7,7 +7,7 @@ import {
 import Footer from '~/components/block/footer';
 import { Loading } from '@shopify/app-bridge-react';
 import './style.scss';
-import { WelcomeMsg, Guide, Contact } from '~/components/hompage/blocks';
+import { WelcomeMsg, Guide, Contact, Overview, RecentInstalled } from '~/components/hompage/blocks';
 
 function HomePage() {
   const [loading, setLoading] = useState(false);
@@ -32,6 +32,8 @@ function HomePage() {
               <Guide />
               <Contact />
 
+              <Overview />
+              <RecentInstalled />
               {/*<BestSeller />*/}
               {/*<LatestRelease />*/}
             </BlockStack>

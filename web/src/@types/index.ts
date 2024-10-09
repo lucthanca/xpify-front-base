@@ -26,8 +26,12 @@ export type CollectionQueryData<T = any> = {
   page_info: PageInfo;
 };
 
-export type GraphQlQueryResponse<T = any> = {
+export type GraphQlCollectionQueryResponse<T = any> = {
   [key: string]: CollectionQueryData<T>
+} | undefined;
+
+export type GraphQlQueryResponse<T = any> = {
+  [key: string]: T
 } | undefined;
 
 type Category = {
@@ -93,19 +97,31 @@ export type ShopifyTheme = {
   processing: boolean;
   admin_graphql_api_id: string;
   errors?: string;
+  local: boolean;
 }
 
 export type HomeBlock = {
   id: string;
   dismissed: boolean;
 }
-
+export type InstalledSection = {
+  id: string;
+  section_id: string;
+  theme_id: string;
+  version: string;
+  created_at: string;
+  updated_at: string;
+  section: Section;
+  theme: ShopifyTheme;
+}
 export type Shop = {
   domain: string;
   email: string;
   name: string;
   shop_owner: string;
   home_blocks: HomeBlock[];
+  installed_sections: any,
+  available_sections_count: number;
 }
 
 export interface UserContextType {
