@@ -72,7 +72,8 @@ export const CANCEL_PLAN_MUTATION = gql`
 /* Sort options use */
 export const MY_SHOP = gql`
   query GetShop {
-    shop: myShop {
+    myShop {
+      id
       email
       name
       shop_owner

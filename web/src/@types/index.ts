@@ -120,7 +120,7 @@ export type Shop = {
   name: string;
   shop_owner: string;
   home_blocks: HomeBlock[];
-  installed_sections: any,
+  installed_sections: CollectionQueryData<InstalledSection>,
   available_sections_count: number;
 }
 

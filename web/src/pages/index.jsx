@@ -28,10 +28,9 @@ function HomePage() {
         <Layout>
           <Layout.Section>
             <BlockStack gap='600'>
-              <WelcomeMsg />
+              {/*<WelcomeMsg />*/}
               <Guide />
               <Contact />
-
               <Overview />
               <RecentInstalled />
               {/*<BestSeller />*/}

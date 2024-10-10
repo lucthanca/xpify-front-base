@@ -11,7 +11,7 @@ const UserProvider = ({ children }: { children: React.JSX.Element }): React.JSX.
     nextFetchPolicy: "cache-first",
   });
   const contextValue = useMemo(() => ({
-    shop: data?.shop,
+    shop: data?.myShop,
     loading,
   }), [data, loading]);
   return (

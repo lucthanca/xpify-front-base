@@ -8,6 +8,7 @@ import {
 } from "~/components/providers";
 import { useEffect } from 'react';
 import { logAllInteractions } from '~/utils/onInteraction';
+import { logAllCLSReports } from '~/hooks/use-cls';
 
 export default function App() {
   // Any .tsx or .jsx files in /pages will become a route
@@ -16,6 +17,7 @@ export default function App() {
 
   useEffect(() => {
     logAllInteractions();
+    logAllCLSReports();
   }, [])
   return (
     // <AuthProvider>

@@ -21,7 +21,6 @@ const Adapter = props => {
   const talonProps = useAdapter(props);
   const { client, initialized } = talonProps;
   const loadingScreen = document.getElementById('otsb-app-loading');
-  console.log('aasdasdasd');
   if (!initialized || !props.domain) {
     if (loadingScreen) return null;
     return <ShopifyLoadingFull />

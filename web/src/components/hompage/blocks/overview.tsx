@@ -9,19 +9,20 @@ import { GET_SHOP_OVERVIEW_QUERY } from '~/queries/section-builder/shop.gql';
 import { SkeletonBodyText } from '@shopify/polaris';
 import type { GraphQlQueryResponse, Shop } from '~/@types';
 
-const Overview = props => {
-  const { data, loading, error } = useQuery<GraphQlQueryResponse<Shop>>(GET_SHOP_OVERVIEW_QUERY, {
+const Overview = () => {
+  const { data, loading } = useQuery<GraphQlQueryResponse<Shop>>(GET_SHOP_OVERVIEW_QUERY, {
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first',
   });
-  const sectionCount = loading ? (
+  const loadingWithoutData = loading && !data;
+  const sectionCount = loadingWithoutData ? (
     <div style={{ width: '2rem' }}>
       <SkeletonBodyText lines={1} />
     </div>
   ) : (
-    <Text as='p' variant='bodySm'>{data?.shop?.installed_sections?.length || 0}</Text>
+    <Text as='p' variant='bodySm'>{data?.shop?.installed_sections?.items?.length || 0}</Text>
   );
-  const availableSectionsCount = loading ? (
+  const availableSectionsCount = loadingWithoutData ? (
     <div style={{ width: '2.5rem' }}>
       <SkeletonBodyText lines={1} />
     </div>
