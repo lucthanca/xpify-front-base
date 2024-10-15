@@ -3,7 +3,7 @@ export const GET_SHOP_OVERVIEW_QUERY = gql`
   query GetShopOverview {
     shop: myShop {
       id
-      installed_sections { items{ id } }
+      installed_sections_count
       available_sections_count
     }
   }

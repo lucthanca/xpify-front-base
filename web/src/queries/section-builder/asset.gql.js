@@ -25,6 +25,7 @@ export const UPDATE_ASSET_MUTATION = gql`
         theme_id
         product_version
       }
+      shop {id installed_sections_count}
     }
   }
 `;
@@ -46,6 +47,7 @@ export const UNINSTALL_SECTION_MUTATION = gql`
         theme_id
         product_version
       }
+      shop {id installed_sections_count}
     }
   }
 `;

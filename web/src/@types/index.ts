@@ -101,7 +101,7 @@ export type ShopifyTheme = {
 }
 
 export type HomeBlock = {
-  id: string;
+  id: 'home_welcome_message' | 'home_contact_us' | 'home_guide_step';
   dismissed: boolean;
 }
 export type InstalledSection = {
@@ -122,6 +122,7 @@ export type Shop = {
   home_blocks: HomeBlock[];
   installed_sections: CollectionQueryData<InstalledSection>,
   available_sections_count: number;
+  installed_sections_count: number;
 }
 
 export interface UserContextType {

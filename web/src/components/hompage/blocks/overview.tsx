@@ -20,7 +20,7 @@ const Overview = () => {
       <SkeletonBodyText lines={1} />
     </div>
   ) : (
-    <Text as='p' variant='bodySm'>{data?.shop?.installed_sections?.items?.length || 0}</Text>
+    <Text as='p' variant='bodySm'>{data?.shop?.installed_sections_count || 0}</Text>
   );
   const availableSectionsCount = loadingWithoutData ? (
     <div style={{ width: '2.5rem' }}>
@@ -34,12 +34,12 @@ const Overview = () => {
       <BlockStack gap='400'>
         <BlockStack>
           <Text as='h2' variant='headingSm'>Overview</Text>
-          <Text as='p' variant='bodySm'>Statistics of sections you have installed.</Text>
+          <Text as='p' variant='bodySm'>Statistics of sections.</Text>
         </BlockStack>
         <InlineGrid columns={{ xs: '1fr', md: '1fr 1fr' }} gap='200'>
           <Card>
             <BlockStack gap='200'>
-              <Text as='h3' variant='headingXs'>Sections</Text>
+              <Text as='h3' variant='headingXs'>Installed Sections</Text>
               {sectionCount}
             </BlockStack>
           </Card>
