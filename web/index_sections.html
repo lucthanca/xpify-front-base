@@ -4,18 +4,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script type="module">
-    window.xpify = {PROD:import.meta.env.PROD};
-    if (!import.meta.env || !import.meta.env.PROD) {
-      // Because the base HTML is rendered in the server side, we need to manually embed the code to enable HMR in our
-      // code, so that the vite server is properly enabled to run HMR
-      const script = document.createElement('script');
-      script.setAttribute('type', "module");
-      const origin = window.location.origin;
-      script.setAttribute('src', `${origin}/dev_embed.js`);
-      document.getElementsByTagName('head')[0].append(script);
-    }
-  </script>
   <script type="text/javascript">
     setTimeout(() => {
       if (window?.xpify?.PROD !== true) return;
@@ -77,7 +65,7 @@
       --pc-shadow-bevel-border-radius-xs: var(--p-border-radius-300);
     }
   </style>
-  <div class="Polaris-Page Polaris-Page--fullWidth">
+  <div class="Polaris-Page">
     <div class="Polaris-Box" style="--pc-box-padding-block-start-xs: var(--p-space-400); --pc-box-padding-block-start-md: var(--p-space-600); --pc-box-padding-block-end-xs: var(--p-space-400); --pc-box-padding-block-end-md: var(--p-space-600); --pc-box-padding-inline-start-xs: var(--p-space-400); --pc-box-padding-inline-start-sm: var(--p-space-0); --pc-box-padding-inline-end-xs: var(--p-space-400); --pc-box-padding-inline-end-sm: var(--p-space-0); position: relative;">
       <div class="Polaris-Page-Header--isSingleRow Polaris-Page-Header--noBreadcrumbs Polaris-Page-Header--mediumTitle">
         <div class="Polaris-Page-Header__Row">

@@ -71,12 +71,24 @@ export const CANCEL_PLAN_MUTATION = gql`
 
 /* Sort options use */
 export const MY_SHOP = gql`
-  query Get {
+  query GetShop {
     myShop {
+      id
       email
       name
       shop_owner
       domain
+      home_blocks {
+        id dismissed
+      }
+    }
+  }
+`;
+
+export const DISMISS_HOME_BLOCK_MUTATION = gql`
+  mutation DismissBlock($id: String!, $undo: Boolean) {
+    dismissHomeBlock(id: $id, undo: $undo) {
+      id dismissed
     }
   }
 `;

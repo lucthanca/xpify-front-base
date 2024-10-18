@@ -1,5 +1,6 @@
 import NavigationMenu from "~/components/Navigation";
 import Routes from "~/Routes";
+import UserProvider from "~/context/user.tsx";
 // import AuthProvider from "~/context/auth";
 import {
   // EnsureInstalledProvider,
@@ -7,6 +8,7 @@ import {
 } from "~/components/providers";
 import { useEffect } from 'react';
 import { logAllInteractions } from '~/utils/onInteraction';
+import { logAllCLSReports } from '~/hooks/use-cls';
 
 export default function App() {
   // Any .tsx or .jsx files in /pages will become a route
@@ -15,14 +17,17 @@ export default function App() {
 
   useEffect(() => {
     logAllInteractions();
+    logAllCLSReports();
   }, [])
   return (
     // <AuthProvider>
     //   <EnsureInstalledProvider>
-        <FreshChat>
-          <NavigationMenu />
-          <Routes pages={pages} />
-        </FreshChat>
+    <UserProvider>
+      <FreshChat>
+        <NavigationMenu />
+        <Routes pages={pages} />
+      </FreshChat>
+    </UserProvider>
     //   </EnsureInstalledProvider>
     // </AuthProvider>
   );

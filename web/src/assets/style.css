@@ -116,12 +116,20 @@ button.splide__arrow {
 }
 
 .quickViewModal__gallery__root > div,
-.quickViewModal__gallery__root > div > div.splide__track,
-.quickViewModal__gallery__root > div > div.splide__track > ul > li img {
+.quickViewModal__gallery__root > div > div.splide__track {
   width: 100%;
   height: 100%;
 }
-
+.quickViewModal__gallery__root > div > div.splide__track {
+  background: white;
+}
+.quickViewModal__gallery__root > div > div.splide__track > ul > li img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  overflow: hidden;
+  background: white;
+}
 @media only screen and (max-width: 768px) {
   .grid-template-section-simple, .grid-template-section-group {
     grid-template-columns: 1fr;

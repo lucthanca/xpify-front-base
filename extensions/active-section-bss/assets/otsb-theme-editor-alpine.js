@@ -13,7 +13,7 @@ if (!window.otsb.loadedScript) {
   window.otsb.loadedScript = [];
 }
 if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
-  window.otsb.loadedScript.push('otsb-popup.js')
+  window.otsb.loadedScript.push('otsb-popup.js');
 
   requestAnimationFrame(() => {
     document.addEventListener('alpine:init', () => {
@@ -38,7 +38,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             // cast to boolean
             intentCompleted = intentCompleted === 'true';
           }
-          return intentCompleted;
+          return intentCompleted === true;
         },
         init() {
           if (Shopify.designMode) {
@@ -151,6 +151,11 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
                   _this.open();
                 }, data.delays * 1000);
               }
+              if (data.name === 'popup-spin-wheel') {
+                setTimeout(() => {
+                  _this.open();
+                }, data.delays * 1000);
+              }
             } catch (error) {
               console.log(error);
             }
@@ -163,16 +168,25 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             return;
           }
           if (data.enable_exit_intent) {
+            const setShowPopup = () => {
+              if (!Shopify.designMode) {
+                if (!this.isExpireSave()) {
+                  this.show = true;
+                }
+              } else {
+                this.show = true;
+              }
+            };
             // show popup if is desktop and not touch device
             if (!this.isMobileScreen && !this.isTouchDevice) {
-              this.show = true;
+              setShowPopup();
               return;
             }
             // if is mobile or tablet (is touch device) and show on mobile is true, use normal popup logic
             if (!data.showOnMobile) return;
 
             if (data.email_form_success) {
-              this.show = true;
+              setShowPopup();
               return;
             }
           }
@@ -220,6 +234,9 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             this.show = false;
             if (data.email_form_success) {
               localStorage.setItem(`intent-${data.sectionId}_completed`, true);
+            }
+            if (!Shopify.designMode && !this.isExpireSave()) {
+              this.setExpire();
             }
             return;
           }
@@ -311,14 +328,18 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
           });
         },
         setOverlay() {
-          let popupsDiv = document.querySelector('#otsb-popup-exit-intent');
+          if (!data.popup_div_selector) return;
+          let popupsDiv = document.querySelector(data.popup_div_selector);
+          if (!popupsDiv) return;
           if (popupsDiv.classList.contains('bg-[#acacac]')) return;
           if (data.overlay) {
             popupsDiv.className += ' bg-[#acacac] bg-opacity-30';
           }
         },
         removeOverlay() {
-          let popupsDiv = document.querySelector('#otsb-popup-exit-intent');
+          if (!data.popup_div_selector) return;
+          let popupsDiv = document.querySelector(data.popup_div_selector);
+          if (!popupsDiv) return;
           if (data.name === 'popup-spin-wheel') {
             popupsDiv.classList.remove('bg-[#acacac]', 'bg-opacity-30');
           }
@@ -350,79 +371,67 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
           this.spin = true;
         },
       }));
-      Alpine.data('otsb_xPopupsSpin', data => ({
+      Alpine.data('otsb_xPopupsSpin', (data) => ({
         init() {
-          const jsonString = data.data_wheel.replace(/'/g, '"')
+          const jsonString = data.data_wheel.replace(/'/g, '"');
 
           // Parse the JSON string
-          const item = JSON.parse(jsonString)
+          const item = JSON.parse(jsonString);
           document.addEventListener('shopify:block:load', function () {
-            creatSvg()
-          })
+            if (document.getElementById('chart').innerHTML.trim() === '') {
+              creatSvg();
+            }
+          });
           if (document.getElementById('chart').innerHTML.trim() === '') {
-            creatSvg()
+            creatSvg();
           }
           if (localStorage.getItem('result-' + data.sectionId)) {
-            var result = JSON.parse(
-              localStorage.getItem('result-' + data.sectionId)
-            )
-            showSuccess(result.picked)
+            var result = JSON.parse(localStorage.getItem('result-' + data.sectionId));
+            showSuccess(result.picked);
           }
 
           function showSuccess(picked) {
             var wheel = document.getElementById('otsb-wheel-' + data.sectionId),
-              success = document.getElementById(
-                'otsb-wheel-success-' + data.sectionId
-              ),
-              heading = document.getElementById(
-                'otsb-success-heading-' + data.sectionId
-              ),
-              subheading = document.getElementById(
-                'otsb-success-subheading-' + data.sectionId
-              ),
-              code = document.getElementById(
-                'otsb-success-code-' + data.sectionId
-              ),
+              success = document.getElementById('otsb-wheel-success-' + data.sectionId),
+              heading = document.getElementById('otsb-success-heading-' + data.sectionId),
+              subheading = document.getElementById('otsb-success-subheading-' + data.sectionId),
+              code = document.getElementById('otsb-success-code-' + data.sectionId),
               result = item.filter(a => a.id === picked)[0]
               if (Shopify.designMode) {
                 heading.innerHTML = ''
                 subheading.innerHTML = ''
                 code.innerHTML = ''
-              }
-              if(result) { 
-                heading.append(result.heading)
-                subheading.append(result.subheading)
+              }  
+            if(result) {
+              if (heading.innerHTML.trim() === '') {
+                heading.append(result.heading);
+                subheading.append(result.subheading);
                 if (result.code !== '') {
-                  code.append(result.code)
+                  code.append(result.code);
                 } else {
-                  code.classList.add('hidden')
-                  document
-                    .getElementsByClassName('otsb-code-' + data.sectionId)[0]
-                    .classList.add('hidden')
+                  code.classList.add('hidden');
+                  document.getElementsByClassName('otsb-code-' + data.sectionId)[0].classList.add('hidden');
                 }
-              } else {
-                heading.append("The code has been deleted");
-                code.classList.add('hidden')
               }
+            } else {
+              heading.append("The code has been deleted");
+              code.classList.add('hidden');
+            }
 
             // Add active class to next content
-            changeButtonClose()
-            success.classList.add('active')
-            wheel.classList.remove('previous')
-            wheel.classList.add('hidden')
-            success.classList.remove('hidden')
-            success.classList.add('visible')
+            changeButtonClose();
+            success.classList.add('active');
+            wheel.classList.remove('previous');
+            wheel.classList.add('hidden');
+            success.classList.remove('hidden');
+            success.classList.add('visible');
           }
 
           function changeButtonClose() {
-            var wheel = document.getElementById(
-                'PromotionPopupClose-' + data.sectionId
-              ),
-              success = document.getElementById(
-                'PromotionPopupClose-Success-' + data.sectionId
-              )
-            wheel.classList.add('hidden')
-            success.classList.remove('hidden')
+            var wheel = document.getElementById('PromotionPopupClose-' + data.sectionId),
+              success = document.getElementById('PromotionPopupClose-Success-' + data.sectionId);
+            wheel.classList.add('hidden');
+            success.classList.remove('hidden');
           }
 
           function creatSvg() {
@@ -433,65 +442,49 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
               rotation = 0,
               oldrotation = 0,
               picked = 100000,
-              oldpick = []
+              oldpick = [];
 
-            var svg = document.createElementNS(
-              'http://www.w3.org/2000/svg',
-              'svg'
-            )
-            svg.setAttribute('width', 270)
-            svg.setAttribute('height', h + padding.top + padding.bottom)
-            document.getElementById('chart').appendChild(svg)
+            var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', 270);
+            svg.setAttribute('height', h + padding.top + padding.bottom);
+            document.getElementById('chart').appendChild(svg);
 
-            var container = document.createElementNS(
-              'http://www.w3.org/2000/svg',
-              'g'
-            )
-            container.setAttribute('class', 'chartholder')
+            var container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            container.setAttribute('class', 'chartholder');
             container.setAttribute(
               'transform',
-              'translate(' +
-                (w / 2 + padding.left + 5) +
-                ',' +
-                (h / 2 + padding.top) +
-                ')'
-            )
-            svg.appendChild(container)
+              'translate(' + (w / 2 + padding.left + 5) + ',' + (h / 2 + padding.top) + ')'
+            );
+            svg.appendChild(container);
 
-            var  vis = document.createElementNS(
-              'http://www.w3.org/2000/svg',
-              'g'
-            )
-            container.appendChild(vis)
+            var vis = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            container.appendChild(vis);
 
             var pie = function (item) {
-              var pieData = []
+              var pieData = [];
               var sum = item.reduce(function (a, b) {
-                return a + 1
-              }, 0)
-              var startAngle = 0
+                return a + 1;
+              }, 0);
+              var startAngle = 0;
               item.forEach(function (d) {
-                var angle = (1 / sum) * Math.PI * 2
+                var angle = (1 / sum) * Math.PI * 2;
                 pieData.push({
                   item: d,
                   value: 1,
                   startAngle: startAngle,
                   endAngle: startAngle + angle,
-                })
-                startAngle += angle
-              })
-              return pieData
-            }
+                });
+                startAngle += angle;
+              });
+              return pieData;
+            };
 
             var arc = function (d) {
-              var path = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'path'
-              )
-              var x1 = r * Math.cos(d.startAngle - Math.PI / 2)
-              var y1 = r * Math.sin(d.startAngle - Math.PI / 2)
-              var x2 = r * Math.cos(d.endAngle - Math.PI / 2)
-              var y2 = r * Math.sin(d.endAngle - Math.PI / 2)
+              var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+              var x1 = r * Math.cos(d.startAngle - Math.PI / 2);
+              var y1 = r * Math.sin(d.startAngle - Math.PI / 2);
+              var x2 = r * Math.cos(d.endAngle - Math.PI / 2);
+              var y2 = r * Math.sin(d.endAngle - Math.PI / 2);
               var d =
                 'M0,0L' +
                 x1 +
@@ -507,277 +500,234 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
                 x2 +
                 ',' +
                 y2 +
-                'Z'
-              path.setAttribute('d', d)
-              return path
-            }
+                'Z';
+              path.setAttribute('d', d);
+              return path;
+            };
 
             var arcs = pie(item).map(function (d) {
-              var g = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'g'
-              )
-              g.setAttribute('class', 'slice')
+              var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+              g.setAttribute('class', 'slice');
 
-              var path = arc(d)
-              path.setAttribute('fill', d.item.color)
-              g.appendChild(path)
+              var path = arc(d);
+              path.setAttribute('fill', d.item.color);
+              g.appendChild(path);
 
-              var text = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'text'
-              )
-              var angle = (d.startAngle + d.endAngle) / 2
-              var x = (r - 10) * Math.cos(angle - Math.PI / 2)
-              var y = (r - 10) * Math.sin(angle - Math.PI / 2)
+              var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+              var angle = (d.startAngle + d.endAngle) / 2;
+              var x = (r - 10) * Math.cos(angle - Math.PI / 2);
+              var y = (r - 10) * Math.sin(angle - Math.PI / 2);
               text.setAttribute(
                 'transform',
-                'translate(' +
-                  x +
-                  ',' +
-                  y +
-                  ') rotate(' +
-                  ((angle * 180) / Math.PI - 90) +
-                  ')'
-              )
-              text.setAttribute('text-anchor', 'end')
+                'translate(' + x + ',' + y + ') rotate(' + ((angle * 180) / Math.PI - 90) + ')'
+              );
+
+              text.setAttribute('text-anchor', 'end');
               text.textContent = d.item.label
               if(d.item.text_color != 'none') {
                 text.setAttribute('fill', d.item.text_color)
               }
-              g.appendChild(text)
+              g.appendChild(text);
 
-              return g
-            })
+              return g;
+            });
 
             arcs.forEach(function (g) {
-              vis.appendChild(g)
-            })
-            var circle = document.createElementNS(
-              'http://www.w3.org/2000/svg',
-              'circle'
-            )
-            circle.setAttribute('cx', 0)
-            circle.setAttribute('cy', 0)
-            circle.setAttribute('r', 20)
-            circle.style.fill = 'white'
-            circle.style.cursor = 'pointer'
-            container.appendChild(circle)
+              vis.appendChild(g);
+            });
+            var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', 0);
+            circle.setAttribute('cy', 0);
+            circle.setAttribute('r', 20);
+            circle.style.fill = 'white';
+            circle.style.cursor = 'pointer';
+            container.appendChild(circle);
 
-            var borderCircle = document.createElementNS(
-              'http://www.w3.org/2000/svg',
-              'circle'
-            )
-            borderCircle.setAttribute('cx', 0)
-            borderCircle.setAttribute('cy', 0)
-            borderCircle.setAttribute('r', r)
-            borderCircle.setAttribute('fill', 'none')
-            borderCircle.setAttribute('stroke', 'black')
+            var borderCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            borderCircle.setAttribute('cx', 0);
+            borderCircle.setAttribute('cy', 0);
+            borderCircle.setAttribute('r', r);
+            borderCircle.setAttribute('fill', 'none');
+            borderCircle.setAttribute('stroke', 'black');
             borderCircle.setAttribute('stroke-width', '6');
-            container.appendChild(borderCircle)
+            container.appendChild(borderCircle);
 
-            var buttonSpin =
-              document.getElementById('submit-spin-' + data.sectionId) ??
-              container
-            var submit = document.getElementById(
-              'submit-button-' + data.sectionId
-            )
-            var closeButton = document.getElementById(
-              'PromotionPopupClose-Success-' + data.sectionId
-            )
-            const form = document.getElementById('newsletter-' + data.sectionId)
+            var buttonSpin = document.getElementById('submit-spin-' + data.sectionId) ?? container;
+            var submit = document.getElementById('submit-button-' + data.sectionId);
+            var closeButton = document.getElementById('PromotionPopupClose-Success-' + data.sectionId);
+            const form = document.getElementById('newsletter-' + data.sectionId);
 
-            buttonSpin.addEventListener('click', spin)
+            buttonSpin.addEventListener('click', spin);
 
-            closeButton.addEventListener('click', resetModal)
+            closeButton.addEventListener('click', resetModal);
 
             function validate() {
-              submit.click()
+              submit.click();
             }
 
             function resetModal() {
-              localStorage.removeItem('result-' + data.sectionId)
+              localStorage.removeItem('result-' + data.sectionId);
             }
 
             function spin() {
-              const inputEmail = document.getElementById(
-                'Email--' + data.sectionId
-              ).value
-              const error = false
-              const format = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]/
+              const inputEmail = document.getElementById('Email--' + data.sectionId).value;
+              const error = false;
+              const format = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]/;
 
               if (!inputEmail || !format.test(inputEmail)) {
-                validate()
-                return
+                validate();
+                return;
               }
 
-              buttonSpin.removeEventListener('click', spin)
+              buttonSpin.removeEventListener('click', spin);
 
               if (oldpick.length == item.length) {
-                container.removeEventListener('click', spin)
-                return
+                container.removeEventListener('click', spin);
+                return;
               }
 
-              var ps = 360 / item.length
-              var pieslice = Math.round(1440 / item.length)
-              var rng = Math.floor((Math.random() * 3600) + 3600)
+              var ps = 360 / item.length;
+              var pieslice = Math.round(1440 / item.length);
+              var rng = Math.floor(Math.random() * 1440 + 3600);
 
-              rotation = Math.round(rng / ps) * ps
+              rotation = Math.round(rng / ps) * ps;
 
-              picked = Math.round(item.length - (rotation % 360) / ps)
-              picked = picked >= item.length ? picked % item.length : picked
+              picked = Math.round(item.length - (rotation % 360) / ps);
+              picked = picked >= item.length ? picked % item.length : picked;
 
               if (oldpick.indexOf(picked) !== -1) {
-                spin()
-                return
+                spin();
+                return;
               } else {
-                oldpick.push(picked)
+                oldpick.push(picked);
               }
 
-              rotation += Math.round(ps / 2) - 35
-              animateRotation()
+              rotation += Math.round(ps / 2) - 35;
+              animateRotation();
 
               function animateRotation() {
-                var start = oldrotation % 360
-                var end = rotation
-                var duration = 3000
-                var startTime = null
+                var start = oldrotation % 360;
+                var end = rotation;
+                var duration = 3000;
+                var startTime = null;
 
                 function easeOutCubic(t) {
-                  return --t * t * t + 1
+                  return --t * t * t + 1;
                 }
 
                 function animate(time) {
-                  if (!startTime) startTime = time
-                  var progress = time - startTime
-                  var t = Math.min(progress / duration, 1)
-                  var easedT = easeOutCubic(t)
-                  var current = start + (end - start) * easedT
-                  vis.setAttribute('transform', 'rotate(' + current + ')')
+                  if (!startTime) startTime = time;
+                  var progress = time - startTime;
+                  var t = Math.min(progress / duration, 1);
+                  var easedT = easeOutCubic(t);
+                  var current = start + (end - start) * easedT;
+                  vis.setAttribute('transform', 'rotate(' + current + ')');
                   if (t < 1) {
-                    requestAnimationFrame(animate)
+                    requestAnimationFrame(animate);
                   } else {
-                    oldrotation = rotation
-                    buttonSpin.addEventListener('click', spin)
+                    oldrotation = rotation;
+                    buttonSpin.addEventListener('click', spin);
                     setTimeout(function () {
                       // ajaxFormInit(form);
                       if (!isExpireSave()) {
-                        setExpire()
+                        setExpire();
                       }
-                      setResult(picked)
-                      // submit.click()
-                    }, 1000) // Gọi hàm showSuccess sau khi vòng quay hoàn tất
+                      setResult(picked);
+                      submit.click();
+                    }, 1000); // Gọi hàm showSuccess sau khi vòng quay hoàn tất
                   }
                 }
 
-                requestAnimationFrame(animate)
+                requestAnimationFrame(animate);
               }
 
               function setResult(picked) {
                 const resultItem = {
                   section: data.sectionId,
                   picked: item[picked].id,
-                }
-                localStorage.setItem(
-                  'result-' + data.sectionId,
-                  JSON.stringify(resultItem)
-                )
+                };
+                localStorage.setItem('result-' + data.sectionId, JSON.stringify(resultItem));
               }
 
               function setExpire() {
                 const item = {
                   section: data.sectionId,
                   expires: Date.now() + data.delayDays * 24 * 60 * 60 * 1000,
-                }
+                };
 
-                localStorage.setItem(data.sectionId, JSON.stringify(item))
+                localStorage.setItem(data.sectionId, JSON.stringify(item));
                 //remove storage data, the full popup will be displayed when the site applies the reappear rule.
-                localStorage.removeItem('current-' + data.sectionId)
+                localStorage.removeItem('current-' + data.sectionId);
               }
 
               function isExpireSave() {
-                const item = xParseJSONOTSB(
-                  localStorage.getItem(data.sectionId)
-                )
-                if (item == null) return false
+                const item = xParseJSONOTSB(localStorage.getItem(data.sectionId));
+                if (item == null) return false;
 
                 if (Date.now() > item.expires) {
-                  localStorage.removeItem(data.sectionId)
-                  return false
+                  localStorage.removeItem(data.sectionId);
+                  return false;
                 }
 
-                return true
+                return true;
               }
             }
           }
         },
-      }))
-      Alpine.data('otsb_xPopupsSpinSuccess', data => ({
+      }));
+      Alpine.data('otsb_xPopupsSpinSuccess', (data) => ({
         init() {
-          const jsonString = data.data_wheel.replace(/'/g, '"')
+          const jsonString = data.data_wheel.replace(/'/g, '"');
 
           // Parse the JSON string
-          const item = JSON.parse(jsonString)
+          const item = JSON.parse(jsonString);
           const wheel = document.getElementById('otsb-wheel-' + data.sectionId),
-            success = document.getElementById(
-              'otsb-wheel-success-' + data.sectionId
-            ),
-            heading = document.getElementById(
-              'otsb-success-heading-' + data.sectionId
-            ),
-            subheading = document.getElementById(
-              'otsb-success-subheading-' + data.sectionId
-            ),
-            code = document.getElementById(
-              'otsb-success-code-' + data.sectionId
-            )
-          document.addEventListener('shopify:block:select', event => {
-            console.log('run: otsb_xPopupsSpinSuccess')
-            const selectedBlockId = event.detail.blockId
+            success = document.getElementById('otsb-wheel-success-' + data.sectionId),
+            heading = document.getElementById('otsb-success-heading-' + data.sectionId),
+            subheading = document.getElementById('otsb-success-subheading-' + data.sectionId),
+            code = document.getElementById('otsb-success-code-' + data.sectionId);
+          document.addEventListener('shopify:block:select', (event) => {
+            console.log('run: otsb_xPopupsSpinSuccess');
+            const selectedBlockId = event.detail.blockId;
             if (data.block_id === selectedBlockId) {
-              showSuccess(2)
+              showSuccess(2);
             }
-          })
-          document.addEventListener('shopify:block:deselect', event => {
-            console.log('run: otsb_xPopupsSpinSuccess')
-            const selectedBlockId = event.detail.blockId
+          });
+          document.addEventListener('shopify:block:deselect', (event) => {
+            console.log('run: otsb_xPopupsSpinSuccess');
+            const selectedBlockId = event.detail.blockId;
             if (data.block_id === selectedBlockId) {
-              showSpin()
+              showSpin();
             }
-          })
+          });
 
           function showSuccess(picked) {
-
             // Add active class to next content
             // changeButtonClose()
-            success.classList.add('active')
-            wheel.classList.remove('previous')
-            wheel.classList.add('hidden')
-            success.classList.remove('hidden')
-            success.classList.add('visible')
+            success.classList.add('active');
+            wheel.classList.remove('previous');
+            wheel.classList.add('hidden');
+            success.classList.remove('hidden');
+            success.classList.add('visible');
           }
           function showSpin() {
-            wheel.classList.add('active')
-            success.classList.remove('previous')
-            success.classList.add('hidden')
-            wheel.classList.remove('hidden')
-            wheel.classList.add('visible')
+            wheel.classList.add('active');
+            success.classList.remove('previous');
+            success.classList.add('hidden');
+            wheel.classList.remove('hidden');
+            wheel.classList.add('visible');
           }
 
           function changeButtonClose() {
-            var wheel = document.getElementById(
-                'PromotionPopupClose-' + data.sectionId
-              ),
-              success = document.getElementById(
-                'PromotionPopupClose-Success-' + data.sectionId
-              )
-            wheel.classList.add('hidden')
-            success.classList.remove('hidden')
+            var wheel = document.getElementById('PromotionPopupClose-' + data.sectionId),
+              success = document.getElementById('PromotionPopupClose-Success-' + data.sectionId);
+            wheel.classList.add('hidden');
+            success.classList.remove('hidden');
           }
         },
-      }))
-    })
-  })
+      }));
+    });
+  });
 }
 document.addEventListener('shopify:section:load', function (event) {
   // Kiểm tra nếu section chứa lớp 'spin' thì khởi động lại Alpine.js
@@ -791,51 +741,38 @@ document.addEventListener('shopify:section:select', function (event) {
   }
 })
 if (!window.otsb.loadedScript.includes('otsb-popup-intent.js')) {
-  window.otsb.loadedScript.push('otsb-popup-intent.js')
+  window.otsb.loadedScript.push('otsb-popup-intent.js');
   requestAnimationFrame(() => {
     document.addEventListener('alpine:init', () => {
       Alpine.store('otsb_xPopupExitIntent', {
         thankiu_page_active_blocks: {},
-      })
+      });
       Alpine.data('otsb_popupIntent', (blockId, sectionId) => {
         return {
           init() {
             if (Shopify && Shopify.designMode) {
-              document.addEventListener('shopify:block:select', event => {
-                const selectedBlockId = event.detail.blockId
-                console.log(
-                  Alpine.store('otsb_xPopupExitIntent')
-                    ?.thankiu_page_active_blocks
-                )
-                if (
-                  !Alpine.store('otsb_xPopupExitIntent')
-                    ?.thankiu_page_active_blocks?.[blockId]
-                ) {
-                  Alpine.store(
-                    'otsb_xPopupExitIntent'
-                  ).thankiu_page_active_blocks[blockId] = false
+              document.addEventListener('shopify:block:select', (event) => {
+                const selectedBlockId = event.detail.blockId;
+                console.log(Alpine.store('otsb_xPopupExitIntent')?.thankiu_page_active_blocks);
+                if (!Alpine.store('otsb_xPopupExitIntent')?.thankiu_page_active_blocks?.[blockId]) {
+                  Alpine.store('otsb_xPopupExitIntent').thankiu_page_active_blocks[blockId] = false;
                 }
-                Alpine.store(
-                  'otsb_xPopupExitIntent'
-                ).thankiu_page_active_blocks[blockId] =
-                  selectedBlockId === blockId
-                console.log('Runnnn')
-              })
+                Alpine.store('otsb_xPopupExitIntent').thankiu_page_active_blocks[blockId] = selectedBlockId === blockId;
+                console.log('Runnnn');
+              });
 
-              document.addEventListener('shopify:block:deselect', event => {
-                const selectedBlockId = event.detail.blockId
+              document.addEventListener('shopify:block:deselect', (event) => {
+                const selectedBlockId = event.detail.blockId;
                 if (selectedBlockId == blockId) {
-                  Alpine.store(
-                    'otsb_xPopupExitIntent'
-                  ).thankiu_page_active_blocks[blockId] = false
+                  Alpine.store('otsb_xPopupExitIntent').thankiu_page_active_blocks[blockId] = false;
                 }
-              })
+              });
             }
           },
-        }
-      })
-    })
-  })
+        };
+      });
+    });
+  });
 }
 if (!window.otsb.loadedScript.includes('otsb-flashsales.js')) {
   window.otsb.loadedScript.push('otsb-flashsales.js')

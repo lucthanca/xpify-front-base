@@ -79,7 +79,6 @@ function MyLibrary() {
           </Popover>
         </div>
       }
-      fullWidth
     >
       <Layout>
         <SectionCollection type={TYPE_MAPPING[selected]} owned={true} pageSize={null} />

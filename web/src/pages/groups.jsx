@@ -5,8 +5,7 @@ import { SECTION_TYPE_GROUP } from '~/constants';
 
 function GroupsPage() {
   return (
-    <Page title="Section groups" fullWidth
-          subtitle="Don't know where to start? Select a whole pack of solution for your store!">
+    <Page title="Section groups" subtitle="Don't know where to start? Select a whole pack of solution for your store!">
       <div id="xpify_sections_footer">
         <Layout>
           <GroupCollection type={SECTION_TYPE_GROUP} />

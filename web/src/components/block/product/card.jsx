@@ -111,9 +111,9 @@ function ProductCard({index, item, imgSizes = "(min-width: 1024px) calc((100vw -
             <InlineStack gap={200}>
               <BadgeStatusSection item={item} />
             </InlineStack>
-            {item.version &&
-              <Text variant="bodySm">Version: {item.version}</Text>
-            }
+            {/*{item.version &&*/}
+            {/*  <Text variant="bodySm">Version: {item.version}</Text>*/}
+            {/*}*/}
             {item?.categoriesV2?.length > 0 && (
               <Badges items={item.categoriesV2} isSimpleSection={!item?.child_ids?.length} searchKey={'category'} title={'Categories'} />
             )}

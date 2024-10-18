@@ -1,11 +1,11 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_SECTION_COLLECTION_KEY, SECTIONS_QUERY } from '~/queries/section-builder/product.gql';
 import { useMemo } from 'react';
-import type { GraphQlQueryResponse, Section } from '~/@types';
+import type { GraphQlCollectionQueryResponse, Section } from '~/@types';
 import { isEmpty } from '~/utils/isEmpty';
 
 export const useTopSellProducts = () => {
-  const { data, loading, error } = useQuery<GraphQlQueryResponse<Section>>(SECTIONS_QUERY, {
+  const { data, loading, error } = useQuery<GraphQlCollectionQueryResponse<Section>>(SECTIONS_QUERY, {
     fetchPolicy: "cache-and-network",
     variables: {
       sort: { column: 'entity_id', order: 'desc' },
