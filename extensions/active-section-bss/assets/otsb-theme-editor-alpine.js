@@ -132,6 +132,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
 
           const _this = this;
           if (Shopify.designMode) {
+            console.log('lien ga');
             _this.open();
           } else {
             // check if popup is intent or not
@@ -382,28 +383,17 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
               ),
               code = document.getElementById(
                 'otsb-success-code-' + data.sectionId
-              ),
-              result = item.filter(a => a.id === picked)[0]
-              if (Shopify.designMode) {
-                heading.innerHTML = ''
-                subheading.innerHTML = ''
-                code.innerHTML = ''
-              }
-              if(result) { 
-                heading.append(result.heading)
-                subheading.append(result.subheading)
-                if (result.code !== '') {
-                  code.append(result.code)
-                } else {
-                  code.classList.add('hidden')
-                  document
-                    .getElementsByClassName('otsb-code-' + data.sectionId)[0]
-                    .classList.add('hidden')
-                }
-              } else {
-                heading.append("The code has been deleted");
-                code.classList.add('hidden')
-              }
+              )
+            heading.append(item[picked].heading)
+            subheading.append(item[picked].subheading)
+            if (item[picked].code !== '') {
+              code.append(item[picked].code)
+            } else {
+              code.classList.add('otsb-hidden')
+              document
+                .getElementsByClassName('otsb-code-' + data.sectionId)[0]
+                .classList.add('otsb-hidden')
+            }
 
             // Add active class to next content
             changeButtonClose()
@@ -458,7 +448,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             )
             svg.appendChild(container)
 
-            var  vis = document.createElementNS(
+            var vis = document.createElementNS(
               'http://www.w3.org/2000/svg',
               'g'
             )
@@ -542,9 +532,6 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
               )
               text.setAttribute('text-anchor', 'end')
               text.textContent = d.item.label
-              if(d.item.text_color != 'none') {
-                text.setAttribute('fill', d.item.text_color)
-              }
               g.appendChild(text)
 
               return g
@@ -573,8 +560,6 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
             borderCircle.setAttribute('r', r)
             borderCircle.setAttribute('fill', 'none')
             borderCircle.setAttribute('stroke', 'black')
-            borderCircle.setAttribute('stroke-width', '6');
-            container.appendChild(borderCircle)
 
             var buttonSpin =
               document.getElementById('submit-spin-' + data.sectionId) ??
@@ -620,7 +605,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
 
               var ps = 360 / item.length
               var pieslice = Math.round(1440 / item.length)
-              var rng = Math.floor((Math.random() * 3600) + 3600)
+              var rng = Math.floor(Math.random() * 1440 + 3600)
 
               rotation = Math.round(rng / ps) * ps
 
@@ -665,7 +650,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
                         setExpire()
                       }
                       setResult(picked)
-                      // submit.click()
+                      submit.click()
                     }, 1000) // Gọi hàm showSuccess sau khi vòng quay hoàn tất
                   }
                 }
@@ -674,13 +659,13 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
               }
 
               function setResult(picked) {
-                const resultItem = {
+                const item = {
                   section: data.sectionId,
-                  picked: item[picked].id,
+                  picked: picked,
                 }
                 localStorage.setItem(
                   'result-' + data.sectionId,
-                  JSON.stringify(resultItem)
+                  JSON.stringify(item)
                 )
               }
 
@@ -747,6 +732,18 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
           })
 
           function showSuccess(picked) {
+            if (heading.innerHTML.trim() === '') {
+              heading.append(item[picked].heading)
+              subheading.append(item[picked].subheading)
+              if (item[picked].code !== '') {
+                code.append(item[picked].code)
+              } else {
+                code.classList.add('hidden')
+                document
+                  .getElementsByClassName('otsb-code-' + data.sectionId)[0]
+                  .classList.add('hidden')
+              }
+            }
 
             // Add active class to next content
             // changeButtonClose()
