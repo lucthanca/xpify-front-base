@@ -2211,21 +2211,21 @@ to{transform:rotate(360deg)}}
           right: 0;
           bottom: 0;
           left: 0;
-          width: var(--button-width, 120%);
-          height: var(--button-height, 100%);
+          width: var(--otsb-button-width, 120%);
+          height: var(--otsb-button-height, 100%);
           background-color: rgb(var(--colors-button-hover, 56, 56, 56));
           backface-visibility: hidden;
           will-change: transform;
-          transform: var(--button-transform, rotate3d(0,0,1,10deg) translate3d(-1.2em,110%,0));
-          transform-origin: var(--button-transform-origin, 0% 100%);
+          transform: var(--otsb-button-transform, rotate3d(0,0,1,10deg) translate3d(-1.2em,110%,0));
+          transform-origin: var(--otsb-button-transform-origin, 0% 100%);
           transition: transform 0.5s ease;
         }
 
       .otsb__root .otsb-btn__solid.otsb-btn__slide {
-        --button-width: 102%;
-        --button-height: 500%;
-        --button-transform: rotate3d(0,0,1,-10deg) translate3d(-130%,-10em,0);
-        --button-transform-origin: 100% 0%;
+        --otsb-button-width: 102%;
+        --otsb-button-height: 500%;
+        --otsb-button-transform: rotate3d(0,0,1,-10deg) translate3d(-130%,-10em,0);
+        --otsb-button-transform-origin: 100% 0%;
       }
         .otsb__root .otsb-btn__solid.otsb-btn__sliced:not(.otsb-btn__no-sliced) .otsb-btn-icon {
           transition: opacity .25s,transform .5s;
