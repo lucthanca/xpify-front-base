@@ -601,8 +601,15 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
               } else {
                 oldpick.push(picked);
               }
+              var plus = 35;
+              if(item.length <= 5) {
+                plus = 70;
+              }
+              if(item.length == 2) {
+                plus = 105;
+              }
 
-              rotation += Math.round(ps / 2) - 35;
+              rotation += Math.round(ps / 2) - plus;
               animateRotation();
 
               function animateRotation() {
