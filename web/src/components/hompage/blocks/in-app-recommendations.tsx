@@ -1,0 +1,84 @@
+import {
+  BlockStack,
+  Card,
+  Icon,
+  InlineGrid,
+  Text,
+  SkeletonBodyText,
+  InlineStack, Box,
+  SkeletonThumbnail,
+  SkeletonDisplayText,
+} from '@shopify/polaris';
+import { XIcon } from '@shopify/polaris-icons';
+import { useAppRecommend } from '~/talons/useAppRecommend';
+import type { AppRecommend } from '~/@types';
+import DismissedCard from '~/components/hompage/blocks/dismissed';
+
+export type AppRecommendItemProps = {
+  app: AppRecommend;
+};
+const AppRecommendItemSkeleton = () => {
+  const maxWidth = Math.floor(Math.random() * (55 - 25 + 1)) + 25;
+  const maxWithName: `${number}%` = `${maxWidth}%`;
+  return (
+    <InlineStack gap='300' blockAlign='start' wrap={false}>
+      <div><SkeletonThumbnail size='medium'/></div>
+      <div className='w-full'>
+        <BlockStack gap='200'>
+          <div className='w-full'><SkeletonDisplayText size='small' maxWidth={maxWithName} /></div>
+          <SkeletonBodyText lines={2} />
+        </BlockStack>
+      </div>
+    </InlineStack>
+  );
+};
+
+const AppRecommendItem = (props: AppRecommendItemProps) => {
+  const { app } = props;
+  return (
+    <InlineStack gap='300' blockAlign='start' wrap={false}>
+      <a href={app.url} className='w-16 aspect-square rounded-[1.25rem] relative block overflow-hidden flex-shrink-0' target='_blank'>
+        <img src={app.icon_url} alt={app.name} className='w-full h-full absolute object-cover' />
+      </a>
+      <BlockStack gap='200'>
+        <a href={app.url} target='_blank'><Text as='h3' variant='headingXs'>{app.name}</Text></a>
+        <Text as='p' variant='bodySm'>{app.description}</Text>
+      </BlockStack>
+    </InlineStack>
+  );
+};
+
+const InAppRecommendations = () => {
+  const { apps, loadingWithoutData, loadingWithoutCache, dismissTriggered, isDismissed, dismiss, undo } = useAppRecommend();
+  const displaySkeleton = loadingWithoutCache || loadingWithoutData;
+
+  if (dismissTriggered) return <DismissedCard onUndo={undo} />;
+  if (isDismissed) return null;
+  return (
+    <Card roundedAbove="sm">
+      <div className="xpify_dismissible_content">
+        <BlockStack gap="400">
+          <InlineGrid columns="1fr auto">
+            <Text as="h2" variant="headingSm">More apps your store might need</Text>
+          </InlineGrid>
+
+          <InlineGrid gap="400" columns={{ xs: '1fr', md: '1fr 1fr' }}>
+            {displaySkeleton && [1, 2, 3, 4, 5, 6].map((index) => <AppRecommendItemSkeleton key={index} />)}
+            {!displaySkeleton && apps.map((app, index) => <AppRecommendItem key={index} app={app} />)}
+          </InlineGrid>
+        </BlockStack>
+        <Box position='absolute' insetBlockStart='300' insetInlineEnd='300' zIndex='1'>
+          <div className="xpify-close-btn">
+            <InlineStack wrap={false} gap='200'>
+              <button type='button' className='xpify_dismiss' aria-label="Dismiss" onClick={dismiss}>
+                <Icon source={XIcon} />
+              </button>
+            </InlineStack>
+          </div>
+        </Box>
+      </div>
+    </Card>
+);
+};
+
+export default InAppRecommendations;

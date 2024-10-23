@@ -334,6 +334,9 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
           if (popupsDiv.classList.contains('bg-[#acacac]')) return;
           if (data.overlay) {
             popupsDiv.className += ' bg-[#acacac] bg-opacity-30';
+            if (data.name === 'popup-spin-wheel') {
+              popupsDiv.className += ' pointer-events-auto';
+            }
           }
         },
         removeOverlay() {
@@ -341,7 +344,7 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
           let popupsDiv = document.querySelector(data.popup_div_selector);
           if (!popupsDiv) return;
           if (data.name === 'popup-spin-wheel') {
-            popupsDiv.classList.remove('bg-[#acacac]', 'bg-opacity-30');
+            popupsDiv.classList.remove('bg-[#acacac]', 'bg-opacity-30', 'pointer-events-auto');
           }
           displayedPopups = xParseJSONOTSB(localStorage.getItem('promotion-popup')) || [];
           if (popupsDiv.classList.contains('bg-[#acacac]') && displayedPopups.length == 0) {
@@ -601,8 +604,15 @@ if (!window.otsb.loadedScript.includes('otsb-popup.js')) {
               } else {
                 oldpick.push(picked);
               }
+              var plus = 35;
+              if(item.length <= 5) {
+                plus = 70;
+              }
+              if(item.length == 2) {
+                plus = 105;
+              }
 
-              rotation += Math.round(ps / 2) - 35;
+              rotation += Math.round(ps / 2) - plus;
               animateRotation();
 
               function animateRotation() {

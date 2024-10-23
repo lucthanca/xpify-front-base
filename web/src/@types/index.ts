@@ -129,3 +129,11 @@ export interface UserContextType {
   shop: Shop | undefined;
   loading: boolean;
 }
+
+export interface AppRecommend {
+  id: string;
+  name: string;
+  description: string;
+  icon_url: string;
+  url: string;
+}
