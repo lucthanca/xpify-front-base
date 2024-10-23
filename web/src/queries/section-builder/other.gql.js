@@ -92,3 +92,18 @@ export const DISMISS_HOME_BLOCK_MUTATION = gql`
     }
   }
 `;
+
+export const APP_RECOMMENDATIONS_QUERY_KEY = 'appRecommendations';
+export const APP_RECOMMENDATIONS_QUERY = gql`
+  query GetAppRecommendations {
+    ${APP_RECOMMENDATIONS_QUERY_KEY}(sort: { field: "created_at", direction: DESC }) {
+      items {
+        id
+        name
+        description
+        icon_url
+        url
+      }
+    }
+  }
+`;
