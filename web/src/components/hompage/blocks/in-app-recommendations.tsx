@@ -9,10 +9,10 @@ import {
   SkeletonThumbnail,
   SkeletonDisplayText,
 } from '@shopify/polaris';
-import { XIcon } from '@shopify/polaris-icons';
 import { useAppRecommend } from '~/talons/useAppRecommend';
 import type { AppRecommend } from '~/@types';
 import DismissedCard from '~/components/hompage/blocks/dismissed';
+import { CloseBtn } from '~/components/hompage/blocks/close-btn';
 
 export type AppRecommendItemProps = {
   app: AppRecommend;
@@ -67,15 +67,7 @@ const InAppRecommendations = () => {
             {!displaySkeleton && apps.map((app, index) => <AppRecommendItem key={index} app={app} />)}
           </InlineGrid>
         </BlockStack>
-        <Box position='absolute' insetBlockStart='300' insetInlineEnd='300' zIndex='1'>
-          <div className="xpify-close-btn">
-            <InlineStack wrap={false} gap='200'>
-              <button type='button' className='xpify_dismiss' aria-label="Dismiss" onClick={dismiss}>
-                <Icon source={XIcon} />
-              </button>
-            </InlineStack>
-          </div>
-        </Box>
+        <CloseBtn dismiss={dismiss} />
       </div>
     </Card>
 );
