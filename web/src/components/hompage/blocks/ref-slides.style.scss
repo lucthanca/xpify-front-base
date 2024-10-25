@@ -1,0 +1,15 @@
+.xpify_ref_slide_desc_root {
+  ul {
+    @apply p-0;
+    margin: 10px 0 10px 12px;
+    &:first-of-type {
+      @apply mt-0;
+    }
+    &:last-of-type {
+      @apply mb-0;
+    }
+  }
+}
+.xpify_lazy-image-loaded {
+  @apply object-cover;
+}
