@@ -22,13 +22,13 @@ const Overview = () => {
   ) : (
     <Text as='p' variant='bodySm'>{data?.shop?.installed_sections_count || 0}</Text>
   );
-  const availableSectionsCount = loadingWithoutData ? (
-    <div style={{ width: '2.5rem' }}>
-      <SkeletonBodyText lines={1} />
-    </div>
-  ) : (
-    <Text as='p' variant='bodySm'>{data?.shop.available_sections_count || 0}</Text>
-  );
+  // const availableSectionsCount = loadingWithoutData ? (
+  //   <div style={{ width: '2.5rem' }}>
+  //     <SkeletonBodyText lines={1} />
+  //   </div>
+  // ) : (
+  //   <Text as='p' variant='bodySm'>{data?.shop.available_sections_count || 0}</Text>
+  // );
   return (
     <Card>
       <BlockStack gap='400'>
@@ -46,7 +46,11 @@ const Overview = () => {
           <Card>
             <BlockStack gap='200'>
               <Text as='h3' variant='headingXs'>Available Sections</Text>
-              {availableSectionsCount}
+              {loadingWithoutData ? (
+                <div style={{ width: '2.5rem' }}>
+                 <SkeletonBodyText lines={1} />
+                </div>
+              ) : <Text as='p' variant='bodySm'>70+</Text>}
             </BlockStack>
           </Card>
         </InlineGrid>

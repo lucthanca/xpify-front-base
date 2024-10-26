@@ -137,3 +137,16 @@ export interface AppRecommend {
   icon_url: string;
   url: string;
 }
+
+export interface RefBlockSlide {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  primary_button_text: string;
+  primary_button_url: string;
+  secondary_button_text: string;
+  secondary_button_url: string;
+  sort: number;
+  status: "ENABLED" | "DISABLED";
+}

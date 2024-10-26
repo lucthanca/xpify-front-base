@@ -7,7 +7,7 @@ import {
 import Footer from '~/components/block/footer';
 import { Loading } from '@shopify/app-bridge-react';
 import './style.scss';
-import { InAppRecommendations, Guide, Contact, Overview, RecentInstalled } from '~/components/hompage/blocks';
+import { InAppRecommendations, Guide, Contact, Overview, RecentInstalled, OmniRefSlides } from '~/components/hompage/blocks';
 
 function HomePage() {
   const [loading, setLoading] = useState(false);
@@ -33,6 +33,7 @@ function HomePage() {
               <Contact />
               <Overview />
               <RecentInstalled />
+              <OmniRefSlides />
               <InAppRecommendations />
               {/*<BestSeller />*/}
               {/*<LatestRelease />*/}

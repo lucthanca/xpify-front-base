@@ -96,7 +96,7 @@ export const DISMISS_HOME_BLOCK_MUTATION = gql`
 export const APP_RECOMMENDATIONS_QUERY_KEY = 'appRecommendations';
 export const APP_RECOMMENDATIONS_QUERY = gql`
   query GetAppRecommendations {
-    ${APP_RECOMMENDATIONS_QUERY_KEY}(sort: { field: "created_at", direction: DESC }) {
+    ${APP_RECOMMENDATIONS_QUERY_KEY}(sort: { field: "sort", direction: ASC }) {
       items {
         id
         name
@@ -106,4 +106,14 @@ export const APP_RECOMMENDATIONS_QUERY = gql`
       }
     }
   }
+`;
+export const BLOCK_REF_SLIDES_QUERY_KEY = 'omniRefBlockSlides';
+export const BLOCK_REF_SLIDES_QUERY = gql`
+    query GetRefBlockSlides {
+        ${BLOCK_REF_SLIDES_QUERY_KEY}(filter: { status: ENABLED },sort: { field: SORT, direction: ASC }) {
+            items {
+              id title description image_url primary_button_text primary_button_url secondary_button_text secondary_button_url
+            }
+        }
+    }
 `;
