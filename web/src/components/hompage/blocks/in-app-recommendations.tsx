@@ -49,28 +49,39 @@ const AppRecommendItem = (props: AppRecommendItemProps) => {
 };
 
 const InAppRecommendations = () => {
-  const { apps, loadingWithoutData, loadingWithoutCache, dismissTriggered, isDismissed, dismiss, undo } = useAppRecommend();
+  const { apps, loadingWithoutData, loadingWithoutCache, dismissTriggered, isDismissed, dismiss, undo, ref, inView, intersected } = useAppRecommend();
   const displaySkeleton = loadingWithoutCache || loadingWithoutData;
 
-  if (dismissTriggered) return <DismissedCard onUndo={undo} />;
-  if (isDismissed) return null;
-  return (
-    <Card roundedAbove="sm">
-      <div className="xpify_dismissible_content">
-        <BlockStack gap="400">
-          <InlineGrid columns="1fr auto">
-            <Text as="h2" variant="headingSm">More apps your store might need</Text>
-          </InlineGrid>
+  console.log({ 'app_rcm_inview': inView });
+  let content
 
-          <InlineGrid gap="400" columns={{ xs: '1fr', md: '1fr 1fr' }}>
-            {displaySkeleton && [1, 2, 3, 4, 5, 6].map((index) => <AppRecommendItemSkeleton key={index} />)}
-            {!displaySkeleton && apps.map((app, index) => <AppRecommendItem key={index} app={app} />)}
-          </InlineGrid>
-        </BlockStack>
-        <CloseBtn dismiss={dismiss} />
-      </div>
-    </Card>
-);
+  if (intersected && dismissTriggered) {
+    content = <DismissedCard onUndo={undo} />;
+  } else if (intersected && (isDismissed || (apps.length === 0 && !displaySkeleton))) {
+  } else {
+    content = (
+      <Card roundedAbove="sm">
+        <div className="xpify_dismissible_content">
+          <BlockStack gap="400">
+            <InlineGrid columns="1fr auto">
+              <Text as="h2" variant="headingSm">More apps your store might need</Text>
+            </InlineGrid>
+
+            <InlineGrid gap="400" columns={{ xs: '1fr', md: '1fr 1fr' }}>
+              {displaySkeleton && [1, 2, 3, 4, 5, 6].map((index) => <AppRecommendItemSkeleton key={index} />)}
+              {!displaySkeleton && apps.map((app, index) => <AppRecommendItem key={index} app={app} />)}
+            </InlineGrid>
+          </BlockStack>
+          {!displaySkeleton && <CloseBtn dismiss={dismiss} />}
+        </div>
+      </Card>
+    );
+  }
+  return (
+    <div ref={ref}>
+      {content}
+    </div>
+  );
 };
 
 export default InAppRecommendations;

@@ -31,5 +31,6 @@ export const useRefSlides = () => {
     slides,
     ref,
     inView,
+    intersected,
   };
 };
