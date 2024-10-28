@@ -9,10 +9,10 @@ import {
   SkeletonThumbnail,
   SkeletonDisplayText,
 } from '@shopify/polaris';
-import { XIcon } from '@shopify/polaris-icons';
 import { useAppRecommend } from '~/talons/useAppRecommend';
 import type { AppRecommend } from '~/@types';
 import DismissedCard from '~/components/hompage/blocks/dismissed';
+import { CloseBtn } from '~/components/hompage/blocks/close-btn';
 
 export type AppRecommendItemProps = {
   app: AppRecommend;
@@ -49,36 +49,39 @@ const AppRecommendItem = (props: AppRecommendItemProps) => {
 };
 
 const InAppRecommendations = () => {
-  const { apps, loadingWithoutData, loadingWithoutCache, dismissTriggered, isDismissed, dismiss, undo } = useAppRecommend();
+  const { apps, loadingWithoutData, loadingWithoutCache, dismissTriggered, isDismissed, dismiss, undo, ref, inView, intersected } = useAppRecommend();
   const displaySkeleton = loadingWithoutCache || loadingWithoutData;
 
-  if (dismissTriggered) return <DismissedCard onUndo={undo} />;
-  if (isDismissed) return null;
-  return (
-    <Card roundedAbove="sm">
-      <div className="xpify_dismissible_content">
-        <BlockStack gap="400">
-          <InlineGrid columns="1fr auto">
-            <Text as="h2" variant="headingSm">More apps your store might need</Text>
-          </InlineGrid>
+  console.log({ 'app_rcm_inview': inView });
+  let content
 
-          <InlineGrid gap="400" columns={{ xs: '1fr', md: '1fr 1fr' }}>
-            {displaySkeleton && [1, 2, 3, 4, 5, 6].map((index) => <AppRecommendItemSkeleton key={index} />)}
-            {!displaySkeleton && apps.map((app, index) => <AppRecommendItem key={index} app={app} />)}
-          </InlineGrid>
-        </BlockStack>
-        <Box position='absolute' insetBlockStart='300' insetInlineEnd='300' zIndex='1'>
-          <div className="xpify-close-btn">
-            <InlineStack wrap={false} gap='200'>
-              <button type='button' className='xpify_dismiss' aria-label="Dismiss" onClick={dismiss}>
-                <Icon source={XIcon} />
-              </button>
-            </InlineStack>
-          </div>
-        </Box>
-      </div>
-    </Card>
-);
+  if (intersected && dismissTriggered) {
+    content = <DismissedCard onUndo={undo} />;
+  } else if (intersected && (isDismissed || (apps.length === 0 && !displaySkeleton))) {
+  } else {
+    content = (
+      <Card roundedAbove="sm">
+        <div className="xpify_dismissible_content">
+          <BlockStack gap="400">
+            <InlineGrid columns="1fr auto">
+              <Text as="h2" variant="headingSm">More apps your store might need</Text>
+            </InlineGrid>
+
+            <InlineGrid gap="400" columns={{ xs: '1fr', md: '1fr 1fr' }}>
+              {displaySkeleton && [1, 2, 3, 4, 5, 6].map((index) => <AppRecommendItemSkeleton key={index} />)}
+              {!displaySkeleton && apps.map((app, index) => <AppRecommendItem key={index} app={app} />)}
+            </InlineGrid>
+          </BlockStack>
+          {!displaySkeleton && <CloseBtn dismiss={dismiss} />}
+        </div>
+      </Card>
+    );
+  }
+  return (
+    <div ref={ref}>
+      {content}
+    </div>
+  );
 };
 
 export default InAppRecommendations;
