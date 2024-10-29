@@ -59,7 +59,7 @@ const BlockContent = ({ block, useLazyImage = true }: { block: RefBlockSlide, us
   return (
     <InlineStack gap='400'>
       <div className='relative aspect-[16/9] rounded-[var(--p-border-radius-200)] overflow-hidden w-[45%] select-none'>
-        <a href={block.primary_button_url} className='inset-0 absolute w-full h-full'>
+        <a href={block.primary_button_url} className='inset-0 absolute w-full h-full' target='_blank'>
           <img alt={block.title} className='inset-0 w-full h-full object-contain' {...imgAttributes}/>
         </a>
       </div>
@@ -69,7 +69,7 @@ const BlockContent = ({ block, useLazyImage = true }: { block: RefBlockSlide, us
         {hasBtn && (
           <ButtonGroup>
             {shouldRenderPrimaryButton && (
-              <Button url={block.primary_button_url} target='_blank' variant='primary'>
+              <Button url={block.primary_button_url} target='_blank'>
                 {block.primary_button_text}
               </Button>
             )}
@@ -89,7 +89,7 @@ BlockContent.propTypes = {
 }
 
 const Slider = ({ items, shouldPlay }: { items: RefBlockSlide[], shouldPlay: boolean }) => {
-  const [splideOpts] = useState<Options>({ reducedMotion: { interval: 3000, speed: 800 },type: 'loop', perPage: 1, rewind: true, gap: 0, pagination: false, arrows: false, interval: 3000, lazyLoad: 'nearby' });
+  const [splideOpts] = useState<Options>({ reducedMotion: { interval: 20000, speed: 800 },type: 'loop', perPage: 1, rewind: true, gap: 0, pagination: false, arrows: false, interval: 20000, lazyLoad: 'nearby' });
   const splide = useRef<Splide>();
   const onLazyLoadLoaded = useCallback((_: any, imgEl: HTMLElement) => {
     imgEl.classList.remove('object-contain');
