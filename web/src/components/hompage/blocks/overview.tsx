@@ -46,7 +46,11 @@ const Overview = () => {
           <Card>
             <BlockStack gap='200'>
               <Text as='h3' variant='headingXs'>Available Sections</Text>
-              <Text as='p' variant='bodySm'>70+</Text>
+              {loadingWithoutData ? (
+                <div style={{ width: '2.5rem' }}>
+                 <SkeletonBodyText lines={1} />
+                </div>
+              ) : <Text as='p' variant='bodySm'>70+</Text>}
             </BlockStack>
           </Card>
         </InlineGrid>

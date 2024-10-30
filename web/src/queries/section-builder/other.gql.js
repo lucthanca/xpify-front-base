@@ -107,3 +107,13 @@ export const APP_RECOMMENDATIONS_QUERY = gql`
     }
   }
 `;
+export const BLOCK_REF_SLIDES_QUERY_KEY = 'omniRefBlockSlides';
+export const BLOCK_REF_SLIDES_QUERY = gql`
+    query GetRefBlockSlides {
+        ${BLOCK_REF_SLIDES_QUERY_KEY}(filter: { status: ENABLED },sort: { field: SORT, direction: ASC }) {
+            items {
+              id title description image_url primary_button_text primary_button_url secondary_button_text secondary_button_url
+            }
+        }
+    }
+`;
